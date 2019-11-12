@@ -1,34 +1,18 @@
-'use strict'
+'use strict';
 
 const express = require('express');
 const bodyParser = require('body-parser');
+const index = require('./routes/index-route');
+const product = require('./routes/product-route');
+const mongoose = require('mongoose');
 
 const app = express();
-const router = express.Router();
+
+mongoose.connect('mongodb+srv://admin:admin@cluster0-5qx8r.mongodb.net/test?retryWrites=true&w=majority');
+
 
 app.use(bodyParser.json());
-
-const route = router.get('/', (req, res, next) => {
-  res.status(200).send({
-    title: 'Node Store API',
-    version: '0.0.2'
-  });
-});
-
-const post = router.post('/', (req, res, next) => {
-  res.status(200).send(req.body);
-});
-
-const put = router.put('/:id', (req, res, next) => {
-  let id = req.params.id;
-  res.status(200).send({
-    id: id,
-    item: req.body
-  });
-});
-
-app.use('/', route);
-app.use('/products', post);
-app.use('/products', put);
+app.use('/', index);
+app.use('/products', product);
 
 module.exports = app;
