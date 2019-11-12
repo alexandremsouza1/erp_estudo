@@ -3,6 +3,7 @@
 const mongoose = require('mongoose');
 const Product = mongoose.model('Product');
 
+
 exports.post = (req, res, next) => {
     let product = new Product(req.body);
     product.save().then(resp => {
