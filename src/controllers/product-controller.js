@@ -1,7 +1,7 @@
 'use strict';
 
 const mongoose = require('mongoose');
-const Product = require('../models/product');
+const Product = require('../models/product-model');
 //const Product = mongoose.model('product'); Dessa forma não funciona, não sei porque...
 
 
@@ -20,12 +20,21 @@ exports.post = (req, res, next) => {
 };
 
 exports.put = (req, res, next) => {
-    let product = new Product(req.body);
-    let id = req.params.id;
-    res.status(200).send({
-        id: id,
-        item: req.body
+    Product.findByIdAndUpdate({
+        _id: req.params.id
+    }, {
+        $set: {
+            title: req.body.title,
+            price: req.body.price
+    }}).then(resp => {
+        res.status(200).send({mensagem: "Produto atualizado com sucesso"})
+    }).catch(err => {
+        res.status(400).send({
+            mensagem: "Ops, houve um erro ao atualizar o produto",
+            error: err.message
+        });
     });
+    
 };
 
 exports.listarTodosProdutos = (req, res, next) => {
@@ -43,9 +52,9 @@ exports.listarTodosProdutos = (req, res, next) => {
 }
 
 exports.listarProdutoPorID = (req, res, next) => {
-    Product.findOne({_id: req.body.id}).then(resp => {
+    Product.findById({_id: req.params.id}).then(resp => {
         res.status(200).send(resp);
     }).catch(err => {
-        res.status(400).find(err);
+        res.status(400).send({message: err.message});
     });
 }
