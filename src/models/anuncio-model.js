@@ -1,15 +1,14 @@
 'use strict'
 
 const mongoose = require('mongoose');
-const anuncioModelSchema = mongoose.Schema();
 
-const anuncioModel = new Schema({
+const anuncioModel = mongoose.Schema({
     titulo: {
         type: String,
         required: true,
         trim: true
     },
-    price: {
+    preco: {
         type: Number,
         required: true
     },
@@ -20,4 +19,4 @@ const anuncioModel = new Schema({
     }
 });
 
-module.exports = mongoose.model('Anuncio', anuncioModelSchema);
+module.exports = mongoose.model('Anuncio', anuncioModel);
