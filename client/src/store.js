@@ -1,5 +1,5 @@
 import {createStore} from 'redux';
-import {Reducers} from './modules/reducers'
+import {rootReducer} from './modules/reducers/anuncio/anuncio-combine-reducer'
 
 /**
  * Criado por:
@@ -7,7 +7,7 @@ import {Reducers} from './modules/reducers'
  * 
  */
 
-export const store = createStore(Reducers);
+export const store = createStore(rootReducer);
 
 store.subscribe(() => {
     console.log("Store foi modificada: ", store.getState())

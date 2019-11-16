@@ -7,6 +7,6 @@ import {anuncioReducer} from './anuncio-reducer';
  * @version 0.0.1
  */
 
-const rootReducer = combineReducers({
+export const rootReducer = combineReducers({
     dados: anuncioReducer
 });
