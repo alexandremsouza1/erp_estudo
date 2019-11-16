@@ -11,12 +11,10 @@ export default class AnuncioController extends React.Component {
         this.state = {
             response: '',
             thArray: ['Título', 'Preço', "Descrição"],
-            result: [{
-                titulo: '',
-                preco: '',
-                descricao: ''
-            }]
+            result: [{}]
         }
+
+       
     }
 
     componentDidMount() {

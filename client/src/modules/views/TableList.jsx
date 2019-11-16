@@ -4,6 +4,7 @@ import Card from "modules/components/Card/Card.jsx";
 import Button from "modules/components/CustomButton/CustomButton.jsx";
 
 class TableList extends Component {
+
   render() {
     return (
       <div className="content">
