@@ -7,11 +7,12 @@ const keys = require('./keys');
 passport.use(
     new MercadoLibreStrategy({
     
-    callbackURL: 'http://localhost:5000',
     clientID: keys.mercadolivre.CLIENT_ID,
-    clientSecret: keys.mercadolivre.CLIENT_SECRET
+    clientSecret: keys.mercadolivre.CLIENT_SECRET,
+    callbackURL: 'https://frozen-bayou-77555.herokuapp.com/auth/mercadolibre/callback',
+
 }, (accessToken, refreshToken, profile, done) => {
-        console.log(profile);
+        return done(null, profile);
     })
 );
 

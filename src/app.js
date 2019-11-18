@@ -6,7 +6,7 @@ const index = require('./routes/index-route');
 const productRoute = require('./routes/product-route');
 const anuncioRoute = require('./routes/anuncio.route')
 const app = express();
-require('../../app/config/passport-mercadolivre');
+//require('../../app/config/passport-mercadolivre');
 
 app.use(bodyParser.json());
 app.use('/', index);
