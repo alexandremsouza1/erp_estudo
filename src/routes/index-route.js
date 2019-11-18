@@ -20,6 +20,14 @@ router.get('/', (req, resp, next) => {
 });
 */
 
+router.get('/', (req, resp, next) => {
+
+    resp.status(200).send(res);
+
+});
+
+
+/*
 router.get('/auth/mercadolibre', passport.authorize('mercadolibre', {
     scope: ['profile']
 }));
@@ -43,5 +51,5 @@ function ensureAuthenticated(req, res, next) {
     };
     res.redirect('/auth/mercadolibre');
 };
-
+*/
 module.exports = router;
