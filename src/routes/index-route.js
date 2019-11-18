@@ -3,6 +3,7 @@
 const express = require("express");
 const passport = require("passport");
 const router = express.Router();
+require('../../config/passport-mercadolivre');
 /*
 var meli = require('mercadolibre');
 const CLIENT_ID = 8828109757058917;

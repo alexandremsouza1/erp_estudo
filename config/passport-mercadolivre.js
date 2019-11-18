@@ -7,10 +7,9 @@ const keys = require('./keys');
 passport.use(
     new MercadoLibreStrategy({
     
-    callbackURL: 'https://www.mercadolivre.com.br',
+    callbackURL: 'http://localhost:5000',
     clientID: keys.mercadolivre.CLIENT_ID,
-    clientSecret: keys.mercadolivre.CLIENT_SECRET,
-
+    clientSecret: keys.mercadolivre.CLIENT_SECRET
 }, (accessToken, refreshToken, profile, done) => {
         console.log(profile);
     })
