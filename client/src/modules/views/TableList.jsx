@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { Grid, Row, Col, Table } from "react-bootstrap";
-
 import Card from "modules/components/Card/Card.jsx";
-import { thArray, tdArray } from "variables/Variables.jsx";
+import Button from "modules/components/CustomButton/CustomButton.jsx";
 
 class TableList extends Component {
   render() {
@@ -12,62 +11,37 @@ class TableList extends Component {
           <Row>
             <Col md={12}>
               <Card
-                title="Striped Table with Hover"
+                title={this.props.title}
                 category="Here is a subtitle for this table"
                 ctTableFullWidth
                 ctTableResponsive
                 content={
                   <Table striped hover>
-                    <thead>
-                      <tr>
-                        {thArray.map((prop, key) => {
-                          return <th key={key}>{prop}</th>;
-                        })}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {tdArray.map((prop, key) => {
-                        return (
-                          <tr key={key}>
-                            {prop.map((prop, key) => {
-                              return <td key={key}>{prop}</td>;
-                            })}
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </Table>
-                }
-              />
-            </Col>
 
-            <Col md={12}>
-              <Card
-                plain
-                title="Striped Table with Hover"
-                category="Here is a subtitle for this table"
-                ctTableFullWidth
-                ctTableResponsive
-                content={
-                  <Table hover>
                     <thead>
                       <tr>
-                        {thArray.map((prop, key) => {
+                        {this.props.thArray.map((prop, key) => {
                           return <th key={key}>{prop}</th>;
                         })}
                       </tr>
                     </thead>
+
                     <tbody>
-                      {tdArray.map((prop, key) => {
+                      {this.props.result.map(prop => {
                         return (
-                          <tr key={key}>
-                            {prop.map((prop, key) => {
-                              return <td key={key}>{prop}</td>;
-                            })}
-                          </tr>
-                        );
+                          <tr>
+                            <td>{prop.titulo}</td>
+                            <td>{prop.preco}</td>
+                            <td>{prop.descricao}</td>
+                            <td>
+                              <Button bsStyle="info" pullRight fill type="submit">
+                                Editar
+                              </Button>
+                            </td>
+                          </tr>)
                       })}
                     </tbody>
+
                   </Table>
                 }
               />

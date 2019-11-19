@@ -1,5 +1,7 @@
 import React from 'react'
 import AnuncioView from './AnuncioView';
+import axios from 'axios'
+
 
 export default class AnuncioController extends React.Component {
 
@@ -7,27 +9,31 @@ export default class AnuncioController extends React.Component {
         super(props);
 
         this.state = {
-            response: ''
+            response: '',
+            thArray: ['Título', 'Preço', "Descrição"],
+            result: [{
+                titulo: '',
+                preco: '',
+                descricao: ''
+            }]
         }
     }
 
     componentDidMount() {
-        //O getMessage retorna uma Promise
-        this.getMessage()
-                .then(res => this.setState({response: res.express}))
-                .catch(err => console.log(err.message));
+       
+        axios.get('http://localhost:5000/anuncio').then(res => {
+           this.setState({
+                result: res.data
+            });
+            
+           console.log(this.state.result);
+        });
+
+        
             
     }
 
-    getMessage = async () => {
-        const response = await fetch('/api/mensagem');
-        const body = await response.json();
-        if (response.status != '200') {
-            throw Error(body.message);
-        }
-
-        return body;
-    }
+    
 
     
 
