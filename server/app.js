@@ -3,12 +3,12 @@
 const express = require('express');
 const passport = require("passport");
 const bodyParser = require('body-parser');
-const index = require('./routes/index-route');
-const productRoute = require('./routes/product-route');
-const anuncioRoute = require('./routes/anuncio.route');
-const mercadoLivreRoute = require('./routes/mercadoLivre-route');
+const index = require('../server/src/routes/index-route');
+const productRoute = require('../server/src/routes/product-route');
+const anuncioRoute = require('../server/src/routes/anuncio.route');
+const mercadoLivreRoute = require('../server/src/routes/mercadoLivre-route');
 const app = express();
-require('../config/passport-mercadolivre')(passport); //PASSPORT MERCADOLIVRE - INJETANDO O PASSPORT
+require('../server/src/config/passport-mercadolivre')(passport); //PASSPORT MERCADOLIVRE - INJETANDO O PASSPORT
 const cors = require('cors');
 
 //Session

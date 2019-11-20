@@ -2,10 +2,10 @@
   "name": "node-react",
   "version": "1.0.0",
   "scripts": {
-    "client": "cd client && npm start",
-    "server": "nodemon ./bin/server.js",
+    "client": "cd .. && cd client && npm start",
+    "server": "nodemon server.js",
     "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
-    "start": "node ./bin/server.js"
+    "start": "node server.js"
   },
   "dependencies": {
     "axios": "^0.19.0",
