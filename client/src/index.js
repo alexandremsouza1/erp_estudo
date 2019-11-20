@@ -14,6 +14,7 @@ import { Provider } from 'react-redux';
 import {store} from './store';
 
 ReactDOM.render(
+  
   <Provider store={store}>
     <BrowserRouter>
       <Switch>
@@ -22,5 +23,7 @@ ReactDOM.render(
       </Switch>
     </BrowserRouter>
   </Provider>,
+
   document.getElementById("root")
+
 );
