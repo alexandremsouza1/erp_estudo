@@ -12,7 +12,9 @@ app.set('port', port);
 const server = http.createServer(app);
 
 server.listen(port, () => {
+    console.log("\n");
     console.log(`Servidor rodando na porta: ${port}`);
+    console.log("\n");
 });
 
 

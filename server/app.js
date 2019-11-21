@@ -10,18 +10,15 @@ const mercadoLivreRoute = require('../server/src/routes/mercadoLivre-route');
 const app = express();
 require('../server/src/config/passport-mercadolivre')(passport); //PASSPORT MERCADOLIVRE - INJETANDO O PASSPORT
 const cors = require('cors');
+const usuarioRoute = require('../server/src/routes/usuario-route');
 
 //Session
 const expressSession = require('express-session');
 app.use(expressSession({secret: 'sessionSecretKey'}));
 app.use(passport.initialize());
 app.use(passport.session());
-
 app.use(cors());
-
 app.use(bodyParser.json());
-
-//app.use('/', index);
 
 app.use('/products', productRoute);
 
@@ -31,9 +28,6 @@ app.use('/anuncio', anuncioRoute);
 //Mercado Livre
 app.use('/', mercadoLivreRoute);
 
-
-
-
-
+app.use('/usuario', usuarioRoute);
 
 module.exports = app;

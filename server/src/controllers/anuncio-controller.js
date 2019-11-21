@@ -1,6 +1,5 @@
 'use strict'
 
-const mongoose = require('mongoose');
 const anuncioModel = require('../models/anuncio-model');
 
 exports.salvar = (req, res, next) => {

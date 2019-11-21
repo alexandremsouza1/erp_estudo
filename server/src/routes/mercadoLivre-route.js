@@ -3,20 +3,29 @@
 const express = require("express");
 const passport = require("passport");
 const router = express.Router();
+const constants = require('../constants/constants');
+
+/**
+ * @author Felipe Miguel dos Santos
+ */
 
 router.get('/auth/mercadolibre', passport.authorize('mercadolibre'));
 
+//Retorno de callback do servidor do mercado livre
 router.get('/auth/mercadolibre/callback', passport.authorize('mercadolibre', { 
     failureRedirect: '/login' 
 }), (req, res) => {
-        // Successful authentication, redirect home.
-        res.redirect('/anuncio');
+        // Redireciona para a página principal do sistema
+        res.redirect(constants.localhost.LOCALHOST_3000+"/admin/dashboard");
     });
 
 router.get('/', ensureAuthenticated, (req, res) => {
-        res.send("Logged in user: " + req.user.nickname);
+        res.send("Usuario logado: " + req.user.nickname);
     }
 );
+
+/** Verifica se o usuário já está autenticado, caso sim, redireciona para a página principal do sistema
+  Se não, rediciona para a rota /auth/mercadolibre **/
 
 function ensureAuthenticated(req, res, next){
     if (req.isAuthenticated()) {
