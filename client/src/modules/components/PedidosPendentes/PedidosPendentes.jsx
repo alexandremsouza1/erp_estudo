@@ -1,5 +1,5 @@
 
-import React, { Component } from "react";
+import React from "react";
 
 export class PedidosPendentes extends React.Component {
  

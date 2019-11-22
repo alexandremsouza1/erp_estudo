@@ -1,15 +1,10 @@
-import React, { Component } from "react";
+import React from "react";
 import { NavLink } from "react-router-dom";
-
-import AdminNavbarLinks from "../Navbars/AdminNavbarLinks.jsx";
 
 import logo from "assets/img/reactlogo.png";
 
-class Sidebar extends Component {
-  constructor(props) {
-    super(props);
-  }
-
+class Sidebar extends React.Component {
+ 
   activeRoute(routeName) {
     return this.props.location.pathname.indexOf(routeName) > -1 ? "active" : "";
   }
@@ -24,13 +19,13 @@ class Sidebar extends Component {
 
         <div className="logo">
 
-          <a href="#" className="simple-text logo-mini">
+          <a href="/" className="simple-text logo-mini">
             <div className="logo-img">
               <img src={logo} alt="logo_image" />
             </div>
           </a>
 
-          <a href="#" className="simple-text logo-normal">
+          <a href="/" className="simple-text logo-normal">
             #Sistema#
           </a>
 

@@ -1,12 +1,6 @@
 import DashboardView from "./modules/views/Dashboard/DashboardView";
-import AnuncioView from "./modules/views/Anuncio/AnuncioView";
 import TableList from "./modules/views/TableList";
 import AnuncioController from "modules/views/Anuncio/AnuncioController";
-//import Typography from "views/Typography.jsx";
-//import Icons from "views/Icons.jsx";
-//import Maps from "views/Maps.jsx";
-//import Notifications from "views/Notifications.jsx";
-//import Upgrade from "views/Upgrade.jsx";
 
 const dashboardRoutes = [
   {

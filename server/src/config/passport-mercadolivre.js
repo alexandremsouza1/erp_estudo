@@ -4,22 +4,28 @@ const usuarioController = require("../controllers/usuario-controller");
 
 module.exports = (passport) => {
 
-  
 
-passport.use(new MercadoLibreStrategy({
+
+  passport.use(new MercadoLibreStrategy({
 
     clientID: keys.mercadolivre.CLIENT_ID,
     clientSecret: keys.mercadolivre.CLIENT_SECRET,
     callbackURL: keys.mercadolivre.CALLBACK_URL,
-  
+
   }, (accessToken, refreshToken, profile, done) => {
-    // + store/retrieve user from database, together with access token and refresh token
-    console.log("\n");
-    console.log("accessToken: "+ accessToken);
-    console.log("refreshToken: "+ refreshToken);
-    console.log("\n");
-    console.log(profile);
-    
+
+    usuarioController.buscarUsuarioPorID(setUsuario(profile, accessToken, refreshToken)).then(res => {
+      //console.log("Resultado: " + res);
+      if(res === false){
+        usuarioController.salvarUsuario(setUsuario(profile, accessToken, refreshToken));
+      }
+    });
+
+    return done(null, profile);
+  }
+  ));
+
+  const setUsuario = (profile, accessToken, refreshToken) => {
     UsuarioJSON = {
       id: profile.id,
       accessToken: accessToken,
@@ -28,17 +34,13 @@ passport.use(new MercadoLibreStrategy({
       first_name: profile.first_name,
       email: profile.email
     }
-
-    usuarioController.salvarUsuario(UsuarioJSON);
-
-    return done(null, profile); 
+    return UsuarioJSON;
   }
-));
 
-passport.serializeUser((user, done) => {
+  passport.serializeUser((user, done) => {
     done(null, user);
   });
-  
+
   passport.deserializeUser((user, done) => {
     done(null, user);
   });

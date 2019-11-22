@@ -1,7 +1,5 @@
 import {
-    SALVAR_ANUNCIO,
-    ATUALIZAR_ANUNCIO,
-    LISTAR_TODOS_ANUNCIOS
+    SALVAR_ANUNCIO
 } from '../../constants/anuncio/anuncio-constants'
 
 /**

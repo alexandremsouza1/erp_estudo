@@ -6,7 +6,7 @@ const router = express.Router();
  * @author Felipe Miguel dos Santos
  */
 
-exports.salvarUsuario = (objectJSON) =>{
+let salvarUsuario = (objectJSON) => {
     usuarioModel(objectJSON).save().then(resp => {
         console.log("Usuário salvo com sucesso!");
     }).catch(err => {
@@ -15,29 +15,39 @@ exports.salvarUsuario = (objectJSON) =>{
     });
 }
 
-exports.buscarUsuarioPorID = (idUsuario) => {
-    usuarioModel.findOne({id: idUsuario}).then(resp => {
-        return resp;
-    }).catch(err => {
-        return err;
-    });
+const buscarUsuarioPorID = (UsuarioJSON) => {
+
+    let model = usuarioModel.findOne({ id: UsuarioJSON.id }).then(res => {
+        if (res === null) {
+            salvarUsuario(UsuarioJSON);
+        } else {
+            if (res.id === UsuarioJSON.id) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+    })
+
+    return model;
 }
 
-exports.salvarUsuarioRoute = (req, res) =>{
+let salvarUsuarioRoute = (req, res) => {
     usuarioModel(req.body).save().then(resp => {
         res.status(200).send({
             mensagem: "Usuário salvo com sucesso!"
         });
     }).catch(err => {
         res.status(401).send({
-            mensagem: "Opss. houve um erro ao salvar o usuario no banco de dados!", 
+            mensagem: "Opss. houve um erro ao salvar o usuario no banco de dados!",
             error: err
         });
     });
 }
 
-exports.buscarUsuarioPorIDRoute = (req, res) => {
-    usuarioModel.findOne({id: req.params.id}).then(resp => {
+let buscarUsuarioPorIDRoute = (req, res) => {
+    usuarioModel.findOne({ id: req.params.id }).then(resp => {
         res.status(200).send(resp);
     }).catch(err => {
         res.status(401).send({
@@ -45,4 +55,11 @@ exports.buscarUsuarioPorIDRoute = (req, res) => {
             error: err
         });
     });
+}
+
+module.exports = {
+    salvarUsuario,
+    buscarUsuarioPorID,
+    salvarUsuarioRoute,
+    buscarUsuarioPorIDRoute
 }

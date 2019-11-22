@@ -19,7 +19,7 @@ class Header extends Component {
         <Navbar.Header>
 
           <Navbar.Brand>
-            <a href="#">{this.props.brandText}</a>
+            <a href="/">{this.props.brandText}</a>
           </Navbar.Brand>
 
         </Navbar.Header>
