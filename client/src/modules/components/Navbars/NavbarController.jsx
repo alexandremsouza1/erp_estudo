@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import Navbar from './Navbar';
+import {reactLocalStorage} from 'reactjs-localstorage';
 
 export default class NavbarController extends React.Component {
     constructor(props) {
@@ -11,14 +12,15 @@ export default class NavbarController extends React.Component {
         }
     }
 
-    componentdidMount = async () => {
-        await axios.get('http://localhost:5000/usuario/by/362614126').then(res => {
+    componentDidMount = async () => {
+        await axios.get('/usuario/by/362614126').then(res => {
             this.setState({
-                nomeUsuario: res.data
+                nomeUsuario: res.data.first_name
             })
         });
-
-        console.log("Nome Usuario: " + this.state.nomeUsuario);
+        //@sisiml/accessToken
+        let usuarioSession = reactLocalStorage.get('@sisiml/accessToken');
+        console.log("Nome Usuario: " + usuarioSession);
     }
 
     render() {

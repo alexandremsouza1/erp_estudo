@@ -1,6 +1,9 @@
 const MercadoLibreStrategy = require('passport-mercadolibre').Strategy;
 const keys = require('./keys');
 const usuarioController = require("../controllers/usuario-controller");
+const reactLocalStorage = require("reactjs-localstorage");
+var localStorage = require('localStorage');
+
 
 module.exports = (passport) => {
 
@@ -16,8 +19,11 @@ module.exports = (passport) => {
         usuarioController.salvarUsuario(setUsuario(profile, accessToken, refreshToken));
       }else{
         usuarioController.editarUsuario(res._id, accessToken, refreshToken);
+        localStorage.setItem('@sisiml/accessToken', accessToken);
+        console.log("LocalStorage: " + localStorage.getItem('@sisiml/accessToken'));
       }
     });
+    
     return done(null, profile);
   }
   ));
