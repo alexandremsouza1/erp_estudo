@@ -1,9 +1,9 @@
 import React from 'react';
 import axios from 'axios';
-import Navbar from '../Navbars';
+import Navbar from './Navbar';
 
 export default class NavbarController extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.state = {
@@ -11,20 +11,22 @@ export default class NavbarController extends React.Component {
         }
     }
 
-    componentdidMount = async () =>{
+    componentdidMount = async () => {
         await axios.get('http://localhost:5000/usuario/by/362614126').then(res => {
             this.setState({
                 nomeUsuario: res.data
             })
         });
 
-        console.log("Nome Usuario: "+this.state.nomeUsuario);
+        console.log("Nome Usuario: " + this.state.nomeUsuario);
     }
 
-    render(){
-        return(
+    render() {
+        return (
             <div>
-                <Navbar nomeUsuario = {this.state.nomeUsuario}></Navbar>
+                <Navbar nomeUsuario={this.state.nomeUsuario} 
+                        brandText={this.props.brandText} 
+                        {...this.props}/>
             </div>
         );
     }

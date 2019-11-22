@@ -1,8 +1,7 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 import NotificationSystem from "react-notification-system";
-
-import Navbar from "../modules/components/Navbars/Navbar";
+import NavbarController from "../modules/components/Navbars/NavbarController";
 import Footer from "../modules/components/Footer/Footer";
 import Sidebar from "../modules/components/Sidebar/Sidebar";
 
@@ -85,7 +84,7 @@ class Admin extends React.Component {
 
         <div id="main-panel" className="main-panel" ref="mainPanel">
 
-          <Navbar
+          <NavbarController
             {...this.props}
             brandText={this.getPathName(this.props.location.pathname)}
           />
