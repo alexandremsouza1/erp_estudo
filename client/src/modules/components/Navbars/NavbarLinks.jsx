@@ -31,6 +31,11 @@ class AdminNavbarLinks extends Component {
         </Nav>
 
         <Nav pullRight>
+          <NavItem eventKey={1} href="#">
+            Ola! {this.props.nomeUsuario}
+          </NavItem>
+
+
           <NavItem eventKey={3} href="#">
             Sair
           </NavItem>

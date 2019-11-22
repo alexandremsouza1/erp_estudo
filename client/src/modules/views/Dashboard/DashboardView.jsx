@@ -1,11 +1,11 @@
-import React, { Component } from "react";
+import React from "react";
 import { Grid, Row, Col } from "react-bootstrap";
 
 import { Card } from "modules/components/Card/Card.jsx";
 import { StatsCard } from "modules/components/StatsCard/StatsCard.jsx";
 import { PedidosPendentes } from "modules/components/PedidosPendentes/PedidosPendentes.jsx";
 
-class DashboardView extends Component {
+class DashboardView extends React.Component {
 
   render() {
     return (

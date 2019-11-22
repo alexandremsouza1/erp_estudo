@@ -34,7 +34,6 @@ exports.put = (req, res, next) => {
             error: err.message
         });
     });
-    
 };
 
 exports.listarTodosProdutos = (req, res, next) => {
