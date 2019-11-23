@@ -16,12 +16,10 @@
     "express": "^4.16.2",
     "express-session": "^1.17.0",
     "http": "0.0.0",
-    "localStorage": "^1.0.4",
     "mercadolibre": "0.0.13",
     "mongoose": "^5.7.10",
     "passport": "^0.4.0",
-    "passport-mercadolibre": "0.0.2",
-    "reactjs-localstorage": "0.0.8"
+    "passport-mercadolibre": "0.0.2"
   },
   "devDependencies": {
     "concurrently": "^3.5.0"

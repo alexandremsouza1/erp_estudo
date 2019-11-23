@@ -1,7 +1,6 @@
 import React from 'react';
 import axios from 'axios';
 import Navbar from './Navbar';
-import {reactLocalStorage} from 'reactjs-localstorage';
 
 export default class NavbarController extends React.Component {
     constructor(props) {
@@ -18,9 +17,6 @@ export default class NavbarController extends React.Component {
                 nomeUsuario: res.data.first_name
             })
         });
-        //@sisiml/accessToken
-        let usuarioSession = reactLocalStorage.get('@sisiml/accessToken');
-        console.log("Nome Usuario: " + usuarioSession);
     }
 
     render() {

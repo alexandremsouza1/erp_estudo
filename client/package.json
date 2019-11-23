@@ -19,7 +19,6 @@
     "react-router-dom": "5.0.0",
     "react-scripts": "3.0.0",
     "react-toggle": "4.0.2",
-    "reactjs-localstorage": "0.0.8",
     "redux": "^4.0.4"
   },
   "devDependencies": {

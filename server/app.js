@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * @author Felipe Miguel dos Santos
+ */
+
 const express = require('express');
 const passport = require("passport");
 const bodyParser = require('body-parser');
@@ -11,14 +15,20 @@ const app = express();
 require('../server/src/config/passport-mercadolivre')(passport); //PASSPORT MERCADOLIVRE - INJETANDO O PASSPORT
 const cors = require('cors');
 const usuarioRoute = require('../server/src/routes/usuario-route');
+const session = require('express-session');
 
-//Session
-const expressSession = require('express-session');
-app.use(expressSession({secret: 'sessionSecretKey'}));
-app.use(passport.initialize());
-app.use(passport.session());
+//  Adicionar e configurar middleware
+app.use(session({
+    secret: 'sessionSecretKey',
+    resave: true,
+    saveUninitialized: true
+}));
+
 app.use(cors());
 app.use(bodyParser.json());
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 app.use('/products', productRoute);
 

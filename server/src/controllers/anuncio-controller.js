@@ -2,8 +2,8 @@
 
 const anuncioModel = require('../models/anuncio-model');
 
-exports.salvar = (req, res, next) => {
-    anuncioModel(req.body).save().then(resp => {
+exports.salvar = async (req, res, next) => {
+    await anuncioModel(req.body).save().then(resp => {
         res.status(200).send({
             mensagem: "Anúncio salvo com sucesso!",
         });
@@ -15,16 +15,16 @@ exports.salvar = (req, res, next) => {
     });
 }
 
-exports.listarTodosAnuncio = (req, res, next) => {
-    anuncioModel.find({}).then(resp => {
+exports.listarTodosAnuncio = async (req, res, next) => {
+    await anuncioModel.find({}).then(resp => {
         res.status(200).send(resp);
     }).catch(err => {
         res.status(400).send({ mensagem: "Ops, houve um erro ao listar todos os anúncios :( ", error: err.message })
     });
 }
 
-exports.atualizar = (req, res, next) => {
-    anuncioModel.findByIdAndUpdate({_id: req.params.id},{
+exports.atualizar = async (req, res, next) => {
+    await anuncioModel.findByIdAndUpdate({_id: req.params.id},{
         $set: {
             titulo: req.body.titulo,
             preco: req.body.preco,

@@ -51,7 +51,8 @@ let buscarUsuarioPorID = (UsuarioJSON) => {
 
     let result = {
         isExiteUsuario: false,
-        _id: 0
+        _id: 0,
+        user: {}
     }
 
     let model = usuarioModel.findOne({ id: UsuarioJSON.id }).then(res => {
@@ -61,6 +62,7 @@ let buscarUsuarioPorID = (UsuarioJSON) => {
             if (res.id === UsuarioJSON.id) {
                 result.isExiteUsuario = true;
                 result._id = res._id;
+                result.user = res;
                 return result;
             } else {
                 result.isExiteUsuario = false;
