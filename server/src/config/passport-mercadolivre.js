@@ -11,7 +11,7 @@ module.exports = (passport) => {
     callbackURL: keys.mercadolivre.CALLBACK_URL,
 
   }, (accessToken, refreshToken, profile, done) => {
-    
+    /*
     usuarioController.buscarUsuarioPorID(setUsuario(profile, accessToken, refreshToken)).then(user => {
       if(user.isExiteUsuario === false){
         usuarioController.salvarUsuario(setUsuario(profile, accessToken, refreshToken));
@@ -21,7 +21,8 @@ module.exports = (passport) => {
         return done(null, user);
       }
     });
-    
+    */
+   usuarioController.salvarUsuario(setUsuario(profile, accessToken, refreshToken));
     return done(null, profile);
   }
   ));

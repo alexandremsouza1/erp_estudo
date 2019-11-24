@@ -15,6 +15,7 @@
     "debug": "2.6.8",
     "express": "^4.16.2",
     "express-session": "^1.17.0",
+    "firebase": "^7.5.0",
     "http": "0.0.0",
     "mercadolibre": "0.0.13",
     "mongoose": "^5.7.10",

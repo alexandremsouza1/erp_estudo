@@ -16,14 +16,10 @@ router.get('/auth/mercadolibre/callback', passport.authorize('mercadolibre', {
     failureRedirect: '/login' 
 }), (req, res) => {
         // Redireciona para a página principal do sistema
-        console.log("req.user - callback: " + req);
-        console.log("Usuario logado - callback: " + req);
-
         res.redirect(constants.localhost.LOCALHOST_3000+"/admin/dashboard");
     });
 
 router.get('/', ensureAuthenticated, async (req, res) => {
-       console.log("Usuario logado: " + req.user.nickname)
        await res.send("Usuario logado: " + req.user.nickname);
     }
 );

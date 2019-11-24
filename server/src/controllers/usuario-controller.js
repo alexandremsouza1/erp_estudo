@@ -1,54 +1,31 @@
-const usuarioModel = require("../models/usuario-model");
 const express = require('express');
 const router = express.Router();
+const axios = require("axios");
+const constants = require('../constants/constants');
 
 /**
  * @author Felipe Miguel dos Santos
  */
 
-const salvarUsuario = (objectJSON) => {
-    usuarioModel(objectJSON).save().then(resp => {
-        console.log("Usuário salvo com sucesso!");
+const salvarUsuario = async (usuario) => {
+    await axios.put(constants.urlbase.COLLECTION_USUARIOS, usuario).then(resp => {
+        console.log("Usuario salvo com sucesso!");
     }).catch(err => {
-        console.log("Opss. houve um erro ao salvar o usuario no banco de dados!");
-        console.log(err);
+        console.log("Houve um erro ao salvar o usuario no firebase: " + err);
     });
 }
 
 const editarUsuario = (_id, accessToken, refreshToken) => {
-    usuarioModel.findByIdAndUpdate({_id: _id}, {
-        $set: {
-            accessToken: accessToken,
-            refreshToken: refreshToken
-        }
-    }).then(resp => {
-        console.log("Usuario atualizado com sucesso.");
-    }).catch(err => {
-        console.log("Opss. houve um erro ao editar o usuario no banco de dados!");
-        console.log(err);
-    });
+  
+  
 }
 
 const editarUsuarioRoute = (req, res) => {
-    usuarioModel.findByIdAndUpdate({_id: req.params.id}, {
-        $set: {
-            accessToken: req.body.accessToken,
-            refreshToken: req.body.refreshToken
-        }
-    }).then(resp => {
-        res.status(200).send({
-            mensagem: `Dados atualizado com sucesso para o usuário ${profile.nick_name}`,
-        });
-    }).catch(err => {
-        res.status(400).send({
-            mensagem: "Opss. houve um erro ao editar o usuario no banco de dados!",
-            err: err
-        });
-    });
+   
 }
 
 let buscarUsuarioPorID = (UsuarioJSON) => {
-
+/*
     let result = {
         isExiteUsuario: false,
         _id: 0,
@@ -76,27 +53,24 @@ let buscarUsuarioPorID = (UsuarioJSON) => {
     });
 
     return model;
+
+    */
 }
 
 const salvarUsuarioRoute = (req, res) => {
-    usuarioModel(req.body).save().then(resp => {
-        res.status(200).send({
-            mensagem: "Usuário salvo com sucesso!"
-        });
-    }).catch(err => {
-        res.status(401).send({
-            mensagem: "Opss. houve um erro ao salvar o usuario no banco de dados!",
-            error: err
-        });
-    });
+    
 }
 
 const buscarUsuarioPorIDRoute = (req, res) => {
-    usuarioModel.findOne({ id: req.params.id }).then(resp => {
-        res.status(200).send(resp);
+    
+}
+
+const listarTodosUsuarios = async (req, res) => {
+    await axios.get(constants.urlbase.COLLECTION_USUARIOS).then(resp => {
+        res.status(200).send(resp.data);
     }).catch(err => {
         res.status(401).send({
-            mensagem: "Ops, houve um erro ao listar o usuário por ID",
+            mensagem: "houve um erro ao listar os usuarios",
             error: err
         });
     });
@@ -108,5 +82,6 @@ module.exports = {
     salvarUsuarioRoute,
     buscarUsuarioPorIDRoute,
     editarUsuarioRoute,
-    editarUsuario
+    editarUsuario,
+    listarTodosUsuarios
 }

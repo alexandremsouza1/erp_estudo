@@ -6,6 +6,11 @@ const localhost = {
     LOCALHOST_5000: `http://localhost:${PORT_5000}`
 }
 
+const urlbase = {
+    COLLECTION_USUARIOS: "https://sisiml.firebaseio.com/usuarios.json"
+}
+
 module.exports = {
-    localhost
+    localhost,
+    urlbase
 }
