@@ -16,6 +16,7 @@ require('../server/src/config/passport-mercadolivre')(passport); //PASSPORT MERC
 const cors = require('cors');
 const usuarioRoute = require('../server/src/routes/usuario-route');
 const session = require('express-session');
+const flash = require('connect-flash');
 
 //  Adicionar e configurar middleware
 app.use(session({
@@ -23,6 +24,14 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 }));
+
+app.use(flash());
+/*
+app.use((req, res, next) => {
+    res.locals.anuncio = req.flash("anuncioJSON");
+    next();
+});
+*/
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -39,5 +48,7 @@ app.use('/anuncio', anuncioRoute);
 app.use('/', mercadoLivreRoute);
 
 app.use('/usuario', usuarioRoute);
+
+
 
 module.exports = app;

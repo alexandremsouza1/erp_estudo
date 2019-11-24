@@ -2,7 +2,7 @@
 
 const mongoose = require('mongoose');
 const Product = require('../models/product-model');
-//const Product = mongoose.model('product'); Dessa forma não funciona, não sei porque...
+const axios = require("axios");
 
 
 exports.post = (req, res, next) => {

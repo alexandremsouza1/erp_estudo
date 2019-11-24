@@ -74,7 +74,12 @@ const getTodosAnuncios = async () => {
             resp.data.results.map(result => {
                 axios.get(`https://api.mercadolibre.com/items/${result}/`).then(resp => {
                     console.log("*** DETALHES DO ANUNCIO ***");
-                    console.log(resp.data);
+                    console.log("Título: "+resp.data.title);
+                    console.log("Preço: "+resp.data.price);
+                    console.log("Estoque total: "+resp.data.available_quantity);
+                    console.log("Foto principal: "+resp.data.pictures[0].url);
+                    console.log("Link do anúncio: "+resp.data.permalink);
+                    console.log("\n");
 
                 }).catch(err => {console.log("Houve um erro ao buscar os detalhes do anuncio: " + err)});
             });
