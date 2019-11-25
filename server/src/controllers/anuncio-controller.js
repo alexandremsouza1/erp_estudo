@@ -4,10 +4,7 @@ const axios = require('axios');
 const constants = require('../constants/constants');
 const localStorage = require('localStorage');
 
-
-var anuncio = {};
-
-
+var listaMAP = [];
 
 exports.salvar = async (req, res, next) => {
 
@@ -23,59 +20,66 @@ const buscarUsuarioPorID = async () => {
     return usuarios;
 }
 
-exports.listarTodosAnuncio = async (req, res, next) => {
-    var lista = [];
-    buscarUsuarioPorID().then(resp => {
-        
-        axios.get(`https://api.mercadolibre.com/users/${resp.id}/items/search?search_type=scan&access_token=${resp.accessToken}`).then(resp => {
-            /* console.log("\n")
-             console.log("***** TODOS OS ANUNCIOS *****");
-             console.log(resp.data.results);
-             console.log("\n")
- */
-            //let anuncio;
-            
-            resp.data.results.map(result => {
+exports.listarTodosAnuncio = async (req, res) => {
+    var listaAnuncio = [];
+    var resultadoBusca = buscarUsuarioPorID().then(resp => {
+
+        var resultGetAnuncios = axios.get(`https://api.mercadolibre.com/users/${resp.id}/items/search?search_type=scan&access_token=${resp.accessToken}`).then(response => {
+
+            //let anuncioConvertidosParaNumber  = response.data.results.map(result => {return Number(result)});
+            //console.log(anuncioConvertidosParaNumber );
+
+            var anuncioResult = new Promise((resolve, reject) => {
+
+                var detalhesAnuncio = response.data.results.map(result => {
+
+                    var resultDetalheAnuncio = axios.get(`https://api.mercadolibre.com/items/${result}/`).then(res => {
+
+                        var anuncio = {
+                            titulo: res.data.title,
+                            preco: res.data.price,
+                            estoque_total: res.data.available_quantity,
+                            foto_principal: res.data.pictures[0].url,
+                            link_anuncio: res.data.permalink
+                        }
+
+                        return anuncio;
 
 
-                axios.get(`https://api.mercadolibre.com/items/${result}/`).then(resp => {
-                    //console.log("*** DETALHES DO ANUNCIO ***");
-                    /*console.log("Título: "+resp.data.title);
-                    console.log("Preço: "+resp.data.price);
-                    console.log("Estoque total: "+resp.data.available_quantity);
-                    console.log("Foto principal: "+resp.data.pictures[0].url);
-                    console.log("Link do anúncio: "+resp.data.permalink);
-                    console.log("\n");
-*/
-                    var anuncio = {
-                        titulo: resp.data.title,
-                        preco: resp.data.price,
-                        estoque_total: resp.data.available_quantity,
-                        foto_principal: resp.data.pictures[0].url,
-                        link_anuncio: resp.data.permalink
-                    }
+                    }).catch(err => {
+                        console.log("Houve um erro ao buscar os detalhes do anuncio: " + err)
+                    });
 
-                    
+                   
 
-                    //lista.push(anuncio);
+                    return resultDetalheAnuncio;
 
-                    //console.log(anuncio);
-                    lista.push(anuncio);
-                    
+                })
 
-                }).catch(err => {
-                    console.log("Houve um erro ao buscar os detalhes do anuncio: " + err)
-                });
-                console.log(lista.map(r => {}));
+
+                
+                    console.log(detalhesAnuncio);
+               
+
+                resolve(detalhesAnuncio);
+
+            })
+
+            //console.log(anuncioResult);
+
+            anuncioResult.then(resp => {
+                res.status(200).send(resp);
+            }).catch(err => {
+                console.log(err);
             });
-            // lista.push(JSON.stringify(localStorage.getItem('anuncio')));
 
-        }).catch(err => { console.log("Houve um erro ao listar todos os anuncios: " + err) });
+
+
+
+        }).catch(err => {
+            console.log("Houve um erro ao listar todos os anuncios: " + err)
+        });
     })
-
-    //console.log(lista);
-    res.status(200).send(lista);
-
 }
 
 exports.atualizar = async (req, res, next) => {
