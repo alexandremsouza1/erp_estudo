@@ -21,17 +21,10 @@ const buscarUsuarioPorID = async () => {
 }
 
 exports.listarTodosAnuncio = async (req, res) => {
-    var listaAnuncio = [];
-    var resultadoBusca = buscarUsuarioPorID().then(resp => {
-
-        var resultGetAnuncios = axios.get(`https://api.mercadolibre.com/users/${resp.id}/items/search?search_type=scan&access_token=${resp.accessToken}`).then(response => {
-
-            var anuncioResult = new Promise((resolve, reject) => {
-
+    buscarUsuarioPorID().then(resp => {
+        axios.get(`https://api.mercadolibre.com/users/${resp.id}/items/search?search_type=scan&access_token=${resp.accessToken}`).then(response => {
                 var detalhesAnuncio = response.data.results.map(result => {
-
-                    var resultDetalheAnuncio = axios.get(`https://api.mercadolibre.com/items/${result}/`).then(res => {
-
+                    return axios.get(`https://api.mercadolibre.com/items/${result}/`).then(res => {
                         var anuncio = {
                             titulo: res.data.title,
                             preco: res.data.price,
@@ -39,33 +32,15 @@ exports.listarTodosAnuncio = async (req, res) => {
                             foto_principal: res.data.pictures[0].url,
                             link_anuncio: res.data.permalink
                         }
-
                         return anuncio;
-
                     }).catch(err => {
                         console.log("Houve um erro ao buscar os detalhes do anuncio: " + err)
                     });
-
-                    return resultDetalheAnuncio;
-
                 })
 
-                console.log(this.listaAnuncio);
-
-                resolve(detalhesAnuncio);
-
-            })
-
-            //console.log(anuncioResult);
-
-            anuncioResult.then(resp => {
-                res.status(200).send(resp);
-            }).catch(err => {
-                console.log(err);
-            });
-
-
-
+                Promise.all(detalhesAnuncio).then(resp => {
+                    res.send(resp)
+                });
 
         }).catch(err => {
             console.log("Houve um erro ao listar todos os anuncios: " + err)
