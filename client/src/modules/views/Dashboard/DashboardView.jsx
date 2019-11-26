@@ -5,9 +5,8 @@ import { Card } from "modules/components/Card/Card.jsx";
 import { StatsCard } from "modules/components/StatsCard/StatsCard.jsx";
 import { PedidosPendentes } from "modules/components/PedidosPendentes/PedidosPendentes.jsx";
 
-class DashboardView extends React.Component {
+export default function DashboardView(props) {
 
-  render() {
     return (
       <div className="content">
         <Grid fluid>
@@ -26,7 +25,7 @@ class DashboardView extends React.Component {
               <StatsCard
                 bigIcon={<i className="pe-7s-wallet text-success" />}
                 statsText="Saldo"
-                statsValue="R$: 3.987,65"
+                statsValue={<span>R${props.saldoTotal}</span>}
                 statsIcon={<i className="fa fa-calendar-o" />}
                 statsIconText="Atualizado as 23:10"
               />
@@ -42,7 +41,7 @@ class DashboardView extends React.Component {
               />
             </Col>
           </Row>
-          
+
 
           <Row>
 
@@ -65,7 +64,7 @@ class DashboardView extends React.Component {
         </Grid>
       </div>
     );
-  }
+  
 }
 
-export default DashboardView;
+

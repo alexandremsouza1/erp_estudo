@@ -17,7 +17,7 @@ const cors = require('cors');
 const usuarioRoute = require('../server/src/routes/usuario-route');
 const session = require('express-session');
 const flash = require('connect-flash');
-
+const saldoRoute = require('./src/routes/saldo-route')
 //  Adicionar e configurar middleware
 app.use(session({
     secret: 'sessionSecretKey',
@@ -26,18 +26,11 @@ app.use(session({
 }));
 
 app.use(flash());
-/*
-app.use((req, res, next) => {
-    res.locals.anuncio = req.flash("anuncioJSON");
-    next();
-});
-*/
 
 app.use(cors());
 app.use(bodyParser.json());
 app.use(passport.initialize());
 app.use(passport.session());
-
 
 app.use('/products', productRoute);
 
@@ -49,6 +42,7 @@ app.use('/', mercadoLivreRoute);
 
 app.use('/usuario', usuarioRoute);
 
+app.use('/saldo', saldoRoute);
 
 
 module.exports = app;

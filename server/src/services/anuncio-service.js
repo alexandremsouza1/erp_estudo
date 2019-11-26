@@ -2,30 +2,16 @@
 
 const axios = require('axios');
 const constants = require('../constants/constants');
-const localStorage = require('localStorage');
+const usuarioService = require('../services/usuario-service')
 
-var listaMAP = [];
-
-exports.salvar = async (req, res, next) => {
-
-}
-
-const buscarUsuarioPorID = async () => {
-    const usuarios = await axios.get(constants.urlbase.COLLECTION_USUARIOS).then(resp => {
-        return resp.data;
-    }).catch(err => {
-        console.log("Houve um erro ao listar todos os usuarios: " + err);
-        res.status(401).send({ mensagem: "Houve um erro ao listar todos os usuarios: " + err })
-    });
-    return usuarios;
-}
+exports.salvar = async (req, res, next) => {}
 
 exports.listarTodosAnuncio = async (req, res) => {
-    buscarUsuarioPorID().then(resp => {
+    usuarioService.buscarUsuarioPorID().then(resp => {
         axios.get(`${constants.API_MERCADO_LIVRE}/users/${resp.id}/items/search?search_type=scan&access_token=${resp.accessToken}`).then(response => {
                 var detalhesAnuncio = response.data.results.map(result => {
-                    return axios.get(`https://api.mercadolibre.com/items/${result}/`).then(res => {
-                        return axios.get(`https://api.mercadolibre.com/visits/items?ids=${result}`).then(resp => {
+                    return axios.get(`${constants.API_MERCADO_LIVRE}/items/${result}/`).then(res => {
+                        return axios.get(`${constants.API_MERCADO_LIVRE}/visits/items?ids=${result}`).then(resp => {
                             var anuncio = {
                                 id: res.data.id,
                                 titulo: res.data.title,
@@ -38,7 +24,7 @@ exports.listarTodosAnuncio = async (req, res) => {
                             }
                             return anuncio;
                         }).catch(err => {
-    
+                            console.log("Houve um erro: " + err)
                         })
                     }).catch(err => {
                         console.log("Houve um erro ao buscar os detalhes do anuncio: " + err)

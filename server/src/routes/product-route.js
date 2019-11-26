@@ -1,9 +1,9 @@
 "use strict"
 
 const express = require("express");
-const productController = require('../controllers/product-controller');
+const productService = require('../services/product-service');
 const router = express.Router();
 
-router.post('/', productController.listarTodosProdutos);
+router.post('/', productService.listarTodosProdutos);
 
 module.exports = router;

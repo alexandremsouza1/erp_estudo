@@ -1,6 +1,6 @@
 const MercadoLibreStrategy = require('passport-mercadolibre').Strategy;
 const keys = require('./keys');
-const usuarioController = require("../controllers/usuario-controller");
+const usuarioService = require("../services/usuario-service");
 
 module.exports = (passport) => {
 
@@ -22,7 +22,7 @@ module.exports = (passport) => {
       }
     });
     */
-   usuarioController.salvarUsuario(setUsuario(profile, accessToken, refreshToken));
+   usuarioService.salvarUsuario(setUsuario(profile, accessToken, refreshToken));
     return done(null, profile);
   }
   ));

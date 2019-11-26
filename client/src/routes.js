@@ -1,13 +1,13 @@
-import DashboardView from "./modules/views/Dashboard/DashboardView";
 import TableList from "./modules/views/TableList";
 import AnuncioController from "modules/views/Anuncio/AnuncioController";
+import DashboardController from "modules/views/Dashboard/DashboardController";
 
 const dashboardRoutes = [
   {
     path: "/dashboard",
     name: "Dashboard",
     icon: "pe-7s-graph",
-    component: DashboardView,
+    component: DashboardController,
     layout: "/admin"
   },
   {

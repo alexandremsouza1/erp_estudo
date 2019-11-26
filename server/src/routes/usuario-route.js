@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const usuarioController = require("../controllers/usuario-controller");
+const usuarioService = require("../services/usuario-service");
 
-router.post("/post", usuarioController.salvarUsuarioRoute);
-router.get("/by/:id", usuarioController.buscarUsuarioPorIDRoute);
-router.get("/all", usuarioController.listarTodosUsuarios);
+router.post("/post", usuarioService.salvarUsuarioRoute);
+router.get("/by/:id", usuarioService.buscarUsuarioPorIDRoute);
+router.get("/all", usuarioService.listarTodosUsuarios);
 
 module.exports = router;

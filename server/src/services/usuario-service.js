@@ -24,38 +24,6 @@ const editarUsuarioRoute = (req, res) => {
    
 }
 
-let buscarUsuarioPorID = (UsuarioJSON) => {
-/*
-    let result = {
-        isExiteUsuario: false,
-        _id: 0,
-        user: {}
-    }
-
-    let model = usuarioModel.findOne({ id: UsuarioJSON.id }).then(res => {
-        if (res === null) {
-            salvarUsuario(UsuarioJSON);
-        } else {
-            if (res.id === UsuarioJSON.id) {
-                result.isExiteUsuario = true;
-                result._id = res._id;
-                result.user = res;
-                return result;
-            } else {
-                result.isExiteUsuario = false;
-                return result;
-            }
-        }
-
-    }).catch(err => {
-        console.log("Opss. houve um erro ao buscar o usuario pelo ID no banco de dados!");
-        console.log(err);
-    });
-
-    return model;
-
-    */
-}
 
 const salvarUsuarioRoute = (req, res) => {
     
@@ -74,6 +42,16 @@ const listarTodosUsuarios = async (req, res) => {
             error: err
         });
     });
+}
+
+const buscarUsuarioPorID = async () => {
+    const usuarios = await axios.get(constants.urlbase.COLLECTION_USUARIOS).then(resp => {
+        return resp.data;
+    }).catch(err => {
+        console.log("Houve um erro ao listar todos os usuarios: " + err);
+        res.status(401).send({ mensagem: "Houve um erro ao listar todos os usuarios: " + err })
+    });
+    return usuarios;
 }
 
 module.exports = {
