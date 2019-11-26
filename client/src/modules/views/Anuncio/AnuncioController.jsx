@@ -2,7 +2,6 @@ import React from 'react'
 import AnuncioView from './AnuncioView';
 import axios from 'axios'
 
-
 export default class AnuncioController extends React.Component {
 
     constructor(props) {
@@ -19,21 +18,13 @@ export default class AnuncioController extends React.Component {
 
     componentDidMount() {
        
-        axios.get('http://localhost:5000/anuncio').then(res => {
+        axios.get(`http://localhost:5000/anuncio`).then(res => {
            this.setState({
                 result: res.data
             });
-            
-           console.log(this.state.result);
         });
-
-        
-            
     }
 
-    
-
-    
 
     render() {
         return(

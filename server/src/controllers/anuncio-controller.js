@@ -22,17 +22,24 @@ const buscarUsuarioPorID = async () => {
 
 exports.listarTodosAnuncio = async (req, res) => {
     buscarUsuarioPorID().then(resp => {
-        axios.get(`https://api.mercadolibre.com/users/${resp.id}/items/search?search_type=scan&access_token=${resp.accessToken}`).then(response => {
+        axios.get(`${constants.API_MERCADO_LIVRE}/users/${resp.id}/items/search?search_type=scan&access_token=${resp.accessToken}`).then(response => {
                 var detalhesAnuncio = response.data.results.map(result => {
                     return axios.get(`https://api.mercadolibre.com/items/${result}/`).then(res => {
-                        var anuncio = {
-                            titulo: res.data.title,
-                            preco: res.data.price,
-                            estoque_total: res.data.available_quantity,
-                            foto_principal: res.data.pictures[0].url,
-                            link_anuncio: res.data.permalink
-                        }
-                        return anuncio;
+                        return axios.get(`https://api.mercadolibre.com/visits/items?ids=${result}`).then(resp => {
+                            var anuncio = {
+                                id: res.data.id,
+                                titulo: res.data.title,
+                                preco: res.data.price,
+                                estoque_total: res.data.available_quantity,
+                                foto_principal: res.data.pictures[0].url,
+                                link_anuncio: res.data.permalink,
+                                status: res.data.status,
+                                visualizacao: Object.values(resp.data).reduce((accumulador, valorCorrente) => {return valorCorrente})
+                            }
+                            return anuncio;
+                        }).catch(err => {
+    
+                        })
                     }).catch(err => {
                         console.log("Houve um erro ao buscar os detalhes do anuncio: " + err)
                     });

@@ -10,7 +10,10 @@ const urlbase = {
     COLLECTION_USUARIOS: "https://sisiml.firebaseio.com/usuarios.json"
 }
 
+const API_MERCADO_LIVRE = "https://api.mercadolibre.com"
+
 module.exports = {
     localhost,
-    urlbase
+    urlbase,
+    API_MERCADO_LIVRE
 }

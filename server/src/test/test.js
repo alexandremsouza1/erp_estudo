@@ -65,26 +65,37 @@ const buscarUsuarioPorID = async () => {
 
 const getTodosAnuncios = async () => {
     buscarUsuarioPorID().then(resp => {
-        axios.get(`https://api.mercadolibre.com/users/${resp.id}/items/search?search_type=scan&access_token=${resp.accessToken}`).then(resp => {
-            console.log("\n")
-            console.log("***** TODOS OS ANUNCIOS *****");
-            console.log(resp.data.results);
-            console.log("\n")
+        axios.get(`${constants.API_MERCADO_LIVRE}/users/${resp.id}/items/search?search_type=scan&access_token=${resp.accessToken}`).then(response => {
+            var detalhesAnuncio = response.data.results.map(result => {
+                return axios.get(`https://api.mercadolibre.com/items/${result}/`).then(res => {
+                    return axios.get(`https://api.mercadolibre.com/visits/items?ids=${result}`).then(resp => {
+                        var anuncio = {
+                            id: res.data.id,
+                            titulo: res.data.title,
+                            preco: res.data.price,
+                            estoque_total: res.data.available_quantity,
+                            foto_principal: res.data.pictures[0].url,
+                            link_anuncio: res.data.permalink,
+                            status: res.data.status,
+                            visualizacao: Object.values(resp.data).reduce((accumulador, valorCorrente) => {return valorCorrente})
+                        }
+                        return anuncio;
+                    }).catch(err => {
 
-            resp.data.results.map(result => {
-                axios.get(`https://api.mercadolibre.com/items/${result}/`).then(resp => {
-                    console.log("*** DETALHES DO ANUNCIO ***");
-                    console.log("Título: "+resp.data.title);
-                    console.log("Preço: "+resp.data.price);
-                    console.log("Estoque total: "+resp.data.available_quantity);
-                    console.log("Foto principal: "+resp.data.pictures[0].url);
-                    console.log("Link do anúncio: "+resp.data.permalink);
-                    console.log("\n");
+                    })
 
-                }).catch(err => {console.log("Houve um erro ao buscar os detalhes do anuncio: " + err)});
+                }).catch(err => {
+                    console.log("Houve um erro ao buscar os detalhes do anuncio: " + err)
+                });
+            })
+
+            Promise.all(detalhesAnuncio).then(resp => {
+                console.log(resp)
             });
-    
-        }).catch(err => {console.log("Houve um erro ao listar todos os anuncios: " + err)});
+
+        }).catch(err => {
+            console.log("Houve um erro ao listar todos os anuncios: " + err)
+        });
     })
 }
 

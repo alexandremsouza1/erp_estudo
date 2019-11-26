@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { Grid, Row, Col, Table } from "react-bootstrap";
 import Card from "modules/components/Card/Card.jsx";
 import Button from "modules/components/CustomButton/CustomButton.jsx";
+import StatsCard from "modules/components/StatsCard/StatsCard";
+import { Badge } from 'react-bootstrap';
 
 class TableList extends Component {
 
@@ -13,34 +15,42 @@ class TableList extends Component {
             <Col md={12}>
               <Card
                 title={this.props.title}
-                category="Here is a subtitle for this table"
+                category="Anúncios Ativos"
                 ctTableFullWidth
                 ctTableResponsive
                 content={
                   <Table striped hover>
-
-                    <thead>
-                      <tr>
-                        {this.props.thArray.map((prop, key) => {
-                          return <th key={key}>{prop}</th>;
-                        })}
-                      </tr>
-                    </thead>
-
                     <tbody>
                       {this.props.result.map(prop => {
                         return (
                           <tr>
-                            <td>{prop.titulo}</td>
-                            <td>{prop.preco}</td>
-                            <td>{prop.descricao}</td>
+                            <td><img src={prop.foto_principal} height='100' width='80'/></td>  
+                            <td>
+                              <a href={prop.link_anuncio} target='_blank'>{prop.titulo}</a>
+                              <br/>#{prop.id}
+                              <br></br>
+                              <Badge pill variant="warning">
+                                <span style={{"font-weight": "bold"}}>Status: {prop.status === 'active' ? 'Ativo' : 'Inativo'}</span>
+                              </Badge>  
+                            </td>
+                            
+                            <td>
+                            <Badge>R$: {prop.preco}</Badge>
+                              <br/>
+                            <Badge>{prop.visualizacao} Visitas</Badge>
+                              <br/>
+                            Estoque total: {prop.estoque_total}
+                            </td>
+                           
                             <td>
                               <Button bsStyle="info" pullRight fill type="submit">
                                 Editar
                               </Button>
                             </td>
-                          </tr>)
-                      })}
+                          </tr> 
+                        )
+                      }
+                      )}
                     </tbody>
 
                   </Table>
