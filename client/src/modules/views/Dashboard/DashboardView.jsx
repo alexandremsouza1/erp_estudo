@@ -5,6 +5,7 @@ import { Card } from "modules/components/Card/Card.jsx";
 import { StatsCard } from "modules/components/StatsCard/StatsCard.jsx";
 import  PedidosPendentes  from "modules/components/PedidosPendentes/PedidosPendentes";
 
+
 export default function DashboardView(props) {
   return (
     <div className="content">

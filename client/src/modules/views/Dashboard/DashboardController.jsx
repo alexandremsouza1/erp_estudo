@@ -7,7 +7,9 @@ export default class DashboardController extends React.Component {
     constructor(props) {
         super(props)
 
-        this.state = {}
+        this.state = {
+            isLoading: true
+        }
     }
 
     componentDidMount() {
@@ -34,7 +36,8 @@ export default class DashboardController extends React.Component {
                 dataPedido: resp.data.dataPedido,
                 valor: resp.data.preco.toLocaleString('pt-BR'),
                 linkBoleto: resp.data.boleto,
-                fotoPrincipal: resp.data.fotoPrincipal
+                fotoPrincipal: resp.data.fotoPrincipal,
+                isLoading: false
             })
         })
     }

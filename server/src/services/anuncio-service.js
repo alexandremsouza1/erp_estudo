@@ -24,10 +24,10 @@ exports.listarTodosAnuncio = async (req, res) => {
                             }
                             return anuncio;
                         }).catch(err => {
-                            console.log("Houve um erro: " + err)
+                            res.send("Houve um erro: " + err)
                         })
                     }).catch(err => {
-                        console.log("Houve um erro ao buscar os detalhes do anuncio: " + err)
+                        res.send("Houve um erro ao buscar os detalhes do anuncio: " + err)
                     });
                 })
 
@@ -36,7 +36,7 @@ exports.listarTodosAnuncio = async (req, res) => {
                 });
 
         }).catch(err => {
-            console.log("Houve um erro ao listar todos os anuncios: " + err)
+            res.send("Houve um erro ao listar todos os anuncios: " + err)
         });
     })
 }

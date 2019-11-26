@@ -1,16 +1,19 @@
 import React, { Component } from "react";
-import { Grid, Row, Col, Table } from "react-bootstrap";
+import { Grid, Row, Col, Table} from "react-bootstrap";
 import Card from "modules/components/Card/Card.jsx";
 import Button from "modules/components/CustomButton/CustomButton.jsx";
 import { Badge } from 'react-bootstrap';
+import LoadingCarregandoSolicitacao from "modules/components/Loading/LoadingCarregandoSolicitacao"
 
 export default function TableList(props) {
+  
   if (!props.isLoading) {
     return (
       <div className="content">
         <Grid fluid>
           <Row>
             <Col md={12}>
+
               <Card
                 title={props.title}
                 category="Anúncios Ativos"
@@ -60,8 +63,9 @@ export default function TableList(props) {
         </Grid>
       </div>
     );
-  }else{
-    return(
+  } else {
+    return (
+      <>
       <div className="content">
         <Grid fluid>
           <Row>
@@ -72,16 +76,14 @@ export default function TableList(props) {
                 ctTableFullWidth
                 ctTableResponsive
                 content={
-                  <Table striped hover>
-                    {'colocar o progressbar aqui'}
-
-                  </Table>
+                  <LoadingCarregandoSolicitacao width={450}/>
                 }
               />
             </Col>
           </Row>
         </Grid>
       </div>
+      </>
     )
   }
 }

@@ -13,25 +13,24 @@ export default class AnuncioController extends React.Component {
             result: [{}],
             isLoading: true
         }
-
-       
+ 
     }
 
-    componentDidMount() {
-       
+    componentDidMount(){
+       console.log("Clique")
         axios.get(`http://localhost:5000/anuncio`).then(res => {
            this.setState({
                 result: res.data,
                 isLoading: false
             });
-        }).catch(err => err);
+        }).catch(err => {console.log(err)});
     }
 
 
     render() {
         return(
             <div>
-                <AnuncioView {...this.state}/>
+                <AnuncioView {...this.state} mostrarAnuncios={this.state.mostrarAnuncios}/>
             </div>
         );
     }

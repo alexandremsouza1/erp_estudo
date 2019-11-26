@@ -83,7 +83,7 @@ const getTodosAnuncios = async () => {
                         }
                         return anuncio;
                     }).catch(err => {
-
+                        console.log("Houve um erro: " + err)
                     })
 
                 }).catch(err => {
@@ -154,4 +154,4 @@ const obterDadosClient = async () => {
 //salvarUsuario();
 //salvarUsuarioAPI();
 //listarViaAPI();
-obterDadosClient()
+getTodosAnuncios()
