@@ -26,9 +26,6 @@ exports.listarTodosAnuncio = async (req, res) => {
 
         var resultGetAnuncios = axios.get(`https://api.mercadolibre.com/users/${resp.id}/items/search?search_type=scan&access_token=${resp.accessToken}`).then(response => {
 
-            //let anuncioConvertidosParaNumber  = response.data.results.map(result => {return Number(result)});
-            //console.log(anuncioConvertidosParaNumber );
-
             var anuncioResult = new Promise((resolve, reject) => {
 
                 var detalhesAnuncio = response.data.results.map(result => {
@@ -45,21 +42,15 @@ exports.listarTodosAnuncio = async (req, res) => {
 
                         return anuncio;
 
-
                     }).catch(err => {
                         console.log("Houve um erro ao buscar os detalhes do anuncio: " + err)
                     });
-
-                   
 
                     return resultDetalheAnuncio;
 
                 })
 
-
-                
-                    console.log(detalhesAnuncio);
-               
+                console.log(this.listaAnuncio);
 
                 resolve(detalhesAnuncio);
 
