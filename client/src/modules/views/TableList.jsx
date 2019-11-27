@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Grid, Row, Col, Table } from "react-bootstrap";
 import Card from "modules/components/Card/Card.jsx";
 import Button from "modules/components/CustomButton/CustomButton.jsx";
-import StatsCard from "modules/components/StatsCard/StatsCard";
 import { Badge } from 'react-bootstrap';
 
 class TableList extends Component {
@@ -24,9 +23,9 @@ class TableList extends Component {
                       {this.props.result.map(prop => {
                         return (
                           <tr>
-                            <td><img src={prop.foto_principal} height='100' width='80'/></td>  
+                            <td><img src={prop.foto_principal} alt='fotoPrincipal' height='100' width='80'/></td>  
                             <td>
-                              <a href={prop.link_anuncio} target='_blank'>{prop.titulo}</a>
+                              <a href={prop.link_anuncio} rel="noopener noreferrer" target='_blank'>{prop.titulo}</a>
                               <br/>#{prop.id}
                               <br></br>
                               <Badge pill variant="warning">

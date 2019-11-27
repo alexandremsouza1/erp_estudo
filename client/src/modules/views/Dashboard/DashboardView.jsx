@@ -6,7 +6,6 @@ import { StatsCard } from "modules/components/StatsCard/StatsCard.jsx";
 import { PedidosPendentes } from "modules/components/PedidosPendentes/PedidosPendentes.jsx";
 
 export default function DashboardView(props) {
-
     return (
       <div className="content">
         <Grid fluid>
@@ -25,7 +24,7 @@ export default function DashboardView(props) {
               <StatsCard
                 bigIcon={<i className="pe-7s-wallet text-success" />}
                 statsText="Saldo"
-                statsValue={<span>R${props.saldoTotal}</span>}
+                statsValue={props.saldoTotal}
                 statsIcon={<i className="fa fa-calendar-o" />}
                 statsIconText="Atualizado as 23:10"
               />

@@ -7,24 +7,23 @@ export default class DashboardController extends React.Component {
     constructor(props){
         super(props)
 
-        this.state = {
-            saldoTotal: 0,
-            saldoDisponivel: 0
-        }
+        this.state = {}
     }
 
     componentDidMount() {
-        axios.get('http://localhost:5000/saldo').then(resp =>{
+        axios.get('http://localhost:5000/saldo').then(res =>{
             this.setState({
-                saldoTotal: resp.saldo_total,
-                saldoDisponivel: resp.disponivel
+                saldoTotal: res.data.saldo_total.toLocaleString('pt-BR'),
+                saldoDisponivel: res.data.disponivel.toLocaleString('pt-BR')
             })
         })
     }
 
     render(){
         return(
-            <div><DashboardView {...this.state}/></div>
+            <div>
+                <DashboardView {...this.state}/>  
+            </div>
         )
     }
 
