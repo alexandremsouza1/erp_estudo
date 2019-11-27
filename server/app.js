@@ -18,6 +18,9 @@ const usuarioRoute = require('../server/src/routes/usuario-route');
 const session = require('express-session');
 const flash = require('connect-flash');
 const saldoRoute = require('./src/routes/saldo-route')
+const vendasRoute = require('../server/src/routes/vendas.router')
+
+
 //  Adicionar e configurar middleware
 app.use(session({
     secret: 'sessionSecretKey',
@@ -44,5 +47,6 @@ app.use('/usuario', usuarioRoute);
 
 app.use('/saldo', saldoRoute);
 
+app.use('/total-vendas', vendasRoute)
 
 module.exports = app;

@@ -77,7 +77,7 @@ const getTodosAnuncios = async () => {
                             foto_principal: res.data.pictures[0].url,
                             link_anuncio: res.data.permalink,
                             status: res.data.status,
-                            visualizacao: Object.values(resp.data).reduce((accumulador, valorCorrente) => {return valorCorrente})
+                            visualizacao: Object.values(resp.data).reduce((accumulador, valorCorrente) => { return valorCorrente })
                         }
                         return anuncio;
                     }).catch(err => {
@@ -99,7 +99,18 @@ const getTodosAnuncios = async () => {
     })
 }
 
+const obterTotalDeVendas = async () => {
+    buscarUsuarioPorID().then(resp => {
+        axios.get(`${constants.API_MERCADO_LIVRE}/orders/search?seller=${resp.id}&order.status=paid&access_token=${resp.accessToken}`).then(resp => {
+            console.log(resp.data.results)
+        }).catch(err => {
+            console.log({ mensagem: "Houve um erro ao buscar todas as vendas realizadas: " + err })
+        })
+    })
+
+}
+
 //salvarUsuario();
 //salvarUsuarioAPI();
 //listarViaAPI();
-getTodosAnuncios();
+obterTotalDeVendas();
