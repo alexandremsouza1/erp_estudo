@@ -47,6 +47,6 @@ app.use('/usuario', usuarioRoute);
 
 app.use('/saldo', saldoRoute);
 
-app.use('/total-vendas', vendasRoute)
+app.use('/vendas', vendasRoute)
 
 module.exports = app;

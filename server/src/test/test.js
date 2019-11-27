@@ -100,17 +100,39 @@ const getTodosAnuncios = async () => {
 }
 
 const obterTotalDeVendas = async () => {
+    var data = new Date();
     buscarUsuarioPorID().then(resp => {
-        axios.get(`${constants.API_MERCADO_LIVRE}/orders/search?seller=${resp.id}&order.status=paid&access_token=${resp.accessToken}`).then(resp => {
-            console.log(resp.data.results)
+        axios.get(`${constants.API_MERCADO_LIVRE}/orders/search?seller=${resp.id}&order.status=paid&order.date_created.from=2019-${data.getMonth()+1}-01T00:00:00.000-00:00&order.date_created.to=2019-${data.getMonth()+1}-30T00:00:00.000-00:00&&access_token=${resp.accessToken}`).then(resp => {
+            console.log({total: resp.data.results.length+1})
         }).catch(err => {
             console.log({ mensagem: "Houve um erro ao buscar todas as vendas realizadas: " + err })
         })
     })
 
 }
+var primeiroEUltimodia = obterPrimeiro_Ultimodia = () => {
+    var date = new Date();
+    var primeiroDia = new Date(date.getFullYear(), date.getMonth(), 1);
+    var ultimoDia = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+
+    var primeiro_dia = primeiroDia.toString()
+    var ultimo_dia = ultimoDia.toString()
+
+
+
+    var data = new Date()
+    var dia = data.getDate();
+    var mes = data.getMonth();
+    var ano = data.getFullYear();
+    data = ano+ '-' + (mes+1) + '-' + dia 
+
+    console.log(primeiroDia)
+    console.log(ultimoDia)
+    console.log(data)
+}
+
 
 //salvarUsuario();
 //salvarUsuarioAPI();
 //listarViaAPI();
-obterTotalDeVendas();
+obterTotalDeVendas()
