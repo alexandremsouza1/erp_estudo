@@ -110,8 +110,8 @@ const obterTotalDeVendas = async () => {
             console.log({ mensagem: "Houve um erro ao buscar todas as vendas realizadas: " + err })
         })
     })
-
 }
+
 const obterVendasPendentes = async () => {
     usuarioService.buscarUsuarioPorID().then(resp => {
         axios.get(`${constants.API_MERCADO_LIVRE}/orders/search/pending?seller=${resp.id}&access_token=${resp.accessToken}`).then(response => {
@@ -126,8 +126,32 @@ const obterVendasPendentes = async () => {
     })
 }
 
+const obterDadosClient = async () => {
+    buscarUsuarioPorID().then(resp => {
+        axios.get(`${constants.API_MERCADO_LIVRE}/orders/search?seller=${resp.id}&order.status=paid&access_token=${resp.accessToken}`).then(resp => {
+            resp.data.results.filter(function (a) {
+                //Evita os IDs duplicados
+                return !this[JSON.stringify(a.buyer.id)] && (this[JSON.stringify(a.buyer.id)] = true)
+            }, Object.create(null)).map(value => {
+                console.log({
+                    id: value.buyer.id,
+                    nickname: value.buyer.nickname,
+                    numero_contato: value.buyer.phone.number,
+                    ddd: value.buyer.phone.area_code,
+                    primeiro_nome: value.buyer.first_name,
+                    last_name: value.buyer.last_name,
+                    tipo_documento: value.buyer.billing_info.doc_type,
+                    documento: value.buyer.billing_info.doc_number		
+                })
+            })
+        }).catch(err => {
+            console.log({ mensagem: "Houve um erro ao buscar todas as vendas realizadas: " + err })
+        })
+    })
+}
+
 
 //salvarUsuario();
 //salvarUsuarioAPI();
 //listarViaAPI();
-obterVendasPendentes()
+obterDadosClient()

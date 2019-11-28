@@ -4,23 +4,22 @@ import Card from "modules/components/Card/Card.jsx";
 import Button from "modules/components/CustomButton/CustomButton.jsx";
 import { Badge } from 'react-bootstrap';
 
-class TableList extends Component {
-
-  render() {
+export default function TableList(props) {
+  if (!props.isLoading) {
     return (
       <div className="content">
         <Grid fluid>
           <Row>
             <Col md={12}>
               <Card
-                title={this.props.title}
+                title={props.title}
                 category="Anúncios Ativos"
                 ctTableFullWidth
                 ctTableResponsive
                 content={
                   <Table striped hover>
                     <tbody>
-                      {this.props.result.map(prop => {
+                      {props.result.map(prop => {
                         return (
                           <tr>
                             <td><img src={prop.foto_principal} alt='fotoPrincipal' height='100' width='80' /></td>
@@ -43,7 +42,7 @@ class TableList extends Component {
 
                             <td>
                               <Button bsStyle="info" pullRight fill type="submit">
-                                <i className='pe-7s-next-2'></i>
+                                <i className='fa fa-edit'></i>
                                 Editar
                               </Button>
                             </td>
@@ -61,7 +60,31 @@ class TableList extends Component {
         </Grid>
       </div>
     );
+  }else{
+    return(
+      <div className="content">
+        <Grid fluid>
+          <Row>
+            <Col md={12}>
+              <Card
+                title={props.title}
+                category="Anúncios Ativos"
+                ctTableFullWidth
+                ctTableResponsive
+                content={
+                  <Table striped hover>
+                    {'colocar o progressbar aqui'}
+
+                  </Table>
+                }
+              />
+            </Col>
+          </Row>
+        </Grid>
+      </div>
+    )
   }
 }
 
-export default TableList;
+
+

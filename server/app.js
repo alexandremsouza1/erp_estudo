@@ -19,6 +19,7 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const saldoRoute = require('./src/routes/saldo-route')
 const vendasRoute = require('../server/src/routes/vendas.router')
+const clienteRoute = require('../server/src/routes/cliente.route')
 
 
 //  Adicionar e configurar middleware
@@ -48,5 +49,7 @@ app.use('/usuario', usuarioRoute);
 app.use('/saldo', saldoRoute);
 
 app.use('/vendas', vendasRoute)
+
+app.use('/clientes', clienteRoute)
 
 module.exports = app;

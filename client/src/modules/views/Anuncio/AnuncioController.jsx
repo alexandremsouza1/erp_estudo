@@ -10,7 +10,8 @@ export default class AnuncioController extends React.Component {
         this.state = {
             response: '',
             thArray: ['Título', 'Preço', "Descrição"],
-            result: [{}]
+            result: [{}],
+            isLoading: true
         }
 
        
@@ -20,9 +21,10 @@ export default class AnuncioController extends React.Component {
        
         axios.get(`http://localhost:5000/anuncio`).then(res => {
            this.setState({
-                result: res.data
+                result: res.data,
+                isLoading: false
             });
-        });
+        }).catch(err => err);
     }
 
 
