@@ -3,7 +3,7 @@ import { Grid, Row, Col } from "react-bootstrap";
 
 import { Card } from "modules/components/Card/Card.jsx";
 import { StatsCard } from "modules/components/StatsCard/StatsCard.jsx";
-import { PedidosPendentes } from "modules/components/PedidosPendentes/PedidosPendentes.jsx";
+import  PedidosPendentes  from "modules/components/PedidosPendentes/PedidosPendentes";
 
 export default function DashboardView(props) {
   return (
@@ -16,7 +16,7 @@ export default function DashboardView(props) {
               statsText="Total de vendas"
               statsValue={props.totalVendas}
               statsIcon={<i className="fa fa-refresh" />}
-              statsIconText="Mês de Novembro"
+              statsIconText={<span>Mês de {props.nomeMes}</span>}
             />
           </Col>
 
@@ -53,7 +53,7 @@ export default function DashboardView(props) {
               content={
                 <div className="table-full-width">
                   <table className="table">
-                    <PedidosPendentes />
+                    <PedidosPendentes {...props}/>
                   </table>
                 </div>
               }

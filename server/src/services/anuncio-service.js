@@ -41,6 +41,15 @@ exports.listarTodosAnuncio = async (req, res) => {
     })
 }
 
+
+exports.obterFotoPrincipalAnuncio = async (idAnuncio) => {
+    return await axios.get(`${constants.API_MERCADO_LIVRE}/items/${idAnuncio}/`).then(res => {
+        return res.data.pictures[0].url;
+    }).catch(err => {
+        console.log("Houve um erro ao buscar os detalhes do anuncio: " + err)
+    });
+}
+
 exports.atualizar = async (req, res, next) => {
 
 }

@@ -1,6 +1,8 @@
 const firebase = require('../config/firebase');
 const axios = require("axios");
 const constants = require('../constants/constants');
+const usuarioService = require('../services/usuario-service')
+const anuncioService = require('../services/anuncio-service')
 
 const usuario = {
     id: 3311227,
@@ -110,29 +112,22 @@ const obterTotalDeVendas = async () => {
     })
 
 }
-var primeiroEUltimodia = obterPrimeiro_Ultimodia = () => {
-    var date = new Date();
-    var primeiroDia = new Date(date.getFullYear(), date.getMonth(), 1);
-    var ultimoDia = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-
-    var primeiro_dia = primeiroDia.toString()
-    var ultimo_dia = ultimoDia.toString()
-
-
-
-    var data = new Date()
-    var dia = data.getDate();
-    var mes = data.getMonth();
-    var ano = data.getFullYear();
-    data = ano+ '-' + (mes+1) + '-' + dia 
-
-    console.log(primeiroDia)
-    console.log(ultimoDia)
-    console.log(data)
+const obterVendasPendentes = async () => {
+    usuarioService.buscarUsuarioPorID().then(resp => {
+        axios.get(`${constants.API_MERCADO_LIVRE}/orders/search/pending?seller=${resp.id}&access_token=${resp.accessToken}`).then(response => {
+            response.data.results.filter(value => value.payments[0].status === 'pending').map(value => {
+                anuncioService.obterFotoPrincipalAnuncio(value.order_items[0].item.id).then(res => {
+                    console.log(res)
+                }) 
+            })
+        }).catch(err => {
+            console.log(err)
+        })
+    })
 }
 
 
 //salvarUsuario();
 //salvarUsuarioAPI();
 //listarViaAPI();
-obterTotalDeVendas()
+obterVendasPendentes()

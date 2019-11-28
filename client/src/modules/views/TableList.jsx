@@ -23,30 +23,31 @@ class TableList extends Component {
                       {this.props.result.map(prop => {
                         return (
                           <tr>
-                            <td><img src={prop.foto_principal} alt='fotoPrincipal' height='100' width='80'/></td>  
+                            <td><img src={prop.foto_principal} alt='fotoPrincipal' height='100' width='80' /></td>
                             <td>
                               <a href={prop.link_anuncio} rel="noopener noreferrer" target='_blank'>{prop.titulo}</a>
-                              <br/>#{prop.id}
+                              <br />#{prop.id}
                               <br></br>
                               <Badge pill variant="warning">
-                                <span style={{"font-weight": "bold"}}>Status: {prop.status === 'active' ? 'Ativo' : 'Inativo'}</span>
-                              </Badge>  
+                                <span style={{ "font-weight": "bold" }}>Status: {prop.status === 'active' ? 'Ativo' : 'Inativo'}</span>
+                              </Badge>
                             </td>
-                            
+
                             <td>
-                            <Badge>R$: {prop.preco}</Badge>
-                              <br/>
-                            <Badge>{prop.visualizacao} Visitas</Badge>
-                              <br/>
-                            Estoque total: {prop.estoque_total}
+                              <Badge>R$: {prop.preco}</Badge>
+                              <br />
+                              <Badge>{prop.visualizacao} Visitas</Badge>
+                              <br />
+                              Estoque total: {prop.estoque_total}
                             </td>
-                           
+
                             <td>
                               <Button bsStyle="info" pullRight fill type="submit">
+                                <i className='pe-7s-next-2'></i>
                                 Editar
                               </Button>
                             </td>
-                          </tr> 
+                          </tr>
                         )
                       }
                       )}

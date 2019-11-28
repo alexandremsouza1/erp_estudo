@@ -1,38 +1,30 @@
 
 import React from "react";
 
-export class PedidosPendentes extends React.Component {
- 
-  render() {
-    const mensagemPedidoPendente = [
-      'Kit 10 Blusas Feminina Crepe Atacado - Promoção Frete Grátis"',
-      "Kit 10 Blusas Feminina Crepe Atacado - Promoção Frete Grátis"
-    ];
-    var pedidos = [];
-
-    for (var i = 0; i < mensagemPedidoPendente.length; i++) {
-      pedidos.push(
-        <tr key={i}>
-
+export default function PedidosPendentes(props) {
+  return (
+    <tbody>
+        <tr>
           <td>
-            {/* Colocar a imagem principal do anuncio aqui*/}
+            <img src={props.fotoPrincipal} alt='fotoPrincipal' height='100' width='80'></img>
           </td>
-
           <td>
-            <b>Anúncio:</b> {mensagemPedidoPendente[i]}
-            <br></br>
-            <b>Variação:</b> (10P - Manguinhas) - KIT 09
-            <br></br>
-            <b>Cliente:</b> João Antônio
-            <br></br>
-            <b>Data e hora da compra:</b> 08/11/2019 as 22:15
-          </td>
-         
-        </tr>
-      );
-    }
-    return <tbody>{pedidos}</tbody>;
-  }
+            <b>Anúncio:</b> {props.titulo}
+          <br></br>
+            <b>Variação:</b> {props.variacao}
+          <br></br>
+            <b>Cliente:</b> {props.cliente}
+          <br></br>
+            <b>Data e hora da compra:</b> {props.dataPedido}
+          <br></br>
+            <b>Valor do produto:</b> {props.valor} reais
+          <br></br>
+            <b>Boleto:</b> <a href={props.linkBoleto} target='_blank'> {props.linkBoleto}</a>  
+        </td>
+      </tr>
+    </tbody>
+  )
 }
 
-export default PedidosPendentes;
+
+
