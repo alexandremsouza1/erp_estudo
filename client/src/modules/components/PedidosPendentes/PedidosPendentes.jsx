@@ -19,7 +19,7 @@ export default function PedidosPendentes(props) {
           <br></br>
             <b>Valor do produto:</b> {props.valor} reais
           <br></br>
-            <b>Boleto:</b> <a href={props.linkBoleto} target='_blank'> {props.linkBoleto}</a>  
+            <b>Boleto:</b> <a href={props.linkBoleto} target='_blank' rel="noopener noreferrer"> {props.linkBoleto}</a>  
         </td>
       </tr>
     </tbody>
