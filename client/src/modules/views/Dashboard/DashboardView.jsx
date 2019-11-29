@@ -2,8 +2,9 @@ import React from "react";
 import { Grid, Row, Col } from "react-bootstrap";
 
 import { Card } from "modules/components/Card/Card.jsx";
-import { StatsCard } from "modules/components/StatsCard/StatsCard.jsx";
-import  PedidosPendentes  from "modules/components/PedidosPendentes/PedidosPendentes";
+import StatsCard  from "modules/components/StatsCard/StatsCard.jsx";
+import PedidosPendentes from "modules/components/PedidosPendentes/PedidosPendentes";
+import Carregando from '../../components/Loading/LoadingCarregandoSolicitacao'
 
 
 export default function DashboardView(props) {
@@ -18,7 +19,7 @@ export default function DashboardView(props) {
               statsValue={props.totalVendas}
               statsIcon={<i className="fa fa-refresh" />}
               statsIconText={<span>Mês de {props.nomeMes}</span>}
-            />
+              isLoading={props.isLoading}/>
           </Col>
 
           <Col lg={4} sm={6}>
@@ -28,6 +29,7 @@ export default function DashboardView(props) {
               statsValue={<span>R$ {props.saldoTotal}</span>}
               statsIcon={<i className="fa fa-calendar-o" />}
               statsIconText={<span>Disponível: R$ {props.saldoDisponivel}</span>}
+              isLoading={props.isLoading}
             />
 
           </Col>
@@ -48,16 +50,23 @@ export default function DashboardView(props) {
             <Card
               title="Pedido de vendas pendente"
               category="Aguardando confirmação do pagamento"
-              stats="Atualizado a 5 minutos atrás..."
-              statsIcon="fa fa-history"
               content={
                 <div className="table-full-width">
                   <table className="table">
-                    {props.vendasPendente.map(resp => {
-                      return (
-                        <PedidosPendentes resp={resp} key={resp.id}/>
-                      )
-                    })}
+                    {
+                      props.vendasPendente.map(resp => {
+                        if (!props.isLoading) {
+                          return (
+                            <PedidosPendentes resp={resp} key={resp.id} />
+                          )
+                        }else{
+                          return(
+                            <Carregando width={450}/>
+                          )
+                        }
+
+                      })
+                    }
                   </table>
                 </div>
               }

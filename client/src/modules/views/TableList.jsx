@@ -3,7 +3,7 @@ import { Grid, Row, Col, Table} from "react-bootstrap";
 import Card from "modules/components/Card/Card.jsx";
 import Button from "modules/components/CustomButton/CustomButton.jsx";
 import { Badge } from 'react-bootstrap';
-//import LoadingCarregandoSolicitacao from "modules/components/Loading/LoadingCarregandoSolicitacao"
+import LoadingCarregandoSolicitacao from "modules/components/Loading/LoadingCarregandoSolicitacao"
 
 export default function TableList(props) {
   
@@ -76,7 +76,7 @@ export default function TableList(props) {
                 ctTableFullWidth
                 ctTableResponsive
                 content={
-                  <div></div>
+                  <LoadingCarregandoSolicitacao width={450}/>
                 }
               />
             </Col>
