@@ -113,13 +113,37 @@ const obterTotalDeVendas = async () => {
 }
 
 const obterVendasPendentes = async () => {
-    usuarioService.buscarUsuarioPorID().then(resp => {
-        axios.get(`${constants.API_MERCADO_LIVRE}/orders/search/pending?seller=${resp.id}&access_token=${resp.accessToken}`).then(response => {
-            response.data.results.filter(value => value.payments[0].status === 'pending').map(value => {
-                anuncioService.obterFotoPrincipalAnuncio(value.order_items[0].item.id).then(res => {
-                    console.log(res)
-                }) 
+    usuarioService.buscarUsuarioPorID().then(async resp => {
+        await axios.get(`${constants.API_MERCADO_LIVRE}/orders/search/pending?seller=${resp.id}&access_token=${resp.accessToken}`).then(async response => {
+            let vendasPendentes = await response.data.results.filter(value => value.payments[0].status === 'pending').map(async value => {
+                return await anuncioService.obterFotoPrincipalAnuncio(value.order_items[0].item.id).then(resp => {
+                    let vendas = {
+                        idVariacao: value.order_items[0].item.variation_id,
+                        idAnuncio: value.order_items[0].item.id,
+                        titulo: value.order_items[0].item.title,
+                        quantidade: value.order_items[0].quantity,
+                        preco: value.order_items[0].full_unit_price,
+                        sku: value.order_items[0].item.seller_sku,
+                        idCategoria: value.order_items[0].item.category_id,
+                        variacao: value.order_items[0].item.variation_attributes
+                            .filter(value => value.name === 'Tamanho')
+                            .reduce((value) => value).value_name,
+                        dataPedido: value.date_created,
+                        statusPagamento: value.payments[0].status === 'pending' ? 'Pendente' : value.payments[0].status
+                            || value.payments[0].status === 'rejected' ? 'Rejeitado' : value.payments[0].status,
+                        boleto: value.payments[0].activation_uri,
+                        metodoPagamento: value.payments[0].payment_method_id === 'bolbradesco' ? 'Boleto Banco Bradesco' : value.payments[0].payment_method_id,
+                        tipoPagamento: value.payments[0].payment_type === 'credit_card' ? 'Cartão de crédito' : value.payments[0].payment_type
+                            || value.payments[0].payment_type === 'ticket' ? 'Boleto' : value.payments[0].payment_type,
+                        cliente: value.buyer.nickname,
+                        fotoPrincipal: resp
+                    }
+                   return vendas
+                })
             })
+            
+            Promise.all(vendasPendentes).then(resp => {console.log(resp)})
+
         }).catch(err => {
             console.log(err)
         })
@@ -151,7 +175,5 @@ const obterDadosClient = async () => {
 }
 
 
-//salvarUsuario();
-//salvarUsuarioAPI();
-//listarViaAPI();
-getTodosAnuncios()
+
+obterVendasPendentes()

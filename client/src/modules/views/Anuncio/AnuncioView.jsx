@@ -7,10 +7,7 @@ import {
 } from "react-bootstrap";
 
 import { Card } from "modules/components/Card/Card.jsx";
-
 import TableList from '../../views/TableList'
-import Button from "modules/components/CustomButton/CustomButton.jsx";
-
 
 export default function AnuncioView(props) {
     return (

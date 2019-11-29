@@ -19,11 +19,11 @@ exports.obterTotalDeVendas = async (req, res) => {
 }
 
 exports.obterVendasPendentes = async (req, res) => {
-    usuarioService.buscarUsuarioPorID().then(resp => {
-        axios.get(`${constants.API_MERCADO_LIVRE}/orders/search/pending?seller=${resp.id}&access_token=${resp.accessToken}`).then(response => {
-            response.data.results.filter(value => value.payments[0].status === 'pending').map(value => {
-                anuncioService.obterFotoPrincipalAnuncio(value.order_items[0].item.id).then(resp => {
-                    res.send({
+    usuarioService.buscarUsuarioPorID().then(async resp => {
+        await axios.get(`${constants.API_MERCADO_LIVRE}/orders/search/pending?seller=${resp.id}&access_token=${resp.accessToken}`).then(async response => {
+            let dadosVendaPendente = await response.data.results.filter(value => value.payments[0].status === 'pending').map(async value => {
+                return await anuncioService.obterFotoPrincipalAnuncio(value.order_items[0].item.id).then(resp => {
+                    let vendaPendente = {
                         idVariacao: value.order_items[0].item.variation_id,
                         idAnuncio: value.order_items[0].item.id,
                         titulo: value.order_items[0].item.title,
@@ -43,12 +43,18 @@ exports.obterVendasPendentes = async (req, res) => {
                             || value.payments[0].payment_type === 'ticket' ? 'Boleto' : value.payments[0].payment_type,
                         cliente: value.buyer.nickname,
                         fotoPrincipal: resp
-                    })
+                    }
+                    return vendaPendente
                 })
+                
             })
+
+            Promise.all(dadosVendaPendente).then(response => res.status(200).send(response))
+
         }).catch(err => {
-            res.send(err)
+            res.status(401).send(err)
         })
+        
     })
 }
 

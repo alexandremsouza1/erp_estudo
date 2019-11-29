@@ -1,9 +1,9 @@
-import React, { Component } from "react";
+import React from "react";
 import { Grid, Row, Col, Table} from "react-bootstrap";
 import Card from "modules/components/Card/Card.jsx";
 import Button from "modules/components/CustomButton/CustomButton.jsx";
 import { Badge } from 'react-bootstrap';
-import LoadingCarregandoSolicitacao from "modules/components/Loading/LoadingCarregandoSolicitacao"
+//import LoadingCarregandoSolicitacao from "modules/components/Loading/LoadingCarregandoSolicitacao"
 
 export default function TableList(props) {
   
@@ -24,7 +24,7 @@ export default function TableList(props) {
                     <tbody>
                       {props.result.map(prop => {
                         return (
-                          <tr>
+                          <tr key={prop.id}>
                             <td><img src={prop.foto_principal} alt='fotoPrincipal' height='100' width='80' /></td>
                             <td>
                               <a href={prop.link_anuncio} rel="noopener noreferrer" target='_blank'>{prop.titulo}</a>
@@ -76,7 +76,7 @@ export default function TableList(props) {
                 ctTableFullWidth
                 ctTableResponsive
                 content={
-                  <LoadingCarregandoSolicitacao width={450}/>
+                  <div></div>
                 }
               />
             </Col>

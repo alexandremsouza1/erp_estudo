@@ -42,7 +42,6 @@ export default function DashboardView(props) {
           </Col>
         </Row>
 
-
         <Row>
 
           <Col md={12}>
@@ -54,7 +53,11 @@ export default function DashboardView(props) {
               content={
                 <div className="table-full-width">
                   <table className="table">
-                    <PedidosPendentes {...props}/>
+                    {props.vendasPendente.map(resp => {
+                      return (
+                        <PedidosPendentes resp={resp} key={resp.id}/>
+                      )
+                    })}
                   </table>
                 </div>
               }
