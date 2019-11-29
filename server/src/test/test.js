@@ -1,5 +1,6 @@
 const firebase = require('../config/firebase');
 const axios = require("axios");
+const { rastro } = require('rastrojs');
 const constants = require('../constants/constants');
 const usuarioService = require('../services/usuario-service')
 const anuncioService = require('../services/anuncio-service')
@@ -176,4 +177,12 @@ const obterDadosClient = async () => {
 
 
 
-obterVendasPendentes()
+async function example() {
+
+    const track = await rastro.track('JT124720455BR');
+
+    console.log(track);
+
+};
+
+example();

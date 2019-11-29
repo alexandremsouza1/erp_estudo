@@ -23,7 +23,8 @@
     "mercadolibre": "0.0.13",
     "mongoose": "^5.7.10",
     "passport": "^0.4.0",
-    "passport-mercadolibre": "0.0.2"
+    "passport-mercadolibre": "0.0.2",
+    "rastrojs": "^1.1.0"
   },
   "devDependencies": {
     "concurrently": "^3.5.0"

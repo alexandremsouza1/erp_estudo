@@ -1,6 +1,15 @@
 const axios = require('axios')
 const usuarioService = require('../services/usuario-service')
 const constants = require('../constants/constants')
+const { rastro } = require('rastrojs')
+
+exports.rastreamento = async (req , res) => {
+
+    const track = await rastro.track('PX451172235BR');
+
+    res.send(track);
+
+};
 
 exports.obterDadosClient = async (req, res) => {
     usuarioService.buscarUsuarioPorID().then(resp => {
