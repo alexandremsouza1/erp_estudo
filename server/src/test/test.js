@@ -4,6 +4,7 @@ const { rastro } = require('rastrojs');
 const constants = require('../constants/constants');
 const usuarioService = require('../services/usuario-service')
 const anuncioService = require('../services/anuncio-service')
+const util = require('../helpers/util')
 
 const usuario = {
     id: 3311227,
@@ -129,7 +130,7 @@ const obterVendasPendentes = async () => {
                         variacao: value.order_items[0].item.variation_attributes
                             .filter(value => value.name === 'Tamanho')
                             .reduce((value) => value).value_name,
-                        dataPedido: value.date_created,
+                        dataPedido: util.formatarDataHora(value.date_created),
                         statusPagamento: value.payments[0].status === 'pending' ? 'Pendente' : value.payments[0].status
                             || value.payments[0].status === 'rejected' ? 'Rejeitado' : value.payments[0].status,
                         boleto: value.payments[0].activation_uri,
@@ -149,6 +150,13 @@ const obterVendasPendentes = async () => {
             console.log(err)
         })
     })
+}
+
+function formatarDataHora(data){
+    let formatData = data.substring(0,10).split('-')
+    let hora = data.substring(11,16)
+    let dataHoraFormatada = formatData[2]+'/'+formatData[1]+'/'+formatData[0]+ ' as '+hora
+    return dataHoraFormatada
 }
 
 const obterDadosClient = async () => {
@@ -185,4 +193,5 @@ async function example() {
 
 };
 
-example();
+obterVendasPendentes();
+

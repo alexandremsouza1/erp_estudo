@@ -6,7 +6,7 @@ export default function PedidosPendentes(props) {
   return (
     <Card
       title={props.resp.titulo}
-      category={<>Data: {props.resp.dataPedido}</>}
+      category={<>{props.resp.dataPedido}</>}
       stats="Atualizado a 5 minutos atrás..."
       statsIcon="fa fa-history"
       content={

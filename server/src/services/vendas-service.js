@@ -2,6 +2,7 @@ const axios = require('axios')
 const usuarioService = require('../services/usuario-service')
 const anuncioService = require('../services/anuncio-service')
 const constants = require('../constants/constants')
+const util = require('../helpers/util')
 
 
 exports.obterTotalDeVendas = async (req, res) => {
@@ -34,7 +35,7 @@ exports.obterVendasPendentes = async (req, res) => {
                         variacao: value.order_items[0].item.variation_attributes
                             .filter(value => value.name === 'Tamanho')
                             .reduce((value) => value).value_name,
-                        dataPedido: value.date_created,
+                        dataPedido: util.formatarDataHora(value.date_created),
                         statusPagamento: value.payments[0].status === 'pending' ? 'Pendente' : value.payments[0].status
                             || value.payments[0].status === 'rejected' ? 'Rejeitado' : value.payments[0].status,
                         boleto: value.payments[0].activation_uri,
