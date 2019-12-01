@@ -92,10 +92,16 @@ const getTodosAnuncios = async () => {
                     console.log("Houve um erro ao buscar os detalhes do anuncio: " + err)
                 });
             })
-
-            Promise.all(detalhesAnuncio).then(resp => {
-                console.log(resp)
-            });
+            
+            
+                Promise.all(detalhesAnuncio).then(resp => {
+                   resp.map(resp => {
+                       if(resp.titulo.includes("Perfume")){
+                           console.log(resp)
+                       }
+                   })
+                });
+            
 
         }).catch(err => {
             console.log("Houve um erro ao listar todos os anuncios: " + err)
@@ -220,5 +226,6 @@ async function example() {
 
 };
 
-obterDadosCliente();
+
+getTodosAnuncios();
 

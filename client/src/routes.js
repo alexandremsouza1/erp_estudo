@@ -1,4 +1,4 @@
-import TableList from "./modules/views/TableList";
+import TableList from "./modules/views/Anuncio/TableList";
 import AnuncioController from "modules/views/Anuncio/AnuncioController";
 import DashboardController from "modules/views/Dashboard/DashboardController";
 import ClienteController from "modules/views/Cliente/ClienteController";
@@ -13,7 +13,7 @@ const dashboardRoutes = [
   },
   {
     path: "/user",
-    name: "Anúncio",
+    name: "Anúncios",
     icon: "pe-7s-user",
     component: AnuncioController,
     layout: "/admin"

@@ -31,9 +31,16 @@ exports.listarTodosAnuncio = async (req, res) => {
                     });
                 })
 
-                Promise.all(detalhesAnuncio).then(resp => {
-                    res.send(resp)
-                });
+                if(req.params.titulo === null || req.params.titulo === undefined){
+                    Promise.all(detalhesAnuncio).then(resp => {
+                        res.send(resp)
+                    });
+                }else{
+                    Promise.all(detalhesAnuncio).then(resp => {
+                        res.send(resp.filter(resp => resp.titulo === req.params.titulo))
+                    });
+                }
+                
 
         }).catch(err => {
             res.send("Houve um erro ao listar todos os anuncios: " + err)
@@ -48,6 +55,17 @@ exports.obterFotoPrincipalAnuncio = async (idAnuncio) => {
     }).catch(err => {
         console.log("Houve um erro ao buscar os detalhes do anuncio: " + err)
     });
+}
+
+
+exports.buscarAnuncioPorTitulo = async (req , res) => {
+    usuarioService.buscarUsuarioPorID().then(resp => {
+        axios.get(`${constants.API_MERCADO_LIVRE}/users/${resp.id}/items/search?search_type=scan&access_token=${resp.accessToken}`)
+                    .then(response => {
+               let resultadoPesquisa = response.data.results.filter(resp => resp.title === req.params.titulo)      
+               res.status(200).send(resultadoPesquisa)   
+        }).catch(err => res.send(err))
+    })
 }
 
 exports.atualizar = async (req, res, next) => {
