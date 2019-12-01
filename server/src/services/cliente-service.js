@@ -2,6 +2,7 @@ const axios = require('axios')
 const usuarioService = require('../services/usuario-service')
 const constants = require('../constants/constants')
 const { rastro } = require('rastrojs')
+const util = require('../helpers/util')
 
 exports.rastreamento = async (req , res) => {
 
@@ -21,12 +22,14 @@ exports.obterDadosClient = async (req, res) => {
                 var dadosClient = {
                     id: value.buyer.id,
                     nickname: value.buyer.nickname,
-                    numero_contato: value.buyer.phone.number,
+                    numero_contato: util.tratarNumeroCelularComDDD(value.buyer.phone.area_code,value.buyer.phone.number) === null 
+                                   ? 'Não informado' : 'https://api.whatsapp.com/send?phone=55'+util.tratarNumeroCelularComDDD(value.buyer.phone.area_code,value.buyer.phone.number)+'',
                     ddd: value.buyer.phone.area_code,
                     primeiro_nome: value.buyer.first_name,
                     last_name: value.buyer.last_name,
                     tipo_documento: value.buyer.billing_info.doc_type,
-                    documento: value.buyer.billing_info.doc_number		
+                    documento: value.buyer.billing_info.doc_number === undefined 
+                        || value.buyer.billing_info.doc_number === null ? 'Não informado' : value.buyer.billing_info.doc_number		
                 }
                 return dadosClient
             })

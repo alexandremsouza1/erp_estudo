@@ -20,7 +20,7 @@ const dashboardRoutes = [
   },
   {
     path:'/cliente',
-    name: 'Cliente',
+    name: 'Clientes',
     icon: 'pe-7s-user',
     component: ClienteController,
     layout: '/admin'

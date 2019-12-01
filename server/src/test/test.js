@@ -152,35 +152,62 @@ const obterVendasPendentes = async () => {
     })
 }
 
-function formatarDataHora(data){
-    let formatData = data.substring(0,10).split('-')
-    let hora = data.substring(11,16)
-    let dataHoraFormatada = formatData[2]+'/'+formatData[1]+'/'+formatData[0]+ ' as '+hora
-    return dataHoraFormatada
-}
-
-const obterDadosClient = async () => {
+const obterDadosCliente = async () => {
     buscarUsuarioPorID().then(resp => {
         axios.get(`${constants.API_MERCADO_LIVRE}/orders/search?seller=${resp.id}&order.status=paid&access_token=${resp.accessToken}`).then(resp => {
-            resp.data.results.filter(function (a) {
+           /* resp.data.results.filter(function (a) {
                 //Evita os IDs duplicados
                 return !this[JSON.stringify(a.buyer.id)] && (this[JSON.stringify(a.buyer.id)] = true)
             }, Object.create(null)).map(value => {
-                console.log({
+                /*console.log({
                     id: value.buyer.id,
                     nickname: value.buyer.nickname,
-                    numero_contato: value.buyer.phone.number,
+                    numero_contato: util.tratarNumeroCelularComDDD(value.buyer.phone.area_code,value.buyer.phone.number),
                     ddd: value.buyer.phone.area_code,
                     primeiro_nome: value.buyer.first_name,
                     last_name: value.buyer.last_name,
                     tipo_documento: value.buyer.billing_info.doc_type,
                     documento: value.buyer.billing_info.doc_number		
                 })
-            })
+            })*/
+            console.log(resp.data.results)
         }).catch(err => {
             console.log({ mensagem: "Houve um erro ao buscar todas as vendas realizadas: " + err })
         })
     })
+}
+
+function tratarNumeroCelularComDDD(ddd, numero){
+    if(ddd != null) ddd = ddd.replace(' ','') 
+    if(ddd === null || ddd == undefined){
+        if(numero != null || numero != undefined){
+            numero = numero.replace("(", "").replace(")","").replace(" ","").replace("-","").trim()
+            if(numero.substring(0,1) == 0){
+                return adicionarNove(numero.substring(1,12))
+            }else{
+                return adicionarNove(numero)
+            } 
+        }
+    }else{
+        numero = numero.replace("(", "").replace(")","").replace(" ","").replace("-","").trim()
+        if(ddd.substring(0,1) == 0){
+            ddd = ddd.substring(1,3)
+            return adicionarNove(ddd+''+numero)
+        }else{
+            return adicionarNove(ddd+''+numero)
+        } 
+    }
+    return numero
+}
+
+function adicionarNove(numero){
+    if(numero.length == 10){
+        ddd = numero.substring(0,2)
+        numero = numero.substring(2,10)
+        return ddd+'9'+numero
+    }else{
+        return numero
+    }
 }
 
 
@@ -193,5 +220,5 @@ async function example() {
 
 };
 
-obterVendasPendentes();
+obterDadosCliente();
 
