@@ -49,6 +49,7 @@ class Sidebar extends React.Component {
                       to={prop.layout + prop.path}
                       className="nav-link"
                       activeClassName="active"
+                      
                     >
                       <i className={prop.icon} />
                       <p>{prop.name}</p>

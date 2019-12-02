@@ -4,6 +4,7 @@ import Carregando from '../../components/Loading/LoadingCarregandoSolicitacao'
 import { Card } from "modules/components/Card/Card.jsx";
 import imgWhatsapp from '../../../assets/img/WhatsApp-icon.png'
 import userAvatar from '../../../assets/img/useravatar.png'
+import Panel from '../../components/Panel/Panel'
 
 export default function ClientView(props) {
     return (
@@ -14,7 +15,7 @@ export default function ClientView(props) {
                         return (
                             <>
 
-                                <Card
+                                <Panel
                                     title={<>{resp.primeiro_nome} {resp.last_name}</>}
                                     content={
 
@@ -39,7 +40,7 @@ export default function ClientView(props) {
                                         </Row>
 
 
-                                    }></Card>
+                                    }></Panel>
                             </>
                         )
                     } else {

@@ -68,47 +68,64 @@ const buscarUsuarioPorID = async() => {
     return usuarios;
 }
 
-const getTodosAnuncios = async() => {
-    buscarUsuarioPorID().then(resp => {
+const listarTodosAnuncio = async (req, res) => {
+    usuarioService.buscarUsuarioPorID().then(resp => {
         axios.get(`${constants.API_MERCADO_LIVRE}/users/${resp.id}/items/search?search_type=scan&access_token=${resp.accessToken}`).then(response => {
-            var detalhesAnuncio = response.data.results.map(result => {
-                return axios.get(`https://api.mercadolibre.com/items/${result}/`).then(res => {
-                    return axios.get(`https://api.mercadolibre.com/visits/items?ids=${result}`).then(resp => {
-                        var anuncio = {
-                            id: res.data.id,
-                            titulo: res.data.title,
-                            preco: res.data.price,
-                            estoque_total: res.data.available_quantity,
-                            foto_principal: res.data.pictures[0].url,
-                            link_anuncio: res.data.permalink,
-                            status: res.data.status,
-                            visualizacao: Object.values(resp.data).reduce((accumulador, valorCorrente) => { return valorCorrente })
-                        }
-                        return anuncio;
-                    }).catch(err => {
-                        console.log("Houve um erro: " + err)
-                    })
-
-                }).catch(err => {
-                    console.log("Houve um erro ao buscar os detalhes do anuncio: " + err)
-                });
-            })
-
-
-            Promise.all(detalhesAnuncio).then(resp => {
-                resp.map(resp => {
-                    if (resp.titulo.includes("Perfume")) {
-                        console.log(resp)
-                    }
+                var detalhesAnuncio = response.data.results.map(result => {
+                    return axios.get(`${constants.API_MERCADO_LIVRE}/items/${result}/`).then(res => {
+                        return axios.get(`${constants.API_MERCADO_LIVRE}/visits/items?ids=${result}`).then(resp => {
+                            if(res.data.shipping.free_shipping){
+                                return axios.get(`${constants.API_MERCADO_LIVRE}/items/${result}/shipping_options/free`).then(resp => {
+                                    var anuncio = {
+                                        id: res.data.id,
+                                        titulo: res.data.title,
+                                        preco: res.data.price,
+                                        estoque_total: res.data.available_quantity,
+                                        foto_principal: res.data.pictures[0].url,
+                                        link_anuncio: res.data.permalink,
+                                        status: res.data.status,
+                                        visualizacao: Object.values(resp.data).reduce((accumulador, valorCorrente) => {return valorCorrente}),
+                                        totalVariacoes: res.data.variations.length,
+                                        tipoAnuncio: res.data.listing_type_id === "gold_pro" ? "Premium - Exposição máxima" : "Clássico - Exposição Alta",
+                                        custoFreteGratis: resp.data.coverage.all_country.list_cost
+                                    }
+                                    return anuncio;
+                                }).catch(err => console.log(err))
+                            }else{
+                                var anuncio = {
+                                    id: res.data.id,
+                                    titulo: res.data.title,
+                                    preco: res.data.price,
+                                    estoque_total: res.data.available_quantity,
+                                    foto_principal: res.data.pictures[0].url,
+                                    link_anuncio: res.data.permalink,
+                                    status: res.data.status,
+                                    visualizacao: Object.values(resp.data).reduce((accumulador, valorCorrente) => {return valorCorrente}),
+                                    totalVariacoes: res.data.variations.length,
+                                    tipoAnuncio: res.data.listing_type_id === "gold_pro" ? "Premium - Exposição máxima" : "Clássico - Exposição Alta",
+                                    custoFreteGratis: 0
+                                }
+                                return anuncio;
+                            }
+                            
+                        }).catch(err => {console.log("Houve um erro: " + err)
+                        })
+                    }).catch(err => {console.log("Houve um erro ao buscar os detalhes do anuncio: " + err)
+                    });
                 })
-            });
 
+                Promise.all(detalhesAnuncio).then(resp => {
+                    console.log(resp)
+                });
+                
 
         }).catch(err => {
             console.log("Houve um erro ao listar todos os anuncios: " + err)
         });
     })
 }
+
+
 
 const obterTotalDeVendas = async() => {
     var data = new Date();
@@ -240,4 +257,4 @@ function obterEnderecoCliente() {
     })
 }
 
-console.log(obterEnderecoCliente())
+listarTodosAnuncio()

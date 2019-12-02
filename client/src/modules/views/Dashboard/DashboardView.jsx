@@ -49,7 +49,7 @@ export default function DashboardView(props) {
           <Col md={12}>
             <Card
               title="Pedido de vendas pendente"
-              category="Aguardando confirmação do pagamento"
+              category={<>{props.totalVendasPendentes} Aguardando confirmação do pagamento</>}
               content={
                 <div className="table-full-width">
                   <table className="table">

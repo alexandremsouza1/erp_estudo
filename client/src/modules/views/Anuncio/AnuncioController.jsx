@@ -17,7 +17,7 @@ export default function AnuncioController() {
 
     return (
         <div>
-            <AnuncioView state={state} {...state} />
+            <AnuncioView state={state} {...state}/>
         </div>
     );
 

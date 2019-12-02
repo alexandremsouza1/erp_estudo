@@ -52,7 +52,7 @@ export default function TableList(props) {
                                 <i className="fa fa-star text-primary"></i>
                                 <i className="fa fa-shopping-cart text-primary"></i>
                                 <a style={{ "fontSize": "14px" }} href={prop.link_anuncio} rel="noopener noreferrer" target='_blank' full_base="1">#{prop.id}</a>
-                                <span className="badge badge-primary" style={{ "fontSize": "12px" }}>Variações</span>
+                                <span className="badge badge-primary" style={{ "fontSize": "12px" }}>{prop.totalVariacoes} Variações</span>
                               </p>
                               <p style={{ "fontSize": "15px" }}>MercadoEnvios Grátis Brasil - R$ 16,95 por envio</p>
                               <p>
@@ -74,7 +74,7 @@ export default function TableList(props) {
                               <br />
                               <span className="text-danger" style={{ "fontSize": "12px" }}>Tarifa R$ -3,96</span>
                               <br />
-                              <span className="text-danger" style={{ "fontSize": "12px" }}>Custo Fixo R$ -5,00</span>
+                              <span className="text-danger" style={{ "fontSize": "12px" }}>Custo Fixo R$ {prop.custoFreteGratis}</span>
                               <br />
                               <span className="badge badge-info" style={{ "fontSize": "12px" }}>Líquido R$ 27,04</span>
                             </div>
@@ -86,9 +86,9 @@ export default function TableList(props) {
                                   <span className="caret"></span>
                                 </button>
                                 <ul role="menu" className="dropdown-menu dropdown-menu-right">
-                                    <li>
-                                      <a>Gerenciar Imagens</a>
-                                    </li>
+                                  <li>
+                                    <a>Gerenciar Imagens</a>
+                                  </li>
                                 </ul>
                               </div>
                             </div>

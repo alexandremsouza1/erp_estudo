@@ -2,6 +2,7 @@ import React from 'react'
 import '../../../assets/css/Global/style.css'
 import Card from "../../components/Card/Card"
 import { Row, Col } from "react-bootstrap"
+import Panel from '../../components/Panel/Panel'
 
 export default function VendasView() {
 
@@ -56,6 +57,13 @@ export default function VendasView() {
                     </Row>
                 </div>
             </div>
+
+            <Panel title="Título" content={
+                <div>
+                    <span>Conteúdo</span>
+                </div>
+            }></Panel>                    
+
         </div>
     )
 }
