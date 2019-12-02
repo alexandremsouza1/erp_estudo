@@ -1,31 +1,22 @@
-import React from 'react'
+import React, { useState } from 'react'
+import {useDispatch, useSelector} from 'react-redux'
 import ClientView from '../Cliente/ClienteView'
 import axios from 'axios'
+import {LISTAR_TODOS_CLIENTES} from '../../constants/constants'
 
-export default class ClientController extends React.Component {
 
-   constructor(props){
-       super(props)
+export default function ClientController() {
 
-       this.state = {
-           result: [{}],
-           isLoading: true
-       }
-   }
+    const dispatch = useDispatch()
+    const store =  useSelector(store => store.cliente)
 
-   componentDidMount(){
+    useState(() => {
         axios.get('http://localhost:5000/clientes').then(resp => {
-                this.setState({
-                    result: resp.data,
-                    isLoading: false
-                })
-        }).catch(err => err)     
-   }
+           dispatch({type: LISTAR_TODOS_CLIENTES, data: resp.data, isLoading: false})
+        }).catch(err => err)
+    }, [])
 
-   render(){
-       return(
-           <ClientView result={this.state.result} isLoading={this.state.isLoading}/>
-       )
-   }
-
+    return (
+        <ClientView result={store.result} isLoading={store.isLoading} />
+    )
 }

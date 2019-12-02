@@ -1,14 +1,15 @@
 import {createStore} from 'redux';
-import {rootReducer} from './modules/reducers/anuncio/anuncio-combine-reducer'
+import {reducers} from './modules/reducers/combine.reducer'
+//import {anuncioReducer} from './modules/reducers/anuncio/anuncio-reducer';
 
 /**
  * Criado por:
- * @name Felipe Miguel dos Santos
+ * @author Felipe Miguel dos Santos
  * 
  */
 
-export const store = createStore(rootReducer);
+export const store = createStore(reducers);
 
 store.subscribe(() => {
-    console.log("Store foi modificada: ", store.getState())
+    console.log("> Store foi modificada: ", store.getState())
 });

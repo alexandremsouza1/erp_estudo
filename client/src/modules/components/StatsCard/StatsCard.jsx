@@ -1,10 +1,9 @@
-import React, { Component } from "react";
+import React from "react";
 import { Row, Col } from "react-bootstrap";
-//import Loading from '../../components/Loading/Loading'
 import Carregando from '../../components/Loading/LoadingCarregandoSolicitacao'
 
 export default function StatsCard(props) {
-  {
+  
     if(!props.isLoading){
       return (
         <div className="card card-stats">
@@ -46,7 +45,7 @@ export default function StatsCard(props) {
         
       )
     }
-  }
+  
    
 }
 

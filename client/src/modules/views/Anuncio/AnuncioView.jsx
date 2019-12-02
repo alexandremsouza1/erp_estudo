@@ -18,7 +18,7 @@ export default function AnuncioView(props) {
               <Card
                 title="Anúncio"
                 content={            
-                  <TableList {...props} title="Meus Anúncios" thArray={props.thArray} result={props.result} ></TableList>
+                  <TableList title="Meus Anúncios" result={props.state.result} {...props}></TableList>
                 }
               />
             </Col>

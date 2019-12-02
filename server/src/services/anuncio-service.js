@@ -31,15 +31,9 @@ exports.listarTodosAnuncio = async (req, res) => {
                     });
                 })
 
-                if(req.params.titulo === null || req.params.titulo === undefined){
-                    Promise.all(detalhesAnuncio).then(resp => {
-                        res.send(resp)
-                    });
-                }else{
-                    Promise.all(detalhesAnuncio).then(resp => {
-                        res.send(resp.filter(resp => resp.titulo === req.params.titulo))
-                    });
-                }
+                Promise.all(detalhesAnuncio).then(resp => {
+                    res.send(resp)
+                });
                 
 
         }).catch(err => {

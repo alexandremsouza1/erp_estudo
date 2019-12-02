@@ -10,7 +10,7 @@ import "./assets/css/demo.css";
 import "./assets/css/pe-icon-7-stroke.css";
 
 import AdminLayout from "layouts/Admin.jsx";
-import { Provider } from 'react-redux';
+import { Provider} from 'react-redux';
 import {store} from './store';
 
 ReactDOM.render(

@@ -1,38 +1,26 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import AnuncioView from './AnuncioView';
 import axios from 'axios'
+import {useSelector, useDispatch} from 'react-redux'
+import {LISTAR_TODOS_ANUNCIOS} from '../../constants/constants'
 
-export default class AnuncioController extends React.Component {
+export default function AnuncioController() {
 
-    constructor(props) {
-        super(props);
+    const state = useSelector(store => store.anuncio)
+    const dispatch = useDispatch()
+    //const [anuncio, setAnuncio] = useState([])
 
-        this.state = {
-            response: '',
-            thArray: ['Título', 'Preço', "Descrição"],
-            result: [{}],
-            isLoading: true
-        }
- 
-    }
+    useState(()=>{
+        axios.get('http://localhost:5000/anuncio').then(resp => {
+           dispatch({type: LISTAR_TODOS_ANUNCIOS, data: resp.data, isLoading: false})
+        }).catch(err => {console.log(err)})
+    }, [])
 
-    componentDidMount(){
-       console.log("Clique")
-        axios.get(`http://localhost:5000/anuncio`).then(res => {
-           this.setState({
-                result: res.data,
-                isLoading: false
-            });
-        }).catch(err => {console.log(err)});
-    }
-
-
-    render() {
         return(
             <div>
-                <AnuncioView {...this.state} mostrarAnuncios={this.state.mostrarAnuncios}/>
+                <AnuncioView state={state} {...state}/>
             </div>
         );
-    }
+    
 
 }

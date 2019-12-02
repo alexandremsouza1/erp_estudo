@@ -24,7 +24,7 @@ export default function TableList(props) {
                     <Navbar bg="light" expand="lg">
                       <Form inline>
                         <FormControl type="text" placeholder="Buscar por título" className="mr-sm-2" style={{ 'width': '500px' }} />
-                        <Button round ><img src={iconSearch}></img></Button>
+                        <Button round ><img src={iconSearch} alt='search'></img></Button>
                       </Form>
                     </Navbar>
 
@@ -38,8 +38,8 @@ export default function TableList(props) {
                                 <a href={prop.link_anuncio} rel="noopener noreferrer" target='_blank'>{prop.titulo}</a>
                                 <br />#{prop.id}
                                 <br></br>
-                                <Badge pill variant="warning">
-                                  <span style={{ "font-weight": "bold" }}>Status: {prop.status === 'active' ? 'Ativo' : 'Inativo'}</span>
+                                <Badge variant="warning">
+                                  <b>Status: {prop.status === 'active' ? 'Ativo' : 'Inativo'}</b>
                                 </Badge>
                               </td>
 
