@@ -33,8 +33,8 @@ export default function ClientView(props) {
                                             </Col>
 
                                             <Col lg={2} style={{"width": "300px"}}>
-                                                <b>Cidade: </b>{resp.nickname}<br></br>
-                                                <b>Estado: </b>{resp.tipo_documento} {resp.documento}<br></br>
+                                                <b>Cidade: </b>{resp.cidade}<br></br>
+                                                <b>Estado: </b>{resp.estado}<br></br>
                                             </Col>
                                         </Row>
 

@@ -4,7 +4,7 @@ import Card from "modules/components/Card/Card.jsx";
 import Button from "modules/components/CustomButton/CustomButton.jsx";
 import LoadingCarregandoSolicitacao from "modules/components/Loading/LoadingCarregandoSolicitacao"
 import iconSearch from '../../../assets/img/Zoom-icon24px.png'
-import '../../../assets/css/modal.css';
+import '../../../assets/css/Global/style.css';
 
 export default function TableList(props) {
 
@@ -17,7 +17,6 @@ export default function TableList(props) {
         <Grid fluid>
           <Row>
             <Col md={12}>
-
               <Card
                 title={props.title}
                 category="Anúncios Ativos"
@@ -69,21 +68,18 @@ export default function TableList(props) {
                         }
                         )}
                       </tbody>
-
                     </Table>
-
-
                   </>
                 }
               />
             </Col>
-
-
           </Row>
         </Grid>
 
 
-        {showModal && <Modal show={showModal} onHide={() => setShowModal(false)} dialogClassName="width_modal" >
+        {showModal && 
+        
+        <Modal show={showModal} onHide={() => setShowModal(false)} dialogClassName="width_modal" >
           <Modal.Header closeButton >
             <Modal.Title>{dadosAnuncio.titulo}</Modal.Title>
           </Modal.Header>
@@ -97,11 +93,11 @@ export default function TableList(props) {
 
           <Modal.Footer>
             <Button variant="secondary" onClick={() => setShowModal(false)}>
-              Close
-                        </Button>
+              Fechar
+            </Button>
             <Button variant="primary" onClick={() => setShowModal(false)}>
-              Save Changes
-                        </Button>
+              Salvar
+            </Button>
           </Modal.Footer>
 
         </Modal>}

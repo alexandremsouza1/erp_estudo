@@ -11,6 +11,7 @@ export default function Icons() {
 
   const anuncios = useSelector(state => state.anuncio)
   const dispatch = useDispatch()
+  document.title = "Controle de Estoque"
   
   useEffect(() => {
      axios.get('http://localhost:5000/anuncio').then(resp => {

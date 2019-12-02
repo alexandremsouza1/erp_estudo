@@ -13,6 +13,8 @@ export default function DashboardController() {
 
     const dispatch = useDispatch()
     const store = useSelector(store => store.dashboard)
+
+    document.title = "Dashboard"
 /*
     setInterval(()=>{
         get()

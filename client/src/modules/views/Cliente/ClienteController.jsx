@@ -10,6 +10,8 @@ export default function ClientController() {
     const dispatch = useDispatch()
     const store =  useSelector(store => store.cliente)
 
+    document.title = "Clientes"
+
     useEffect(() => {
         axios.get('http://localhost:5000/clientes').then(resp => {
            dispatch({type: LISTAR_TODOS_CLIENTES, data: resp.data, isLoading: false})
