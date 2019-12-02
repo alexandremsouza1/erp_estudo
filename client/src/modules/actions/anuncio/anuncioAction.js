@@ -8,9 +8,9 @@
  * @param {*Descrição do anúncio} descricao 
  */
 
-function anuncioAction(){
+function AnuncioAction(){
 
    
 }
 
-export default anuncioAction
+export default AnuncioAction

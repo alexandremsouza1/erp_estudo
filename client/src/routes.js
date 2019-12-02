@@ -1,7 +1,7 @@
 import AnuncioController from "modules/views/Anuncio/AnuncioController";
 import DashboardController from "modules/views/Dashboard/DashboardController";
 import ClienteController from "modules/views/Cliente/ClienteController";
-import Icons  from 'modules/views/Icons'
+import ControleEstoqueController from 'modules/views/Controle-estoque/ControlleEstoqueController'
 
 const dashboardRoutes = [
   {
@@ -29,7 +29,7 @@ const dashboardRoutes = [
     path: "/table",
     name: "Controle de estoque",
     icon: "pe-7s-note2",
-    component: Icons,
+    component: ControleEstoqueController,
     layout: "/admin"
   }/*,
   {

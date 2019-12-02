@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect } from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import ClientView from '../Cliente/ClienteView'
 import axios from 'axios'
@@ -10,7 +10,7 @@ export default function ClientController() {
     const dispatch = useDispatch()
     const store =  useSelector(store => store.cliente)
 
-    useState(() => {
+    useEffect(() => {
         axios.get('http://localhost:5000/clientes').then(resp => {
            dispatch({type: LISTAR_TODOS_CLIENTES, data: resp.data, isLoading: false})
         }).catch(err => err)

@@ -1,6 +1,7 @@
 import {combineReducers} from 'redux';
 import anuncioReducer from './anuncio/anuncio.reducer';
 import clienteReducer from './cliente/cliente.reducer';
+import dashboardReducer from './dashboard/dashboard.reducer'
 
 /**
  * Criado por: 
@@ -10,5 +11,6 @@ import clienteReducer from './cliente/cliente.reducer';
 
 export const reducers = combineReducers({
     anuncio: anuncioReducer,
-    cliente: clienteReducer
+    cliente: clienteReducer,
+    dashboard: dashboardReducer
 });
