@@ -11,11 +11,6 @@ export default function TableList(props) {
   const [showModal, setShowModal] = useState(false)
   const [dadosAnuncio, setDadosAnuncio] = useState({})
 
-  var styleModal = {
-    width: '600px'
-  }
-
-
   if (!props.isLoading) {
     return (
       <div className="content">
@@ -87,28 +82,30 @@ export default function TableList(props) {
           </Row>
         </Grid>
 
-        
-          {showModal && <Modal show={showModal} onHide={() => setShowModal(false)} dialogClassName="width_modal" >
-            <Modal.Header closeButton >
-              <Modal.Title>{dadosAnuncio.titulo}</Modal.Title>
-            </Modal.Header>
 
-            <Modal.Body >
+        {showModal && <Modal show={showModal} onHide={() => setShowModal(false)} dialogClassName="width_modal" >
+          <Modal.Header closeButton >
+            <Modal.Title>{dadosAnuncio.titulo}</Modal.Title>
+          </Modal.Header>
 
+          <Modal.Body >
+            <Form inline>
+              <FormControl type="text" placeholder="Título" className="mr-sm-2" style={{ 'width': '500px' }} value={dadosAnuncio.titulo}/>
+            </Form>
 
-            </Modal.Body>
+          </Modal.Body>
 
-            <Modal.Footer>
-              <Button variant="secondary" onClick={() => setShowModal(false)}>
-                Close
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setShowModal(false)}>
+              Close
                         </Button>
-              <Button variant="primary" onClick={() => setShowModal(false)}>
-                Save Changes
+            <Button variant="primary" onClick={() => setShowModal(false)}>
+              Save Changes
                         </Button>
-            </Modal.Footer>
+          </Modal.Footer>
 
-          </Modal>}
-        
+        </Modal>}
+
       </div>
     );
   } else {

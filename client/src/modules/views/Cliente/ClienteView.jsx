@@ -3,6 +3,7 @@ import { Grid, Row, Col } from "react-bootstrap";
 import Carregando from '../../components/Loading/LoadingCarregandoSolicitacao'
 import { Card } from "modules/components/Card/Card.jsx";
 import imgWhatsapp from '../../../assets/img/WhatsApp-icon.png'
+import userAvatar from '../../../assets/img/useravatar.png'
 
 export default function ClientView(props) {
     return (
@@ -14,10 +15,15 @@ export default function ClientView(props) {
                             <>
 
                                 <Card
-                                    title={<>Nome: {resp.primeiro_nome} {resp.last_name}</>}
+                                    title={<>{resp.primeiro_nome} {resp.last_name}</>}
                                     content={
 
                                         <Row>
+
+                                            <Col lg={4} style={{"width": "75px"}}>
+                                                <img src={userAvatar} alt='avatar' height='55' width='55' ></img><br></br>
+                                            </Col>
+
                                             <Col lg={6}>
                                                 <b>Whatsapp: </b>
                                                 <a href={resp.numero_contato === 'Não informado' ? null : resp.numero_contato} target='_blank' rel="noopener noreferrer">{resp.numero_contato}</a>
@@ -26,8 +32,7 @@ export default function ClientView(props) {
                                                 <b>Documento: </b>{resp.tipo_documento} {resp.documento}<br></br>
                                             </Col>
 
-                                            <Col lg={6}>
-                                                <b>Endereço: </b><br></br>
+                                            <Col lg={2} style={{"width": "300px"}}>
                                                 <b>Cidade: </b>{resp.nickname}<br></br>
                                                 <b>Estado: </b>{resp.tipo_documento} {resp.documento}<br></br>
                                             </Col>
