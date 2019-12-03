@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect} from 'react'
 import AnuncioView from './AnuncioView';
 import axios from 'axios'
 import { useSelector, useDispatch } from 'react-redux'
@@ -8,8 +8,7 @@ export default function AnuncioController() {
 
     const state = useSelector(store => store.anuncio)
     const dispatch = useDispatch()
-    //const [anuncio, setAnuncio] = useState([])
-
+    
     useEffect(() => {
         axios.get('http://localhost:5000/anuncio').then(resp => {
             dispatch({ type: LISTAR_TODOS_ANUNCIOS, data: resp.data, isLoading: false })

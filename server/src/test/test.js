@@ -5,6 +5,7 @@ const constants = require('../constants/constants');
 const usuarioService = require('../services/usuario-service')
 const anuncioService = require('../services/anuncio-service')
 const util = require('../helpers/util')
+const reloadJSON = require('self-reload-json');
 
 const usuario = {
     id: 3311227,
@@ -227,5 +228,11 @@ async function example() {
 };
 
 
-getTodosAnuncios();
+function monitorarJSON(){
+   
+    var config = new reloadJSON(__dirname+"/JSON.json");
+    config.resume().forceUpdate()
+}
+
+monitorarJSON()
 

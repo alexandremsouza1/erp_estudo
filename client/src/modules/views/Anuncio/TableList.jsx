@@ -1,11 +1,20 @@
-import React from "react";
-import { Grid, Row, Col, Table, Navbar, Form, Badge, FormControl } from "react-bootstrap";
+import React, { useState } from "react";
+import { Grid, Row, Col, Table, Navbar, Form, Badge, FormControl, Modal } from "react-bootstrap";
 import Card from "modules/components/Card/Card.jsx";
 import Button from "modules/components/CustomButton/CustomButton.jsx";
 import LoadingCarregandoSolicitacao from "modules/components/Loading/LoadingCarregandoSolicitacao"
 import iconSearch from '../../../assets/img/Zoom-icon24px.png'
+import '../../../assets/css/modal.css';
 
 export default function TableList(props) {
+
+  const [showModal, setShowModal] = useState(false)
+  const [dadosAnuncio, setDadosAnuncio] = useState({})
+
+  var styleModal = {
+    width: '600px'
+  }
+
 
   if (!props.isLoading) {
     return (
@@ -52,10 +61,13 @@ export default function TableList(props) {
                               </td>
 
                               <td>
-                                <Button bsStyle="info" pullRight fill type="submit">
+                                <Button bsStyle="info" pullRight fill onClick={() => {
+                                  setDadosAnuncio(prop)
+                                  setShowModal(true)
+                                }}>
                                   <i className='fa fa-edit'></i>
                                   Editar
-                              </Button>
+                                 </Button>
                               </td>
                             </tr>
                           )
@@ -64,12 +76,39 @@ export default function TableList(props) {
                       </tbody>
 
                     </Table>
+
+
                   </>
                 }
               />
             </Col>
+
+
           </Row>
         </Grid>
+
+        
+          {showModal && <Modal show={showModal} onHide={() => setShowModal(false)} dialogClassName="width_modal" >
+            <Modal.Header closeButton >
+              <Modal.Title>{dadosAnuncio.titulo}</Modal.Title>
+            </Modal.Header>
+
+            <Modal.Body >
+
+
+            </Modal.Body>
+
+            <Modal.Footer>
+              <Button variant="secondary" onClick={() => setShowModal(false)}>
+                Close
+                        </Button>
+              <Button variant="primary" onClick={() => setShowModal(false)}>
+                Save Changes
+                        </Button>
+            </Modal.Footer>
+
+          </Modal>}
+        
       </div>
     );
   } else {
@@ -92,6 +131,9 @@ export default function TableList(props) {
             </Row>
           </Grid>
         </div>
+
+
+
       </>
     )
   }

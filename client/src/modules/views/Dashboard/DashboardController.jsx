@@ -13,8 +13,16 @@ export default function DashboardController() {
 
     const dispatch = useDispatch()
     const store = useSelector(store => store.dashboard)
-
+/*
+    setInterval(()=>{
+        get()
+    }, 60000)
+*/
     useEffect(() => {
+        get()
+    }, [])
+
+    function get(){
         axios.get('http://localhost:5000/saldo').then(res => {
             dispatch({
                 type: OBTER_SALDO_TOTAL,
@@ -40,7 +48,7 @@ export default function DashboardController() {
                 isLoading: false
             })
         })
-    }, [])
+    }
 
     return (
         <div>
