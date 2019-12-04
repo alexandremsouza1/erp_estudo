@@ -31,44 +31,72 @@ export default function TableList(props) {
                       </Form>
                     </Navbar>
 
-                    <Table striped hover>
-                      <tbody>
-                        {props.result.map(prop => {
-                          return (
-                            <tr key={prop.id}>
-                              <td><img src={prop.foto_principal} alt='fotoPrincipal' height='100' width='80' /></td>
-                              <td>
+                    {props.result.map(prop => {
+                      return (
+                        <div className="panel panel-primary">
+                          <div className="panel-heading">
+                            <h3 className="panel-title">
+                              {prop.titulo}
+                            </h3>
+                          </div>
+                          <div className="panel-body" style={{ "min-height": "142px" }}>
+                            <div className="col-md-2 col-xs-12 text-center" style={{ "padding-left": "0px;" }}>
+                              <img src={prop.foto_principal} alt='fotoPrincipal' height='100' width='80' />
+                            </div>
+                            <div className="col-md-5 col-xs-12 text-center-xs">
+                              <font size="4pt">
                                 <a href={prop.link_anuncio} rel="noopener noreferrer" target='_blank'>{prop.titulo}</a>
-                                <br />#{prop.id}
-                                <br></br>
-                                <Badge variant="warning">
-                                  <b>Status: {prop.status === 'active' ? 'Ativo' : 'Inativo'}</b>
-                                </Badge>
-                              </td>
-
-                              <td>
-                                <Badge>R$: {prop.preco}</Badge>
-                                <br />
-                                <Badge>{prop.visualizacao} Visitas</Badge>
-                                <br />
-                                Estoque total: {prop.estoque_total}
-                              </td>
-
-                              <td>
-                                <Button bsStyle="info" pullRight fill onClick={() => {
-                                  setDadosAnuncio(prop)
-                                  setShowModal(true)
-                                }}>
-                                  <i className='fa fa-edit'></i>
-                                  Editar
-                                 </Button>
-                              </td>
-                            </tr>
-                          )
-                        }
-                        )}
-                      </tbody>
-                    </Table>
+                              </font>
+                              <p>
+                                <i className="fa fa-tag text-primary"></i>
+                                <i className="fa fa-star text-primary"></i>
+                                <i className="fa fa-shopping-cart text-primary"></i>
+                                <a style={{ "fontSize": "14px" }} href={prop.link_anuncio} rel="noopener noreferrer" target='_blank' full_base="1">#{prop.id}</a>
+                                <span className="badge badge-primary" style={{ "fontSize": "12px" }}>Variações</span>
+                              </p>
+                              <p style={{ "fontSize": "15px" }}>MercadoEnvios Grátis Brasil - R$ 16,95 por envio</p>
+                              <p>
+                                <span style={{ "fontSize": "12px" }} className="badge">0 Vendidos</span>
+                                <span style={{ "fontSize": "12px" }} className="badge badge-success">{prop.visualizacao} visitas</span>
+                              </p>
+                            </div>
+                            <div className="col-md-3 col-xs-6 text-center-xs">
+                              <font size="3">
+                                <b>
+                                  <a style={{ "color": "red" }}>
+                                    R$ {prop.preco}{' '}
+                                  </a>
+                                </b>
+                              </font>
+                              <font size="3">
+                                x {prop.estoque_total} disponíveis
+                              </font>
+                              <br />
+                              <span className="text-danger" style={{ "fontSize": "12px" }}>Tarifa R$ -3,96</span>
+                              <br />
+                              <span className="text-danger" style={{ "fontSize": "12px" }}>Custo Fixo R$ -5,00</span>
+                              <br />
+                              <span className="badge badge-info" style={{ "fontSize": "12px" }}>Líquido R$ 27,04</span>
+                            </div>
+                            <div className="col-md-2 col-xs-6 text-center-xs">
+                              <a className="btn btn-sm btn-flat btn-primary btn-rad">Modificar</a>
+                              <div className="btn-group">
+                                <button data-toggle="dropdown" type="button" className="btn btn-sm btn-flat btn-primary btn-rad dropdown-toggle">
+                                  <i className="fa fa-cog"></i>
+                                  <span className="caret"></span>
+                                </button>
+                                <ul role="menu" className="dropdown-menu dropdown-menu-right">
+                                    <li>
+                                      <a>Gerenciar Imagens</a>
+                                    </li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )
+                    }
+                    )}
                   </>
                 }
               />
@@ -77,30 +105,30 @@ export default function TableList(props) {
         </Grid>
 
 
-        {showModal && 
-        
-        <Modal show={showModal} onHide={() => setShowModal(false)} dialogClassName="width_modal" >
-          <Modal.Header closeButton >
-            <Modal.Title>{dadosAnuncio.titulo}</Modal.Title>
-          </Modal.Header>
+        {showModal &&
 
-          <Modal.Body >
-            <Form inline>
-              <FormControl type="text" placeholder="Título" className="mr-sm-2" style={{ 'width': '500px' }} value={dadosAnuncio.titulo}/>
-            </Form>
+          <Modal show={showModal} onHide={() => setShowModal(false)} dialogClassName="width_modal" >
+            <Modal.Header closeButton >
+              <Modal.Title>{dadosAnuncio.titulo}</Modal.Title>
+            </Modal.Header>
 
-          </Modal.Body>
+            <Modal.Body >
+              <Form inline>
+                <FormControl type="text" placeholder="Título" className="mr-sm-2" style={{ 'width': '500px' }} value={dadosAnuncio.titulo} />
+              </Form>
 
-          <Modal.Footer>
-            <Button variant="secondary" onClick={() => setShowModal(false)}>
-              Fechar
+            </Modal.Body>
+
+            <Modal.Footer>
+              <Button variant="secondary" onClick={() => setShowModal(false)}>
+                Fechar
             </Button>
-            <Button variant="primary" onClick={() => setShowModal(false)}>
-              Salvar
+              <Button variant="primary" onClick={() => setShowModal(false)}>
+                Salvar
             </Button>
-          </Modal.Footer>
+            </Modal.Footer>
 
-        </Modal>}
+          </Modal>}
 
       </div>
     );
