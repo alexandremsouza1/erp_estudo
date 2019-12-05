@@ -10,7 +10,7 @@ exports.listarTodosAnuncio = async (req, res) => {
     usuarioService.buscarUsuarioPorID().then(resp01 => {
         axios.get(`${constants.API_MERCADO_LIVRE}/users/${resp01.id}/items/search?search_type=scan&access_token=${resp01.accessToken}`).then(resp07 => {
             var detalhesAnuncio = resp07.data.results.map(resp02 => {
-                return axios.get(`${constants.API_MERCADO_LIVRE}/items/${resp02}/`).then(resp03 => {
+                return axios.get(`${constants.API_MERCADO_LIVRE}/items/${resp02}?access_token=${resp01.accessToken}`).then(resp03 => {
                     return axios.get(`${constants.API_MERCADO_LIVRE}/visits/items?ids=${resp02}`).then(resp04 => {
                         if(resp03.data.shipping.free_shipping){
                             return axios.get(`${constants.API_MERCADO_LIVRE}/items/${resp02}/shipping_options/free`).then(resp05 => {
@@ -27,7 +27,8 @@ exports.listarTodosAnuncio = async (req, res) => {
                                     custoFreteGratis: resp05.data.coverage.all_country.list_cost,
                                     tarifa: Number(((resp03.data.price) * (11/100)).toFixed(2)),
                                     liquido: Number((resp03.data.price - (resp05.data.coverage.all_country.list_cost) - (resp03.data.price) * (11/100)).toFixed(2)),
-                                    tipoAnuncio: resp03.data.listing_type_id === "gold_pro" ? "Premium - Exposição máxima" : "Clássico - Exposição alta"
+                                    tipoAnuncio: resp03.data.listing_type_id === "gold_pro" ? "Premium - Exposição máxima" : "Clássico - Exposição alta",
+                                    quantidadeVendido: resp03.data.sold_quantity
                                 }
                                 return anuncio;
                             }).catch(err => res.send(err))
@@ -45,7 +46,8 @@ exports.listarTodosAnuncio = async (req, res) => {
                                 custoFreteGratis: 5.00,
                                 tarifa: Number(((resp03.data.price) * (11/100)).toFixed(2)),
                                 liquido: Number((resp03.data.price - 5.00 - ((resp03.data.price) * (11/100))).toFixed(2)),
-                                tipoAnuncio: resp03.data.listing_type_id === "gold_pro" ? "Premium - Exposição máxima" : "Clássico - Exposição alta"
+                                tipoAnuncio: resp03.data.listing_type_id === "gold_pro" ? "Premium - Exposição máxima" : "Clássico - Exposição alta",
+                                quantidadeVendido: resp03.data.sold_quantity
                             }
                             return anuncio;
                         }

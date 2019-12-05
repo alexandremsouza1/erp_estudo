@@ -56,7 +56,7 @@ export default function TableList(props) {
                               </p>
                               <p style={{ "fontSize": "15px" }}>MercadoEnvios Grátis Brasil - R$ {prop.custoFreteGratis.toLocaleString("pt-BR")} por envio</p>
                               <p>
-                                <span style={{ "fontSize": "12px" }} className="badge">0 Vendidos</span>
+                                <span style={{ "fontSize": "12px" }} className="badge">{prop.quantidadeVendido} Vendidos</span>
                                 <span style={{ "fontSize": "12px" }} className="badge badge-success">{prop.visualizacao} visitas</span>
                                 <span style={{ "fontSize": "12px" }} className="badge badge-success">{prop.tipoAnuncio}</span>
                               </p>
