@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import '../../../assets/css/Global/style.css'
 
 export class UserCard extends Component {
   render() {
@@ -10,12 +11,12 @@ export class UserCard extends Component {
         <div className="content">
           <div className="author">
             <a href="#">
-              <img
-                className="avatar border-gray"
+              <img 
                 src={this.props.avatar}
                 alt="..."
+                style={{"maxWidth": "80px", "maxHeight": "80px"}}
               />
-              <h4 className="title">
+              <h4 className="title" style={{"padding-top": "5px"}}>
                 {this.props.name}
                 <br />
                 <small>{this.props.userName}</small>

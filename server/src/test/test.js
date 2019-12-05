@@ -162,7 +162,8 @@ const obterVendasPendentes = async() => {
                         tipoPagamento: value.payments[0].payment_type === 'credit_card' ? 'Cartão de crédito' : value.payments[0].payment_type ||
                             value.payments[0].payment_type === 'ticket' ? 'Boleto' : value.payments[0].payment_type,
                         cliente: value.buyer.nickname,
-                        fotoPrincipal: resp
+                        fotoPrincipal: resp,
+                        quantidadeVendasPendente: response.data.results.filter(value => value.payments[0].status === 'pending').length
                     }
                     return vendas
                 })
@@ -257,4 +258,4 @@ function obterEnderecoCliente() {
     })
 }
 
-listarTodosAnuncio()
+obterVendasPendentes()

@@ -6,6 +6,7 @@ import UserCard from '../../components/UserCard/UserCard'
 import imgParaPreparar from '../../../assets/img/delivery-box-icon128px.png'
 import imgProntoParaEnviar from '../../../assets/img/delivery-truck-icon128px.png'
 import imgEmTrasito from '../../../assets/img/truck-icon128px.png'
+import imgConcluido from '../../../assets/img/Accept-icon128px.png'
 
 
 export default function VendasView() {
@@ -39,7 +40,8 @@ export default function VendasView() {
                         <Col md={3}>
                             <UserCard 
                                 name="Concluídas"
-                                userName="55 vendas"/>
+                                userName="55 vendas"
+                                avatar={imgConcluido}/>
                         </Col>
                     </Row>
                 </div>

@@ -47,6 +47,7 @@ export default function DashboardController() {
             dispatch({
                 type: OBTER_VENDAS_PENDENTE,
                 vendasPendente: resp.data,
+                totalVendasPendentes: resp.data.totalVendasPendentes,
                 isLoading: false
             })
         })

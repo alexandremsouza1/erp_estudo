@@ -12,7 +12,8 @@ const INITIAL_STATE = {
     saldoTotal: Number(),
     saldoDisponivel: Number(),
     totalVendas: Number(),
-    nomeMes: ''
+    nomeMes: '',
+    totalVendasPendentes: Number()
 }
 
 export default function dashboardReducer(state = INITIAL_STATE, action) {
@@ -37,6 +38,7 @@ export default function dashboardReducer(state = INITIAL_STATE, action) {
             return {
                 ...state,
                 vendasPendente: action.vendasPendente,
+                totalVendasPendentes: action.totalVendasPendentes,
                 isLoading: action.isLoading
             }
         }

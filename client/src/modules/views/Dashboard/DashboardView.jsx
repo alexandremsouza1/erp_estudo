@@ -2,7 +2,7 @@ import React from "react";
 import { Grid, Row, Col } from "react-bootstrap";
 
 import { Card } from "modules/components/Card/Card.jsx";
-import StatsCard  from "modules/components/StatsCard/StatsCard.jsx";
+import StatsCard from "modules/components/StatsCard/StatsCard.jsx";
 import PedidosPendentes from "modules/components/PedidosPendentes/PedidosPendentes";
 import Carregando from '../../components/Loading/LoadingCarregandoSolicitacao'
 
@@ -18,7 +18,7 @@ export default function DashboardView(props) {
               statsValue={props.totalVendas}
               statsIcon={<i className="fa fa-refresh" />}
               statsIconText={<span>Mês de {props.nomeMes}</span>}
-              isLoading={props.isLoading}/>
+              isLoading={props.isLoading} />
           </Col>
 
           <Col lg={4} sm={6}>
@@ -47,26 +47,23 @@ export default function DashboardView(props) {
 
           <Col md={12}>
             <Card
-              title="Pedido de vendas pendente"
-              category={<>{props.totalVendasPendentes} Aguardando confirmação do pagamento</>}
+              title={<>Pedido de vendas pendente {props.totalVendasPendentes}</>}
+              category="Aguardando confirmação do pagamento"
               content={
                 <div className="table-full-width">
-                  <table className="table">
-                    {
-                      props.vendasPendente.map(resp => {
-                        if (!props.isLoading) {
-                          return (
-                            <PedidosPendentes resp={resp} key={resp.id} />
-                          )
-                        }else{
-                          return(
-                            <Carregando width={450}/>
-                          )
-                        }
 
-                      })
+                  {props.vendasPendente.map(resp => {
+                    if (!props.isLoading) {
+                      return (
+                          <PedidosPendentes resp={resp} key={resp.id} />
+                      )
+                    } else {
+                      return (
+                        <Carregando width={450} />
+                      )
                     }
-                  </table>
+                  })
+                  }
                 </div>
               }
             />
