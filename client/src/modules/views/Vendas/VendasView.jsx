@@ -32,7 +32,7 @@ export default function VendasView() {
                         <Col md={3}>
                             <UserCard 
                                 name="Em trânsito" 
-                                userName="2 vendas"
+                                userName="2 venda"
                                 avatar={imgEmTrasito}/>
                         </Col>
 
