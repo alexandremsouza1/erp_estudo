@@ -25,6 +25,7 @@ exports.listarTodosAnuncio = async (req, res) => {
                                     visualizacao: Object.values(resp04.data).reduce((accumulador, valorCorrente) => { return valorCorrente }),
                                     totalVariacoes: resp03.data.variations.length,
                                     custoFreteGratis: resp05.data.coverage.all_country.list_cost,
+                                    freteGratis: "Grátis Brasil",
                                     tarifa: Number(((resp03.data.price) * (11/100)).toFixed(2)),
                                     liquido: Number((resp03.data.price - (resp05.data.coverage.all_country.list_cost) - (resp03.data.price) * (11/100)).toFixed(2)),
                                     tipoAnuncio: resp03.data.listing_type_id === "gold_pro" ? "Premium - Exposição máxima" : "Clássico - Exposição alta",
@@ -43,7 +44,8 @@ exports.listarTodosAnuncio = async (req, res) => {
                                 status: resp03.data.status,
                                 visualizacao: Object.values(resp04.data).reduce((accumulador, valorCorrente) => { return valorCorrente }),
                                 totalVariacoes: resp03.data.variations.length,
-                                custoFreteGratis: 5.00,
+                                custoFreteGratis: 5.00+",00",
+                                freteGratis: "",
                                 tarifa: Number(((resp03.data.price) * (11/100)).toFixed(2)),
                                 liquido: Number((resp03.data.price - 5.00 - ((resp03.data.price) * (11/100))).toFixed(2)),
                                 tipoAnuncio: resp03.data.listing_type_id === "gold_pro" ? "Premium - Exposição máxima" : "Clássico - Exposição alta",
@@ -55,8 +57,10 @@ exports.listarTodosAnuncio = async (req, res) => {
                 }).catch(err => {res.send("Houve um erro ao buscar os detalhes do anuncio: " + err)});
             })
 
+            //Ordenar 
+
             Promise.all(detalhesAnuncio).then(resp06 => {
-                res.send(resp06)
+                res.send(orderAnunciosPorQuantidadeVendas(resp06))
             });
 
 
@@ -64,6 +68,11 @@ exports.listarTodosAnuncio = async (req, res) => {
             res.send("Houve um erro ao listar todos os anuncios: " + err)
         });
     })
+}
+
+//Orde por quantidade vendido
+const orderAnunciosPorQuantidadeVendas = (detalhesAnuncio) => {
+        return detalhesAnuncio.sort((a , b) => {return b.quantidadeVendido - a.quantidadeVendido})
 }
 
 

@@ -1,8 +1,12 @@
 import React from 'react'
 import '../../../assets/css/Global/style.css'
-import Card from "../../components/Card/Card"
 import { Row, Col } from "react-bootstrap"
 import Panel from '../../components/Panel/Panel'
+import UserCard from '../../components/UserCard/UserCard'
+import imgParaPreparar from '../../../assets/img/delivery-box-icon128px.png'
+import imgProntoParaEnviar from '../../../assets/img/delivery-truck-icon128px.png'
+import imgEmTrasito from '../../../assets/img/truck-icon128px.png'
+
 
 export default function VendasView() {
 
@@ -12,47 +16,30 @@ export default function VendasView() {
                 <div >
                     <Row>
                         <Col md={3}>
-                            <Card content={
-                                <div className="sc-dashboard__column">
-                                    <div className="sc-dashboard__column-header">
-                                        <p className="sc-dashboard__column-title">Para preparar</p>
-                                        <p className="sc-dashboard__column-description">0 vendas</p>
-                                    </div>
-                                </div>
-                            }></Card>
+                            <UserCard 
+                                name="Para preparar" 
+                                userName="0 vendas"
+                                avatar={imgParaPreparar}/>
                         </Col>
 
                         <Col md={3}>
-                            <Card content={
-                                <div className="sc-dashboard__column">
-                                    <div className="sc-dashboard__column-header">
-                                        <p className="sc-dashboard__column-title">Pronto para enviar</p>
-                                        <p className="sc-dashboard__column-description">1 venda</p>
-                                    </div>
-                                </div>
-                            }></Card>
+                            <UserCard 
+                                name="Pronto para enviar" 
+                                userName="1 venda"
+                                avatar={imgProntoParaEnviar}/>
                         </Col>
 
                         <Col md={3}>
-                            <Card content={
-                                <div className="sc-dashboard__column">
-                                    <div className="sc-dashboard__column-header">
-                                        <p className="sc-dashboard__column-title">Em trânsito</p>
-                                        <p className="sc-dashboard__column-description">2 vendas</p>
-                                    </div>
-                                </div>
-                            }></Card>
+                            <UserCard 
+                                name="Em trânsito" 
+                                userName="2 vendas"
+                                avatar={imgEmTrasito}/>
                         </Col>
 
                         <Col md={3}>
-                            <Card content={
-                                <div className="sc-dashboard__column">
-                                    <div className="sc-dashboard__column-header">
-                                        <p className="sc-dashboard__column-title">Concluídas</p>
-                                        <p className="sc-dashboard__column-description">55 vendas</p>
-                                    </div>
-                                </div>
-                            }></Card>
+                            <UserCard 
+                                name="Concluídas"
+                                userName="55 vendas"/>
                         </Col>
                     </Row>
                 </div>

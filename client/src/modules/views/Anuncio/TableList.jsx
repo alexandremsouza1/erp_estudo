@@ -5,6 +5,7 @@ import Button from "modules/components/CustomButton/CustomButton.jsx";
 import LoadingCarregandoSolicitacao from "modules/components/Loading/LoadingCarregandoSolicitacao"
 import iconSearch from '../../../assets/img/Zoom-icon24px.png'
 import '../../../assets/css/Global/style.css';
+import CustomRadio from '../../components/CustomRadio/CustomRadio'
 
 export default function TableList(props) {
 
@@ -54,7 +55,7 @@ export default function TableList(props) {
                                 <a style={{ "fontSize": "14px" }} href={prop.link_anuncio} rel="noopener noreferrer" target='_blank' full_base="1">#{prop.id}</a>
                                 <span className="badge badge-primary" style={{ "fontSize": "12px" }}>{prop.totalVariacoes} Variações</span>
                               </p>
-                              <p style={{ "fontSize": "15px" }}>MercadoEnvios Grátis Brasil - R$ {prop.custoFreteGratis.toLocaleString("pt-BR")} por envio</p>
+                              <p style={{ "fontSize": "15px" }}>Mercado Envios {prop.freteGratis} - R$ {prop.custoFreteGratis.toLocaleString("pt-BR")} por envio</p>
                               <p>
                                 <span style={{ "fontSize": "12px" }} className="badge">{prop.quantidadeVendido} Vendidos</span>
                                 <span style={{ "fontSize": "12px" }} className="badge badge-success">{prop.visualizacao} visitas</span>
@@ -80,7 +81,10 @@ export default function TableList(props) {
                               <span className="badge badge-info" style={{ "fontSize": "12px" }}>Líquido R$ {prop.liquido.toLocaleString("pt-BR")}</span>
                             </div>
                             <div className="col-md-2 col-xs-6 text-center-xs">
-                              <a className="btn btn-sm btn-flat btn-primary btn-rad">Modificar</a>
+                              <a className="btn btn-sm btn-flat btn-primary btn-rad" onClick={() => {
+                                setShowModal(true)
+                                setDadosAnuncio(prop)
+                              }}> Modificar</a>
                               <div className="btn-group">
                                 <button data-toggle="dropdown" type="button" className="btn btn-sm btn-flat btn-primary btn-rad dropdown-toggle">
                                   <i className="fa fa-cog"></i>
@@ -105,9 +109,8 @@ export default function TableList(props) {
           </Row>
         </Grid>
 
-
+        { /*MODAL*/}
         {showModal &&
-
           <Modal show={showModal} onHide={() => setShowModal(false)} dialogClassName="width_modal" >
             <Modal.Header closeButton >
               <Modal.Title>{dadosAnuncio.titulo}</Modal.Title>
@@ -115,7 +118,14 @@ export default function TableList(props) {
 
             <Modal.Body >
               <Form inline>
-                <FormControl type="text" placeholder="Título" className="mr-sm-2" style={{ 'width': '500px' }} value={dadosAnuncio.titulo} />
+                <div>Título</div>
+                <FormControl type="text" placeholder="Título" style={{ 'width': '500px' }} value={dadosAnuncio.titulo}></FormControl>
+                <p></p>
+                <div>Estado do produto</div>
+                <p>
+                  <CustomRadio number="1" name="b" value="Novo"></CustomRadio>
+                  
+                </p>
               </Form>
 
             </Modal.Body>

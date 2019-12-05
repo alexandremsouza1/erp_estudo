@@ -6,7 +6,6 @@ import StatsCard  from "modules/components/StatsCard/StatsCard.jsx";
 import PedidosPendentes from "modules/components/PedidosPendentes/PedidosPendentes";
 import Carregando from '../../components/Loading/LoadingCarregandoSolicitacao'
 
-
 export default function DashboardView(props) {
   return (
     <div className="content">
