@@ -24,7 +24,10 @@ exports.listarTodosAnuncio = async (req, res) => {
                                     status: resp03.data.status,
                                     visualizacao: Object.values(resp04.data).reduce((accumulador, valorCorrente) => { return valorCorrente }),
                                     totalVariacoes: resp03.data.variations.length,
-                                    custoFreteGratis: resp05.data.coverage.all_country.list_cost
+                                    custoFreteGratis: resp05.data.coverage.all_country.list_cost,
+                                    tarifa: Number(((resp03.data.price) * (11/100)).toFixed(2)),
+                                    liquido: Number((resp03.data.price - (resp05.data.coverage.all_country.list_cost) - (resp03.data.price) * (11/100)).toFixed(2)),
+                                    tipoAnuncio: resp03.data.listing_type_id === "gold_pro" ? "Premium - Exposição máxima" : "Clássico - Exposição alta"
                                 }
                                 return anuncio;
                             }).catch(err => res.send(err))
@@ -39,7 +42,10 @@ exports.listarTodosAnuncio = async (req, res) => {
                                 status: resp03.data.status,
                                 visualizacao: Object.values(resp04.data).reduce((accumulador, valorCorrente) => { return valorCorrente }),
                                 totalVariacoes: resp03.data.variations.length,
-                                custoFreteGratis: 0
+                                custoFreteGratis: 5.00,
+                                tarifa: Number(((resp03.data.price) * (11/100)).toFixed(2)),
+                                liquido: Number((resp03.data.price - 5.00 - ((resp03.data.price) * (11/100))).toFixed(2)),
+                                tipoAnuncio: resp03.data.listing_type_id === "gold_pro" ? "Premium - Exposição máxima" : "Clássico - Exposição alta"
                             }
                             return anuncio;
                         }

@@ -54,17 +54,18 @@ export default function TableList(props) {
                                 <a style={{ "fontSize": "14px" }} href={prop.link_anuncio} rel="noopener noreferrer" target='_blank' full_base="1">#{prop.id}</a>
                                 <span className="badge badge-primary" style={{ "fontSize": "12px" }}>{prop.totalVariacoes} Variações</span>
                               </p>
-                              <p style={{ "fontSize": "15px" }}>MercadoEnvios Grátis Brasil - R$ 16,95 por envio</p>
+                              <p style={{ "fontSize": "15px" }}>MercadoEnvios Grátis Brasil - R$ {prop.custoFreteGratis.toLocaleString("pt-BR")} por envio</p>
                               <p>
                                 <span style={{ "fontSize": "12px" }} className="badge">0 Vendidos</span>
                                 <span style={{ "fontSize": "12px" }} className="badge badge-success">{prop.visualizacao} visitas</span>
+                                <span style={{ "fontSize": "12px" }} className="badge badge-success">{prop.tipoAnuncio}</span>
                               </p>
                             </div>
                             <div className="col-md-3 col-xs-6 text-center-xs">
                               <font size="3">
                                 <b>
                                   <a style={{ "color": "red" }}>
-                                    R$ {prop.preco}{' '}
+                                    R$ {prop.preco.toLocaleString("pt-BR")}{' '}
                                   </a>
                                 </b>
                               </font>
@@ -72,11 +73,11 @@ export default function TableList(props) {
                                 x {prop.estoque_total} disponíveis
                               </font>
                               <br />
-                              <span className="text-danger" style={{ "fontSize": "12px" }}>Tarifa R$ -3,96</span>
+                              <span className="text-danger" style={{ "fontSize": "12px" }}>Tarifa R$ {prop.tarifa.toLocaleString("pt-BR")}</span>
                               <br />
-                              <span className="text-danger" style={{ "fontSize": "12px" }}>Custo Fixo R$ {prop.custoFreteGratis}</span>
+                              <span className="text-danger" style={{ "fontSize": "12px" }}>Custo Fixo R$ {prop.custoFreteGratis.toLocaleString("pt-BR")}</span>
                               <br />
-                              <span className="badge badge-info" style={{ "fontSize": "12px" }}>Líquido R$ 27,04</span>
+                              <span className="badge badge-info" style={{ "fontSize": "12px" }}>Líquido R$ {prop.liquido.toLocaleString("pt-BR")}</span>
                             </div>
                             <div className="col-md-2 col-xs-6 text-center-xs">
                               <a className="btn btn-sm btn-flat btn-primary btn-rad">Modificar</a>
