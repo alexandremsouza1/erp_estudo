@@ -258,4 +258,4 @@ function obterEnderecoCliente() {
     })
 }
 
-obterVendasPendentes()
+listarTodosAnuncio()
