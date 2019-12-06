@@ -11,7 +11,7 @@ export default function AnuncioController() {
     
     useEffect(() => {
         axios.get('http://localhost:5000/anuncio').then(resp => {
-            dispatch({ type: LISTAR_TODOS_ANUNCIOS, data: resp.data, isLoading: false })
+            dispatch({ type: LISTAR_TODOS_ANUNCIOS, data: resp.data, isLoading: false})
         }).catch(err => { console.log(err) })
     }, [])
 

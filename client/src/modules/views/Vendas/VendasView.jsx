@@ -1,6 +1,6 @@
 import React from 'react'
 import '../../../assets/css/Global/style.css'
-import { Row, Col } from "react-bootstrap"
+import { Row, Col, FormGroup, ControlLabel, FormControl, InputGroup } from "react-bootstrap"
 import Panel from '../../components/Panel/Panel'
 import UserCard from '../../components/UserCard/UserCard'
 import imgParaPreparar from '../../../assets/img/delivery-box-icon128px.png'

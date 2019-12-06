@@ -40,13 +40,9 @@ exports.listarTodosProdutos = (req, res, next) => {
     Product.find({
         active: true
     }, "title price").then(resp => {
-
             res.status(200).send(resp);
-
         }).catch(err => {
-
             res.status(400).find(err);
-
         });
 }
 

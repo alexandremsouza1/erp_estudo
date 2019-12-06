@@ -12,28 +12,30 @@ exports.listarTodosAnuncio = async (req, res) => {
             var detalhesAnuncio = resp07.data.results.map(resp02 => {
                 return axios.get(`${constants.API_MERCADO_LIVRE}/items/${resp02}?access_token=${resp01.accessToken}`).then(resp03 => {
                     return axios.get(`${constants.API_MERCADO_LIVRE}/visits/items?ids=${resp02}`).then(resp04 => {
-                        if(resp03.data.shipping.free_shipping){
+                        if (resp03.data.shipping.free_shipping) {
                             return axios.get(`${constants.API_MERCADO_LIVRE}/items/${resp02}/shipping_options/free`).then(resp05 => {
-                                var anuncio = {
-                                    id: resp03.data.id,
-                                    titulo: resp03.data.title,
-                                    preco: resp03.data.price,
-                                    estoque_total: resp03.data.available_quantity,
-                                    foto_principal: resp03.data.pictures[0].url,
-                                    link_anuncio: resp03.data.permalink,
-                                    status: resp03.data.status,
-                                    visualizacao: Object.values(resp04.data).reduce((accumulador, valorCorrente) => { return valorCorrente }),
-                                    totalVariacoes: resp03.data.variations.length,
-                                    custoFreteGratis: resp05.data.coverage.all_country.list_cost,
-                                    freteGratis: "Grátis Brasil",
-                                    tarifa: Number(((resp03.data.price) * (11/100)).toFixed(2)),
-                                    liquido: Number((resp03.data.price - (resp05.data.coverage.all_country.list_cost) - (resp03.data.price) * (11/100)).toFixed(2)),
-                                    tipoAnuncio: resp03.data.listing_type_id === "gold_pro" ? "Premium - Exposição máxima" : "Clássico - Exposição alta",
-                                    quantidadeVendido: resp03.data.sold_quantity
-                                }
-                                return anuncio;
+                                    var anuncio = {
+                                        id: resp03.data.id,
+                                        titulo: resp03.data.title,
+                                        preco: resp03.data.price,
+                                        estoque_total: resp03.data.available_quantity,
+                                        foto_principal: resp03.data.pictures[0].url,
+                                        link_anuncio: resp03.data.permalink,
+                                        status: resp03.data.status,
+                                        visualizacao: Object.values(resp04.data).reduce((accumulador, valorCorrente) => { return valorCorrente }),
+                                        totalVariacoes: resp03.data.variations.length,
+                                        custoFreteGratis: resp05.data.coverage.all_country.list_cost,
+                                        freteGratis: "Grátis Brasil",
+                                        tarifa: Number(((resp03.data.price) * (11 / 100)).toFixed(2)),
+                                        liquido: Number((resp03.data.price - (resp05.data.coverage.all_country.list_cost) - (resp03.data.price) * (11 / 100)).toFixed(2)),
+                                        tipoAnuncio: resp03.data.listing_type_id === "gold_pro" ? "Premium - Exposição máxima" : "Clássico - Exposição alta",
+                                        quantidadeVendido: resp03.data.sold_quantity,
+                                        status: resp03.data.status,
+                                        api: resp03.data
+                                    }
+                                    return anuncio;
                             }).catch(err => res.send(err))
-                        }else{
+                        } else {
                             var anuncio = {
                                 id: resp03.data.id,
                                 titulo: resp03.data.title,
@@ -44,17 +46,17 @@ exports.listarTodosAnuncio = async (req, res) => {
                                 status: resp03.data.status,
                                 visualizacao: Object.values(resp04.data).reduce((accumulador, valorCorrente) => { return valorCorrente }),
                                 totalVariacoes: resp03.data.variations.length,
-                                custoFreteGratis: 5.00+",00",
+                                custoFreteGratis: 5.00 + ",00",
                                 freteGratis: "",
-                                tarifa: Number(((resp03.data.price) * (11/100)).toFixed(2)),
-                                liquido: Number((resp03.data.price - 5.00 - ((resp03.data.price) * (11/100))).toFixed(2)),
+                                tarifa: Number(((resp03.data.price) * (11 / 100)).toFixed(2)),
+                                liquido: Number((resp03.data.price - 5.00 - ((resp03.data.price) * (11 / 100))).toFixed(2)),
                                 tipoAnuncio: resp03.data.listing_type_id === "gold_pro" ? "Premium - Exposição máxima" : "Clássico - Exposição alta",
                                 quantidadeVendido: resp03.data.sold_quantity
                             }
                             return anuncio;
                         }
-                    }).catch(err => {res.send("Houve um erro: " + err)})
-                }).catch(err => {res.send("Houve um erro ao buscar os detalhes do anuncio: " + err)});
+                    }).catch(err => { res.send("Houve um erro: " + err) })
+                }).catch(err => { res.send("Houve um erro ao buscar os detalhes do anuncio: " + err) });
             })
 
             //Ordenar 
@@ -72,7 +74,7 @@ exports.listarTodosAnuncio = async (req, res) => {
 
 //Orde por quantidade vendido
 const orderAnunciosPorQuantidadeVendas = (detalhesAnuncio) => {
-        return detalhesAnuncio.sort((a , b) => {return b.quantidadeVendido - a.quantidadeVendido})
+    return detalhesAnuncio.sort((a, b) => { return b.quantidadeVendido - a.quantidadeVendido })
 }
 
 
