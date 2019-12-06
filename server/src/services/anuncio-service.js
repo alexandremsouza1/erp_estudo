@@ -62,7 +62,7 @@ exports.listarTodosAnuncio = async (req, res) => {
             //Ordenar 
 
             Promise.all(detalhesAnuncio).then(resp06 => {
-                console.log("TESTE0" + resp06)
+                res.send(resp06)
             });
 
 

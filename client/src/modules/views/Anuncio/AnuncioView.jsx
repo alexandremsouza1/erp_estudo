@@ -50,7 +50,7 @@ export default function AnuncioView(props) {
                     </Navbar>
 
                     {props.result.map(prop => {
-                      if (prop.status === (onCheck === '1' ? 'active' : 'paused')) {
+                      if (prop.status === "active") {
                         return (
                           <div className="panel panel-primary">
                             <div className="panel-heading">
@@ -129,7 +129,6 @@ export default function AnuncioView(props) {
         </Grid>
 
         { /*MODAL*/}
-        {console.log(api.titulo)}
         {showModal &&
           <Modal show={showModal} onHide={() => setShowModal(false)} dialogClassName="width_modal" >
             <Modal.Header closeButton >
@@ -138,26 +137,12 @@ export default function AnuncioView(props) {
 
             <Modal.Body sytle={{ "width": "100px" }}>
 
-              <Form>
-                <div style={{ "marginLeft": "10px" }}>
-                  <FormInput ncols={["col-md-4"]} label="Título" style={{ "width": "500px" }} />
-                </div>
 
-                <div className="mb-3">
-                  <RadioButton
-                    option="1"
-                    name="radio"
-                    label="Novo"
-                    onChange={() => { setOnCheck('1') }}
-                    checked={onCheck} />
-                  <RadioButton
-                    option="2"
-                    name="radio"
-                    label="Usado"
-                    onChange={() => { setOnCheck('2') }}
-                    checked={onchange} />
-                </div>
-              </Form>
+              <div style={{ "marginLeft": "10px" }}>
+                <FormInput ncols={["col-md-4"]} label="Título" style={{ "width": "500px" }} />
+              </div>
+
+
 
 
 
