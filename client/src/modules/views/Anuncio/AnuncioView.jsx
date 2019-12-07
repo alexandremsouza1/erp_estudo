@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Grid, Row, Col, Table, Navbar, Form, Badge, FormControl, Modal } from "react-bootstrap";
+import { Grid, Row, Col, Navbar, Form, FormControl, Modal } from "react-bootstrap";
 import Card from "modules/components/Card/Card.jsx";
 import Button from "modules/components/CustomButton/CustomButton.jsx";
 import LoadingCarregandoSolicitacao from "modules/components/Loading/LoadingCarregandoSolicitacao"
@@ -12,7 +12,7 @@ export default function AnuncioView(props) {
   document.title = "Anúncios"
 
   const [showModal, setShowModal] = useState(false)
-  const [api, setApi] = useState({})
+  const [anuncio, setAnuncio] = useState({})
   const [onCheck, setOnCheck] = useState('1')
 
   if (!props.isLoading) {
@@ -101,7 +101,7 @@ export default function AnuncioView(props) {
                               <div className="col-md-2 col-xs-6 text-center-xs">
                                 <a className="btn btn-sm btn-flat btn-primary btn-rad" onClick={() => {
                                   setShowModal(true)
-                                  setApi(prop)
+                                  setAnuncio(prop)
                                 }}> Modificar</a>
                                 <div className="btn-group">
                                   <button data-toggle="dropdown" type="button" className="btn btn-sm btn-flat btn-primary btn-rad dropdown-toggle">
@@ -138,23 +138,47 @@ export default function AnuncioView(props) {
             <Modal.Body sytle={{ "width": "100px" }}>
 
 
-              <div style={{ "marginLeft": "10px" }}>
-                <FormInput ncols={["col-md-4"]} label="Título" style={{ "width": "500px" }} />
+              <div style={{ "marginLeft": "10px", "backgroundColor": "blue" }}>
+
               </div>
 
+              <Row>
+                <Col md={10}>
+                  <FormInput label="Título" value={anuncio.titulo} style={{ "color": "blue" }} disabled="true" />
+                </Col>
+                <Col md={2}>
+                  <FormInput label="Preço" value={anuncio.preco.toLocaleString("pt-BR")} style={{ "color": "blue" }} />
+                </Col>
+              </Row>
 
+              <Row>
+                <Col md={5}>
+                  <FormInput label="Tipo de Anúncio" value={anuncio.tipoAnuncio} style={{ "color": "blue" }} />
+                </Col>
+                <Col md={7}>
+                  <FormInput label="Link Vídeo YouTube" value={""} style={{ "color": "blue" }} placeholder="Informe aqui o link do YouTube" />
+                </Col>
+              </Row>
 
+              <Row>
+                <Col md={12}>
+                  <FormInput label="Descrição somente texto" value={anuncio.description} style={{ "color": "blue" }} componentClass="textarea" rows="15" />
+                </Col>
+              </Row>
 
-
-
+              <Row>
+                <Col md={12}>
+                  <FormInput label="Garantia" value={""} style={{ "color": "blue" }} componentClass="textarea" rows="4" />
+                </Col>
+              </Row>
 
             </Modal.Body>
 
             <Modal.Footer>
-              <Button variant="secondary" onClick={() => setShowModal(false)}>
+              <Button onClick={() => setShowModal(false)} bsStyle="primary" fill>
                 Fechar
             </Button>
-              <Button variant="primary" onClick={() => setShowModal(false)}>
+              <Button bsStyle="primary" fill onClick={() => setShowModal(false)}>
                 Salvar
             </Button>
             </Modal.Footer>

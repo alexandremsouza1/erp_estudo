@@ -5,8 +5,6 @@ import { FormGroup, ControlLabel, FormControl, Row } from "react-bootstrap";
 export class FormInput extends React.Component {
   render() {
     return (
-      <Row>
-        <div className={this.props.ncols}>
           <FormGroup>
             <ControlLabel>{this.props.label} </ControlLabel>
             <FormControl
@@ -14,10 +12,11 @@ export class FormInput extends React.Component {
               bsClass={this.props.bsClass}
               placeholder={this.props.placeholder}
               defaultValue={this.props.value} 
-              style={this.props.style}/>
+              style={this.props.style}
+              disabled={this.props.disabled}
+              componentClass={this.props.componentClass}
+              rows={this.props.rows}/>
           </FormGroup>
-        </div>
-      </Row>
     )
   }
 }
