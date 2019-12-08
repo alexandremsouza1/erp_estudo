@@ -1,7 +1,14 @@
 .width_modal {
-    width: 100%;
+    width: 95%;
     height: 100%
 }
+
+@media (min-width: 768px){
+    .radio-col-sm-2 {
+        width: 7%
+    }
+}
+
 
 .panel-primary {
     border-color: #428bca;

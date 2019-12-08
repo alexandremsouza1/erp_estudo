@@ -33,24 +33,28 @@ export default function AnuncioView(props) {
                         <FormControl type="text" placeholder="Buscar por título" className="mr-sm-2" style={{ 'width': '500px' }} />
                         <Button round ><img src={iconSearch} alt='search'></img></Button>
                       </Form>
-                      <div>
-                        <RadioButton
-                          option="1"
-                          name="radio"
-                          label="Ativos"
-                          onChange={() => { setOnCheck('1') }}
-                          checked={onCheck} />
-                        <RadioButton
-                          option="2"
-                          name="radio"
-                          label="Inativos"
-                          onChange={() => { setOnCheck('2') }}
-                          checked={onchange} />
+                      <div className="form-group">
+                        <div className="col-sm-2">
+                            <RadioButton
+                              option="1"
+                              name="radio"
+                              label="Ativos"
+                              onChange={() => { setOnCheck('1') }}
+                              checked={onCheck} />
+                        </div>
+                        <div className="col-sm-10">
+                          <RadioButton
+                            option="2"
+                            name="radio"
+                            label="Inativos"
+                            onChange={() => { setOnCheck('2') }}
+                            checked={onchange} />
+                        </div>
                       </div>
                     </Navbar>
 
                     {props.result.map(prop => {
-                      if (prop.status === "active") {
+                      if (prop.status === "paused") {
                         return (
                           <div className="panel panel-primary">
                             <div className="panel-heading">
@@ -70,8 +74,8 @@ export default function AnuncioView(props) {
                                   <i className="fa fa-tag text-primary"></i>
                                   <i className="fa fa-star text-primary"></i>
                                   <i className="fa fa-shopping-cart text-primary"></i>
-                                  <a style={{ "fontSize": "14px" }} href={prop.link_anuncio} rel="noopener noreferrer" target='_blank' full_base="1">#{prop.id}</a>
-                                  <span className="badge badge-primary" style={{ "fontSize": "12px" }}>{prop.totalVariacoes} Variações</span>
+                                  <a style={{ "fontSize": "14px", "marginLeft": "5px" }} rel="noopener noreferrer" target='_blank' full_base="1">#{prop.id}</a>
+                                  <span className="badge badge-primary" style={{ "fontSize": "12px", "marginLeft": "5px" }}>{prop.totalVariacoes} Variações</span>
                                 </p>
                                 <p style={{ "fontSize": "15px" }}>Mercado Envios {prop.freteGratis} - R$ {prop.custoFreteGratis.toLocaleString("pt-BR")} por envio</p>
                                 <p>
