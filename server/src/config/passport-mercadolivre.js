@@ -22,8 +22,11 @@ module.exports = (passport) => {
       }
     });
     */
-   usuarioService.salvarUsuario(setUsuario(profile, accessToken, refreshToken));
-    return done(null, profile);
+   usuarioService.salvarUsuario(setUsuario(profile, accessToken, refreshToken))
+   
+
+   return done(null, profile);
+  
   }
   ));
 
