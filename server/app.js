@@ -20,7 +20,7 @@ const flash = require('connect-flash');
 const saldoRoute = require('./src/routes/saldo-route')
 const vendasRoute = require('../server/src/routes/vendas.router')
 const clienteRoute = require('../server/src/routes/cliente.route')
-
+//const notificacoesMercadoLivreRoute = require('../server/src/routes/notificacoes.mercadolivre')
 
 //  Adicionar e configurar middleware
 app.use(session({
@@ -51,5 +51,7 @@ app.use('/saldo', saldoRoute);
 app.use('/vendas', vendasRoute)
 
 app.use('/clientes', clienteRoute)
+
+//app.use('/notifications', notificacoesMercadoLivreRoute)
 
 module.exports = app;
