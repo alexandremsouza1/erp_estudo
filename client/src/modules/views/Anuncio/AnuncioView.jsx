@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { Grid, Row, Col, Navbar, Form, FormControl, Modal } from "react-bootstrap";
+import { Grid, Row, Col, Navbar, Form, FormControl } from "react-bootstrap";
 import Card from "modules/components/Card/Card.jsx";
 import Button from "modules/components/CustomButton/CustomButton.jsx";
 import LoadingCarregandoSolicitacao from "modules/components/Loading/LoadingCarregandoSolicitacao"
 import iconSearch from '../../../assets/img/Zoom-icon24px.png'
 import '../../../assets/css/Global/style.css';
-import RadioButton from '../../components/CustomRadio/CustomRadio'
+import Modal from '../../components/CustomModal/CustomModal'
 import FormInput from '../../components/FormInput/FormInput'
 
 export default function AnuncioView(props) {
@@ -13,7 +13,11 @@ export default function AnuncioView(props) {
 
   const [showModal, setShowModal] = useState(false)
   const [anuncio, setAnuncio] = useState({})
-  const [onCheck, setOnCheck] = useState('1')
+  const [isActive, setIsActive] = useState('active')
+
+  const handleChangeIsActive = (e) => {
+    setIsActive(e.target.value)
+  };
 
   if (!props.isLoading) {
     return (
@@ -31,30 +35,22 @@ export default function AnuncioView(props) {
                     <Navbar bg="light" expand="lg">
                       <Form inline>
                         <FormControl type="text" placeholder="Buscar por título" className="mr-sm-2" style={{ 'width': '500px' }} />
-                        <Button round ><img src={iconSearch} alt='search'></img></Button>
+                        <Button bsStyle="primary" fill style={{'marginTop': "5px"}}><img src={iconSearch} alt='search'></img></Button>
                       </Form>
-                      <div className="form-group">
-                        <div className="col-sm-2">
-                            <RadioButton
-                              option="1"
-                              name="radio"
-                              label="Ativos"
-                              onChange={() => { setOnCheck('1') }}
-                              checked={onCheck} />
-                        </div>
-                        <div className="col-sm-10">
-                          <RadioButton
-                            option="2"
-                            name="radio"
-                            label="Inativos"
-                            onChange={() => { setOnCheck('2') }}
-                            checked={onchange} />
-                        </div>
+                      <div className="col-sm-12" style={{ "marginLeft": '-15px', 'width': '150px' }}>
+                        <FormControl componentClass="select" onChange={handleChangeIsActive}>
+                          <option value="active">Ativos</option>
+                          <option value="paused">Inativos</option>
+                        </FormControl>
+                        <br></br>
                       </div>
+
                     </Navbar>
 
+
+
                     {props.result.map(prop => {
-                      if (prop.status === "paused") {
+                      if (prop.status === isActive) {
                         return (
                           <div className="panel panel-primary">
                             <div className="panel-heading">
@@ -62,8 +58,8 @@ export default function AnuncioView(props) {
                                 {prop.titulo}
                               </h3>
                             </div>
-                            <div className="panel-body" style={{ "min-height": "142px" }}>
-                              <div className="col-md-2 col-xs-12 text-center" style={{ "padding-left": "0px;" }}>
+                            <div className="panel-body" style={{ "minHeight": "142px" }}>
+                              <div className="col-md-2 col-xs-12 text-center">
                                 <img src={prop.foto_principal} alt='fotoPrincipal' height='100' width='80' />
                               </div>
                               <div className="col-md-5 col-xs-12 text-center-xs">
@@ -82,6 +78,7 @@ export default function AnuncioView(props) {
                                   <span style={{ "fontSize": "12px" }} className="badge">{prop.quantidadeVendido} Vendidos</span>
                                   <span style={{ "fontSize": "12px" }} className="badge badge-success">{prop.visualizacao} visitas</span>
                                   <span style={{ "fontSize": "12px" }} className="badge badge-success">{prop.tipoAnuncio}</span>
+                                  <span style={{ "fontSize": "12px" }} className="badge badge-danger" >{prop.sub_status}</span>
                                 </p>
                               </div>
                               <div className="col-md-3 col-xs-6 text-center-xs">
@@ -104,9 +101,10 @@ export default function AnuncioView(props) {
                               </div>
                               <div className="col-md-2 col-xs-6 text-center-xs">
                                 <a className="btn btn-sm btn-flat btn-primary btn-rad" onClick={() => {
-                                  setShowModal(true)
-                                  setAnuncio(prop)
-                                }}> Modificar</a>
+                                    setShowModal(true)
+                                    setAnuncio(prop)
+                                  }}> Modificar
+                                </a>
                                 <div className="btn-group">
                                   <button data-toggle="dropdown" type="button" className="btn btn-sm btn-flat btn-primary btn-rad dropdown-toggle">
                                     <i className="fa fa-cog"></i>
@@ -133,61 +131,7 @@ export default function AnuncioView(props) {
         </Grid>
 
         { /*MODAL*/}
-        {showModal &&
-          <Modal show={showModal} onHide={() => setShowModal(false)} dialogClassName="width_modal" >
-            <Modal.Header closeButton >
-              <Modal.Title>Modificar Anúncio</Modal.Title>
-            </Modal.Header>
-
-            <Modal.Body sytle={{ "width": "100px" }}>
-
-
-              <div style={{ "marginLeft": "10px", "backgroundColor": "blue" }}>
-
-              </div>
-
-              <Row>
-                <Col md={10}>
-                  <FormInput label="Título" value={anuncio.titulo} style={{ "color": "blue" }} disabled="true" />
-                </Col>
-                <Col md={2}>
-                  <FormInput label="Preço" value={anuncio.preco.toLocaleString("pt-BR")} style={{ "color": "blue" }} />
-                </Col>
-              </Row>
-
-              <Row>
-                <Col md={5}>
-                  <FormInput label="Tipo de Anúncio" value={anuncio.tipoAnuncio} style={{ "color": "blue" }} />
-                </Col>
-                <Col md={7}>
-                  <FormInput label="Link Vídeo YouTube" value={""} style={{ "color": "blue" }} placeholder="Informe aqui o link do YouTube" />
-                </Col>
-              </Row>
-
-              <Row>
-                <Col md={12}>
-                  <FormInput label="Descrição somente texto" value={anuncio.description} style={{ "color": "blue" }} componentClass="textarea" rows="15" />
-                </Col>
-              </Row>
-
-              <Row>
-                <Col md={12}>
-                  <FormInput label="Garantia" value={""} style={{ "color": "blue" }} componentClass="textarea" rows="4" />
-                </Col>
-              </Row>
-
-            </Modal.Body>
-
-            <Modal.Footer>
-              <Button onClick={() => setShowModal(false)} bsStyle="primary" fill>
-                Fechar
-            </Button>
-              <Button bsStyle="primary" fill onClick={() => setShowModal(false)}>
-                Salvar
-            </Button>
-            </Modal.Footer>
-
-          </Modal>}
+        {showModal && <Modal {...anuncio} setShowModal={setShowModal} showModal={showModal}></Modal>}
 
       </div>
     );

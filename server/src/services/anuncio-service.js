@@ -31,9 +31,12 @@ exports.listarTodosAnuncio = async (req, res) => {
                                         tarifa: Number(((resp03.data.price) * (11 / 100)).toFixed(2)),
                                         liquido: Number((resp03.data.price - (resp05.data.coverage.all_country.list_cost) - (resp03.data.price) * (11 / 100)).toFixed(2)),
                                         tipoAnuncio: resp03.data.listing_type_id === "gold_pro" ? "Premium - Exposição máxima" : "Clássico - Exposição alta",
+                                        tipoAnuncio_id: resp03.data.listing_type_id,
                                         quantidadeVendido: resp03.data.sold_quantity,
                                         status: resp03.data.status,
-                                        description: resp08.data.plain_text
+                                        description: resp08.data.plain_text,
+                                        video_id: resp03.data.video_id === null ? '' :'https://www.youtube.com/watch?v='+resp03.data.video_id,
+                                        sub_status: resp03.data.sub_status[0] === 'out_of_stock' ? 'Sem estoque' : resp03.data.sub_status
                                     }
                                     return anuncio;
                                 }).catch(err => res.send(err))
@@ -53,30 +56,33 @@ exports.listarTodosAnuncio = async (req, res) => {
                                     tarifa: Number(((resp03.data.price) * (11 / 100)).toFixed(2)),
                                     liquido: Number((resp03.data.price - 5.00 - ((resp03.data.price) * (11 / 100))).toFixed(2)),
                                     tipoAnuncio: resp03.data.listing_type_id === "gold_pro" ? "Premium - Exposição máxima" : "Clássico - Exposição alta",
+                                    tipoAnuncio_id: resp03.data.listing_type_id,
                                     quantidadeVendido: resp03.data.sold_quantity,
-                                    description: resp08.data.plain_text
+                                    description: resp08.data.plain_text,
+                                    video_id: resp03.data.video_id === null ? '' :'https://www.youtube.com/watch?v='+resp03.data.video_id,
+                                    sub_status: resp03.data.sub_status[0] === 'out_of_stock' ? 'Sem estoque' : resp03.data.sub_status
                                 }
                                 return anuncio;
                             }
                         }).catch(err => res.send(err))
-                    }).catch(err => { res.send("Houve um erro: " + err) })
-                }).catch(err => { res.send("Houve um erro ao buscar os detalhes do anuncio: " + err) });
+                    }).catch(err => { res.send(err) })
+                }).catch(err => { res.send(err) });
             })
 
             //Ordenar 
 
             Promise.all(detalhesAnuncio).then(resp06 => {
-                res.send(resp06)
+                res.send(orderAnunciosPorQuantidadeVendas(resp06))
             });
 
 
         }).catch(err => {
-            res.send("Houve um erro ao listar todos os anuncios: " + err)
+            res.send(err)
         });
     })
 }
 
-const setAnuncio = () => {
+const setAnuncio = (resp03, resp04, resp08, resp05) => {
     
 }
 

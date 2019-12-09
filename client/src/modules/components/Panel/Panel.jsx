@@ -11,7 +11,7 @@ export default function Panel(props) {
                     {props.title}
                 </h3>
             </div>
-            <div className="panel-body" style={{ "min-height": "142px" }}>
+            <div className="panel-body" style={{ "minHeight": "142px" }}>
                 {props.content}
             </div>
         </div>

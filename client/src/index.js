@@ -1,4 +1,5 @@
 import React from "react";
+
 import ReactDOM from "react-dom";
 import '../../client/node_modules/bootstrap/dist/css/bootstrap.min.css';
 
@@ -12,10 +13,17 @@ import "./assets/css/pe-icon-7-stroke.css";
 import AdminLayout from "layouts/Admin.jsx";
 import { Provider } from 'react-redux';
 import { store } from './store';
+import CallApiAnuncio from './modules/components/CallApi/CallApiAnuncio'
+import CallApiClient from './modules/components/CallApi/CallApiClient'
+
 
 ReactDOM.render(
-  
+
     <Provider store={store}>
+      
+      <CallApiAnuncio/>
+      <CallApiClient/>
+
       <BrowserRouter>
         <Switch>
           <Route path="/admin" render={props => <AdminLayout {...props} />} />
