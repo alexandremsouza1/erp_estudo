@@ -29,11 +29,11 @@ export default function AnuncioView(props) {
   }
 
   function handleChangeSelectedFreteGratis() {
-      setIsSelectedFrete('Grátis Brasil')
+      setIsSelectedFrete(props.freteGratis)
   }
 
   function handleChangeSelectedFretePorContaDoComprador() {
-    setIsSelectedFrete('Por conta do comprador')
+    setIsSelectedFrete('')
 }
 
   if (!props.isLoading) {
@@ -146,8 +146,10 @@ export default function AnuncioView(props) {
         </Grid>
 
         { /*MODAL*/}
+        {console.log(props.freteGratis)}
         {showModal &&
-          <Modal {...anuncio}
+          <Modal 
+            {...anuncio}
             setShowModal={setShowModal}
             showModal={showModal}
             isSelectedEstadoProduto={isSelectedEstadoProduto}
@@ -155,7 +157,8 @@ export default function AnuncioView(props) {
             handleChangeIsSelectedEstadoProdutoUsado={handleChangeIsSelectedEstadoProdutoUsado} 
             isSelectedFrete={isSelectedFrete}
             handleChangeSelectedFreteGratis={handleChangeSelectedFreteGratis}
-            handleChangeSelectedFretePorContaDoComprador={handleChangeSelectedFretePorContaDoComprador}/>}
+            handleChangeSelectedFretePorContaDoComprador={handleChangeSelectedFretePorContaDoComprador}
+            freteGratis={props.freteGratis}/>}
 
       </div>
     );

@@ -76,16 +76,14 @@ export default function CustomModal(props) {
                     <Col sm={2}>
                         <Form.Radio
                             label='Por Conta do Comprador'
-                            value='porContaDoComprador'
-                            checked={props.isSelectedFrete === 'Por conta do comprador'}
-                            onChange={props.handleChangeIsSelectedEstadoProdutoNovo}/>
+                            checked={props.isSelectedFrete === ''}
+                            onChange={props.handleChangeSelectedFretePorContaDoComprador}/>
                     </Col>
                     <Col sm={10}>
                         <Form.Radio
                             label='Frete Grátis Brasil'
-                            value='freteGratis'
-                            checked={props.isSelectedFrete === 'Grátis Brasil'}
-                            onChange={props.handleChangeIsSelectedEstadoProdutoUsado}/>
+                            checked={props.isSelectedFrete === props.freteGratis}
+                            onChange={props.handleChangeSelectedFreteGratis}/>
                     </Col>
                 </Row>
 
