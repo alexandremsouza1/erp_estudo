@@ -20,7 +20,8 @@
     "react-router-dom": "5.0.0",
     "react-scripts": "3.0.0",
     "react-toggle": "4.0.2",
-    "redux": "^4.0.4"
+    "redux": "^4.0.4",
+    "semantic-ui-react": "^0.88.2"
   },
   "devDependencies": {
     "@types/googlemaps": "3.30.19",

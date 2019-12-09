@@ -1,9 +1,12 @@
 import React from 'react'
-import {Row, Col, FormControl, Modal } from "react-bootstrap";
+import { Row, Col, FormControl, Modal } from "react-bootstrap";
 import Button from "modules/components/CustomButton/CustomButton.jsx";
 import FormInput from '../../components/FormInput/FormInput'
+import { Form, Radio } from 'semantic-ui-react'
 
 export default function CustomModal(props) {
+
+
     return (
         <Modal show={props.showModal} onHide={() => props.setShowModal(false)} dialogClassName="width_modal" >
             <Modal.Header closeButton >
@@ -47,6 +50,42 @@ export default function CustomModal(props) {
                 <Row>
                     <Col md={12}>
                         <FormInput label="Garantia" value={""} style={{ "color": "blue" }} componentClass="textarea" rows="4" />
+                    </Col>
+                </Row>
+
+                <label>Estado do produto</label>
+                <Row>
+                    <Col sm={1}>
+                        <Form.Radio
+                            label='Novo'
+                            value='novo'
+                            checked={props.isSelectedEstadoProduto === 'novo'}
+                            onChange={props.handleChangeIsSelectedEstadoProdutoNovo}/>
+                    </Col>
+                    <Col sm={11}>
+                        <Form.Radio
+                            label='Usado'
+                            value='usado'
+                            checked={props.isSelectedEstadoProduto === 'usado'}
+                            onChange={props.handleChangeIsSelectedEstadoProdutoUsado}/>
+                    </Col>
+                </Row>
+
+                <label>Frete</label>
+                <Row>
+                    <Col sm={2}>
+                        <Form.Radio
+                            label='Por Conta do Comprador'
+                            value='porContaDoComprador'
+                            checked={props.isSelectedFrete === 'Por conta do comprador'}
+                            onChange={props.handleChangeIsSelectedEstadoProdutoNovo}/>
+                    </Col>
+                    <Col sm={10}>
+                        <Form.Radio
+                            label='Frete Grátis Brasil'
+                            value='freteGratis'
+                            checked={props.isSelectedFrete === 'Grátis Brasil'}
+                            onChange={props.handleChangeIsSelectedEstadoProdutoUsado}/>
                     </Col>
                 </Row>
 

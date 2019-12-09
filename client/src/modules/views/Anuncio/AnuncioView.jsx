@@ -14,10 +14,27 @@ export default function AnuncioView(props) {
   const [showModal, setShowModal] = useState(false)
   const [anuncio, setAnuncio] = useState({})
   const [isActive, setIsActive] = useState('active')
+  const [isSelectedEstadoProduto, setIsSelectedEstadoProduto] = useState('novo')
+  const [isSelectedFrete, setIsSelectedFrete] = useState(props.freteGratis)
 
   const handleChangeIsActive = (e) => {
     setIsActive(e.target.value)
   };
+
+  const handleChangeIsSelectedEstadoProdutoNovo = () => {
+    setIsSelectedEstadoProduto('novo')
+  }
+  const handleChangeIsSelectedEstadoProdutoUsado = () => {
+    setIsSelectedEstadoProduto('usado')
+  }
+
+  function handleChangeSelectedFreteGratis() {
+      setIsSelectedFrete('Grátis Brasil')
+  }
+
+  function handleChangeSelectedFretePorContaDoComprador() {
+    setIsSelectedFrete('Por conta do comprador')
+}
 
   if (!props.isLoading) {
     return (
@@ -35,7 +52,7 @@ export default function AnuncioView(props) {
                     <Navbar bg="light" expand="lg">
                       <Form inline>
                         <FormControl type="text" placeholder="Buscar por título" className="mr-sm-2" style={{ 'width': '500px' }} />
-                        <Button bsStyle="primary" fill style={{'marginTop': "5px"}}><img src={iconSearch} alt='search'></img></Button>
+                        <Button bsStyle="primary" fill style={{ 'marginTop': "5px" }}><img src={iconSearch} alt='search'></img></Button>
                       </Form>
                       <div className="col-sm-12" style={{ "marginLeft": '-15px', 'width': '150px' }}>
                         <FormControl componentClass="select" onChange={handleChangeIsActive}>
@@ -46,8 +63,6 @@ export default function AnuncioView(props) {
                       </div>
 
                     </Navbar>
-
-
 
                     {props.result.map(prop => {
                       if (prop.status === isActive) {
@@ -101,9 +116,9 @@ export default function AnuncioView(props) {
                               </div>
                               <div className="col-md-2 col-xs-6 text-center-xs">
                                 <a className="btn btn-sm btn-flat btn-primary btn-rad" onClick={() => {
-                                    setShowModal(true)
-                                    setAnuncio(prop)
-                                  }}> Modificar
+                                  setShowModal(true)
+                                  setAnuncio(prop)
+                                }}> Modificar
                                 </a>
                                 <div className="btn-group">
                                   <button data-toggle="dropdown" type="button" className="btn btn-sm btn-flat btn-primary btn-rad dropdown-toggle">
@@ -131,7 +146,16 @@ export default function AnuncioView(props) {
         </Grid>
 
         { /*MODAL*/}
-        {showModal && <Modal {...anuncio} setShowModal={setShowModal} showModal={showModal}></Modal>}
+        {showModal &&
+          <Modal {...anuncio}
+            setShowModal={setShowModal}
+            showModal={showModal}
+            isSelectedEstadoProduto={isSelectedEstadoProduto}
+            handleChangeIsSelectedEstadoProdutoNovo={handleChangeIsSelectedEstadoProdutoNovo}
+            handleChangeIsSelectedEstadoProdutoUsado={handleChangeIsSelectedEstadoProdutoUsado} 
+            isSelectedFrete={isSelectedFrete}
+            handleChangeSelectedFreteGratis={handleChangeSelectedFreteGratis}
+            handleChangeSelectedFretePorContaDoComprador={handleChangeSelectedFretePorContaDoComprador}/>}
 
       </div>
     );
