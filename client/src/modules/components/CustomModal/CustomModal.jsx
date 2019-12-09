@@ -47,12 +47,6 @@ export default function CustomModal(props) {
                     </Col>
                 </Row>
 
-                <Row>
-                    <Col md={12}>
-                        <FormInput label="Garantia" value={""} style={{ "color": "blue" }} componentClass="textarea" rows="4" />
-                    </Col>
-                </Row>
-
                 <label>Estado do produto</label>
                 <Row>
                     <Col sm={1}>
@@ -84,6 +78,12 @@ export default function CustomModal(props) {
                             label='Frete Grátis Brasil'
                             checked={props.isSelectedFrete === props.freteGratis}
                             onChange={props.handleChangeSelectedFreteGratis}/>
+                    </Col>
+                </Row>
+
+                <Row>
+                    <Col md={12}>
+                        <FormInput label="Garantia" value={""} style={{ "color": "blue" }} componentClass="textarea" rows="4" />
                     </Col>
                 </Row>
 
