@@ -23,7 +23,7 @@ module.exports = (passport) => {
     });
     */
    usuarioService.salvarUsuario(setUsuario(profile, accessToken, refreshToken))
-   
+   console.log("Mercado livre - session user "+ accessToken)
 
    return done(null, profile);
   

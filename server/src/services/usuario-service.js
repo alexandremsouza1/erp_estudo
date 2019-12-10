@@ -49,7 +49,6 @@ const buscarUsuarioPorID = async () => {
         return resp.data;
     }).catch(err => {
         console.log("Houve um erro ao listar todos os usuarios: " + err);
-        res.status(401).send({ mensagem: "Houve um erro ao listar todos os usuarios: " + err })
     });
     return usuarios;
 }

@@ -82,15 +82,12 @@ exports.listarTodosAnuncio = async (req, res) => {
     })
 }
 
-const setAnuncio = (resp03, resp04, resp08, resp05) => {
-    
-}
+const setAnuncio = (resp03, resp04, resp08, resp05) => {}
 
 //Orde por quantidade vendido
 const orderAnunciosPorQuantidadeVendas = (detalhesAnuncio) => {
     return detalhesAnuncio.sort((a, b) => { return b.quantidadeVendido - a.quantidadeVendido })
 }
-
 
 exports.obterFotoPrincipalAnuncio = async (idAnuncio) => {
     return await axios.get(`${constants.API_MERCADO_LIVRE}/items/${idAnuncio}/`).then(res => {
@@ -99,7 +96,6 @@ exports.obterFotoPrincipalAnuncio = async (idAnuncio) => {
         console.log("Houve um erro ao buscar os detalhes do anuncio: " + err)
     });
 }
-
 
 exports.buscarAnuncioPorTitulo = async (req, res) => {
     usuarioService.buscarUsuarioPorID().then(resp => {
@@ -111,6 +107,4 @@ exports.buscarAnuncioPorTitulo = async (req, res) => {
     })
 }
 
-exports.atualizar = async (req, res, next) => {
-
-}
+exports.atualizar = async (req, res, next) => {}

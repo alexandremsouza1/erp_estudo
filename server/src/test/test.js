@@ -6,6 +6,7 @@ const usuarioService = require('../services/usuario-service')
 const anuncioService = require('../services/anuncio-service')
 const util = require('../helpers/util')
 const reloadJSON = require('self-reload-json');
+const postAnuncio = require('./postAnuncio')
 
 const usuario = {
     id: 3311227,
@@ -258,4 +259,10 @@ function obterEnderecoCliente() {
     })
 }
 
-listarTodosAnuncio()
+function postAnuncioMercadoLivre(){
+    usuarioService.buscarUsuarioPorID().then(user => {
+        axios.post(`http://api.mercadolibre.com/items?access_token=${user.accessToken}`, JSON.stringify(postAnuncio)) 
+    }).catch(err => console.log("err.error"))
+}
+
+postAnuncioMercadoLivre()
