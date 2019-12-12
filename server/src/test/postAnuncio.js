@@ -1,24 +1,6 @@
 result = {
     "listing_type_id" : "gold_special",
-    "pictures": [
-        {
-	      "id": "634542-MLB31087825045_062019",
-	      "url": "http://mlb-s2-p.mlstatic.com/634542-MLB31087825045_062019-O.jpg",
-	      "secure_url": "https://mlb-s2-p.mlstatic.com/634542-MLB31087825045_062019-O.jpg",
-	      "size": "343x500",
-	      "max_size": "704x1024",
-	      "quality": ""
-    	},
-    	{
-	      "id": "645213-MLB31555860683_072019",
-	      "url": "http://mlb-s2-p.mlstatic.com/645213-MLB31555860683_072019-O.jpg",
-	      "secure_url": "https://mlb-s2-p.mlstatic.com/645213-MLB31555860683_072019-O.jpg",
-	      "size": "500x500",
-	      "max_size": "1024x1024",
-	      "quality": ""
-    	}
-    ],
-    "title": "TITULO DO ANUNCIO",
+    "title": "PRODUTO DE TESTE - NÃO COMPRAR",
     "available_quantity": 48,
     "category_id": "MLB3112",
     "buying_mode": "buy_it_now",
@@ -45,8 +27,7 @@ result = {
             ],
             "sold_quantity": 13,
             "picture_ids": [
-            	"634542-MLB31087825045_062019",
-                "645213-MLB31555860683_072019"
+            	"https://www.tecmint.com/wp-content/uploads/2017/11/Speed-Up-SSH-Connections-in-Linux.png"
             ]
         },
         {
@@ -67,8 +48,7 @@ result = {
             ],
             "sold_quantity": 7,
             "picture_ids": [
-            	"634542-MLB31087825045_062019",
-                "645213-MLB31555860683_072019"
+            	"https://www.tecmint.com/wp-content/uploads/2017/11/Speed-Up-SSH-Connections-in-Linux.png"
             ]
         }
     ]
