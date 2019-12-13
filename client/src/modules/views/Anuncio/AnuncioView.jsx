@@ -142,7 +142,7 @@ export default function AnuncioView(props) {
 
                                 {/* Botão para editar pequenas alterações*/}
                                 <Dropdown
-                                  text='Filter'
+                                  text='Ajuste'
                                   icon='bars'
                                   floating
                                   labeled
@@ -195,8 +195,11 @@ export default function AnuncioView(props) {
                                       </Modal>
 
                                     </Dropdown.Item>
-                                    <Dropdown.Item>Announcement</Dropdown.Item>
-                                    <Dropdown.Item>Discussion</Dropdown.Item>
+                                    <Dropdown.Item>Gerenciar Variações</Dropdown.Item>
+                                    <Dropdown.Item>Gerenciar Imagens</Dropdown.Item>
+                                    <Dropdown.Item>Pausar</Dropdown.Item>
+                                    <Dropdown.Item>Finalizar</Dropdown.Item>
+                                    <Dropdown.Item>Replicar anúncio</Dropdown.Item>
                                   </Dropdown.Menu>
                                 </Dropdown>
 
