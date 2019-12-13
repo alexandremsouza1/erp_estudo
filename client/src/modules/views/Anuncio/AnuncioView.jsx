@@ -5,8 +5,8 @@ import ButtonB from "modules/components/CustomButton/CustomButton.jsx";
 import LoadingCarregandoSolicitacao from "modules/components/Loading/LoadingCarregandoSolicitacao"
 import iconSearch from '../../../assets/img/Zoom-icon24px.png'
 import '../../../assets/css/Global/style.css';
-import Modal from '../../components/CustomModal/CustomModal'
-import { Button, Dropdown } from 'semantic-ui-react'
+import CustomModal from '../../components/CustomModal/CustomModal'
+import { Button, Dropdown, Modal, Header, Icon, Select, Input } from 'semantic-ui-react'
 
 export default function AnuncioView(props) {
   document.title = "Anúncios"
@@ -37,9 +37,8 @@ export default function AnuncioView(props) {
   }
 
   const options = [
-    { key: 'edit', icon: 'edit', text: 'Edit Post', value: 'edit' },
-    { key: 'delete', icon: 'delete', text: 'Remove Post', value: 'delete' },
-    { key: 'hide', icon: 'hide', text: 'Hide Post', value: 'hide' },
+    { key: 'porcentagem', text: '%', value: 'porcentagem' },
+    { key: 'real', text: 'R$', value: 'real' }
   ]
 
   if (!props.isLoading) {
@@ -73,20 +72,27 @@ export default function AnuncioView(props) {
                     {props.result.map(prop => {
                       if (prop.status === isActive) {
                         return (
+
                           <div className="panel panel-primary">
                             <div className="panel-heading">
                               <h3 className="panel-title">
                                 {prop.titulo}
                               </h3>
                             </div>
+
                             <div className="panel-body" style={{ "minHeight": "142px" }}>
+
                               <div className="col-md-2 col-xs-12 text-center">
+
                                 <img src={prop.foto_principal} alt='fotoPrincipal' height='100' width='80' />
+
                               </div>
+
                               <div className="col-md-5 col-xs-12 text-center-xs">
                                 <font size="4pt">
                                   <a href={prop.link_anuncio} rel="noopener noreferrer" target='_blank'>{prop.titulo}</a>
                                 </font>
+
                                 <p>
                                   <i className="fa fa-tag text-primary"></i>
                                   <i className="fa fa-star text-primary"></i>
@@ -94,6 +100,7 @@ export default function AnuncioView(props) {
                                   <a style={{ "fontSize": "14px", "marginLeft": "5px" }} rel="noopener noreferrer" target='_blank' full_base="1">#{prop.id}</a>
                                   <span className="badge badge-primary" style={{ "fontSize": "12px", "marginLeft": "5px" }}>{prop.totalVariacoes} Variações</span>
                                 </p>
+
                                 <p style={{ "fontSize": "15px" }}>Mercado Envios {prop.freteGratis} - R$ {prop.custoFreteGratis.toLocaleString("pt-BR")} por envio</p>
                                 <p>
                                   <span style={{ "fontSize": "12px" }} className="badge">{prop.quantidadeVendido} Vendidos</span>
@@ -101,8 +108,11 @@ export default function AnuncioView(props) {
                                   <span style={{ "fontSize": "12px" }} className="badge badge-success">{prop.tipoAnuncio}</span>
                                   <span style={{ "fontSize": "12px" }} className="badge badge-danger" >{prop.sub_status}</span>
                                 </p>
+
                               </div>
+
                               <div className="col-md-3 col-xs-6 text-center-xs">
+
                                 <font size="3">
                                   <b>
                                     <a style={{ "color": "red" }}>
@@ -110,9 +120,8 @@ export default function AnuncioView(props) {
                                     </a>
                                   </b>
                                 </font>
-                                <font size="3">
-                                  x {prop.estoque_total} disponíveis
-                              </font>
+                                <font size="3"> x {prop.estoque_total} disponíveis</font>
+
                                 <br />
                                 <span className="text-danger" style={{ "fontSize": "12px" }}>Tarifa R$ {prop.tarifa.toLocaleString("pt-BR")}</span>
                                 <br />
@@ -120,22 +129,76 @@ export default function AnuncioView(props) {
                                 <br />
                                 <span className="badge badge-info" style={{ "fontSize": "12px" }}>Líquido R$ {prop.liquido.toLocaleString("pt-BR")}</span>
                               </div>
-                              <div className="col-md-2 col-xs-6 text-center-xs">
-                                <a className="btn btn-sm btn-flat btn-primary btn-rad" onClick={() => {
+
+                              {/*Botão de modificar anúncio*/}
+                              <div className="col-md-2 text-center-xs">
+                                <Button icon labelPosition='left' style={{ 'fontSize': '12px' }} onClick={() => {
                                   setShowModal(true)
                                   setAnuncio(prop)
                                 }}> Modificar
-                                </a>
+  
+                                <Icon name='edit' />
+                                </Button>
 
-                                <Button.Group color='teal'>
-                                  <Button>Save</Button>
-                                  <Dropdown
-                                    className='button icon'
-                                    floating
-                                    options={options}
-                                    trigger={<React.Fragment />}
-                                  />
-                                </Button.Group>
+                                {/* Botão para editar pequenas alterações*/}
+                                <Dropdown
+                                  text='Filter'
+                                  icon='bars'
+                                  floating
+                                  labeled
+                                  button
+                                  className='icon'
+                                  style={{ 'fontSize': '12px' }}
+                                >
+                                  {/* Alterar preço */}
+                                  <Dropdown.Menu>
+                                    <Dropdown.Header icon='cog' content='Configurações' />
+                                    <Dropdown.Item>
+
+                                      <Modal style={{
+                                        'position': 'relative',
+                                        'height': '50%',
+                                        'width': '50%',
+                                        'top': '10%',
+                                        'bottom': '10%',
+                                        'marginLeft': '50%',
+                                        'marginRight': '50%'
+                                      }}
+                                        trigger={
+                                          <a>Alterar preço</a>
+                                        } >
+
+                                        <Header icon='edit' content='Alterar preço'
+                                          style={{ 'backgroundColor': '#467EED', 'color': 'white' }} />
+
+                                        <Modal.Content>
+                                          <p>
+                                            {prop.titulo}
+                                          </p>
+
+                                          <Input>
+                                            <Select compact options={options} defaultValue='porcentagem'></Select>
+                                            <Input type='text' placeholder='Valor' />
+                                          </Input>
+
+                                        </Modal.Content>
+
+                                        <Modal.Actions>
+                                          <Button color='green'>
+                                            <Icon name='checkmark' /> Confirmar
+                                        </Button>
+
+                                          <Button color='red'>
+                                            <Icon name='remove' /> Fechar
+                                        </Button>
+                                        </Modal.Actions>
+                                      </Modal>
+
+                                    </Dropdown.Item>
+                                    <Dropdown.Item>Announcement</Dropdown.Item>
+                                    <Dropdown.Item>Discussion</Dropdown.Item>
+                                  </Dropdown.Menu>
+                                </Dropdown>
 
                               </div>
                             </div>
@@ -153,8 +216,9 @@ export default function AnuncioView(props) {
 
         { /*MODAL*/}
         {console.log(props.freteGratis)}
+
         {showModal &&
-          <Modal
+          <CustomModal
             {...anuncio}
             setShowModal={setShowModal}
             showModal={showModal}
@@ -188,9 +252,6 @@ export default function AnuncioView(props) {
             </Row>
           </Grid>
         </div>
-
-
-
       </>
     )
   }
