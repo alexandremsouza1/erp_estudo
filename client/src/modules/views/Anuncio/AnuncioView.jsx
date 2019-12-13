@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { Grid, Row, Col, Navbar, Form, FormControl } from "react-bootstrap";
 import Card from "modules/components/Card/Card.jsx";
-import Button from "modules/components/CustomButton/CustomButton.jsx";
+import ButtonB from "modules/components/CustomButton/CustomButton.jsx";
 import LoadingCarregandoSolicitacao from "modules/components/Loading/LoadingCarregandoSolicitacao"
 import iconSearch from '../../../assets/img/Zoom-icon24px.png'
 import '../../../assets/css/Global/style.css';
 import Modal from '../../components/CustomModal/CustomModal'
-import FormInput from '../../components/FormInput/FormInput'
+import { Button, Dropdown } from 'semantic-ui-react'
 
 export default function AnuncioView(props) {
   document.title = "Anúncios"
@@ -29,12 +29,18 @@ export default function AnuncioView(props) {
   }
 
   function handleChangeSelectedFreteGratis() {
-      setIsSelectedFrete(props.freteGratis)
+    setIsSelectedFrete(props.freteGratis)
   }
 
   function handleChangeSelectedFretePorContaDoComprador() {
     setIsSelectedFrete('')
-}
+  }
+
+  const options = [
+    { key: 'edit', icon: 'edit', text: 'Edit Post', value: 'edit' },
+    { key: 'delete', icon: 'delete', text: 'Remove Post', value: 'delete' },
+    { key: 'hide', icon: 'hide', text: 'Hide Post', value: 'hide' },
+  ]
 
   if (!props.isLoading) {
     return (
@@ -52,7 +58,7 @@ export default function AnuncioView(props) {
                     <Navbar bg="light" expand="lg">
                       <Form inline>
                         <FormControl type="text" placeholder="Buscar por título" className="mr-sm-2" style={{ 'width': '500px' }} />
-                        <Button bsStyle="primary" fill style={{ 'marginTop': "5px" }}><img src={iconSearch} alt='search'></img></Button>
+                        <ButtonB bsStyle="primary" fill style={{ 'marginTop': "5px" }}><img src={iconSearch} alt='search'></img></ButtonB>
                       </Form>
                       <div className="col-sm-12" style={{ "marginLeft": '-15px', 'width': '150px' }}>
                         <FormControl componentClass="select" onChange={handleChangeIsActive}>
@@ -120,17 +126,17 @@ export default function AnuncioView(props) {
                                   setAnuncio(prop)
                                 }}> Modificar
                                 </a>
-                                <div className="btn-group">
-                                  <button data-toggle="dropdown" type="button" className="btn btn-sm btn-flat btn-primary btn-rad dropdown-toggle">
-                                    <i className="fa fa-cog"></i>
-                                    <span className="caret"></span>
-                                  </button>
-                                  <ul role="menu" className="dropdown-menu dropdown-menu-right">
-                                    <li>
-                                      <a>Gerenciar Imagens</a>
-                                    </li>
-                                  </ul>
-                                </div>
+
+                                <Button.Group color='teal'>
+                                  <Button>Save</Button>
+                                  <Dropdown
+                                    className='button icon'
+                                    floating
+                                    options={options}
+                                    trigger={<React.Fragment />}
+                                  />
+                                </Button.Group>
+
                               </div>
                             </div>
                           </div>
@@ -148,17 +154,17 @@ export default function AnuncioView(props) {
         { /*MODAL*/}
         {console.log(props.freteGratis)}
         {showModal &&
-          <Modal 
+          <Modal
             {...anuncio}
             setShowModal={setShowModal}
             showModal={showModal}
             isSelectedEstadoProduto={isSelectedEstadoProduto}
             handleChangeIsSelectedEstadoProdutoNovo={handleChangeIsSelectedEstadoProdutoNovo}
-            handleChangeIsSelectedEstadoProdutoUsado={handleChangeIsSelectedEstadoProdutoUsado} 
+            handleChangeIsSelectedEstadoProdutoUsado={handleChangeIsSelectedEstadoProdutoUsado}
             isSelectedFrete={isSelectedFrete}
             handleChangeSelectedFreteGratis={handleChangeSelectedFreteGratis}
             handleChangeSelectedFretePorContaDoComprador={handleChangeSelectedFretePorContaDoComprador}
-            freteGratis={props.freteGratis}/>}
+            freteGratis={props.freteGratis} />}
 
       </div>
     );

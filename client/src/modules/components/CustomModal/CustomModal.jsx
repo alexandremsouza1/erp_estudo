@@ -1,16 +1,17 @@
 import React from 'react'
-import { Row, Col, FormControl, Modal } from "react-bootstrap";
+import { FormGroup, ControlLabel, Row, Col, FormControl, Modal } from "react-bootstrap";
 import Button from "modules/components/CustomButton/CustomButton.jsx";
 import FormInput from '../../components/FormInput/FormInput'
-import { Form, Radio } from 'semantic-ui-react'
+import { Form, Radio, Input } from 'semantic-ui-react'
 
 export default function CustomModal(props) {
 
 
     return (
         <Modal show={props.showModal} onHide={() => props.setShowModal(false)} dialogClassName="width_modal" >
-            <Modal.Header closeButton >
-                <Modal.Title>Modificar Anúncio</Modal.Title>
+            <Modal.Header closeButton style={{'backgroundColor': '#467EED', 'color': 'white'}}>
+                <Modal.Title style={{'fontSize': '25px'}}>Modificar Anúncio</Modal.Title>
+                <span>#{props.id}</span>
             </Modal.Header>
 
             <Modal.Body sytle={{ "width": "100px" }}>
@@ -20,11 +21,20 @@ export default function CustomModal(props) {
                 </div>
 
                 <Row>
-                    <Col md={10}>
+                    <Col md={8}>
                         <FormInput label="Título" value={props.titulo} style={{ "color": "blue" }} disabled={true} />
                     </Col>
                     <Col md={2}>
-                        <FormInput label="Preço" value={props.preco.toLocaleString("pt-BR")} style={{ "color": "blue" }} />
+                        <label>Preço</label>
+                        <Input
+                            icon='money'
+                            iconPosition='left'
+                            label={{ tag: true, content: 'Reais' }}
+                            labelPosition='right'
+                            placeholder='R$'
+                            value={props.preco.toLocaleString("pt-BR")} 
+                            style={{ "color": "blue" }}
+                        />
                     </Col>
                 </Row>
 
@@ -36,14 +46,21 @@ export default function CustomModal(props) {
                             <option value='premium'>{props.tipoAnuncio_id === 'gold_pro' ? props.tipoAnuncio : 'Premium - Exposição máxima'}</option>
                         </FormControl>
                     </Col>
-                    <Col md={7}>
-                        <FormInput label="Link Vídeo YouTube" value={props.video_id} style={{ "color": "blue" }} placeholder="Informe aqui o link do YouTube" />
+                    <Col md={2}>
+                        <div>
+                            <ControlLabel>Link Vídeo YouTube</ControlLabel>
+                            <Input icon='youtube' iconPosition='left' placeholder='Informe aqui o link do YouTube'
+                                value={props.video_id} style={{ "color": "blue", 'width': '400px' }} />
+                        </div>
+
                     </Col>
                 </Row>
-
+                  <p></p>  
                 <Row>
                     <Col md={12}>
-                        <FormInput label="Descrição somente texto" value={props.description} style={{ "color": "blue" }} componentClass="textarea" rows="15" />
+                        <FormInput label="Descrição somente texto"
+                            value={props.description} style={{ "color": "blue" }}
+                            componentClass="textarea" rows="10" />
                     </Col>
                 </Row>
 
@@ -54,14 +71,14 @@ export default function CustomModal(props) {
                             label='Novo'
                             value='novo'
                             checked={props.isSelectedEstadoProduto === 'novo'}
-                            onChange={props.handleChangeIsSelectedEstadoProdutoNovo}/>
+                            onChange={props.handleChangeIsSelectedEstadoProdutoNovo} />
                     </Col>
                     <Col sm={11}>
                         <Form.Radio
                             label='Usado'
                             value='usado'
                             checked={props.isSelectedEstadoProduto === 'usado'}
-                            onChange={props.handleChangeIsSelectedEstadoProdutoUsado}/>
+                            onChange={props.handleChangeIsSelectedEstadoProdutoUsado} />
                     </Col>
                 </Row>
 
@@ -71,19 +88,19 @@ export default function CustomModal(props) {
                         <Form.Radio
                             label='Por Conta do Comprador'
                             checked={props.isSelectedFrete === ''}
-                            onChange={props.handleChangeSelectedFretePorContaDoComprador}/>
+                            onChange={props.handleChangeSelectedFretePorContaDoComprador} />
                     </Col>
                     <Col sm={10}>
                         <Form.Radio
                             label='Frete Grátis Brasil'
                             checked={props.isSelectedFrete === props.freteGratis}
-                            onChange={props.handleChangeSelectedFreteGratis}/>
+                            onChange={props.handleChangeSelectedFreteGratis} />
                     </Col>
                 </Row>
 
                 <Row>
                     <Col md={12}>
-                        <FormInput label="Garantia" value={""} style={{ "color": "blue" }} componentClass="textarea" rows="4" />
+                        <FormInput label="Garantia" value={""} style={{ "color": "blue" }} componentClass="textarea" rows="2" />
                     </Col>
                 </Row>
 
