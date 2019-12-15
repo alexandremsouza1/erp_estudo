@@ -5,71 +5,54 @@ import ControleEstoqueController from 'modules/views/Controle-estoque/ControlleE
 import VendasController from 'modules/views/Vendas/VendasController'
 
 const dashboardRoutes = [{
-        path: "/dashboard",
-        name: "Dashboard",
-        icon: "pe-7s-graph",
-        component: DashboardController,
-        layout: "/admin"
-    },
-    {
-        path: "/user",
-        name: "Anúncios",
-        icon: "pe-7s-user",
-        component: AnuncioController,
-        layout: "/admin"
-    },
-    {
-        path: '/cliente',
-        name: 'Clientes',
-        icon: 'pe-7s-user',
-        component: ClienteController,
-        layout: '/admin'
-    },
-    {
-        path: "/table",
-        name: "Controle de estoque",
-        icon: "pe-7s-note2",
-        component: ControleEstoqueController,
-        layout: "/admin"
-    },
-    {
-        path: "/vendas",
-        name: "Vendas",
-        icon: "pe-7s-news-paper",
-        component: VendasController,
-        layout: "/admin"
-    }
-    /*
-          {
-            path: "/icons",
-            name: "Icons",
-            icon: "pe-7s-science",
-            component: Icons,
-            layout: "/admin"
-          },
-          {
-            path: "/maps",
-            name: "Maps",
-            icon: "pe-7s-map-marker",
-            component: Maps,
-            layout: "/admin"
-          },
-          {
-            path: "/notifications",
-            name: "Notifications",
-            icon: "pe-7s-bell",
-            component: Notifications,
-            layout: "/admin"
-          },
-          {
-            upgrade: true,
-            path: "/upgrade",
-            name: "Upgrade to PRO",
-            icon: "pe-7s-rocket",
-            component: Upgrade,
-            layout: "/admin"
-          }
-          */
+  path: "/dashboard",
+  name: "Dashboard",
+  icon: "chart pie icon",
+  component: DashboardController,
+  layout: "/admin"
+},
+{
+  path: "/user",
+  name: "Anúncios",
+  icon: "tags icon",
+  component: AnuncioController,
+  layout: "/admin"
+},
+{
+  path: '/cliente',
+  name: 'Clientes',
+  icon: 'users icon',
+  component: ClienteController,
+  layout: '/admin'
+},
+{
+  path: "/table",
+  name: "Controle de estoque",
+  icon: "edit icon",
+  component: ControleEstoqueController,
+  layout: "/admin"
+},
+{
+  path: "/vendas",
+  name: "Pedidos",
+  icon: "cart icon",
+  component: VendasController,
+  layout: "/admin"
+},
+{
+  path: "/icons",
+  name: "Perguntas",
+  icon: "conversation icon",
+  component: VendasController,
+  layout: "/admin"
+},
+{
+  path: "/maps",
+  name: "Resp. Automáticas",
+  icon: "pencil alternate icon",
+  component: VendasController,
+  layout: "/admin"
+}
 ];
 
 export default dashboardRoutes;

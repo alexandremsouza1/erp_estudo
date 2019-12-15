@@ -37,21 +37,13 @@ class Sidebar extends React.Component {
             {this.props.routes.map((prop, key) => {
               if (!prop.redirect) {
                 return (
-                  <li
-                    className={
-                      prop.upgrade
-                        ? "active active-pro"
-                        : this.activeRoute(prop.layout + prop.path)
-                    }
-                    key={key}
-                  >
+                  <li className={this.activeRoute(prop.layout + prop.path)} key={key}>
                     <NavLink
                       to={prop.layout + prop.path}
                       className="nav-link"
-                      activeClassName="active"
-                      
-                    >
-                      <i className={prop.icon} />
+                      activeClassName="active">
+
+                      <i className={prop.icon} style={{'fontSize': '15px'}}/>
                       <p>{prop.name}</p>
                     </NavLink>
                   </li>
@@ -59,6 +51,7 @@ class Sidebar extends React.Component {
               }
               return null;
             })}
+
           </ul>
         </div>
       </div>

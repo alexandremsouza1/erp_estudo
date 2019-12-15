@@ -36,7 +36,8 @@ exports.listarTodosAnuncio = async (req, res) => {
                                         status: resp03.data.status,
                                         description: resp08.data.plain_text,
                                         video_id: resp03.data.video_id === null ? '' :'https://www.youtube.com/watch?v='+resp03.data.video_id,
-                                        sub_status: resp03.data.sub_status[0] === 'out_of_stock' ? 'Sem estoque' : resp03.data.sub_status
+                                        sub_status: resp03.data.sub_status[0] === 'out_of_stock' ? 'Sem estoque' : resp03.data.sub_status,
+                                        json: resp03.data
                                     }
                                     return anuncio;
                                 }).catch(err => res.send(err))
@@ -60,7 +61,8 @@ exports.listarTodosAnuncio = async (req, res) => {
                                     quantidadeVendido: resp03.data.sold_quantity,
                                     description: resp08.data.plain_text,
                                     video_id: resp03.data.video_id === null ? '' :'https://www.youtube.com/watch?v='+resp03.data.video_id,
-                                    sub_status: resp03.data.sub_status[0] === 'out_of_stock' ? 'Sem estoque' : resp03.data.sub_status
+                                    sub_status: resp03.data.sub_status[0] === 'out_of_stock' ? 'Sem estoque' : resp03.data.sub_status,
+                                    json: resp03.data
                                 }
                                 return anuncio;
                             }

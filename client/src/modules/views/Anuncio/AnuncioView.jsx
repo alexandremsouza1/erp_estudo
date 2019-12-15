@@ -6,7 +6,8 @@ import LoadingCarregandoSolicitacao from "modules/components/Loading/LoadingCarr
 import iconSearch from '../../../assets/img/Zoom-icon24px.png'
 import '../../../assets/css/Global/style.css';
 import CustomModal from '../../components/CustomModal/CustomModal'
-import { Button, Dropdown, Modal, Header, Icon, Select, Input } from 'semantic-ui-react'
+import { Button, Dropdown, Modal, Header, Icon, Select, Input, Label } from 'semantic-ui-react'
+
 
 export default function AnuncioView(props) {
   document.title = "Anúncios"
@@ -195,7 +196,83 @@ export default function AnuncioView(props) {
                                       </Modal>
 
                                     </Dropdown.Item>
-                                    <Dropdown.Item>Gerenciar Variações</Dropdown.Item>
+                                    <Dropdown.Item>
+
+                                    <Modal style={{
+                                        'position': 'relative',
+                                        'width': '100%',
+                                        'marginBottom': '5%',
+                                        'marginLeft': '50%',
+                                        'marginRight': '50%'
+                                      }}
+                                        trigger={
+                                          <a>Gerenciar Variações</a>
+                                        } >
+
+                                        <Header icon='edit' content='Gerenciar Variações'
+                                          style={{ 'backgroundColor': '#467EED', 'color': 'white' }} />
+
+                                        <Modal.Content>
+                                          <p>
+                                            {prop.titulo}
+                                          </p>
+                                          <ul style={{'listStyleType': 'none'}}>
+                                          {prop.json.variations.map(variation => {
+                                            return (
+                                              <li key={variation.id}>
+                                                  <Row>
+                                                    <Col md={1}>
+                                                      <label>Estoque</label>
+                                                      <Input type='text' value={variation.available_quantity} style={{'width': '65px'}}></Input>
+                                                    </Col>
+                                                    
+                                                    <Col md={1}>
+                                                      <label>Qtde vnd</label>
+                                                      <Input value={variation.sold_quantity} style={{'width': '65px'}}></Input>
+                                                    </Col>
+
+                                                    <Col md={1}>
+                                                      {variation.attribute_combinations.map(attr => {
+                                                        if(attr.id === 'SIZE' || attr.id === null){
+                                                          return (
+                                                            <>
+                                                              <label>Variação</label>
+                                                              <Input type='text' value={attr.value_name} style={{'width': '350px'}}></Input>
+                                                            </>
+                                                          )
+                                                        }
+                                                      })}
+                                                    </Col>
+
+                                                    <Col md={1}>
+                                                      <label></label>
+                                                      <Button color='red' style={{'position': 'absolute','margin-left': '250px',
+                                                                                  'height': '38px','margin-top': '20px','top': '4px',
+                                                                                  'width': '55px'}}>
+                                                          <Icon name='remove' /> 
+                                                      </Button>
+                                                    </Col>
+                                                  </Row>
+                                              </li>
+                                            )
+                                          })}
+                                          </ul>
+
+                                        </Modal.Content>
+
+                                        <Modal.Actions>
+                                        <Button color='green'>
+                                            <Icon name='checkmark' /> Confirmar
+                                        </Button>
+
+                                          <Button color='red'>
+                                            <Icon name='remove' /> Fechar
+                                        </Button>
+                                        </Modal.Actions>
+                                      </Modal>
+
+
+                                    </Dropdown.Item>
                                     <Dropdown.Item>Gerenciar Imagens</Dropdown.Item>
                                     <Dropdown.Item>Pausar</Dropdown.Item>
                                     <Dropdown.Item>Finalizar</Dropdown.Item>

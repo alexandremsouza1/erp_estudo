@@ -7,7 +7,7 @@ const localhost = {
 }
 
 const urlbase = {
-    COLLECTION_USUARIOS: "https://sisiml.firebaseio.com/usuarios.json"
+    COLLECTION_USUARIOS: "https://sisiml.firebaseio.com/usuarios/usuario.json"
 }
 
 const API_MERCADO_LIVRE = "https://api.mercadolibre.com"

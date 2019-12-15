@@ -35,7 +35,7 @@ const usuario03 = {
     refresh_token: "0Q02Q02Q01W01W01A01A10A98A"
 }
 
-const editarUsuario = async() => {
+const editarUsuario = async () => {
     await axios.put("https://sisiml.firebaseio.com/usuarios.json", usuario).then(resp => {
         console.log("Usuario salvo com sucesso!" + resp);
     }).catch(err => {
@@ -43,26 +43,57 @@ const editarUsuario = async() => {
     });
 }
 
-const salvarUsuario = async() => {
-    await axios.post("https://sisiml.firebaseio.com/usuarios.json", usuario03).then(resp => {
-        console.log("Usuario salvo com sucesso!" + resp);
-    }).catch(err => {
-        console.log("Houve um erro ao salvar o usuario no firebase: " + err);
-    });
+const salvarUsuario = () => {
+    let _usuarioJSON = {}
+    listarTodosUsuarios().then(resp => {
+        resp.usuario.map(usuario => {
+            if (usuario.id === 362614126) {
+                _usuarioJSON = [{
+                    accessToken: "teste",
+                    refreshToken: "teste",
+                    nickname: "protesteckn",
+                    first_name: "te.te",
+                    email: "teste",
+                    id: 123
+                }]
+                axios.put("https://sisiml.firebaseio.com/usuarios/usuario.json", _usuarioJSON).then(resp => {
+                    console.log("Usuario salvo com sucesso!" + resp)
+                }).catch(err => {
+                    console.log("Houve um erro ao salvar o usuario no firebase: " + err)
+                });
+            } else {
+                _usuarioJSON = [{
+                    accessToken: "teste",
+                    refreshToken: "teste",
+                    nickname: "protesteckn",
+                    first_name: "te.te",
+                    email: "teste",
+                    id: 123
+                }]
+                axios.post("https://sisiml.firebaseio.com/usuarios/usuario.json", _usuarioJSON).then(resp => {
+                    console.log("Usuario salvo com sucesso!" + resp)
+                }).catch(err => {
+                    console.log("Houve um erro ao salvar o usuario no firebase: " + err)
+                });
+            }
+        })
+    })
+
 }
 
-const listarTodosUsuarios = async() => {
+const listarTodosUsuarios = async () => {
     const usuarios = await axios.get("https://sisiml.firebaseio.com/usuarios.json").then(resp => {
-        return resp.data;
+        console.log(resp.data)
+        return resp.data
     }).catch(err => {
         console.log("Houve um erro ao listar todos os usuarios: " + err)
     });
     return usuarios;
 }
 
-const buscarUsuarioPorID = async() => {
-    const usuarios = await axios.get(constants.urlbase.COLLECTION_USUARIOS).then(resp => {
-        return resp.data;
+const buscarUsuarioPorID = async () => {
+    const usuarios = await axios.get("https://sisiml.firebaseio.com/felipeanalista3.json").then(resp => {
+        console.log(resp.data)
     }).catch(err => {
         console.log("Houve um erro ao listar todos os usuarios: " + err)
     });
@@ -72,27 +103,11 @@ const buscarUsuarioPorID = async() => {
 const listarTodosAnuncio = async (req, res) => {
     usuarioService.buscarUsuarioPorID().then(resp => {
         axios.get(`${constants.API_MERCADO_LIVRE}/users/${resp.id}/items/search?search_type=scan&access_token=${resp.accessToken}`).then(response => {
-                var detalhesAnuncio = response.data.results.map(result => {
-                    return axios.get(`${constants.API_MERCADO_LIVRE}/items/${result}/`).then(res => {
-                        return axios.get(`${constants.API_MERCADO_LIVRE}/visits/items?ids=${result}`).then(resp => {
-                            if(res.data.shipping.free_shipping){
-                                return axios.get(`${constants.API_MERCADO_LIVRE}/items/${result}/shipping_options/free`).then(resp => {
-                                    var anuncio = {
-                                        id: res.data.id,
-                                        titulo: res.data.title,
-                                        preco: res.data.price,
-                                        estoque_total: res.data.available_quantity,
-                                        foto_principal: res.data.pictures[0].url,
-                                        link_anuncio: res.data.permalink,
-                                        status: res.data.status,
-                                        visualizacao: Object.values(resp.data).reduce((accumulador, valorCorrente) => {return valorCorrente}),
-                                        totalVariacoes: res.data.variations.length,
-                                        tipoAnuncio: res.data.listing_type_id === "gold_pro" ? "Premium - Exposição máxima" : "Clássico - Exposição Alta",
-                                        custoFreteGratis: resp.data.coverage.all_country.list_cost
-                                    }
-                                    return anuncio;
-                                }).catch(err => console.log(err))
-                            }else{
+            var detalhesAnuncio = response.data.results.map(result => {
+                return axios.get(`${constants.API_MERCADO_LIVRE}/items/${result}/`).then(res => {
+                    return axios.get(`${constants.API_MERCADO_LIVRE}/visits/items?ids=${result}`).then(resp => {
+                        if (res.data.shipping.free_shipping) {
+                            return axios.get(`${constants.API_MERCADO_LIVRE}/items/${result}/shipping_options/free`).then(resp => {
                                 var anuncio = {
                                     id: res.data.id,
                                     titulo: res.data.title,
@@ -101,24 +116,46 @@ const listarTodosAnuncio = async (req, res) => {
                                     foto_principal: res.data.pictures[0].url,
                                     link_anuncio: res.data.permalink,
                                     status: res.data.status,
-                                    visualizacao: Object.values(resp.data).reduce((accumulador, valorCorrente) => {return valorCorrente}),
+                                    visualizacao: Object.values(resp.data).reduce((accumulador, valorCorrente) => { return valorCorrente }),
                                     totalVariacoes: res.data.variations.length,
                                     tipoAnuncio: res.data.listing_type_id === "gold_pro" ? "Premium - Exposição máxima" : "Clássico - Exposição Alta",
-                                    custoFreteGratis: 0
+                                    custoFreteGratis: resp.data.coverage.all_country.list_cost,
+                                    json: res.data
                                 }
                                 return anuncio;
+                            }).catch(err => console.log(err))
+                        } else {
+                            var anuncio = {
+                                id: res.data.id,
+                                titulo: res.data.title,
+                                preco: res.data.price,
+                                estoque_total: res.data.available_quantity,
+                                foto_principal: res.data.pictures[0].url,
+                                link_anuncio: res.data.permalink,
+                                status: res.data.status,
+                                visualizacao: Object.values(resp.data).reduce((accumulador, valorCorrente) => { return valorCorrente }),
+                                totalVariacoes: res.data.variations.length,
+                                tipoAnuncio: res.data.listing_type_id === "gold_pro" ? "Premium - Exposição máxima" : "Clássico - Exposição Alta",
+                                custoFreteGratis: 0,
+                                json: res.data
                             }
-                            
-                        }).catch(err => {console.log("Houve um erro: " + err)
-                        })
-                    }).catch(err => {console.log("Houve um erro ao buscar os detalhes do anuncio: " + err)
-                    });
-                })
+                            return anuncio;
+                        }
 
-                Promise.all(detalhesAnuncio).then(resp => {
-                    console.log(resp)
+                    }).catch(err => {
+                        console.log("Houve um erro: " + err)
+                    })
+                }).catch(err => {
+                    console.log("Houve um erro ao buscar os detalhes do anuncio: " + err)
                 });
-                
+            })
+
+            Promise.all(detalhesAnuncio).then(resp => {
+                resp.map(usuario => {
+                    console.log(usuario.json.variations)
+                })
+            });
+
 
         }).catch(err => {
             console.log("Houve um erro ao listar todos os anuncios: " + err)
@@ -128,10 +165,10 @@ const listarTodosAnuncio = async (req, res) => {
 
 
 
-const obterTotalDeVendas = async() => {
+const obterTotalDeVendas = async () => {
     var data = new Date();
     buscarUsuarioPorID().then(resp => {
-        axios.get(`${constants.API_MERCADO_LIVRE}/orders/search?seller=${resp.id}&order.status=paid&order.date_created.from=2019-${data.getMonth()+1}-01T00:00:00.000-00:00&order.date_created.to=2019-${data.getMonth()+1}-30T00:00:00.000-00:00&&access_token=${resp.accessToken}`).then(resp => {
+        axios.get(`${constants.API_MERCADO_LIVRE}/orders/search?seller=${resp.id}&order.status=paid&order.date_created.from=2019-${data.getMonth() + 1}-01T00:00:00.000-00:00&order.date_created.to=2019-${data.getMonth() + 1}-30T00:00:00.000-00:00&&access_token=${resp.accessToken}`).then(resp => {
             console.log({ total: resp.data.results.length + 1 })
         }).catch(err => {
             console.log({ mensagem: "Houve um erro ao buscar todas as vendas realizadas: " + err })
@@ -139,7 +176,7 @@ const obterTotalDeVendas = async() => {
     })
 }
 
-const obterVendasPendentes = async() => {
+const obterVendasPendentes = async () => {
     usuarioService.buscarUsuarioPorID().then(async resp => {
         await axios.get(`${constants.API_MERCADO_LIVRE}/orders/search/pending?seller=${resp.id}&access_token=${resp.accessToken}`).then(async response => {
             let vendasPendentes = await response.data.results.filter(value => value.payments[0].status === 'pending').map(async value => {
@@ -178,7 +215,7 @@ const obterVendasPendentes = async() => {
     })
 }
 
-const obterDadosCliente = async() => {
+const obterDadosCliente = async () => {
     buscarUsuarioPorID().then(resp => {
         axios.get(`${constants.API_MERCADO_LIVRE}/orders/search?seller=${resp.id}&order.status=paid&access_token=${resp.accessToken}`).then(resp => {
             /* resp.data.results.filter(function (a) {
@@ -259,10 +296,10 @@ function obterEnderecoCliente() {
     })
 }
 
-function postAnuncioMercadoLivre(){
+function postAnuncioMercadoLivre() {
     usuarioService.buscarUsuarioPorID().then(user => {
-        axios.post(`http://api.mercadolibre.com/items?access_token=${user.accessToken}`, JSON.stringify(postAnuncio)) 
+        axios.post(`http://api.mercadolibre.com/items?access_token=${user.accessToken}`, JSON.stringify(postAnuncio))
     }).catch(err => console.log("err.error"))
 }
 
-postAnuncioMercadoLivre()
+listarTodosAnuncio()

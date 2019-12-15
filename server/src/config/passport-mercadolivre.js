@@ -22,16 +22,16 @@ module.exports = (passport) => {
       }
     });
     */
-   usuarioService.salvarUsuario(setUsuario(profile, accessToken, refreshToken))
-   console.log("Mercado livre - session user "+ accessToken)
+    usuarioService.salvarUsuario(setUsuario(profile, accessToken, refreshToken))
+    console.log("Mercado livre - session user " + accessToken)
 
-   return done(null, profile);
-  
+    return done(null, profile);
+
   }
   ));
 
   const setUsuario = (profile, accessToken, refreshToken) => {
-    let _usuarioJSON = {
+    let usuarios = {
       id: profile.id,
       accessToken: accessToken,
       refreshToken: refreshToken,
@@ -39,13 +39,13 @@ module.exports = (passport) => {
       first_name: profile.first_name,
       email: profile.email
     }
-    return _usuarioJSON;
+    return usuarios
   }
 
   passport.serializeUser((user, done) => {
     done(null, user);
   });
-  
+
   passport.deserializeUser((user, done) => {
     done(null, user);
   });
