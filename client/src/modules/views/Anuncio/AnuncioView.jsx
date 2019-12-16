@@ -161,8 +161,11 @@ export default function AnuncioView(props) {
                                     </Dropdown.Item>
                                     
                                     <Dropdown.Item>
-                                      <a onClick={() => setIsShowVariationManager(true)}>Gerenciar Variações</a>
-                                      <GerenciarVariacoes  {...prop} isShowVariationManager={isShowVariationManager} setIsShowVariationManager={setIsShowVariationManager}/>
+                                      <a onClick={() => {
+                                        setIsShowVariationManager(true) 
+                                        setAnuncio(prop)}}>
+                                        Gerenciar Variações
+                                      </a>
                                     </Dropdown.Item>
 
                                     <Dropdown.Item>Pausar</Dropdown.Item>
@@ -187,6 +190,9 @@ export default function AnuncioView(props) {
 
         { /*MODAL*/}
         {console.log(props.freteGratis)}
+
+        {isShowVariationManager && <GerenciarVariacoes  {...anuncio} isShowVariationManager={isShowVariationManager} 
+                                          setIsShowVariationManager={setIsShowVariationManager}/>}
 
         {showModal &&
           <CustomModal

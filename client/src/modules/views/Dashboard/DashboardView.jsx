@@ -5,6 +5,7 @@ import { Card } from "modules/components/Card/Card.jsx";
 import StatsCard from "modules/components/StatsCard/StatsCard.jsx";
 import PedidosPendentes from "modules/components/PedidosPendentes/PedidosPendentes";
 import Carregando from '../../components/Loading/LoadingCarregandoSolicitacao'
+import { Button, Icon, Image, Item, Label } from 'semantic-ui-react'
 
 export default function DashboardView(props) {
   return (
@@ -44,18 +45,38 @@ export default function DashboardView(props) {
         </Row>
 
         <Row>
-
           <Col md={12}>
             <Card
               title={<>Pedido de vendas pendente {props.totalVendasPendentes}</>}
               category="Aguardando confirmação do pagamento"
               content={
-                <div className="table-full-width">
-
-                  {props.vendasPendente.map(resp => {
+                <>
+                  {props.vendasPendente.map((prop, key) => {
                     if (!props.isLoading) {
                       return (
-                          <PedidosPendentes resp={resp} key={resp.id} />
+                        <Item.Group divided>
+                          <Item key={key}>
+                            <Item.Image src={prop.fotoPrincipal}  style={{'height':'100px', 'width':'80px', 'marginTop': '13px'}}/>
+                            <Item.Content>
+                              <Item.Header style={{ 'margin-left': '-16px' }}>{prop.titulo}</Item.Header>
+                              <Item.Meta>
+                                <span className='cinema'>{prop.dataPedido}</span>
+                              </Item.Meta>
+                              <Item.Description>
+                                <b>Cliente:</b> {prop.cliente}
+                                <br></br>
+                              </Item.Description>
+                              <Item.Extra>
+                                <Label>{prop.variacao}</Label>
+                                <Label icon='money' content={<>{prop.preco} reais</>} />
+                                <Button icon labelPosition='left' style={{'fontSize': '10px'}} color='orange'>
+                                  <Icon name='file pdf outline'></Icon>
+                                  <a style={{'color': 'white'}} href={prop.boleto} target='_blank' rel="noopener noreferrer"> Boleto</a>
+                                </Button>
+                              </Item.Extra>
+                            </Item.Content>
+                          </Item>
+                        </Item.Group>
                       )
                     } else {
                       return (
@@ -64,7 +85,7 @@ export default function DashboardView(props) {
                     }
                   })
                   }
-                </div>
+                </>
               }
             />
           </Col>
