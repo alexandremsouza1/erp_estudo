@@ -168,6 +168,7 @@ export default function AnuncioView(props) {
                                       </a>
                                     </Dropdown.Item>
 
+                                    <Dropdown.Item>Visualizar perguntas</Dropdown.Item>      
                                     <Dropdown.Item>Pausar</Dropdown.Item>
                                     <Dropdown.Item>Finalizar</Dropdown.Item>
                                     <Dropdown.Item>Replicar anúncio</Dropdown.Item>
