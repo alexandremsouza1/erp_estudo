@@ -22,6 +22,7 @@ export default function AnuncioView(props) {
   const [isSelectedFrete, setIsSelectedFrete] = useState(props.freteGratis)
   const [isShowVariationManager, setIsShowVariationManager] = useState(false)
   const [isShowPerguntas, setIsShowPerguntas] = useState(false)
+  const [isShowEditPrice, setIsShowEditPrice] = useState(false)
 
   const handleChangeIsActive = (e) => {
     setIsActive(e.target.value)
@@ -158,23 +159,27 @@ export default function AnuncioView(props) {
                                     <Dropdown.Header icon='cog' content='Configurações' />
 
                                     <Dropdown.Item>
-                                      <AlterarPreco options={options} {...prop} updateAnuncioPrice={props.updateAnuncioPrice}/>
+                                      <a onClick={() => {
+                                        setIsShowEditPrice(true)
+                                        setAnuncio(prop)}}>
+                                        Alterar preço
+                                      </a>
                                     </Dropdown.Item>
                                     
                                     <Dropdown.Item>
                                       <a onClick={() => {
                                         setIsShowVariationManager(true) 
                                         setAnuncio(prop)}}>
-                                        Gerenciar Variações
+                                        Gerenciar variações
                                       </a>
                                     </Dropdown.Item>
 
                                     <Dropdown.Item>
-                                        <a onClick={() => {
-                                          setIsShowPerguntas(true)
-                                          setAnuncio(prop)}}>
-                                          Visualizar perguntas
-                                        </a>
+                                      <a onClick={() => {
+                                        setIsShowPerguntas(true)
+                                        setAnuncio(prop)}}>
+                                        Visualizar perguntas
+                                      </a>
                                     </Dropdown.Item>      
                                     <Dropdown.Item>Pausar</Dropdown.Item>
                                     <Dropdown.Item>Finalizar</Dropdown.Item>
@@ -208,7 +213,15 @@ export default function AnuncioView(props) {
           <PerguntasAnuncio {...anuncio}
                             isShowPerguntas={isShowPerguntas} 
                             setIsShowPerguntas={setIsShowPerguntas}
-        />}  
+        />}
+
+        {isShowEditPrice && 
+          <AlterarPreco options={options} 
+                        {...anuncio} 
+                        updateAnuncioPrice={props.updateAnuncioPrice}
+                        isShowEditPrice={isShowEditPrice}
+                        setIsShowEditPrice={setIsShowEditPrice}/>
+        }  
 
         {showModal &&
           <CustomModal

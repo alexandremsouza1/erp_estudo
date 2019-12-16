@@ -10,7 +10,7 @@ export default function AlterarPreco(props) {
     }
 
     return (
-        <Modal style={{
+        <Modal open={props.isShowEditPrice} style={{
             'position': 'relative',
             'height': '50%',
             'width': '50%',
@@ -18,10 +18,7 @@ export default function AlterarPreco(props) {
             'bottom': '10%',
             'marginLeft': '50%',
             'marginRight': '50%'
-        }}
-            trigger={
-                <a>Alterar preço</a>
-            } >
+        }}>
 
             <Header icon='edit' content='Alterar preço'
                 style={{ 'backgroundColor': '#467EED', 'color': 'white' }} />
@@ -45,7 +42,7 @@ export default function AlterarPreco(props) {
                     <Icon name='checkmark' /> Confirmar
                 </Button>
 
-                <Button color='red'>
+                <Button color='red' onClick={() => {props.setIsShowEditPrice(false)}}>
                     <Icon name='remove' /> Fechar
                 </Button>
             </Modal.Actions>
