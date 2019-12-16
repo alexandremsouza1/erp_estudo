@@ -9,6 +9,7 @@ import CustomModal from '../../components/CustomModal/CustomModal'
 import { Button, Dropdown, Modal, Header, Icon, Select, Input, Table } from 'semantic-ui-react'
 import AlterarPreco from '../Anuncio/AlterarPreco'
 import GerenciarVariacoes from '../Anuncio/GerenciarVariacoes'
+import PerguntasAnuncio from '../Anuncio/PerguntasAnuncio'
 
 
 export default function AnuncioView(props) {
@@ -20,6 +21,7 @@ export default function AnuncioView(props) {
   const [isSelectedEstadoProduto, setIsSelectedEstadoProduto] = useState('novo')
   const [isSelectedFrete, setIsSelectedFrete] = useState(props.freteGratis)
   const [isShowVariationManager, setIsShowVariationManager] = useState(false)
+  const [isShowPerguntas, setIsShowPerguntas] = useState(false)
 
   const handleChangeIsActive = (e) => {
     setIsActive(e.target.value)
@@ -168,7 +170,13 @@ export default function AnuncioView(props) {
                                       </a>
                                     </Dropdown.Item>
 
-                                    <Dropdown.Item>Visualizar perguntas</Dropdown.Item>      
+                                    <Dropdown.Item>
+                                        <a onClick={() => {
+                                          setIsShowPerguntas(true)
+                                          setAnuncio(prop)}}>
+                                          Visualizar perguntas
+                                        </a>
+                                    </Dropdown.Item>      
                                     <Dropdown.Item>Pausar</Dropdown.Item>
                                     <Dropdown.Item>Finalizar</Dropdown.Item>
                                     <Dropdown.Item>Replicar anúncio</Dropdown.Item>
@@ -190,10 +198,16 @@ export default function AnuncioView(props) {
         </Grid>
 
         { /*MODAL*/}
-        {console.log(props.freteGratis)}
+        {isShowVariationManager && 
+          <GerenciarVariacoes  
+            {...anuncio} 
+            isShowVariationManager={isShowVariationManager} 
+            setIsShowVariationManager={setIsShowVariationManager}
+          />}
 
-        {isShowVariationManager && <GerenciarVariacoes  {...anuncio} isShowVariationManager={isShowVariationManager} 
-                                          setIsShowVariationManager={setIsShowVariationManager}/>}
+        {isShowPerguntas &&
+          <PerguntasAnuncio {...anuncio} isShowPerguntas={isShowPerguntas} setIsShowPerguntas={setIsShowPerguntas}
+        />}  
 
         {showModal &&
           <CustomModal
