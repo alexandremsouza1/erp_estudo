@@ -2,10 +2,12 @@ import React, { useEffect } from 'react'
 import axios from 'axios'
 import DashboardView from './DashboardView'
 import { useSelector, useDispatch } from 'react-redux'
+import { Dimmer, Loader, Segment } from 'semantic-ui-react'
 import {
     OBTER_SALDO_TOTAL,
     OBTER_TOTAL_VENDAS_NO_MES,
-    OBTER_VENDAS_PENDENTE
+    OBTER_VENDAS_PENDENTE,
+    CARREGANDO_AGUARDE
 }
     from '../../constants/constants'
 
@@ -15,16 +17,16 @@ export default function DashboardController() {
     const store = useSelector(store => store.dashboard)
 
     document.title = "Dashboard"
-/*
-    setInterval(()=>{
-        get()
-    }, 60000)
-*/
+    /*
+        setInterval(()=>{
+            get()
+        }, 60000)
+    */
     useEffect(() => {
         get()
     }, [])
 
-    function get(){
+    function get() {
         axios.get('http://localhost:5000/saldo').then(res => {
             dispatch({
                 type: OBTER_SALDO_TOTAL,
@@ -33,7 +35,7 @@ export default function DashboardController() {
                 isLoading: false
             })
         })
-        
+
         axios.get('http://localhost:5000/vendas/total-vendas').then(resp => {
             dispatch({
                 type: OBTER_TOTAL_VENDAS_NO_MES,
@@ -42,7 +44,7 @@ export default function DashboardController() {
                 isLoading: false
             })
         })
-    
+
         axios.get('http://localhost:5000/vendas/vendas-pendentes').then(resp => {
             dispatch({
                 type: OBTER_VENDAS_PENDENTE,
@@ -54,8 +56,13 @@ export default function DashboardController() {
     }
 
     return (
-        <div>
-            <DashboardView {...store} />
-        </div>
+        <>
+            <Dimmer.Dimmable as={Segment} dimmer={store.isLoading}>
+                <Dimmer active={store.isLoading} inverted>
+                    <Loader>{CARREGANDO_AGUARDE}</Loader>
+                </Dimmer>
+                <DashboardView {...store} />
+            </Dimmer.Dimmable>
+        </>
     )
 }

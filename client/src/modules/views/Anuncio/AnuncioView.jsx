@@ -19,6 +19,7 @@ export default function AnuncioView(props) {
   const [isActive, setIsActive] = useState('active')
   const [isSelectedEstadoProduto, setIsSelectedEstadoProduto] = useState('novo')
   const [isSelectedFrete, setIsSelectedFrete] = useState(props.freteGratis)
+  const [isShowVariationManager, setIsShowVariationManager] = useState(false)
 
   const handleChangeIsActive = (e) => {
     setIsActive(e.target.value)
@@ -118,7 +119,7 @@ export default function AnuncioView(props) {
 
                                 <font size="3">
                                   <b>
-                                    <a style={{ "color": "red" }}>
+                                    <a style={{ "color": "blue" }}>
                                       R$ {prop.preco.toLocaleString("pt-BR")}{' '}
                                     </a>
                                   </b>
@@ -162,7 +163,8 @@ export default function AnuncioView(props) {
                                     </Dropdown.Item>
                                     
                                     <Dropdown.Item>
-                                      <GerenciarVariacoes {...prop}/>
+                                      <a onClick={() => setIsShowVariationManager(true)}>Gerenciar Variações</a>
+                                      <GerenciarVariacoes  {...prop} isShowVariationManager={isShowVariationManager}/>
                                     </Dropdown.Item>
 
                                     <Dropdown.Item>Pausar</Dropdown.Item>
