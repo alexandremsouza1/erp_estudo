@@ -121,11 +121,10 @@ exports.buscarAnuncioPorTitulo = async (req, res) => {
     Function responsible for to update procuct price
 */
 exports.updatePrice = (req, res) => {
-    let dados = {}
     usuarioService.buscarUsuarioPorID().then(user => {
         axios.get(`https://api.mercadolibre.com/items/${req.body.itemId}?access_token=${user.accessToken}`).then(response => {
             let values = response.data.variations.map((variat) => {
-                dados = {
+                let dados = {
                     id: variat.id,
                     price: Number(req.body.price)
                 }

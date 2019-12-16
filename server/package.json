@@ -19,6 +19,7 @@
     "express-session": "^1.17.0",
     "firebase": "^7.5.0",
     "http": "0.0.0",
+    "https-proxy-agent": "^4.0.0",
     "localStorage": "^1.0.4",
     "mercadolibre": "0.0.13",
     "mongoose": "^5.7.10",
