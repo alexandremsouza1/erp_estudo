@@ -6,7 +6,9 @@ import LoadingCarregandoSolicitacao from "modules/components/Loading/LoadingCarr
 import iconSearch from '../../../assets/img/Zoom-icon24px.png'
 import '../../../assets/css/Global/style.css';
 import CustomModal from '../../components/CustomModal/CustomModal'
-import { Button, Dropdown, Modal, Header, Icon, Select, Input, Label } from 'semantic-ui-react'
+import { Button, Dropdown, Modal, Header, Icon, Select, Input, Table } from 'semantic-ui-react'
+import AlterarPreco from '../Anuncio/AlterarPreco'
+import GerenciarVariacoes from '../Anuncio/GerenciarVariacoes'
 
 
 export default function AnuncioView(props) {
@@ -154,126 +156,15 @@ export default function AnuncioView(props) {
                                   {/* Alterar preço */}
                                   <Dropdown.Menu>
                                     <Dropdown.Header icon='cog' content='Configurações' />
+
                                     <Dropdown.Item>
-
-                                      <Modal style={{
-                                        'position': 'relative',
-                                        'height': '50%',
-                                        'width': '50%',
-                                        'top': '10%',
-                                        'bottom': '10%',
-                                        'marginLeft': '50%',
-                                        'marginRight': '50%'
-                                      }}
-                                        trigger={
-                                          <a>Alterar preço</a>
-                                        } >
-
-                                        <Header icon='edit' content='Alterar preço'
-                                          style={{ 'backgroundColor': '#467EED', 'color': 'white' }} />
-
-                                        <Modal.Content>
-                                          <p>
-                                            {prop.titulo}
-                                          </p>
-
-                                          <Input>
-                                            <Select compact options={options} defaultValue='porcentagem'></Select>
-                                            <Input type='text' placeholder='Valor' />
-                                          </Input>
-
-                                        </Modal.Content>
-
-                                        <Modal.Actions>
-                                          <Button color='green'>
-                                            <Icon name='checkmark' /> Confirmar
-                                        </Button>
-
-                                          <Button color='red'>
-                                            <Icon name='remove' /> Fechar
-                                        </Button>
-                                        </Modal.Actions>
-                                      </Modal>
-
+                                      <AlterarPreco options={options} {...prop}/>
                                     </Dropdown.Item>
+                                    
                                     <Dropdown.Item>
-
-                                    <Modal style={{
-                                        'position': 'relative',
-                                        'width': '100%',
-                                        'marginBottom': '5%',
-                                        'marginLeft': '50%',
-                                        'marginRight': '50%'
-                                      }}
-                                        trigger={
-                                          <a>Gerenciar Variações</a>
-                                        } >
-
-                                        <Header icon='edit' content='Gerenciar Variações'
-                                          style={{ 'backgroundColor': '#467EED', 'color': 'white' }} />
-
-                                        <Modal.Content>
-                                          <p>
-                                            {prop.titulo}
-                                          </p>
-                                          <ul style={{'listStyleType': 'none'}}>
-                                          {prop.json.variations.map(variation => {
-                                            return (
-                                              <li key={variation.id}>
-                                                  <Row>
-                                                    <Col md={1}>
-                                                      <label>Estoque</label>
-                                                      <Input type='text' value={variation.available_quantity} style={{'width': '65px'}}></Input>
-                                                    </Col>
-                                                    
-                                                    <Col md={1}>
-                                                      <label>Qtde vnd</label>
-                                                      <Input value={variation.sold_quantity} style={{'width': '65px'}}></Input>
-                                                    </Col>
-
-                                                    <Col md={1}>
-                                                      {variation.attribute_combinations.map(attr => {
-                                                        if(attr.id === 'SIZE' || attr.id === null){
-                                                          return (
-                                                            <>
-                                                              <label>Variação</label>
-                                                              <Input type='text' value={attr.value_name} style={{'width': '350px'}}></Input>
-                                                            </>
-                                                          )
-                                                        }
-                                                      })}
-                                                    </Col>
-
-                                                    <Col md={1}>
-                                                      <label></label>
-                                                      <Button color='red' style={{'position': 'absolute','margin-left': '250px',
-                                                                                  'height': '38px','margin-top': '20px','top': '4px',
-                                                                                  'width': '55px'}}>
-                                                          <Icon name='remove' /> 
-                                                      </Button>
-                                                    </Col>
-                                                  </Row>
-                                              </li>
-                                            )
-                                          })}
-                                          </ul>
-
-                                        </Modal.Content>
-
-                                        <Modal.Actions>
-                                        <Button color='green'>
-                                            <Icon name='checkmark' /> Confirmar
-                                        </Button>
-
-                                          <Button color='red'>
-                                            <Icon name='remove' /> Fechar
-                                        </Button>
-                                        </Modal.Actions>
-                                      </Modal>
-
-
+                                      <GerenciarVariacoes {...prop}/>
                                     </Dropdown.Item>
-                                    <Dropdown.Item>Gerenciar Imagens</Dropdown.Item>
+
                                     <Dropdown.Item>Pausar</Dropdown.Item>
                                     <Dropdown.Item>Finalizar</Dropdown.Item>
                                     <Dropdown.Item>Replicar anúncio</Dropdown.Item>
