@@ -10,7 +10,7 @@ export default function GerenciarVariacoes(props) {
   const [imageVariation, setImageVariation] = useState([])
   const [imagesAnuncio, setImagesAnuncio] = useState([])
 
-  const setProps = (variacao, attr) => {
+  const setProps = (attr) => {
     setIsShowEditarAnuncio(true)
     //setVariacao(variacao)
     setAttributeCombinations(attr)
@@ -31,7 +31,7 @@ export default function GerenciarVariacoes(props) {
   }
 
   const setPropsEditAnuncio = (variation, attr, json) => {
-    setProps(variation, attr)
+    setProps(attr)
     getImageVariation(json, variation)
   }
 
