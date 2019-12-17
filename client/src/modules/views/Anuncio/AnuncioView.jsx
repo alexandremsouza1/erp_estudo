@@ -52,8 +52,7 @@ export default function AnuncioView(props) {
           <Row>
             <Col md={12}>
               <Card
-                title={props.title}
-                category="Anúncios Ativos"
+                category={<>Anúncios {isActive === 'active' ? 'Ativos' : 'Pausados'}</>}
                 ctTableFullWidth
                 ctTableResponsive
                 content={
@@ -66,7 +65,7 @@ export default function AnuncioView(props) {
                       <div className="col-sm-12" style={{ "marginLeft": '-15px', 'width': '150px' }}>
                         <FormControl componentClass="select" onChange={handleChangeIsActive}>
                           <option value="active">Ativos</option>
-                          <option value="paused">Inativos</option>
+                          <option value="paused">Pausados</option>
                         </FormControl>
                         <br></br>
                       </div>
@@ -87,7 +86,6 @@ export default function AnuncioView(props) {
                             <div className="panel-body" style={{ "minHeight": "142px" }}>
 
                               <div className="col-md-2 col-xs-12 text-center">
-
                                 <img src={prop.foto_principal} alt='fotoPrincipal' height='100' width='80' />
 
                               </div>
@@ -164,7 +162,7 @@ export default function AnuncioView(props) {
                                     
                                     <Dropdown.Item>
                                       <a onClick={() => setIsShowVariationManager(true)}>Gerenciar Variações</a>
-                                      <GerenciarVariacoes  {...prop} isShowVariationManager={isShowVariationManager}/>
+                                      <GerenciarVariacoes  {...prop} isShowVariationManager={isShowVariationManager} setIsShowVariationManager={setIsShowVariationManager}/>
                                     </Dropdown.Item>
 
                                     <Dropdown.Item>Pausar</Dropdown.Item>

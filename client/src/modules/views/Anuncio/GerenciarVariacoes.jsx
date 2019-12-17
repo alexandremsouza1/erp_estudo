@@ -5,13 +5,34 @@ import EditarVariacao from './EditarVariacao'
 export default function GerenciarVariacoes(props) {
 
   const [isShowEditarAnuncio, setIsShowEditarAnuncio] = useState(false);
-  const [variacao, setVariacao] = useState({})
+  //const [variacao, setVariacao] = useState({})
   const [attributeCombinations, setAttributeCombinations] = useState({})
+  const [imageVariation, setImageVariation] = useState([])
+  const [imagesAnuncio, setImagesAnuncio] = useState([])
 
   const setProps = (variacao, attr) => {
     setIsShowEditarAnuncio(true)
-    setVariacao(variacao)
+    //setVariacao(variacao)
     setAttributeCombinations(attr)
+  }
+
+  const getImageVariation = (json, variation) => {
+    let urls = []
+    json.pictures.map(image => {
+      variation.picture_ids.map(picture_ids => {
+        if (picture_ids === image.id) {
+           urls.push(image.url)
+        }
+      })
+    })
+
+    setImageVariation(urls)
+    setImagesAnuncio(json.pictures)
+  }
+
+  const setPropsEditAnuncio = (variation, attr, json) => {
+    setProps(variation, attr)
+    getImageVariation(json, variation)
   }
 
   return (
@@ -63,14 +84,16 @@ export default function GerenciarVariacoes(props) {
                           <Table.Cell>{variation.sold_quantity}</Table.Cell>
                           <Table.Cell>
                             <Button icon color='red' style={{ 'fontSize': '12px' }}> <Icon name='remove' /> </Button>
-                            <Button icon color='blue' style={{ 'fontSize': '12px' }} onClick={() => setProps(variation, attr)}> <Icon name='edit' /> </Button>
+                            <Button icon color='blue' style={{ 'fontSize': '12px' }} onClick={() => setPropsEditAnuncio(variation, attr, props.json)}> <Icon name='edit' /> </Button>
                           </Table.Cell>
                           <EditarVariacao
-                            variation={variation}
+                            urlImage={imageVariation}
+                            imagesAnuncio={imagesAnuncio}
                             attributeCombinations={attributeCombinations}
                             isShowEditarAnuncio={isShowEditarAnuncio}
-                            setIsShowEditarAnuncio={setIsShowEditarAnuncio} 
-                            {...props}/>
+                            setIsShowEditarAnuncio={setIsShowEditarAnuncio}
+
+                          />
                         </>
                       )
                     }
@@ -87,11 +110,11 @@ export default function GerenciarVariacoes(props) {
       <Modal.Actions>
         <Button color='green'>
           <Icon name='checkmark' /> Confirmar
-            </Button>
+        </Button>
 
-        <Button color='red'>
+        <Button color='red' onClick={() => props.setIsShowVariationManager(false)}>
           <Icon name='remove' /> Fechar
-            </Button>
+        </Button>
       </Modal.Actions>
     </Modal>
   )

@@ -6,7 +6,6 @@ export default function EditarVariacao(props) {
     return (
         <Modal open={props.isShowEditarAnuncio} style={{
             'position': 'relative',
-            'width': '50%',
             'marginLeft': '50%',
             'marginBottom': '5%',
             'marginRight': '50%'
@@ -15,19 +14,23 @@ export default function EditarVariacao(props) {
                 style={{ 'backgroundColor': '#467EED', 'color': 'white' }} />
 
             <Modal.Content>
-                <Grid doubling columns={5}>
-                    <Grid.Column>
-                        {props.json.pictures.map(image => {
-                            props.variation.picture_ids.map(picture_ids => {
-                                if (picture_ids === image.id) {
-                                    console.log(image.url)
-                                    return (
-                                        <Image src={image.url} />
-                                    )
-                                }
-                            })
-                        })}
-                    </Grid.Column>
+                <Grid doubling columns={10}>
+                    {props.urlImage.map((url, key) => {
+                        return (
+                            <Grid.Column>
+                                <img src={url} alt='imageVariation' height='100' width='80' />
+                                <Dropdown floating labeled button text='' icon='image outline' className='icon'>
+                                    <Dropdown.Menu>
+                                        <Dropdown.Header content='Selecione uma imagem!'/>
+                                        <Dropdown.Item key={key}>
+                                            {console.log('URL: '+props.imagesAnuncio)}
+                                            <img src={props.imagesAnuncio} alt='imageVariation' height='100' width='80' />
+                                        </Dropdown.Item>
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                            </Grid.Column>
+                        )
+                    })}
                 </Grid>
             </Modal.Content>
 
