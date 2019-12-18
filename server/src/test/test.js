@@ -304,8 +304,10 @@ function postAnuncioMercadoLivre() {
 
 const getQuestion = () => {
     usuarioService.buscarUsuarioPorID().then(user => {
-        axios.get(`https://api.mercadolibre.com/questions/search?item=MLB1180712483&access_token=${user.accessToken}`).then(resp =>{
-            console.log(resp.data)
+        axios.get(`https://api.mercadolibre.com/questions/search?item=MLB1332847351&access_token=${user.accessToken}`).then(resp =>{
+            resp.data.questions.map(prop => {
+                console.log(prop.answer.text)
+            })
         })
     })
 }

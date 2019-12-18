@@ -1,5 +1,7 @@
 import React from "react";
 import { Button, Modal, Header, Icon, Select, Comment, Form, Input } from 'semantic-ui-react'
+import formatarDataHora from '../../../Helpers/util'
+import userAvatar from '../../../assets/img/funcionario-icon.png'
 
 export default function PerguntasAnuncio(props) {
     return (
@@ -9,34 +11,35 @@ export default function PerguntasAnuncio(props) {
             'marginRight': '50%'
         }}>
             <Header icon='conversation' content='Perguntas'
-                style={{ 'backgroundColor': '#467EED', 'color': 'white' }} />  
+                style={{ 'backgroundColor': '#467EED', 'color': 'white' }} />
             <Modal.Content>
                 <p>{props.titulo}</p>
 
-                {props.question.map(pergunta => {
+                {props.question.map((property, key) => {
+                    console.log(property.answer)
                     return (
-                        <Comment.Group>
+                        <Comment.Group key={key}>
                             <Header as='h3' dividing></Header>
                             <Comment>
-                                <Comment.Avatar src='https://react.semantic-ui.com/images/avatar/small/elliot.jpg' />
+                                <Comment.Avatar src='https://react.semantic-ui.com/images/avatar/small/jenny.jpg' />
                                 <Comment.Content>
-                                    <Comment.Author as='a'>{pergunta.seller_id}</Comment.Author>
+                                    <Comment.Author as='a'>{property.seller_id}</Comment.Author>
                                     <Comment.Metadata>
-                                        <div>{pergunta.date_created}</div>
+                                        <div>{property.date_created != null ? formatarDataHora(property.date_created) : property.date_created}</div>
                                     </Comment.Metadata>
                                     <Comment.Text>
-                                        <p>{pergunta.text}</p>
+                                        <p>{property.text}</p>
                                     </Comment.Text>
                                 </Comment.Content>
                                 <Comment.Group>
                                     <Comment>
-                                        <Comment.Avatar src='https://react.semantic-ui.com/images/avatar/small/jenny.jpg' />
+                                        <Comment.Avatar src={userAvatar}/>
                                         <Comment.Content>
                                             <Comment.Author as='a'>Comproline</Comment.Author>
                                             <Comment.Metadata>
-                                                <div>{'pergunta.answer'}</div>
+                                                <div>{property.answer != null ? formatarDataHora(property.answer.date_created) : ''}</div>
                                             </Comment.Metadata>
-                                            <Comment.Text>{'pergunta.answer.text'}</Comment.Text>
+                                            <Comment.Text>{property.answer != null ? property.answer.text : ''}</Comment.Text>
                                         </Comment.Content>
                                     </Comment>
                                 </Comment.Group>
