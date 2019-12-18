@@ -5,7 +5,7 @@ import userAvatar from '../../../assets/img/funcionario-icon.png'
 
 export default function PerguntasAnuncio(props) {
     return (
-        <Modal open={props.isShowPerguntas} style={{
+        <Modal closeOnDimmerClick={true} open={props.isShowPerguntas} style={{
             'position': 'relative',
             'marginLeft': '50%',
             'marginRight': '50%'
@@ -14,12 +14,14 @@ export default function PerguntasAnuncio(props) {
                 style={{ 'backgroundColor': '#467EED', 'color': 'white' }} />
             <Modal.Content>
                 <p>{props.titulo}</p>
+                <p style={{'fontSize': '12px', 'position': 'absolute', 'marginTop': '-15px'}}>O sistema irá listar apenas as 50 primeiras perguntas</p>
+                
 
                 {props.question.map((property, key) => {
-                    console.log(property.answer)
                     return (
                         <Comment.Group key={key}>
-                            <Header as='h3' dividing></Header>
+                            <Header as='h3' dividing>                             
+                            </Header>
                             <Comment>
                                 <Comment.Avatar src='https://react.semantic-ui.com/images/avatar/small/jenny.jpg' />
                                 <Comment.Content>
