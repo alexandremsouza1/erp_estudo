@@ -7,7 +7,7 @@ import { LISTAR_TODOS_ANUNCIOS } from '../../constants/constants'
 export default function AnuncioController() {
 
     const state = useSelector(store => store.anuncio)
-    const [userNickname, setUserNickname] = useState()
+    //const [userNickname, setUserNickname] = useState()
     /*
     const dispatch = useDispatch()
     useEffect(() => {
@@ -16,19 +16,17 @@ export default function AnuncioController() {
         }).catch(err => { console.log(err) })
     }, [])
 */
-        let getUserById = (userId) => {
-            axios.get('http://localhost:5000/usuario/'+userId).then(user =>{
-                setUserNickname(user.data.nickname)
+        let updateAnuncioPrice= (itemId, price) => {
+            axios.put('http://localhost:5000/anuncio/'+itemId+'/'+price).then(user =>{
+                console.log("Price updated")
             }).catch(error => {
                 console.log("An error occurred while fetching user by id: "+error)
             })
         }
 
-
-
     return (
         <div>
-            <AnuncioView state={state} {...state}/>
+            <AnuncioView state={state} {...state} updateAnuncioPrice={updateAnuncioPrice}/>
         </div>
     );
 

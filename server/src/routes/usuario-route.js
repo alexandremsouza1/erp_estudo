@@ -4,6 +4,6 @@ const usuarioService = require("../services/usuario-service");
 
 router.post("/post", usuarioService.salvarUsuarioRoute);
 router.get("/:id", usuarioService.getUserById);
-router.get("/all", usuarioService.listarTodosUsuarios);
+router.get("/", usuarioService.listarTodosUsuarios);
 
 module.exports = router;

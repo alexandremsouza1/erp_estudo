@@ -10,6 +10,7 @@ router.get('/', anuncioService.listarTodosAnuncio);
 router.get('/:titulo', anuncioService.listarTodosAnuncio)
 router.post('/post', anuncioService.salvar);
 router.put('/put/:id', anuncioService.atualizar);
+router.put('/:itemId/:price', anuncioService.updatePrice)
 
 
 module.exports = router;

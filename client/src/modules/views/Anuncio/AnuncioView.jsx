@@ -158,7 +158,7 @@ export default function AnuncioView(props) {
                                     <Dropdown.Header icon='cog' content='Configurações' />
 
                                     <Dropdown.Item>
-                                      <AlterarPreco options={options} {...prop}/>
+                                      <AlterarPreco options={options} {...prop} updateAnuncioPrice={props.updateAnuncioPrice}/>
                                     </Dropdown.Item>
                                     
                                     <Dropdown.Item>

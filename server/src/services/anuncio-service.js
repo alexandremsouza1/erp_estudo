@@ -113,3 +113,23 @@ exports.buscarAnuncioPorTitulo = async (req, res) => {
 }
 
 exports.atualizar = async (req, res, next) => { }
+
+exports.updatePrice = (req, res) => {
+    let v = {}
+    usuarioService.buscarUsuarioPorID().then(user => {
+        return axios.get(`https://api.mercadolibre.com/items/${req.params.itemId}?access_token=${user.accessToken}`).then(response => {
+            const newVariation = response.data.variations.map((variation) => {
+                v = {
+                    id: variation.id,
+                    price: req.params.price
+                }
+                return v
+            })
+            res.send(newVariation)
+        }).catch(err => {
+            res.send(err)
+        })
+    }).catch(err => {
+        res.send(err)
+    })
+}

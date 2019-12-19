@@ -305,12 +305,41 @@ function postAnuncioMercadoLivre() {
 
 const getQuestion = () => {
     usuarioService.buscarUsuarioPorID().then(user => {
-        axios.get(`https://api.mercadolibre.com/questions/search?item=MLB1332847351&access_token=${user.accessToken}`).then(resp =>{
+        axios.get(`https://api.mercadolibre.com/questions/search?item=MLB1332847351&access_token=${user.accessToken}`).then(resp => {
             resp.data.questions.map(prop => {
                 console.log(prop.answer.text)
             })
         })
     })
 }
+
+const updatePrice = () => {
+    let v = {}
+    usuarioService.buscarUsuarioPorID().then(user => {
+        axios.get(`https://api.mercadolibre.com/items/MLB1363166469?access_token=${user.accessToken}`).then(response => {
+            const newVariation = response.data.variations.map((variation, key) => {
+                if(variation.id === 46280842511){
+                    v = {
+                        id: variation.id,
+                        price: 15.98
+                    }
+                }else{
+                    v = {
+                        id: variation.id,
+                        price: 150.58
+                    }
+                }
+                return v
+            })
+            console.log(newVariation)
+        }).catch(err => {
+            console.log(err)
+        })
+    }).catch(err => {
+        console.log(err)
+    })
+}
+
+updatePrice()
 
 
