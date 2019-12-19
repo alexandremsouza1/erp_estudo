@@ -63,22 +63,21 @@ export default function AnuncioView(props) {
                       <Form inline>
                         <FormControl type="text" placeholder="Buscar por título" className="mr-sm-2" style={{ 'width': '500px' }} />
                         <ButtonB bsStyle="primary" fill style={{ 'marginTop': "5px" }}><img src={iconSearch} alt='search'></img></ButtonB>
+                        <div className="col-sm-12" style={{ "marginLeft": '-15px', 'width': '150px' }}>
+                          <FormControl componentClass="select" onChange={handleChangeIsActive}>
+                            <option value="active">Ativos</option>
+                            <option value="paused">Pausados</option>
+                          </FormControl>
+                          <br></br>
+                        </div> 
                       </Form>
-                      <div className="col-sm-12" style={{ "marginLeft": '-15px', 'width': '150px' }}>
-                        <FormControl componentClass="select" onChange={handleChangeIsActive}>
-                          <option value="active">Ativos</option>
-                          <option value="paused">Pausados</option>
-                        </FormControl>
-                        <br></br>
-                      </div>
-
+                      <br></br>
                     </Navbar>
-
-                    {props.result.map(prop => {
+                    {props.result.map((prop, key) => {
                       if (prop.status === isActive) {
                         return (
 
-                          <div className="panel panel-primary">
+                          <div className="panel panel-primary" key={key}>
                             <div className="panel-heading">
                               <h3 className="panel-title">
                                 {prop.titulo}
@@ -206,7 +205,9 @@ export default function AnuncioView(props) {
           />}
 
         {isShowPerguntas &&
-          <PerguntasAnuncio {...anuncio} isShowPerguntas={isShowPerguntas} setIsShowPerguntas={setIsShowPerguntas}
+          <PerguntasAnuncio {...anuncio}
+                            isShowPerguntas={isShowPerguntas} 
+                            setIsShowPerguntas={setIsShowPerguntas}
         />}  
 
         {showModal &&

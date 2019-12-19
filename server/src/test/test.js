@@ -8,6 +8,7 @@ const util = require('../helpers/util')
 const reloadJSON = require('self-reload-json');
 const postAnuncio = require('./postAnuncio')
 
+
 const usuario = {
     id: 3311227,
     access_token: "78l~987lõ87op´1928373847",
@@ -312,4 +313,4 @@ const getQuestion = () => {
     })
 }
 
-getQuestion()
+

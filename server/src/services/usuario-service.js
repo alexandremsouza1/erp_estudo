@@ -29,10 +29,6 @@ const salvarUsuarioRoute = (req, res) => {
     
 }
 
-const buscarUsuarioPorIDRoute = (req, res) => {
-    
-}
-
 const listarTodosUsuarios = async (req, res) => {
     await axios.get(constants.urlbase.COLLECTION_USUARIOS).then(resp => {
         res.status(200).send(resp.data);
@@ -53,12 +49,20 @@ const buscarUsuarioPorID = async () => {
     return usuarios;
 }
 
+const getUserById = async (req, res) => {
+    await axios.get('https://api.mercadolibre.com/users/'+req.params.id).then(user => {
+        res.status(200).send(user.data)
+    }).catch(error => {
+        res.status(400).send(error)
+    })
+}
+
 module.exports = {
     salvarUsuario,
     buscarUsuarioPorID,
     salvarUsuarioRoute,
-    buscarUsuarioPorIDRoute,
     editarUsuarioRoute,
     editarUsuario,
-    listarTodosUsuarios
+    listarTodosUsuarios,
+    getUserById
 }
