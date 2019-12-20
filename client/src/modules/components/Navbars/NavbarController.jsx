@@ -12,7 +12,7 @@ export default class NavbarController extends React.Component {
     }
 
     componentDidMount = async () => {
-        await axios.get('http://localhost:5000/usuario/all').then(res => {
+        await axios.get('http://localhost:5000/usuario/').then(res => {
             this.setState({
                 nomeUsuario: res.data.first_name
             })

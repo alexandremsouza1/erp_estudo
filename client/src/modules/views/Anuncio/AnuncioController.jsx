@@ -16,9 +16,11 @@ export default function AnuncioController() {
         }).catch(err => { console.log(err) })
     }, [])
 */
-        let updateAnuncioPrice= (itemId, price) => {
-            axios.put('http://localhost:5000/anuncio/'+itemId+'/'+price).then(user =>{
-                console.log("Price updated")
+        let updateAnuncioPrice= async (itemId, price) => {
+            await axios.put('http://localhost:5000/anuncio/'+itemId+'/'+price).then(user =>{
+                console.log('Price updated: >> http://localhost:5000/anuncio/'+itemId+'/'+price+'\n')
+                console.log(user)
+                console.log('\n')
             }).catch(error => {
                 console.log("An error occurred while fetching user by id: "+error)
             })

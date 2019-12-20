@@ -115,17 +115,30 @@ exports.buscarAnuncioPorTitulo = async (req, res) => {
 exports.atualizar = async (req, res, next) => { }
 
 exports.updatePrice = (req, res) => {
-    let v = {}
+    let dados = {}
+    let returns = {}
+    let list = {}
+    console.log('\n')
+    console.log('========== Server ========== ')
+    console.log('ItemID: ' + req.params.itemId + '\n')
+    console.log('Price:  ' + req.params.price + '\n')
+    console.log('========== Server ========== ')
     usuarioService.buscarUsuarioPorID().then(user => {
-        return axios.get(`https://api.mercadolibre.com/items/${req.params.itemId}?access_token=${user.accessToken}`).then(response => {
-            const newVariation = response.data.variations.map((variation) => {
-                v = {
-                    id: variation.id,
-                    price: req.params.price
+        axios.get(`https://api.mercadolibre.com/items/${req.params.itemId}?access_token=${user.accessToken}`).then(response => {
+            returns = response.data.variations.map((variat) => {
+                dados = {
+                    id: variat.id,
+                    price: Number(req.params.price)
                 }
-                return v
+                return dados
             })
-            res.send(newVariation)
+            list = { variations: JSON.stringify(returns) }
+            console.log('variations: ' + list.variations)
+            axios.put(`https://api.mercadolibre.com/items/${req.params.itemId}?access_token=${user.accessToken}`,
+                list.variations).then(resp => {
+                    console.log('PUT: ' + resp.data)
+                    res.send(resp)
+                })
         }).catch(err => {
             res.send(err)
         })

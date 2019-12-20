@@ -54,11 +54,11 @@ export default function DashboardView(props) {
                   {props.vendasPendente.map((prop, key) => {
                     if (!props.isLoading) {
                       return (
-                        <Item.Group divided>
+                        <Item.Group divided key={key}>
                           <Item key={key}>
                             <Item.Image src={prop.fotoPrincipal}  style={{'height':'100px', 'width':'80px', 'marginTop': '13px'}}/>
                             <Item.Content>
-                              <Item.Header style={{ 'margin-left': '-16px' }}>{prop.titulo}</Item.Header>
+                              <Item.Header style={{ 'marginLeft': '-16px' }}>{prop.titulo}</Item.Header>
                               <Item.Meta>
                                 <span className='cinema'>{prop.dataPedido}</span>
                               </Item.Meta>
@@ -80,7 +80,7 @@ export default function DashboardView(props) {
                       )
                     } else {
                       return (
-                        <Carregando width={450} />
+                        <Carregando width={450} key={key}/>
                       )
                     }
                   })
