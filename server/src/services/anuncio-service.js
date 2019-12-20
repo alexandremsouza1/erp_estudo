@@ -4,8 +4,13 @@ const axios = require('axios');
 const constants = require('../constants/constants');
 const usuarioService = require('../services/usuario-service')
 
+/**
+ * Created by Felipe M. Santos
+ */
+
 exports.salvar = async (req, res, next) => { }
 
+/** Function responsible for get for all product */
 exports.listarTodosAnuncio = async (req, res) => {
     usuarioService.buscarUsuarioPorID().then(resp01 => {
         axios.get(`${constants.API_MERCADO_LIVRE}/users/${resp01.id}/items/search?search_type=scan&access_token=${resp01.accessToken}`).then(resp07 => {
@@ -89,7 +94,7 @@ exports.listarTodosAnuncio = async (req, res) => {
 
 const setAnuncio = (resp03, resp04, resp08, resp05) => { }
 
-//Orde por quantidade vendido
+/** Order by quantity sold*/
 const orderAnunciosPorQuantidadeVendas = (detalhesAnuncio) => {
     return detalhesAnuncio.sort((a, b) => { return b.quantidadeVendido - a.quantidadeVendido })
 }
@@ -98,7 +103,7 @@ exports.obterFotoPrincipalAnuncio = async (idAnuncio) => {
     return await axios.get(`${constants.API_MERCADO_LIVRE}/items/${idAnuncio}/`).then(res => {
         return res.data.pictures[0].url;
     }).catch(err => {
-        console.log("Houve um erro ao buscar os detalhes do anuncio: " + err)
+        console.log("An Error occurred to get details product" + err)
     });
 }
 
@@ -112,37 +117,28 @@ exports.buscarAnuncioPorTitulo = async (req, res) => {
     })
 }
 
-exports.atualizar = async (req, res, next) => { }
-
+/*
+    Function responsible for to update procuct price
+*/
 exports.updatePrice = (req, res) => {
     let dados = {}
-    let returns = {}
-    let list = {}
-    console.log('\n')
-    console.log('========== Server ========== ')
-    console.log('ItemID: ' + req.params.itemId + '\n')
-    console.log('Price:  ' + req.params.price + '\n')
-    console.log('========== Server ========== ')
     usuarioService.buscarUsuarioPorID().then(user => {
-        axios.get(`https://api.mercadolibre.com/items/${req.params.itemId}?access_token=${user.accessToken}`).then(response => {
-            returns = response.data.variations.map((variat) => {
+        axios.get(`https://api.mercadolibre.com/items/${req.body.itemId}?access_token=${user.accessToken}`).then(response => {
+            let values = response.data.variations.map((variat) => {
                 dados = {
                     id: variat.id,
-                    price: Number(req.params.price)
+                    price: Number(req.body.price)
                 }
                 return dados
             })
-            list = { variations: JSON.stringify(returns) }
-            console.log('variations: ' + list.variations)
-            axios.put(`https://api.mercadolibre.com/items/${req.params.itemId}?access_token=${user.accessToken}`,
-                list.variations).then(resp => {
-                    console.log('PUT: ' + resp.data)
-                    res.send(resp)
+            axios.put(`https://api.mercadolibre.com/items/${req.body.itemId}?access_token=${user.accessToken}`, 
+                                JSON.stringify({variations: values})).then(resp => {
+                    res.send('Product price updated with success')
                 })
         }).catch(err => {
-            res.send(err)
+            res.send('An error occurred while process a PUT method in line 139',err)
         })
     }).catch(err => {
-        res.send(err)
+        res.send('An error occurred to get user ID, line 128',err)
     })
 }

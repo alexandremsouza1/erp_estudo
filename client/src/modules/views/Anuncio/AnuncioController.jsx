@@ -17,7 +17,7 @@ export default function AnuncioController() {
     }, [])
 */
         let updateAnuncioPrice= async (itemId, price) => {
-            await axios.put('http://localhost:5000/anuncio/'+itemId+'/'+price).then(user =>{
+            await axios.put('http://localhost:5000/anuncio/update_price', {itemId: itemId, price: price}).then(user =>{
                 console.log('Price updated: >> http://localhost:5000/anuncio/'+itemId+'/'+price+'\n')
                 console.log(user)
                 console.log('\n')
