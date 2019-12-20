@@ -25,8 +25,9 @@ const editarUsuarioRoute = (req, res) => {
 }
 
 
-const salvarUsuarioRoute = (req, res) => {
-    
+const salvarUsuarioRoute = async (req, res) => {
+    console.log("User saved")
+    res.status(200).send("User saved");
 }
 
 const listarTodosUsuarios = async (req, res) => {
