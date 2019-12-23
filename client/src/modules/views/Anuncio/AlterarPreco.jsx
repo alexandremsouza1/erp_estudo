@@ -1,51 +1,66 @@
-import React, {useState} from "react";
-import { Button, Modal, Header, Icon, Select, Input} from 'semantic-ui-react'
+import React from "react";
+import { Button, Modal, Header, Icon, Select, Input, Dimmer, Segment, Loader } from 'semantic-ui-react'
+import { CARREGANDO_AGUARDE } from '../../constants/constants'
 
-export default function AlterarPreco(props) {
+export default class AlterarPreco extends React.Component {
 
-    let [price, setPrice] = useState(0)
-
-    let handleOnChangeInputPrice = (event) => {
-        setPrice(event.target.value)
+    constructor(props) {
+        super(props)
+        this.state = {
+            price: this.props.preco
+        }
     }
 
-    return (
-        <Modal open={props.isShowEditPrice} style={{
-            'position': 'relative',
-            'height': '50%',
-            'width': '50%',
-            'top': '10%',
-            'bottom': '10%',
-            'marginLeft': '50%',
-            'marginRight': '50%'
-        }}>
+    handleOnChangeInputPrice = (e) => {
+        this.setState({
+            price: e.target.value
+        })
+    }
 
-            <Header icon='edit' content='Alterar preço'
-                style={{ 'backgroundColor': '#467EED', 'color': 'white' }} />
+    handleButtonSucess = () => {
+        this.props.updateAnuncioPrice(this.props.id, Number(this.state.price))
+        this.props.setLoadingButtonEditPrice(true)
+        this.props.setDisabledButtonSuccess(true)
+    }
 
-            <Modal.Content>
-                <p>
-                    {props.titulo}
-                </p>
+    render() {
+        return (    
+                <Modal open={this.props.isShowEditPrice} style={{
+                    'position': 'relative',
+                    'height': '50%',
+                    'width': '50%',
+                    'top': '10%',
+                    'bottom': '10%',
+                    'marginLeft': '50%',
+                    'marginRight': '50%'
+                }}>
 
-                {console.log(props.id)}
+                    <Header icon='edit' content='Alterar preço'
+                        style={{ 'backgroundColor': '#467EED', 'color': 'white' }} />
 
-                <Input>
-                    <Select compact options={props.options} defaultValue='porcentagem'></Select>
-                    <Input type='text' placeholder='Valor' value={price} onChange={handleOnChangeInputPrice}/>
-                </Input>
+                    <Modal.Content>
+                        <p>
+                            {this.props.titulo}
+                        </p>
 
-            </Modal.Content>
+                        <Input>
+                            <Select compact options={this.props.options} defaultValue='porcentagem'></Select>
+                            <Input type='text' placeholder='Valor' value={this.state.price} onChange={this.handleOnChangeInputPrice} />
+                        </Input>
 
-            <Modal.Actions>
-                <Button color='green' onClick={() => {props.updateAnuncioPrice(props.id, price)}}>
-                    <Icon name='checkmark' /> Confirmar
-                </Button>
+                    </Modal.Content>
 
-                <Button color='red' onClick={() => {props.setIsShowEditPrice(false)}}>
-                    <Icon name='remove' /> Fechar
-                </Button>
-            </Modal.Actions>
-        </Modal>
-    )
+                    <Modal.Actions>
+                        <Button loading={this.props.loadingButtonEditPrice} disabled={this.props.disabledButtonSuccess} color='green' onClick={() => this.handleButtonSucess()}>
+                            <Icon name='checkmark' /> Confirmar
+                    </Button>
+
+                        <Button color='red' onClick={() => { this.props.setIsShowEditPrice(false) }}>
+                            <Icon name='remove' /> Fechar
+                    </Button>
+                    </Modal.Actions>
+                </Modal>
+        
+        )
+    }
 }

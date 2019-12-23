@@ -4,7 +4,7 @@ import clienteReducer from './cliente/cliente.reducer';
 import dashboardReducer from './dashboard/dashboard.reducer'
 
 /**
- * Criado por: 
+ * Created by: 
  * @name Felipe Miguel dos Santos
  * @version 0.0.1
  */

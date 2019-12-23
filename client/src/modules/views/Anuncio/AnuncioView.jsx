@@ -1,16 +1,16 @@
 import React, { useState } from "react";
-import { Grid, Row, Col, Navbar, Form, FormControl } from "react-bootstrap";
+import { Grid, Row, Col, Navbar, Form, FormControl} from "react-bootstrap";
 import Card from "modules/components/Card/Card.jsx";
 import ButtonB from "modules/components/CustomButton/CustomButton.jsx";
 import LoadingCarregandoSolicitacao from "modules/components/Loading/LoadingCarregandoSolicitacao"
 import iconSearch from '../../../assets/img/Zoom-icon24px.png'
 import '../../../assets/css/Global/style.css';
 import CustomModal from '../../components/CustomModal/CustomModal'
-import { Button, Dropdown, Modal, Header, Icon, Select, Input, Table } from 'semantic-ui-react'
+import { Button, Dropdown, Icon} from 'semantic-ui-react'
 import AlterarPreco from '../Anuncio/AlterarPreco'
 import GerenciarVariacoes from '../Anuncio/GerenciarVariacoes'
 import PerguntasAnuncio from '../Anuncio/PerguntasAnuncio'
-
+import Notification from '../Anuncio/Notification'
 
 export default function AnuncioView(props) {
   document.title = "Anúncios"
@@ -22,7 +22,6 @@ export default function AnuncioView(props) {
   const [isSelectedFrete, setIsSelectedFrete] = useState(props.freteGratis)
   const [isShowVariationManager, setIsShowVariationManager] = useState(false)
   const [isShowPerguntas, setIsShowPerguntas] = useState(false)
-  const [isShowEditPrice, setIsShowEditPrice] = useState(false)
 
   const handleChangeIsActive = (e) => {
     setIsActive(e.target.value)
@@ -55,7 +54,6 @@ export default function AnuncioView(props) {
           <Row>
             <Col md={12}>
               <Card
-                category={<>Anúncios {isActive === 'active' ? 'Ativos' : 'Pausados'}</>}
                 ctTableFullWidth
                 ctTableResponsive
                 content={
@@ -74,10 +72,10 @@ export default function AnuncioView(props) {
                       </Form>
                       <br></br>
                     </Navbar>
+
                     {props.result.map((prop, key) => {
                       if (prop.status === isActive) {
                         return (
-
                           <div className="panel panel-primary" key={key}>
                             <div className="panel-heading">
                               <h3 className="panel-title">
@@ -160,7 +158,7 @@ export default function AnuncioView(props) {
 
                                     <Dropdown.Item>
                                       <a onClick={() => {
-                                        setIsShowEditPrice(true)
+                                        props.setIsShowEditPrice(true)
                                         setAnuncio(prop)}}>
                                         Alterar preço
                                       </a>
@@ -215,13 +213,22 @@ export default function AnuncioView(props) {
                             setIsShowPerguntas={setIsShowPerguntas}
         />}
 
-        {isShowEditPrice && 
+        {props.isShowEditPrice && 
           <AlterarPreco options={options} 
                         {...anuncio} 
                         updateAnuncioPrice={props.updateAnuncioPrice}
-                        isShowEditPrice={isShowEditPrice}
-                        setIsShowEditPrice={setIsShowEditPrice}/>
-        }  
+                        isShowEditPrice={props.isShowEditPrice}
+                        setIsShowEditPrice={props.setIsShowEditPrice}
+                        loadingButtonEditPrice={props.loadingButtonEditPrice}
+                        setLoadingButtonEditPrice={props.setLoadingButtonEditPrice}
+                        disabledButtonSuccess={props.disabledButtonSuccess}
+                        setDisabledButtonSuccess={props.setDisabledButtonSuccess}/>
+        }
+
+        {props.isPriceUpdated && 
+          <Notification modalOpen={props.isPriceUpdated} 
+                        content="Preço do anúncio atualizado com sucesso!"
+                        setIsPriceUpdated={props.setIsPriceUpdated}/>}
 
         {showModal &&
           <CustomModal

@@ -4,7 +4,7 @@ import {
 
 /**
  * 
- * Criado por: @author Felipe Miguel dos Santos
+ * created by: @author Felipe Miguel dos Santos
  * 
  * @param {* Estado corrente} state 
  * @param {* Ações} action 
