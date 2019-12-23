@@ -5,12 +5,13 @@ import ButtonB from "modules/components/CustomButton/CustomButton.jsx";
 import LoadingCarregandoSolicitacao from "modules/components/Loading/LoadingCarregandoSolicitacao"
 import iconSearch from '../../../assets/img/Zoom-icon24px.png'
 import '../../../assets/css/Global/style.css';
-import CustomModal from '../../components/CustomModal/CustomModal'
-import { Button, Dropdown, Icon} from 'semantic-ui-react'
+import EditarAnuncio from './EditarAnuncio'
+import { Button, Dropdown, Icon, Confirm} from 'semantic-ui-react'
 import AlterarPreco from '../Anuncio/AlterarPreco'
 import GerenciarVariacoes from '../Anuncio/GerenciarVariacoes'
 import PerguntasAnuncio from '../Anuncio/PerguntasAnuncio'
-import Notification from '../Anuncio/Notification'
+import Notification from '../../components/NotificationSimple/Notification'
+import MudarStatus from '../Anuncio/MudarStatus'
 
 export default function AnuncioView(props) {
   document.title = "Anúncios"
@@ -134,7 +135,8 @@ export default function AnuncioView(props) {
 
                               {/*Botão de modificar anúncio*/}
                               <div className="col-md-2 text-center-xs">
-                                <Button icon labelPosition='left' style={{ 'fontSize': '12px' }} onClick={() => {
+                                <Button icon labelPosition='left' style={{ 'fontSize': '12px' }} 
+                                  onClick={() => {
                                   setShowModal(true)
                                   setAnuncio(prop)
                                 }}> Modificar
@@ -179,7 +181,13 @@ export default function AnuncioView(props) {
                                         Visualizar perguntas
                                       </a>
                                     </Dropdown.Item>      
-                                    <Dropdown.Item>Pausar</Dropdown.Item>
+                                    <Dropdown.Item>
+                                      <a onClick={() => {
+                                        props.setIsShowConfirmPauseProduct(true)
+                                        setAnuncio(prop)}}>
+                                        Pausar
+                                      </a>
+                                    </Dropdown.Item>
                                     <Dropdown.Item>Finalizar</Dropdown.Item>
                                     <Dropdown.Item>Replicar anúncio</Dropdown.Item>
                                   </Dropdown.Menu>
@@ -219,19 +227,24 @@ export default function AnuncioView(props) {
                         updateAnuncioPrice={props.updateAnuncioPrice}
                         isShowEditPrice={props.isShowEditPrice}
                         setIsShowEditPrice={props.setIsShowEditPrice}
-                        loadingButtonEditPrice={props.loadingButtonEditPrice}
-                        setLoadingButtonEditPrice={props.setLoadingButtonEditPrice}
-                        disabledButtonSuccess={props.disabledButtonSuccess}
-                        setDisabledButtonSuccess={props.setDisabledButtonSuccess}/>
+                        loadingButton={props.loadingButton}
+                        setLoadingButton={props.setLoadingButton}
+                        disabledButton={props.disabledButton}
+                        setDisabledButton={props.setDisabledButton}/>
         }
 
         {props.isPriceUpdated && 
           <Notification modalOpen={props.isPriceUpdated} 
                         content="Preço do anúncio atualizado com sucesso!"
-                        setIsPriceUpdated={props.setIsPriceUpdated}/>}
+                        close={props.setIsPriceUpdated}/>}
+                        
+        {props.isStatusUpdated && 
+          <Notification modalOpen={props.isStatusUpdated} 
+                        content="Status do anúncio atualizado com sucesso!"
+                        close={props.setIsStatusUpdated}/>}                
 
         {showModal &&
-          <CustomModal
+          <EditarAnuncio
             {...anuncio}
             setShowModal={setShowModal}
             showModal={showModal}
@@ -243,6 +256,18 @@ export default function AnuncioView(props) {
             handleChangeSelectedFretePorContaDoComprador={handleChangeSelectedFretePorContaDoComprador}
             freteGratis={props.freteGratis} />}
 
+        {props.isShowConfirmPauseProduct && 
+          <MudarStatus 
+            isShowConfirmPauseProduct={props.isShowConfirmPauseProduct}
+            setIsShowConfirmPauseProduct={props.setIsShowConfirmPauseProduct}
+            loadingButton={props.loadingButton}
+            setLoadingButton={props.setLoadingButton}
+            disabledButton={props.disabledButton}
+            setDisabledButton={props.setDisabledButton}
+            {...anuncio}
+            updateStatus={props.updateStatus}
+          />}    
+
       </div>
     );
   } else {
@@ -253,8 +278,6 @@ export default function AnuncioView(props) {
             <Row>
               <Col md={12}>
                 <Card
-                  title={props.title}
-                  category="Anúncios Ativos"
                   ctTableFullWidth
                   ctTableResponsive
                   content={

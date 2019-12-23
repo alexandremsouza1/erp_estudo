@@ -1,16 +1,16 @@
 import React from 'react'
-import { FormGroup, ControlLabel, Row, Col, FormControl, Modal } from "react-bootstrap";
+import { ControlLabel, Row, Col, FormControl, Modal} from "react-bootstrap";
 import Button from "modules/components/CustomButton/CustomButton.jsx";
 import FormInput from '../../components/FormInput/FormInput'
-import { Form, Radio, Input } from 'semantic-ui-react'
+import { Form, Input } from 'semantic-ui-react'
 
 export default function CustomModal(props) {
 
 
     return (
         <Modal show={props.showModal} onHide={() => props.setShowModal(false)} dialogClassName="width_modal" >
-            <Modal.Header closeButton style={{'backgroundColor': '#467EED', 'color': 'white'}}>
-                <Modal.Title style={{'fontSize': '25px'}}>Modificar Anúncio</Modal.Title>
+            <Modal.Header closeButton style={{ 'backgroundColor': '#467EED', 'color': 'white' }}>
+                <Modal.Title style={{ 'fontSize': '25px' }}>Modificar Anúncio</Modal.Title>
                 <span>#{props.id}</span>
             </Modal.Header>
 
@@ -22,7 +22,9 @@ export default function CustomModal(props) {
 
                 <Row>
                     <Col md={8}>
-                        <FormInput label="Título" value={props.titulo} style={{ "color": "blue" }} disabled={true} />
+
+                        <FormInput label="Título" value={props.titulo} style={{ "color": "blue" }} disabled={false} />
+
                     </Col>
                     <Col md={2}>
                         <label>Preço</label>
@@ -32,7 +34,7 @@ export default function CustomModal(props) {
                             label={{ tag: true, content: 'Reais' }}
                             labelPosition='right'
                             placeholder='R$'
-                            value={props.preco.toLocaleString("pt-BR")} 
+                            value={props.preco.toLocaleString("pt-BR")}
                             style={{ "color": "blue" }}
                         />
                     </Col>
@@ -55,7 +57,7 @@ export default function CustomModal(props) {
 
                     </Col>
                 </Row>
-                  <p></p>  
+                <p></p>
                 <Row>
                     <Col md={12}>
                         <FormInput label="Descrição somente texto"

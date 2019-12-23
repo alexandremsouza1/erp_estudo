@@ -2,19 +2,16 @@ import React, { useState } from 'react'
 import AnuncioView from './AnuncioView';
 import axios from 'axios'
 import { useSelector } from 'react-redux'
-//import { LISTAR_TODOS_ANUNCIOS } from '../../constants/constants'
-//import NotificationSystem from 'react-notification-system'
-import { positions, Provider } from "react-alert";
-import AlertTemplate from "react-alert-template-basic";
-import { useAlert } from "react-alert";
 
 export default function AnuncioController() {
 
     const state = useSelector(store => store.anuncio)
     const [isShowEditPrice, setIsShowEditPrice] = useState(false)
-    const [loadingButtonEditPrice, setLoadingButtonEditPrice] = useState(false)
-    const [disabledButtonSuccess, setDisabledButtonSuccess] = useState(false)
+    const [loadingButton, setLoadingButton] = useState(false)
+    const [disabledButton, setDisabledButton] = useState(false)
     const [isPriceUpdated, setIsPriceUpdated] = useState(false)
+    const [isStatusUpdated, setIsStatusUpdated] = useState(false)
+    const [isShowConfirmPauseProduct, setIsShowConfirmPauseProduct] = useState(false)
 
 
     //const [userNickname, setUserNickname] = useState()
@@ -33,16 +30,26 @@ export default function AnuncioController() {
                 console.log('Price updated: >> http://localhost:5000/anuncio/' + itemId + '/' + price + '\n')
                 setIsShowEditPrice(false)
                 setIsPriceUpdated(true)
-                setLoadingButtonEditPrice(false)
-                setDisabledButtonSuccess(false)
+                setLoadingButton(false)
+                setDisabledButton(false)
             }).catch(error => {
                 console.log("An error occurred while fetching user by id: " + error)
             })
         } else {
-            setLoadingButtonEditPrice(false)
-            setDisabledButtonSuccess(false)
+            setLoadingButton(false)
+            setDisabledButton(false)
             console.log("Preço inválido, informe um valor maior do que zero! Tente novamente.")
         }
+    }
+
+    let updateStatus = async (itemId, status) => {
+        await axios.put('http://localhost:5000/anuncio/update_status', {itemId, status}).then(response => {
+            console.log("Status updated with success!")
+            setLoadingButton(false)
+            setDisabledButton(false)
+            setIsShowConfirmPauseProduct(false)
+            setIsStatusUpdated(true)
+        }).catch(error => {console.error("An error occurred to update status product: "+error)})
     }
 
     return (
@@ -53,12 +60,17 @@ export default function AnuncioController() {
                 updateAnuncioPrice={updateAnuncioPrice}
                 isShowEditPrice={isShowEditPrice}
                 setIsShowEditPrice={setIsShowEditPrice}
-                loadingButtonEditPrice={loadingButtonEditPrice}
-                setLoadingButtonEditPrice={setLoadingButtonEditPrice}
-                disabledButtonSuccess={disabledButtonSuccess}
-                setDisabledButtonSuccess={setDisabledButtonSuccess}
+                loadingButton={loadingButton}
+                setLoadingButton={setLoadingButton}
+                disabledButton={disabledButton}
+                setDisabledButton={setDisabledButton}
                 isPriceUpdated={isPriceUpdated}
-                setIsPriceUpdated={setIsPriceUpdated}/>
+                setIsPriceUpdated={setIsPriceUpdated}
+                isStatusUpdated={isStatusUpdated}
+                setIsStatusUpdated={setIsStatusUpdated}
+                updateStatus={updateStatus}
+                isShowConfirmPauseProduct={isShowConfirmPauseProduct}
+                setIsShowConfirmPauseProduct={setIsShowConfirmPauseProduct}/>
         </>
     );
 }

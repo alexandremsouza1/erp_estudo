@@ -10,6 +10,7 @@ router.get('/', anuncioService.listarTodosAnuncio);
 router.get('/:titulo', anuncioService.listarTodosAnuncio)
 router.post('/post', anuncioService.salvar);
 router.put('/update_price', anuncioService.updatePrice)
+router.put('/update_status', anuncioService.updateStatus)
 
 
 module.exports = router;

@@ -1,13 +1,12 @@
 import React from "react";
-import { Button, Modal, Header, Icon, Select, Input, Dimmer, Segment, Loader } from 'semantic-ui-react'
-import { CARREGANDO_AGUARDE } from '../../constants/constants'
+import { Button, Modal, Header, Icon, Select, Input} from 'semantic-ui-react'
 
 export default class AlterarPreco extends React.Component {
 
     constructor(props) {
         super(props)
         this.state = {
-            price: this.props.preco
+            price: String(this.props.preco).replace(".", ",") //Change the String to Number and then change it "." from ","
         }
     }
 
@@ -18,9 +17,9 @@ export default class AlterarPreco extends React.Component {
     }
 
     handleButtonSucess = () => {
-        this.props.updateAnuncioPrice(this.props.id, Number(this.state.price))
-        this.props.setLoadingButtonEditPrice(true)
-        this.props.setDisabledButtonSuccess(true)
+        this.props.updateAnuncioPrice(this.props.id, Number(this.state.price.replace(",",".")))
+        this.props.setLoadingButton(true)
+        this.props.setDisabledButton(true)
     }
 
     render() {
@@ -51,7 +50,7 @@ export default class AlterarPreco extends React.Component {
                     </Modal.Content>
 
                     <Modal.Actions>
-                        <Button loading={this.props.loadingButtonEditPrice} disabled={this.props.disabledButtonSuccess} color='green' onClick={() => this.handleButtonSucess()}>
+                        <Button loading={this.props.loadingButton} disabled={this.props.disabledButton} color='green' onClick={() => this.handleButtonSucess()}>
                             <Icon name='checkmark' /> Confirmar
                     </Button>
 

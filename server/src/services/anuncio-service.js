@@ -135,9 +135,25 @@ exports.updatePrice = (req, res) => {
                     res.send('Product price updated with success')
                 })
         }).catch(err => {
+            console.error('> An error occurred while process a PUT method in line 139')
             res.send('An error occurred while process a PUT method in line 139',err)
         })
     }).catch(err => {
+        console.error('> An error occurred to get user ID, line 128')
         res.send('An error occurred to get user ID, line 128',err)
+    })
+}
+
+/** Function responsible for to update status 'paused' or 'active' */
+exports.updateStatus = (req, res) =>{
+    usuarioService.buscarUsuarioPorID().then(user =>{
+        axios.put(`https://api.mercadolibre.com/items/${req.body.itemId}?access_token=${user.accessToken}`, 
+                 JSON.stringify({status: req.body.status})).then(response => {
+            res.send('Status updated with success!')
+        }).catch(error => {
+            console.log("An error occurred to updated status Anuncio: "+error)
+        })
+    }).catch(error => {
+        console.log("An error occurred to get user: "+error)
     })
 }

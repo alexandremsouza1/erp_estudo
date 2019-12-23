@@ -1,13 +1,16 @@
 import React from "react";
 import { Button, Header, Icon, Modal } from 'semantic-ui-react'
 
+/** Created by Felipe M. Santos 
+ * Simple Notification
+*/
 export default class Notification extends React.Component {
 
     constructor(props) {
         super(props)
     }
 
-    handleCloseNotification = () => {this.props.setIsPriceUpdated(false)}
+    handleCloseNotification = () => {this.props.close(false)}
 
     render() {
         return (
