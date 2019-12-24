@@ -52,12 +52,28 @@ export default function AnuncioController() {
             state.result.map(product => {
                 if(product.id === itemId){
                     product.preco = price
+                    product.tarifa = calcTarifa(price, product)
+                    product.liquido = calcValorLiquido(price, calcTarifa(price, product), product.custoFreteGratis)
                     temp.push(product)
                 }else{
                     temp.push(product)
                 }
             })
             return temp
+    }
+
+    let calcTarifa = (price, anuncio) => {
+        if(anuncio.tipoAnuncio_id === 'gold_special'){
+            return price * (11/100)
+        }else{
+            return price * (16/100)
+        }
+        
+    }
+
+    let calcValorLiquido = (price, tarifa, custoFixo) => {
+        return price - (tarifa + custoFixo)
+
     }
 
     let updateStatus = async (itemId, status) => {
