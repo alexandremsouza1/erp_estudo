@@ -157,7 +157,7 @@ export default function AnuncioView(props) {
                                   {/* Alterar preço */}
                                   <Dropdown.Menu>
                                     <Dropdown.Header icon='cog' content='Configurações' />
-
+                                    
                                     <Dropdown.Item>
                                       <a onClick={() => {
                                         props.setIsShowEditPrice(true)
@@ -165,7 +165,6 @@ export default function AnuncioView(props) {
                                         Alterar preço
                                       </a>
                                     </Dropdown.Item>
-                                    
                                     <Dropdown.Item>
                                       <a onClick={() => {
                                         setIsShowVariationManager(true) 
@@ -173,7 +172,6 @@ export default function AnuncioView(props) {
                                         Gerenciar variações
                                       </a>
                                     </Dropdown.Item>
-
                                     <Dropdown.Item>
                                       <a onClick={() => {
                                         setIsShowPerguntas(true)
@@ -185,11 +183,12 @@ export default function AnuncioView(props) {
                                       <a onClick={() => {
                                         props.setIsShowConfirmPauseProduct(true)
                                         setAnuncio(prop)}}>
-                                        Pausar
+                                        {prop.status === isActive ? 'Pausar' : 'Reativar'}
                                       </a>
                                     </Dropdown.Item>
                                     <Dropdown.Item>Finalizar</Dropdown.Item>
                                     <Dropdown.Item>Replicar anúncio</Dropdown.Item>
+                                     
                                   </Dropdown.Menu>
                                 </Dropdown>
 
@@ -223,6 +222,7 @@ export default function AnuncioView(props) {
 
         {props.isShowEditPrice && 
           <AlterarPreco options={options} 
+                        propsAnuncio={anuncio}
                         {...anuncio} 
                         updateAnuncioPrice={props.updateAnuncioPrice}
                         isShowEditPrice={props.isShowEditPrice}

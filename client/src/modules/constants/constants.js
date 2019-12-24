@@ -16,4 +16,12 @@ export const OBTER_VENDAS_PENDENTE = 'OBTER_VENDAS_PENDENTE'
 export const OBTER_TOTAL_VENDAS_NO_MES = 'OBTER_TOTAL_VENDAS_NO_MES'
 export const OBTER_SALDO_TOTAL = 'OBTER_SALDO_TOTAL'
 
+//Loading
 export const CARREGANDO_AGUARDE = 'Carregando, aguarde...'
+
+//Domain production
+//export const DOMAIN = ''
+
+export const DOMAIN = 'http://localhost:5000'
+
+

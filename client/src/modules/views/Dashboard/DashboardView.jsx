@@ -3,9 +3,8 @@ import { Grid, Row, Col } from "react-bootstrap";
 
 import { Card } from "modules/components/Card/Card.jsx";
 import StatsCard from "modules/components/StatsCard/StatsCard.jsx";
-import PedidosPendentes from "modules/components/PedidosPendentes/PedidosPendentes";
 import Carregando from '../../components/Loading/LoadingCarregandoSolicitacao'
-import { Button, Icon, Image, Item, Label } from 'semantic-ui-react'
+import { Button, Icon, Item, Label } from 'semantic-ui-react'
 
 export default function DashboardView(props) {
   return (

@@ -6,7 +6,7 @@ export default class AlterarPreco extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            price: String(this.props.preco).replace(".", ",") //Change the String to Number and then change it "." from ","
+            price: String(this.props.propsAnuncio.preco).replace(".", ",") //Change the String to Number and then change it "." from ","
         }
     }
 
@@ -17,7 +17,7 @@ export default class AlterarPreco extends React.Component {
     }
 
     handleButtonSucess = () => {
-        this.props.updateAnuncioPrice(this.props.id, Number(this.state.price.replace(",",".")))
+        this.props.updateAnuncioPrice(this.props.propsAnuncio.id, Number(this.state.price.replace(",",".")))
         this.props.setLoadingButton(true)
         this.props.setDisabledButton(true)
     }
@@ -39,7 +39,7 @@ export default class AlterarPreco extends React.Component {
 
                     <Modal.Content>
                         <p>
-                            {this.props.titulo}
+                            {this.props.propsAnuncio.titulo}
                         </p>
 
                         <Input>

@@ -10,6 +10,7 @@ import {
     CARREGANDO_AGUARDE
 }
     from '../../constants/constants'
+import {DOMAIN} from '../../constants/constants'    
 
 export default function DashboardController() {
 
@@ -27,7 +28,7 @@ export default function DashboardController() {
     }, [])
 
     function get() {
-        axios.get('http://localhost:5000/saldo').then(res => {
+        axios.get(`${DOMAIN}/saldo`).then(res => {
             dispatch({
                 type: OBTER_SALDO_TOTAL,
                 saldoTotal: res.data.saldo_total.toLocaleString('pt-BR'),
@@ -36,7 +37,7 @@ export default function DashboardController() {
             })
         })
 
-        axios.get('http://localhost:5000/vendas/total-vendas').then(resp => {
+        axios.get(`${DOMAIN}/vendas/total-vendas`).then(resp => {
             dispatch({
                 type: OBTER_TOTAL_VENDAS_NO_MES,
                 totalVendas: resp.data.total_vendas,
@@ -45,7 +46,7 @@ export default function DashboardController() {
             })
         })
 
-        axios.get('http://localhost:5000/vendas/vendas-pendentes').then(resp => {
+        axios.get(`${DOMAIN}/vendas/vendas-pendentes`).then(resp => {
             dispatch({
                 type: OBTER_VENDAS_PENDENTE,
                 vendasPendente: resp.data,

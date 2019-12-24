@@ -1,5 +1,6 @@
 import {
-    LISTAR_TODOS_ANUNCIOS
+    LISTAR_TODOS_ANUNCIOS,
+    ATUALIZAR_ANUNCIO
 } from '../../constants/constants'
 
 /**
@@ -15,7 +16,7 @@ import {
 function anuncioReducer(state = {result: [{}], isLoading: true}, action){
     switch(action.type){
         case LISTAR_TODOS_ANUNCIOS:
-            return {...state, result: action.data, isLoading: action.isLoading}
+            return {...state, result: action.data, isLoading: action.isLoading}   
          default:
              return state;   
     }
