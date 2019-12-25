@@ -5,7 +5,7 @@ class AdminNavbarLinks extends Component {
   render() {
     const notification = (
       <div>
-        <i className="fa fa-globe" />
+        <i className="fa fa-comment-o" />
         <b className="caret" />
         <span className="notification">
           1

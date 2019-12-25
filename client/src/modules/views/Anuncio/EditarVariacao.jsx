@@ -1,48 +1,79 @@
 import React from 'react'
-import { Button, Dropdown, Modal, Header, Icon, Select, Input, Table, Grid, Image } from 'semantic-ui-react'
+import { Button, Dropdown, Modal, Header, Icon, Segment } from 'semantic-ui-react'
+import { Row, Col } from 'react-bootstrap'
+import FormInput from '../../components/FormInput/FormInput'
 
-export default function EditarVariacao(props) {
+export default class EditarVariacao extends React.Component {
 
-    return (
-        <Modal open={props.isShowEditarAnuncio} style={{
-            'position': 'relative',
-            'marginLeft': '50%',
-            'marginBottom': '5%',
-            'marginRight': '50%'
-        }}>
-            <Header icon='edit' content={<>Alterar variação - {props.attributeCombinations.value_name}</>}
-                style={{ 'backgroundColor': '#467EED', 'color': 'white' }} />
+    constructor(props){
+        super(props)
+        this.state = {
+            image: ''
+        }        
+    }
 
-            <Modal.Content>
-                <Grid doubling columns={10}>
-                    {props.urlImage.map((url, key) => {
-                        return (
-                            <Grid.Column>
-                                <img src={url} alt='imageVariation' height='100' width='80' />
-                                <Dropdown floating labeled button text='' icon='image outline' className='icon'>
-                                    <Dropdown.Menu>
-                                        <Dropdown.Header content='Selecione uma imagem!'/>
-                                        <Dropdown.Item key={key}>
-                                            {console.log('URL: '+props.imagesAnuncio)}
-                                            <img src={props.imagesAnuncio} alt='imageVariation' height='100' width='80' />
-                                        </Dropdown.Item>
-                                    </Dropdown.Menu>
-                                </Dropdown>
-                            </Grid.Column>
-                        )
-                    })}
-                </Grid>
-            </Modal.Content>
+    handleChangeImage = (img) => {
+        this.setState({image: img})
+    }
 
-            <Modal.Actions>
-                <Button color='green' onClick={() => props.setIsShowEditarAnuncio(false)}>
-                    <Icon name='checkmark' /> Alterar
-                </Button>
-                <Button color='red' onClick={() => props.setIsShowEditarAnuncio(false)}>
-                    <Icon name='remove' /> Fechar
-                </Button>
-            </Modal.Actions>
+    render() {
+        return (
+            <Modal size='fullscreen' open={this.props.isShowEditarAnuncio}>
+                <Header icon='edit' content={<>Alterar variação - {this.props.attributeCombinations.value_name}</>}
+                    style={{ 'backgroundColor': '#467EED', 'color': 'white' }} />
 
-        </Modal>
-    )
+                <Modal.Content sytle={{ "width": "100px" }}>
+                    <Row>
+                        <Col md={5}>
+                            <FormInput label="Variação" placeholder='Variação' value={this.props.attributeCombinations.value_name} style={{ "color": "blue" }} />
+                        </Col>
+                        <Col md={2}>
+                            <FormInput label="SKU" placeholder='SKU' style={{ "color": "blue" }} />
+                        </Col>
+                        <Col md={2}>
+                            <FormInput label="Qtde estoque da variação" value={this.props.variation.available_quantity} placeholder='Estoque da variação' style={{ "color": "blue" }} />
+                        </Col>
+                        <Col md={3}>
+                            <FormInput label='Código universal de produto' placeholder='Código universal de produto' />
+                        </Col>
+                    </Row>
+                    <br></br>
+                    <Segment raised color='grey'>
+                        <Row>
+                            {this.props.urlImage.map((url) => {
+                                return (
+                                    <Col md={1}>
+                                        <img src={url} alt='imageVariation' height='100' width='80'/>
+                                        <Dropdown floating labeled button text='' icon='image outline' className='icon'>
+                                            <Dropdown.Menu>
+                                                <Dropdown.Header content='Selecione uma imagem!' />
+                                                {this.props.urlImage.map((image, key) => {
+                                                    return (
+                                                        <Dropdown.Item key={key}>
+                                                            <img src={image} alt='image' height='100' width='80'/>
+                                                        </Dropdown.Item>
+                                                    )
+                                                })}
+                                            </Dropdown.Menu>
+                                        </Dropdown>
+                                    </Col>
+                                )
+                            })}
+                        </Row>
+                    </Segment>
+                </Modal.Content>
+
+                <Modal.Actions>
+                    <Button color='green' onClick={() => this.props.setIsShowEditarAnuncio(false)}>
+                        <Icon name='checkmark' /> Alterar
+                    </Button>
+                    <Button color='red' onClick={() => this.props.setIsShowEditarAnuncio(false)}>
+                        <Icon name='remove' /> Fechar
+                    </Button>
+                </Modal.Actions>
+
+            </Modal >
+        )
+    }
+
 }

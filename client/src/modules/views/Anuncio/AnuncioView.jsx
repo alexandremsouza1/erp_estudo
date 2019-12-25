@@ -119,18 +119,18 @@ export default function AnuncioView(props) {
                                 <font size="3">
                                   <b>
                                     <a style={{ "color": "blue" }}>
-                                      R$ {prop.preco.toLocaleString("pt-BR")}{' '}
+                                      R$ {prop.preco.toFixed(2).toLocaleString("pt-BR")}{' '}
                                     </a>
                                   </b>
                                 </font>
                                 <font size="3"> x {prop.estoque_total} disponíveis</font>
 
                                 <br />
-                                <span className="text-danger" style={{ "fontSize": "12px" }}>Tarifa R$ {prop.tarifa.toLocaleString("pt-BR")}</span>
+                                <span className="text-danger" style={{ "fontSize": "12px" }}>Tarifa R$ {prop.tarifa.toFixed(2).toLocaleString("pt-BR")}</span>
                                 <br />
-                                <span className="text-danger" style={{ "fontSize": "12px" }}>Custo Fixo R$ {prop.custoFreteGratis.toLocaleString("pt-BR")}</span>
+                                <span className="text-danger" style={{ "fontSize": "12px" }}>Envio R$ {prop.custoFreteGratis.toLocaleString("pt-BR")}</span>
                                 <br />
-                                <span className="badge badge-info" style={{ "fontSize": "12px" }}>Líquido R$ {prop.liquido.toLocaleString("pt-BR")}</span>
+                                <span className="badge badge-info" style={{ "fontSize": "12px" }}>Líquido R$ {prop.liquido.toFixed(2).toLocaleString("pt-BR")}</span>
                               </div>
 
                               {/*Botão de modificar anúncio*/}

@@ -1,7 +1,6 @@
 
 import React from "react";
 import { FormGroup, ControlLabel, FormControl} from "react-bootstrap";
-import { Form, Radio, Input } from 'semantic-ui-react'
 
 export class FormInput extends React.Component {
   render() {

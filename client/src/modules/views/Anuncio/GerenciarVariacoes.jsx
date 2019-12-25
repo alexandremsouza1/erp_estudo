@@ -72,9 +72,9 @@ export default function GerenciarVariacoes(props) {
           </Table.Header>
 
           <Table.Body>
-            {props.json.variations.map(variation => {
+            {props.json.variations.map((variation, key) => {
               return (
-                <Table.Row key={variation.id}>
+                <Table.Row key={key}>
                   {variation.attribute_combinations.map(attr => {
                     if (attr.id === 'SIZE' || attr.id === null) {
                       return (
@@ -92,6 +92,7 @@ export default function GerenciarVariacoes(props) {
                             attributeCombinations={attributeCombinations}
                             isShowEditarAnuncio={isShowEditarAnuncio}
                             setIsShowEditarAnuncio={setIsShowEditarAnuncio}
+                            variation={variation}
 
                           />
                         </>
