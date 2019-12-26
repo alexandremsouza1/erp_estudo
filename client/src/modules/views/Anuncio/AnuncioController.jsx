@@ -3,6 +3,7 @@ import AnuncioView from './AnuncioView';
 import axios from 'axios'
 import { useSelector, useDispatch } from 'react-redux'
 import {DOMAIN, LISTAR_TODOS_ANUNCIOS} from '../../constants/constants'
+import sendNotification from '../../../Helpers/Notification'
 
 export default function AnuncioController() {
 
@@ -11,38 +12,31 @@ export default function AnuncioController() {
     const [isShowEditPrice, setIsShowEditPrice] = useState(false)
     const [loadingButton, setLoadingButton] = useState(false)
     const [disabledButton, setDisabledButton] = useState(false)
-    const [isPriceUpdated, setIsPriceUpdated] = useState(false)
     const [isStatusUpdated, setIsStatusUpdated] = useState(false)
     const [isShowConfirmPauseProduct, setIsShowConfirmPauseProduct] = useState(false)
 
     const dispatch = useDispatch()
 
-    //const [userNickname, setUserNickname] = useState()
-    /*
-    useEffect(() => {
-        axios.get('http://localhost:5000/anuncio').then(resp => {
-            dispatch({ type: LISTAR_TODOS_ANUNCIOS, data: resp.data, isLoading: false})
-        }).catch(err => { console.log(err) })
-    }, [])
-*/
-
     let updateAnuncioPrice = async (itemId, price) => {
         if (price != '' || price != 0) {
             await axios.put(`${DOMAIN}/anuncio/update_price`, { itemId: itemId, price: price }).then(user => {
-                console.log('Price updated: >> http://localhost:5000/anuncio/' + itemId + '/' + price + '\n')
+
                 setIsShowEditPrice(false)
-                setIsPriceUpdated(true)
                 setLoadingButton(false)
                 setDisabledButton(false)
-                console.log(updateStateStorePriceProduct(itemId, price))
+                
                 dispatch({type: LISTAR_TODOS_ANUNCIOS, data: updateStateStorePriceProduct(itemId, price), isLoading: false})
+              
+                sendNotification('success', 'Preço do anúncio atualizado com sucesso!', 5000)
+
             }).catch(error => {
-                console.log("An error occurred while fetching user by id: " + error)
+                sendNotification('error', 'Ocorreu um erro ao buscar o usuário pelo ID (AnuncioController:43)', 5000)
             })
         } else {
+            sendNotification('error', 'Preço inválido, informe um valor maior do que zero! Tente novamente', 5000)
+            setIsShowEditPrice(false)
             setLoadingButton(false)
             setDisabledButton(false)
-            console.log("Preço inválido, informe um valor maior do que zero! Tente novamente.")
         }
     }
 
@@ -62,6 +56,23 @@ export default function AnuncioController() {
             return temp
     }
 
+    let updateStatusAnuncioInStore = (itemId, status) => {
+        let temp = []
+        state.result.map(product => {
+            if(product.id === itemId){
+                if(status === 'active'){
+                    product.status = 'active'
+                }else{
+                    product.status = 'paused'
+                }
+                temp.push(product)
+            }else{
+                temp.push(product)
+            }
+        })
+        return temp
+    }
+
     let calcTarifa = (price, anuncio) => {
         if(anuncio.tipoAnuncio_id === 'gold_special'){
             return price * (11/100)
@@ -73,17 +84,24 @@ export default function AnuncioController() {
 
     let calcValorLiquido = (price, tarifa, custoFixo) => {
         return price - (tarifa + custoFixo)
-
     }
 
     let updateStatus = async (itemId, status) => {
         await axios.put(`${DOMAIN}/anuncio/update_status`, {itemId, status}).then(response => {
-            console.log("Status updated with success!")
+
             setLoadingButton(false)
             setDisabledButton(false)
             setIsShowConfirmPauseProduct(false)
             setIsStatusUpdated(true)
-        }).catch(error => {console.error("An error occurred to update status product: "+error)})
+
+            dispatch({type: LISTAR_TODOS_ANUNCIOS, data: updateStatusAnuncioInStore(itemId, status), isLoading: false})
+
+            sendNotification('success', 'Status atualizado com sucesso!', 5000)
+
+        }).catch(error => {
+            sendNotification('error', 'Ocorreu um erro ao atualizar o status do anúncio (AnuncioController:80)' + error)
+        })
+        
     }
 
     return (
@@ -98,8 +116,6 @@ export default function AnuncioController() {
                 setLoadingButton={setLoadingButton}
                 disabledButton={disabledButton}
                 setDisabledButton={setDisabledButton}
-                isPriceUpdated={isPriceUpdated}
-                setIsPriceUpdated={setIsPriceUpdated}
                 isStatusUpdated={isStatusUpdated}
                 setIsStatusUpdated={setIsStatusUpdated}
                 updateStatus={updateStatus}

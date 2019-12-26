@@ -10,7 +10,6 @@ import { Button, Dropdown, Icon, Confirm} from 'semantic-ui-react'
 import AlterarPreco from '../Anuncio/AlterarPreco'
 import GerenciarVariacoes from '../Anuncio/GerenciarVariacoes'
 import PerguntasAnuncio from '../Anuncio/PerguntasAnuncio'
-import Notification from '../../components/NotificationSimple/Notification'
 import MudarStatus from '../Anuncio/MudarStatus'
 
 export default function AnuncioView(props) {
@@ -126,9 +125,9 @@ export default function AnuncioView(props) {
                                 <font size="3"> x {prop.estoque_total} disponíveis</font>
 
                                 <br />
-                                <span className="text-danger" style={{ "fontSize": "12px" }}>Tarifa R$ {prop.tarifa.toFixed(2).toLocaleString("pt-BR")}</span>
+                                <span className="text-danger" style={{ "fontSize": "12px" }}>Tarifa R$ -{prop.tarifa.toFixed(2).toLocaleString("pt-BR")}</span>
                                 <br />
-                                <span className="text-danger" style={{ "fontSize": "12px" }}>Envio R$ {prop.custoFreteGratis.toLocaleString("pt-BR")}</span>
+                                <span className="text-danger" style={{ "fontSize": "12px" }}>Envio R$ -{prop.custoFreteGratis.toLocaleString("pt-BR")}</span>
                                 <br />
                                 <span className="badge badge-info" style={{ "fontSize": "12px" }}>Líquido R$ {prop.liquido.toFixed(2).toLocaleString("pt-BR")}</span>
                               </div>
@@ -157,7 +156,9 @@ export default function AnuncioView(props) {
                                   {/* Alterar preço */}
                                   <Dropdown.Menu>
                                     <Dropdown.Header icon='cog' content='Configurações' />
-                                    
+                             
+                                  {prop.status === 'active' && 
+                                  <>
                                     <Dropdown.Item>
                                       <a onClick={() => {
                                         props.setIsShowEditPrice(true)
@@ -178,17 +179,30 @@ export default function AnuncioView(props) {
                                         setAnuncio(prop)}}>
                                         Visualizar perguntas
                                       </a>
-                                    </Dropdown.Item>      
+                                    </Dropdown.Item>  
                                     <Dropdown.Item>
-                                      <a onClick={() => {
-                                        props.setIsShowConfirmPauseProduct(true)
-                                        setAnuncio(prop)}}>
-                                        {prop.status === isActive ? 'Pausar' : 'Reativar'}
-                                      </a>
+                                          <a onClick={() => {
+                                            props.setIsShowConfirmPauseProduct(true)
+                                            setAnuncio(prop)}}>
+                                          Pausar
+                                          </a>
                                     </Dropdown.Item>
+
                                     <Dropdown.Item>Finalizar</Dropdown.Item>
                                     <Dropdown.Item>Replicar anúncio</Dropdown.Item>
-                                     
+
+                                   </>
+                                    }
+                                    {prop.status === 'paused' && 
+                                      <Dropdown.Item>
+                                        <a onClick={() => {
+                                          props.setIsShowConfirmPauseProduct(true)
+                                          setAnuncio(prop)}}>
+                                        Reativar
+                                        </a>
+                                      </Dropdown.Item>
+                                    }
+  
                                   </Dropdown.Menu>
                                 </Dropdown>
 
@@ -232,17 +246,7 @@ export default function AnuncioView(props) {
                         disabledButton={props.disabledButton}
                         setDisabledButton={props.setDisabledButton}/>
         }
-
-        {props.isPriceUpdated && 
-          <Notification modalOpen={props.isPriceUpdated} 
-                        content="Preço do anúncio atualizado com sucesso!"
-                        close={props.setIsPriceUpdated}/>}
-                        
-        {props.isStatusUpdated && 
-          <Notification modalOpen={props.isStatusUpdated} 
-                        content="Status do anúncio atualizado com sucesso!"
-                        close={props.setIsStatusUpdated}/>}                
-
+              
         {showModal &&
           <EditarAnuncio
             {...anuncio}

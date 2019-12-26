@@ -4,7 +4,7 @@ import { Button, Modal, Header, Icon} from 'semantic-ui-react'
 export default class MudarStatus extends React.Component {
 
     handleButtonConfirm = () => {
-        this.props.updateStatus(this.props.id, 'paused')
+        this.props.updateStatus(this.props.id, this.props.status === 'paused' ? 'active' : 'paused')
         this.props.setLoadingButton(true)
         this.props.setDisabledButton(true)
     }
@@ -26,7 +26,7 @@ export default class MudarStatus extends React.Component {
 
                     <Modal.Content>
                         <p>
-                            Deseja realmente pausar esse anúncio? 
+                            Deseja realmente {this.props.status === 'paused' ? 'ativar' : 'pausar'} esse anúncio? 
                         </p>
                         <p>
                             {this.props.quantidadeVendido === 0 ?
