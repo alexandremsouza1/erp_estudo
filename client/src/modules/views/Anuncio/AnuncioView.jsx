@@ -6,7 +6,7 @@ import LoadingCarregandoSolicitacao from "modules/components/Loading/LoadingCarr
 import iconSearch from '../../../assets/img/Zoom-icon24px.png'
 import '../../../assets/css/Global/style.css';
 import EditarAnuncio from './EditarAnuncio'
-import { Button, Dropdown, Icon, Confirm} from 'semantic-ui-react'
+import { Button, Dropdown, Icon} from 'semantic-ui-react'
 import AlterarPreco from '../Anuncio/AlterarPreco'
 import GerenciarVariacoes from '../Anuncio/GerenciarVariacoes'
 import PerguntasAnuncio from '../Anuncio/PerguntasAnuncio'
@@ -226,6 +226,7 @@ export default function AnuncioView(props) {
             {...anuncio} 
             isShowVariationManager={isShowVariationManager} 
             setIsShowVariationManager={setIsShowVariationManager}
+            updateAvailableQuantity={props.updateAvailableQuantity}
           />}
 
         {isShowPerguntas &&

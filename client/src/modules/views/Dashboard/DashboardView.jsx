@@ -4,7 +4,7 @@ import { Grid, Row, Col } from "react-bootstrap";
 import { Card } from "modules/components/Card/Card.jsx";
 import StatsCard from "modules/components/StatsCard/StatsCard.jsx";
 import Carregando from '../../components/Loading/LoadingCarregandoSolicitacao'
-import { Button, Icon, Item, Label } from 'semantic-ui-react'
+import { Button, Icon, Item, Label, Segment } from 'semantic-ui-react'
 
 export default function DashboardView(props) {
   return (
@@ -49,7 +49,7 @@ export default function DashboardView(props) {
               title={<>Pedido de vendas pendente {props.totalVendasPendentes}</>}
               category="Aguardando confirmação do pagamento"
               content={
-                <>
+                <Segment raised color='grey'>
                   {props.vendasPendente.map((prop, key) => {
                     if (!props.isLoading) {
                       return (
@@ -84,7 +84,7 @@ export default function DashboardView(props) {
                     }
                   })
                   }
-                </>
+                </Segment>
               }
             />
           </Col>

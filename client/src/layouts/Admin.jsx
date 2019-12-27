@@ -1,11 +1,8 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
-import NotificationSystem from "react-notification-system";
 import NavbarController from "../modules/components/Navbars/NavbarController";
 import Footer from "../modules/components/Footer/Footer";
 import Sidebar from "../modules/components/Sidebar/Sidebar";
-
-import { style } from "variables/Variables.jsx";
 
 import routes from "routes.js";
 
@@ -14,7 +11,6 @@ class Admin extends React.Component {
     super(props);
 
     this.state = {
-      _notificationSystem: null,
       fixedClasses: "dropdown show-dropdown open"
     };
   }
@@ -49,36 +45,10 @@ class Admin extends React.Component {
     return "";
   };
 
-
-  componentDidMount() {
-
-    this.setState({ 
-      _notificationSystem: this.refs.notificationSystem 
-    });
-
-    let _notificationSystem = this.refs.notificationSystem;
-
-
-    _notificationSystem.addNotification({
-      title: <span data-notify="icon" className="pe-7s-gift" />,
-      message: (
-        <div>
-          Bem-vindo <b>Felipe Miguel dos Santos</b>.
-        </div>
-      ),
-      level: "success",
-      position: "tr",
-      autoDismiss: 15
-    });
-  }
-
-
   render() {
     return (
 
       <div className="wrapper">
-
-        <NotificationSystem ref="notificationSystem" style={style} />
 
         <Sidebar {...this.props} routes={routes}/>
 
@@ -93,7 +63,6 @@ class Admin extends React.Component {
 
           <Footer />
         </div>
-        
       </div>
     );
   }

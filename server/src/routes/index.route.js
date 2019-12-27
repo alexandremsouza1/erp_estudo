@@ -3,7 +3,7 @@
 const express = require("express");
 const passport = require("passport");
 const router = express.Router();
-require('../../src/config/passport-mercadolivre')(passport);
+require('../config/passport.mercadolivre')(passport);
 
 router.get('/', (req, res, next) => {
 

@@ -56,6 +56,11 @@ export default function AnuncioController() {
             return temp
     }
 
+    let updateAvailableQuantity = (itemId, id, availableQuantity) => {
+         sendNotification('success', 'Estoque do anúncio atualizado com sucesso!', 5000)   
+         sendNotification('success', 'ItemId: '+itemId+' ID: '+id+' AvailableQuantity: '+availableQuantity)
+    }
+
     let updateStatusAnuncioInStore = (itemId, status) => {
         let temp = []
         state.result.map(product => {
@@ -120,7 +125,8 @@ export default function AnuncioController() {
                 setIsStatusUpdated={setIsStatusUpdated}
                 updateStatus={updateStatus}
                 isShowConfirmPauseProduct={isShowConfirmPauseProduct}
-                setIsShowConfirmPauseProduct={setIsShowConfirmPauseProduct}/>
+                setIsShowConfirmPauseProduct={setIsShowConfirmPauseProduct}
+                updateAvailableQuantity={updateAvailableQuantity}/>
         </>
     );
 }

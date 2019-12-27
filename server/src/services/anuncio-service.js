@@ -148,7 +148,9 @@ exports.updatePrice = (req, res) => {
 exports.updateStatus = (req, res) =>{
     usuarioService.buscarUsuarioPorID().then(user =>{
         axios.put(`https://api.mercadolibre.com/items/${req.body.itemId}?access_token=${user.accessToken}`, 
-                 JSON.stringify({status: req.body.status})).then(response => {
+                    JSON.stringify({
+                     status: req.body.status
+                    })).then(response => {
             res.send('Status updated with success!')
         }).catch(error => {
             console.log("An error occurred to updated status Anuncio: "+error)
@@ -156,4 +158,17 @@ exports.updateStatus = (req, res) =>{
     }).catch(error => {
         console.log("An error occurred to get user: "+error)
     })
+}
+
+exports.updateAvailableQuantity = (req, res) => {
+    usuarioService.buscarUsuarioPorID().then(user => {
+        axios.put(`https://api.mercadolibre.com/items/${req.body.itemId}?access_token=${user.accessToken}`, JSON.stringify({
+            variations: {
+                id: req.body.id,
+                available_quantity: req.body.available_quantity
+            }
+        })).then(response => {
+                res.status(200).send('Estoque atualizado com sucesso!')
+        }).catch(error => res.send(error))
+    }).catch(error => res.send(error))
 }
