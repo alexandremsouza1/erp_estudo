@@ -66,7 +66,7 @@ exports.obterVendasPendentes = async (req, res) => {
                     let json = {
                         id_venda: response.id,
                         status: response.status,
-                        data_venda: response.date_closed,
+                        data_venda: util.formatarDataHora(response.date_closed),
                         sold_quantity: response.order_items[0].quantity,
                         id_variacao: response.order_items[0].item.variation_id,
                         sku: response.order_items[0].item.seller_sku,

@@ -5,7 +5,6 @@ const constants = require('../constants/constants');
 const usuarioService = require('../services/usuario-service')
 const anuncioService = require('../services/anuncio-service')
 const util = require('../helpers/util')
-const reloadJSON = require('self-reload-json');
 const postAnuncio = require('./postAnuncio')
 
 
@@ -285,11 +284,7 @@ async function example() {
 };
 
 
-function monitorarJSON() {
 
-    var config = new reloadJSON(__dirname + "/JSON.json");
-    config.resume().forceUpdate()
-}
 
 function obterEnderecoCliente() {
     return axios.get('https://api.mercadolibre.com/users/202221965').then(resp => {
@@ -340,6 +335,52 @@ const updatePrice = () => {
     })
 }
 
-updatePrice()
+const obterVendas = async () => {
+    usuarioService.buscarUsuarioPorID().then(async user => {
+       await axios.get(`https://api.mercadolibre.com/orders/search?seller=${user.id}&access_token=${user.accessToken}`).then(resp => {
+           let vendasConcluidas = resp.data.results.map(response => {
+               let json = {
+                   id_venda: response.id,
+                   status: response.status,
+                   data_venda: util.formatarDataHora(response.date_closed),
+                   sold_quantity: response.order_items[0].quantity,
+                   id_variacao: response.order_items[0].item.variation_id,
+                   sku: response.order_items[0].item.seller_sku,
+                   id_anuncio: response.order_items[0].item.id,
+                   titulo: response.order_items[0].item.title,
+                   taxa: response.order_items[0].sale_fee,
+                   valor_venda: response.total_amount,
+                   status_pagamento: response.payments[0].status,
+                   nickname_comprador: response.buyer.nickname,
+                   email_comprador: response.buyer.email,
+                   first_name_comprador: response.buyer.first_name,
+                   last_name_comprador: response.buyer.last_name,
+                   tipo_documento_comprador: response.buyer.billing_info.doc_type,
+                   documento_comprador: response.buyer.billing_info.doc_number === undefined ||
+                       response.buyer.billing_info.doc_number === null ? 'Não informado' : response.buyer.billing_info.doc_number,
+                   numero_contato: util.tratarNumeroCelularComDDD(response.buyer.phone.area_code, response.buyer.phone.number) === null ?
+                       'Não informado' : 'https://api.whatsapp.com/send?phone=55' + util.tratarNumeroCelularComDDD(response.buyer.phone.area_code, response.buyer.phone.number) + '',
+                   ddd: response.buyer.phone.area_code,
+                   status_envio: response.shipping.status,
+                   rua: response.shipping.receiver_address.street_name,
+                   cep: response.shipping.receiver_address.zip_code,
+                   latitude: response.shipping.receiver_address.latitude,
+                   longitude: response.shipping.receiver_address.longitude,
+                   estado: response.shipping.receiver_address.state.name,
+                   id_estado: response.shipping.receiver_address.state.id,
+                   cidade: response.shipping.receiver_address.city.name
+
+               }
+               return json
+           })
+           Promise.all(vendasConcluidas).then(vendas => {
+               console.log(vendas)
+           })
+       }).catch(error => console.error(error))
+   }).catch(error => console.error(error))
+}
+
+obterVendas()
+
 
 
