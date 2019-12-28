@@ -112,7 +112,7 @@ export default class VendasView extends React.Component {
                                                             </div>
                                                             <div>
                                                                 <img src={iconWhatsapp}></img>{' '}
-                                                                {venda.numero_contato}
+                                                                <span data-toggle="tooltip" title='Número de contato do Whatsapp!'>{venda.numero_contato}</span>
                                                             </div>
 
                                                         </Card.Meta>
@@ -135,7 +135,7 @@ export default class VendasView extends React.Component {
                                                         <Card.Description>
                                                             <img src={iconPagamentoConfirmado}></img>{' '}
                                                             <span style={{ 'color': '#19b698', 'fontSize': '18px', 'fontFamily': 'Open Sans' }}>R$ {venda.valor_venda.toLocaleString('pt-BR')}</span>
-                                                            <div>
+                                                            <div data-toggle="tooltip" title={venda.status_pagamento === 'approved' ? 'Aprovado': 'Não aprovado'}>
                                                                 <span className={venda.status_pagamento === 'approved' ? this.state.badgeSucess : this.state.badgeDange} style={{ 'color': 'white' }}>{venda.status_pagamento === 'approved' ? 'Aprovado' : 'Estornado'}</span>
                                                             </div>
                                                         </Card.Description>
