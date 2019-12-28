@@ -11,15 +11,13 @@ export default class GerenciarVariacoes extends React.Component {
       isShowEditarAnuncio: false,
       attributeCombinations: {},
       imageVariation: [],
-      imagesAnuncio: [],
-      availableQuantity: 0,
-      variationId: 0
+      imagesAnuncio: []
     }
   }
 
   setProps = (attr) => {
     this.setState({
-      isShowEditarAnuncio: false,
+      isShowEditarAnuncio: true,
       attributeCombinations: attr
     })
   }
@@ -45,9 +43,17 @@ export default class GerenciarVariacoes extends React.Component {
     this.getImageVariation(json, variation)
   }
 
-  handleChangeInputAvailableQuantity = (itemId, id, availableQuantity) => {
+  handleChangeInputAvailableQuantity = (event) =>{
+      this.setState({availableQuantity: event.target.value})
+  }
+
+  updateAvailableQuantity = (itemId, id, availableQuantity) => {
     this.props.updateAvailableQuantity(itemId, id, availableQuantity)
     this.props.setIsShowVariationManager(false)
+  }
+
+  closeModalEditVariacao = (close) => {
+    this.setState({isShowEditarAnuncio: close})
   }
 
   render() {
@@ -97,8 +103,7 @@ export default class GerenciarVariacoes extends React.Component {
                         return (
                           <>
                             <Table.Cell>{attr.value_name}</Table.Cell>
-                            <Table.Cell><Input style={{ 'width': '70px' }} value={variation.available_quantity}></Input>
-                            </Table.Cell>
+                            <Table.Cell>{variation.available_quantity}</Table.Cell>
                             <Table.Cell>{variation.sold_quantity}</Table.Cell>
                             <Table.Cell>
                               <Button icon color='red' style={{ 'fontSize': '12px' }}> <Icon name='remove' /> </Button>
@@ -109,9 +114,8 @@ export default class GerenciarVariacoes extends React.Component {
                               imagesAnuncio={this.state.imagesAnuncio}
                               attributeCombinations={this.state.attributeCombinations}
                               isShowEditarAnuncio={this.state.isShowEditarAnuncio}
-                              setIsShowEditarAnuncio={this.props.setIsShowEditarAnuncio}
                               variation={variation}
-
+                              closeModalEditVariacao={this.closeModalEditVariacao} 
                             />
                           </>
                         )
@@ -127,7 +131,7 @@ export default class GerenciarVariacoes extends React.Component {
         </Modal.Content>
 
         <Modal.Actions>
-          <Button color='green' onClick={() => this.handleChangeInputAvailableQuantity(this.props.id, this.state.variationId, this.state.availableQuantity)}>
+          <Button color='green'>
             <Icon name='checkmark' /> Confirmar
         </Button>
 

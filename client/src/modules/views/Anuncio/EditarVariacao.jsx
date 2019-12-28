@@ -64,10 +64,10 @@ export default class EditarVariacao extends React.Component {
                 </Modal.Content>
 
                 <Modal.Actions>
-                    <Button color='green' onClick={() => this.props.setIsShowEditarAnuncio(false)}>
+                    <Button color='green' onClick={() => this.props.closeModalEditVariacao(false)}>
                         <Icon name='checkmark' /> Alterar
                     </Button>
-                    <Button color='red' onClick={() => this.props.setIsShowEditarAnuncio(false)}>
+                    <Button color='red' onClick={() => this.props.closeModalEditVariacao(false)}>
                         <Icon name='remove' /> Fechar
                     </Button>
                 </Modal.Actions>

@@ -27,7 +27,7 @@ export default function DashboardView(props) {
               statsText="Saldo"
               statsValue={<span>R$ {props.saldoTotal}</span>}
               statsIcon={<i className="fa fa-calendar-o" />}
-              statsIconText={<span>Disponível: R$ {props.saldoDisponivel}</span>}
+              statsIconText={<span>Disponível: <span style={{'color': 'blue'}}>R$ {props.saldoDisponivel}</span></span>}
               isLoading={props.isLoading}
             />
 
@@ -44,50 +44,52 @@ export default function DashboardView(props) {
         </Row>
 
         <Row>
-          <Col md={12}>
-            <Card
-              title={<>Pedido de vendas pendente {props.totalVendasPendentes}</>}
-              category="Aguardando confirmação do pagamento"
-              content={
-                <Segment raised color='grey'>
-                  {props.vendasPendente.map((prop, key) => {
-                    if (!props.isLoading) {
-                      return (
-                        <Item.Group divided key={key}>
-                          <Item key={key}>
-                            <Item.Image src={prop.fotoPrincipal}  style={{'height':'100px', 'width':'80px', 'marginTop': '13px'}}/>
-                            <Item.Content>
-                              <Item.Header style={{ 'marginLeft': '-16px' }}>{prop.titulo}</Item.Header>
-                              <Item.Meta>
-                                <span className='cinema'>{prop.dataPedido}</span>
-                              </Item.Meta>
-                              <Item.Description>
-                                <b>Cliente:</b> {prop.cliente}
-                                <br></br>
-                              </Item.Description>
-                              <Item.Extra>
-                                <Label>{prop.variacao}</Label>
-                                <Label icon='money' content={<>{prop.preco} reais</>} />
-                                <Button icon labelPosition='left' style={{'fontSize': '10px'}} color='orange'>
-                                  <Icon name='file pdf outline'></Icon>
-                                  <a style={{'color': 'white'}} href={prop.boleto} target='_blank' rel="noopener noreferrer"> Boleto</a>
-                                </Button>
-                              </Item.Extra>
-                            </Item.Content>
-                          </Item>
-                        </Item.Group>
-                      )
-                    } else {
-                      return (
-                        <Carregando width={450} key={key}/>
-                      )
+          {props.vendasPendente.length > 0 &&
+            <Col md={12}>
+              <Card
+                title={<>Pedido de vendas pendente {props.totalVendasPendentes}</>}
+                category="Aguardando confirmação do pagamento"
+                content={
+                  <Segment raised color='grey'>
+                    {props.vendasPendente.map((prop, key) => {
+                      if (!props.isLoading) {
+                        return (
+                          <Item.Group divided key={key}>
+                            <Item key={key}>
+                              <Item.Image src={prop.fotoPrincipal} style={{ 'height': '100px', 'width': '80px', 'marginTop': '13px' }} />
+                              <Item.Content>
+                                <Item.Header style={{ 'marginLeft': '-16px' }}>{prop.titulo}</Item.Header>
+                                <Item.Meta>
+                                  <span className='cinema'>{prop.dataPedido}</span>
+                                </Item.Meta>
+                                <Item.Description>
+                                  <b>Cliente:</b> {prop.cliente}
+                                  <br></br>
+                                </Item.Description>
+                                <Item.Extra>
+                                  <Label>{prop.variacao}</Label>
+                                  <Label icon='money' content={<>{prop.preco} reais</>} />
+                                  <Button icon labelPosition='left' style={{ 'fontSize': '10px' }} color='orange'>
+                                    <Icon name='file pdf outline'></Icon>
+                                    <a style={{ 'color': 'white' }} href={prop.boleto} target='_blank' rel="noopener noreferrer"> Boleto</a>
+                                  </Button>
+                                </Item.Extra>
+                              </Item.Content>
+                            </Item>
+                          </Item.Group>
+                        )
+                      } else {
+                        return (
+                          <Carregando width={450} key={key} />
+                        )
+                      }
+                    })
                     }
-                  })
-                  }
-                </Segment>
-              }
-            />
-          </Col>
+                  </Segment>
+                }
+              />
+            </Col>
+          }
         </Row>
       </Grid>
     </div>

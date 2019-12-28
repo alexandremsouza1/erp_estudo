@@ -11,7 +11,7 @@ exports.obterTotalDeVendas = async (req, res) => {
         axios.get(`${constants.API_MERCADO_LIVRE}/orders/search?seller=${resp.id}&order.date_created.from=2019-${data.getMonth() + 1}-01T00:00:00.000-00:00&order.date_created.to=2019-${data.getMonth() + 1}-30T00:00:00.000-00:00&&access_token=${resp.accessToken}`).then(response => {
             res.send({
                 total_vendas: response.data.results.length,
-                nome_mes: converterDataInteiroParaStringMes(data.getMonth() + 1)
+                nome_mes: util.converterDataInteiroParaStringMes(data.getMonth() + 1)
             })
         }).catch(err => {
             res.status(401).send(err)
@@ -48,7 +48,7 @@ exports.obterVendasPendentes = async (req, res) => {
                     }
                     return vendaPendente
                 })
-                
+
             })
 
             Promise.all(dadosVendaPendente).then(response => res.status(200).send(response))
@@ -56,37 +56,54 @@ exports.obterVendasPendentes = async (req, res) => {
         }).catch(err => {
             res.status(401).send(err)
         })
-        
     })
 }
 
-const converterDataInteiroParaStringMes = (mes) => {
-    switch (mes) {
-        case 1:
-            return 'Janeiro'
-        case 2:
-            return 'Fevereiro'
-        case 3:
-            return 'Março'
-        case 4:
-            return 'Abril'
-        case 5:
-            return 'Maio'
-        case 6:
-            return 'Junho'
-        case 7:
-            return 'Julho'
-        case 8:
-            return 'Agosto'
-        case 9:
-            return 'Setembro'
-        case 10:
-            return 'Outubro'
-        case 11:
-            return 'Novembro'
-        case 12:
-            return 'Dezembro'
+    exports.obterVendas = async (req, res) => {
+         usuarioService.buscarUsuarioPorID().then(async user => {
+            await axios.get(`https://api.mercadolibre.com/orders/search/recent?seller=${user.id}&access_token=${user.accessToken}`).then(resp => {
+                let vendasConcluidas = resp.data.results.map(response => {
+                    let json = {
+                        id_venda: response.id,
+                        status: response.status,
+                        data_venda: response.date_closed,
+                        sold_quantity: response.order_items[0].quantity,
+                        id_variacao: response.order_items[0].item.variation_id,
+                        sku: response.order_items[0].item.seller_sku,
+                        id_anuncio: response.order_items[0].item.id,
+                        titulo: response.order_items[0].item.title,
+                        taxa: response.order_items[0].sale_fee,
+                        valor_venda: response.total_amount,
+                        status_pagamento: response.payments[0].status,
+                        nickname_comprador: response.buyer.nickname,
+                        email_comprador: response.buyer.email,
+                        first_name_comprador: response.buyer.first_name,
+                        last_name_comprador: response.buyer.last_name,
+                        tipo_documento_comprador: response.buyer.billing_info.doc_type,
+                        documento_comprador: response.buyer.billing_info.doc_number === undefined ||
+                            response.buyer.billing_info.doc_number === null ? 'Não informado' : response.buyer.billing_info.doc_number,
+                        numero_contato: util.tratarNumeroCelularComDDD(response.buyer.phone.area_code, response.buyer.phone.number) === null ?
+                            'Não informado' : 'https://api.whatsapp.com/send?phone=55' + util.tratarNumeroCelularComDDD(response.buyer.phone.area_code, response.buyer.phone.number) + '',
+                        ddd: response.buyer.phone.area_code,
+                        status_envio: response.shipping.status,
+                        rua: response.shipping.receiver_address.street_name,
+                        cep: response.shipping.receiver_address.zip_code,
+                        latitude: response.shipping.receiver_address.latitude,
+                        longitude: response.shipping.receiver_address.longitude,
+                        estado: response.shipping.receiver_address.state.name,
+                        id_estado: response.shipping.receiver_address.state.id,
+                        cidade: response.shipping.receiver_address.city.name
+    
+                    }
+                    return json
+                })
+                Promise.all(vendasConcluidas).then(vendas => {
+                    res.send(vendas)
+                })
+            }).catch(error => res.send(error))
+        }).catch(error => res.send(error))
     }
-}
 
+
+    
 

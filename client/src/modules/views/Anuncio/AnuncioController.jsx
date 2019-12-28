@@ -3,7 +3,7 @@ import AnuncioView from './AnuncioView';
 import axios from 'axios'
 import { useSelector, useDispatch } from 'react-redux'
 import {DOMAIN, LISTAR_TODOS_ANUNCIOS} from '../../constants/constants'
-import sendNotification from '../../../Helpers/Notification'
+import sendNotification from '../../components/Notification/Notification'
 
 export default function AnuncioController() {
 
