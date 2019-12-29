@@ -2,6 +2,8 @@ import React from "react";
 import { Button, Modal, Header, Icon, Select, Comment, Form, Input } from 'semantic-ui-react'
 import formatarDataHora from '../../../Helpers/util'
 import userAvatar from '../../../assets/img/funcionario-icon.png'
+import Chat from '../../components/Chat/Chat'
+import '../../../assets/css/Global/chat.css'
 
 export default function PerguntasAnuncio(props) {
 
@@ -11,8 +13,13 @@ export default function PerguntasAnuncio(props) {
             'marginLeft': '50%',
             'marginRight': '50%'
         }} closeIcon>
-            <Header icon='conversation' content='Perguntas'
-                style={{ 'backgroundColor': '#467EED', 'color': 'white' }} />
+            <Header style={{'paddingTop': '10px'}} icon='conversation' content={<>Perguntas 
+                    <span style={{'marginLeft': '700px'}} className='box-tools pull-right'>
+                        <button style={{'color': 'white'}} onClick={() => { props.setIsShowPerguntas(false) }} type="button" className="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                    </span></>}
+                style={{ 'backgroundColor': '#467EED', 'color': 'white' }}>
+                    
+                </Header>
             <Modal.Content>
                  <p>{props.question.length === 0 ? 'Nenhuma pergunta para esse anúncio!' : props.titulo}</p>
                  <p style={{ 'fontSize': '12px', 'position': 'absolute', 'marginTop': '-15px' }}>
@@ -20,6 +27,15 @@ export default function PerguntasAnuncio(props) {
                  </p>
 
                 {props.question.map((property, key) => {
+                    return(
+                        <Chat nomeCompletoCliente={property.date_created != null ? formatarDataHora(property.date_created) : property.date_created} 
+                              pergunta={property.text} 
+                              resposta={property.answer != null ? property.answer.text : ''}
+                              nomeEmpresa='Comproline'
+                              displayFooter={'none'}
+                              displayButtonClose={'none'}/>
+                    )
+                    /*
                     return (
                         <Comment.Group key={key}>
                             <Header as='h3' dividing></Header>
@@ -49,6 +65,8 @@ export default function PerguntasAnuncio(props) {
                             </Comment>
                         </Comment.Group>
                     )
+                    */
+
                 })
 
              }

@@ -4,6 +4,7 @@ import axios from 'axios'
 import { useSelector, useDispatch } from 'react-redux'
 import {DOMAIN, LISTAR_TODOS_ANUNCIOS} from '../../constants/constants'
 import sendNotification from '../../components/Notification/Notification'
+import swal from 'sweetalert'
 
 export default function AnuncioController() {
 
@@ -27,13 +28,15 @@ export default function AnuncioController() {
                 
                 dispatch({type: LISTAR_TODOS_ANUNCIOS, data: updateStateStorePriceProduct(itemId, price), isLoading: false})
               
-                sendNotification('success', 'Preço do anúncio atualizado com sucesso!', 5000)
+                //sendNotification('success', 'Preço do anúncio atualizado com sucesso!', 5000)
+                swal("Atualizado!", "Preço do anúncio atualizado com sucesso", "success");
 
             }).catch(error => {
                 sendNotification('error', 'Ocorreu um erro ao buscar o usuário pelo ID (AnuncioController:43)', 5000)
             })
         } else {
-            sendNotification('error', 'Preço inválido, informe um valor maior do que zero! Tente novamente', 5000)
+            //sendNotification('error', 'Preço inválido, informe um valor maior do que zero! Tente novamente', 5000)
+            swal("Atenção", "Preço inválido, informe um valor maior do que zero! Tente novamente", "error");
             setIsShowEditPrice(false)
             setLoadingButton(false)
             setDisabledButton(false)
