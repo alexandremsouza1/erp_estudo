@@ -1,7 +1,6 @@
 import React from "react";
 
 import ReactDOM from "react-dom";
-import './assets/css/Global/adminLTE.css'
 import '../../client/node_modules/bootstrap/dist/css/bootstrap.min.css';
 
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
@@ -19,6 +18,7 @@ import { Provider } from 'react-redux';
 import { store } from './store';
 import CallApiAnuncio from './modules/components/CallApi/CallApiAnuncio'
 import CallApiClient from './modules/components/CallApi/CallApiClient'
+
 
 
 ReactDOM.render(

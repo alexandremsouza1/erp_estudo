@@ -10,6 +10,12 @@ const usuarioService = require('../services/usuario-service')
 
 exports.salvar = async (req, res, next) => { }
 
+exports.obterVisualizacao = (req, res) => {
+    axios.get(`${constants.API_MERCADO_LIVRE}/visits/items?ids=${req.params.itemId}`).then(response => {
+       res.status(200).send({visualizacao: Object.values(response.data).reduce((accumulador, valorCorrente) => { return valorCorrente })})
+    })
+}
+
 /** Function responsible for get for all product */
 exports.listarTodosAnuncio = async (req, res) => {
     usuarioService.buscarUsuarioPorID().then(resp01 => {

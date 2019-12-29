@@ -1,6 +1,7 @@
 import React from 'react'
 import user from '../../../assets/img/user16px.png'
 import { Input, Button } from 'semantic-ui-react'
+//import '../../../assets/css/Global/adminLTE.css'
 
 export default class PerguntasView extends React.Component {
 
