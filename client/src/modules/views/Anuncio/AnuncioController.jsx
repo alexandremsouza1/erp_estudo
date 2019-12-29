@@ -104,7 +104,8 @@ export default function AnuncioController() {
 
             dispatch({type: LISTAR_TODOS_ANUNCIOS, data: updateStatusAnuncioInStore(itemId, status), isLoading: false})
 
-            sendNotification('success', 'Status atualizado com sucesso!', 5000)
+            //sendNotification('success', 'Status atualizado com sucesso!', 5000)
+            swal("Atualizado!", "Status atualizado com sucesso", "success");
 
         }).catch(error => {
             sendNotification('error', 'Ocorreu um erro ao atualizar o status do anúncio (AnuncioController:80)' + error)
