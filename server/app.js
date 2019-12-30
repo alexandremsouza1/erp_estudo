@@ -7,20 +7,20 @@
 const express = require('express');
 const passport = require("passport");
 const bodyParser = require('body-parser');
-const index = require('../server/src/routes/index.route');
-const productRoute = require('../server/src/routes/product.route');
-const anuncioRoute = require('../server/src/routes/anuncio.route');
-const mercadoLivreRoute = require('../server/src/routes/mercadoLivre.route');
+const index = require('./src/routes/index.route');
+const productRoute = require('./src/routes/product.route');
+const anuncioRoute = require('./src/routes/anuncio.route');
+const mercadoLivreRoute = require('./src/routes/mercadoLivre.route');
 const app = express();
 require('./src/config/passport.mercadolivre')(passport); //PASSPORT MERCADOLIVRE - INJETANDO O PASSPORT
 const cors = require('cors');
-const usuarioRoute = require('../server/src/routes/usuario.route');
+const usuarioRoute = require('./src/routes/usuario.route');
 const session = require('express-session');
 const flash = require('connect-flash');
 const saldoRoute = require('./src/routes/saldo.route')
-const vendasRoute = require('../server/src/routes/vendas.router')
-const clienteRoute = require('../server/src/routes/cliente.route')
-//const notificacoesMercadoLivreRoute = require('../server/src/routes/notificacoes.mercadolivre')
+const vendasRoute = require('./src/routes/vendas.router')
+const clienteRoute = require('./src/routes/cliente.route')
+const notificacoesMercadoLivreRoute = require('./src/routes/notificacoes.mercadolivre')
 
 //  Adicionar e configurar middleware
 app.use(session({
@@ -48,10 +48,10 @@ app.use('/usuario', usuarioRoute);
 
 app.use('/saldo', saldoRoute);
 
-app.use('/vendas', vendasRoute)
+app.use('/vendas', vendasRoute);
 
-app.use('/clientes', clienteRoute)
+app.use('/clientes', clienteRoute);
 
-//app.use('/notifications', notificacoesMercadoLivreRoute)
+app.use('/notifications', notificacoesMercadoLivreRoute);
 
 module.exports = app;
