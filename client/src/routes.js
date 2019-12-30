@@ -3,6 +3,7 @@ import DashboardController from "modules/views/Dashboard/DashboardController";
 import ClienteController from "modules/views/Cliente/ClienteController";
 import ControleEstoqueController from 'modules/views/Controle-estoque/ControlleEstoqueController'
 import VendasController from 'modules/views/Vendas/VendasController'
+import PerguntasController from 'modules/views/Perguntas/PerguntasController'
 
 const dashboardRoutes = [{
   path: "/dashboard",
@@ -43,7 +44,7 @@ const dashboardRoutes = [{
   path: "/icons",
   name: "Perguntas",
   icon: "conversation icon",
-  component: VendasController,
+  component: PerguntasController,
   layout: "/admin"
 },
 {

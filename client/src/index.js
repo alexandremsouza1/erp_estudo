@@ -1,6 +1,7 @@
 import React from "react";
 
 import ReactDOM from "react-dom";
+import './assets/css/Global/adminLTE.css'
 import '../../client/node_modules/bootstrap/dist/css/bootstrap.min.css';
 
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
