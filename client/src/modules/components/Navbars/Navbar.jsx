@@ -3,9 +3,9 @@ import { Navbar } from "react-bootstrap";
 
 import NavbarLinks from "../Navbars/NavbarLinks";
 
-export default class Header extends React.Component{
+export default class Header extends React.Component {
 
-   render() { 
+  render() {
     return (
       <Navbar fluid>
 
@@ -14,11 +14,11 @@ export default class Header extends React.Component{
           <Navbar.Brand>
             {this.props.brandText}
           </Navbar.Brand>
-          
+
         </Navbar.Header>
 
         <Navbar.Collapse>
-          <NavbarLinks nomeUsuario= {this.props.nomeUsuario}/>
+          <NavbarLinks nomeUsuario={this.props.nomeUsuario} />
         </Navbar.Collapse>
 
       </Navbar>
