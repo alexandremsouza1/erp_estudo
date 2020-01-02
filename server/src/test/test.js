@@ -167,11 +167,17 @@ const listarTodosAnuncio = async (req, res) => {
 
 const obterTotalDeVendas = async () => {
     var data = new Date();
-    buscarUsuarioPorID().then(resp => {
-        axios.get(`${constants.API_MERCADO_LIVRE}/orders/search?seller=${resp.id}&order.status=paid&order.date_created.from=2019-${data.getMonth() + 1}-01T00:00:00.000-00:00&order.date_created.to=2019-${data.getMonth() + 1}-30T00:00:00.000-00:00&&access_token=${resp.accessToken}`).then(resp => {
-            console.log({ total: resp.data.results.length + 1 })
+    usuarioService.buscarUsuarioPorID().then(resp => {
+        axios.get(`${constants.API_MERCADO_LIVRE}/orders/search?seller=${resp.id}&order.date_created.from=${data.getFullYear()}-${data.getMonth() + 1}-01T00:00:00.000-00:00&order.date_created.to=${data.getFullYear()}-${data.getMonth() + 1}-30T00:00:00.000-00:00&&access_token=${resp.accessToken}`).then(response => {
+           console.log('\n')
+           console.log({
+                total_vendas: response.data.results.length,
+                nome_mes: util.converterDataInteiroParaStringMes(data.getMonth() + 1),
+                ano: data.getFullYear()
+           })
+           console.log('\n')
         }).catch(err => {
-            console.log({ mensagem: "Houve um erro ao buscar todas as vendas realizadas: " + err })
+            console.log(err)
         })
     })
 }
@@ -410,7 +416,7 @@ let obterDadosPagamento = (payments) => {
     })
 }
 
-obterVendas()
+obterTotalDeVendas()
 
 
 

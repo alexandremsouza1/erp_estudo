@@ -37,7 +37,7 @@ export default function DashboardController() {
             })
         })
 
-        axios.get(`${DOMAIN}/vendas/total-vendas`).then(resp => {
+        axios.get(`${DOMAIN}/vendas/getTotalDeVendas`).then(resp => {
             dispatch({
                 type: OBTER_TOTAL_VENDAS_NO_MES,
                 totalVendas: resp.data.total_vendas,
@@ -46,7 +46,7 @@ export default function DashboardController() {
             })
         })
 
-        axios.get(`${DOMAIN}/vendas/vendas-pendentes`).then(resp => {
+        axios.get(`${DOMAIN}/vendas/getVendasPendentes`).then(resp => {
             dispatch({
                 type: OBTER_VENDAS_PENDENTE,
                 vendasPendente: resp.data,
