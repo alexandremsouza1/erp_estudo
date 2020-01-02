@@ -89,7 +89,7 @@ export default class VendasView extends React.Component {
                 </div>
                 {this.props.vendas.map((venda, key) => {
                         if (venda.dados_entrega.status_envio === this.state.status_envio) {
-                            this.props.getDadosEnvio(venda.dados_entrega.id)
+                            //this.props.getDadosEnvio(venda)
                             return (
                                 <Panel key={key} title={<>Pedido <span className="badge badge-success" style={{ 'color': 'white' }}>
                                     {this.getTraduzirStatusEnvio(this.state.status_envio)}</span> - Nº #{venda.id_venda} - {venda.itens_pedido.titulo_anuncio}</>}
