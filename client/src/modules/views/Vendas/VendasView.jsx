@@ -7,7 +7,7 @@ import imgParaPreparar from '../../../assets/img/delivery-box-icon128px.png'
 import imgProntoParaEnviar from '../../../assets/img/delivery-truck-icon128px.png'
 import imgEmTrasito from '../../../assets/img/truck-icon128px.png'
 import imgConcluido from '../../../assets/img/Accept-icon128px.png'
-import { Card, Divider } from 'semantic-ui-react'
+import { Card, Divider, Dimmer, Loader, Segment } from 'semantic-ui-react'
 import iconWhatsapp from '../../../assets/img/WhatsApp-icon.png'
 import iconUser from '../../../assets/img/user16px.png'
 import iconEnvio from '../../../assets/img/delivery-truck-icon16px.png'
@@ -27,7 +27,7 @@ export default class VendasView extends React.Component {
     }
 
     getStatusEmTransito = () => {
-        console.log({ status_envio: 'shipped' })
+        //console.log({ status_envio: 'shipped' })
         this.setState({ status_envio: 'shipped' })
     }
 
@@ -88,9 +88,12 @@ export default class VendasView extends React.Component {
                     </div>
                 </div>
                 {this.props.vendas.map((venda, key) => {
-                        if (venda.dados_entrega.status_envio === this.state.status_envio) {
-                            //this.props.getDadosEnvio(venda)
-                            return (
+                    
+                    if (venda.dados_entrega.status === this.state.status_envio) {
+
+                        console.log(venda.dados_entrega.status)
+                        return (
+                            
                                 <Panel key={key} title={<>Pedido <span className="badge badge-success" style={{ 'color': 'white' }}>
                                     {this.getTraduzirStatusEnvio(this.state.status_envio)}</span> - Nº #{venda.id_venda} - {venda.itens_pedido.titulo_anuncio}</>}
                                     content={
@@ -152,7 +155,7 @@ export default class VendasView extends React.Component {
                                                                 Envio
                                                         </Card.Header>
                                                             <Card.Meta>
-                                                                Código de Rastreio: {this.props.shipping.cod_rastreamento}
+                                                                Código de Rastreio:
                                                         </Card.Meta>
                                                             <Divider />
                                                             <Card.Description>
@@ -202,8 +205,8 @@ export default class VendasView extends React.Component {
                                         </>
                                     }>
                                 </Panel>
-                            )
-                        }
+                        )
+                    }
                 })}
             </div>
         )

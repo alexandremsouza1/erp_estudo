@@ -62,51 +62,78 @@ exports.obterVendasPendentes = async (req, res) => {
 exports.obterVendasEmTransito = async (req, res) => {
     let jsonVenda = []
     usuarioService.buscarUsuarioPorID().then(async user => {
-        await axios.get(`https://api.mercadolibre.com/orders/search/recent?seller=${user.id}&access_token=${user.accessToken}`).then(resp => {
-            resp.data.results.map(response => {
-                if (response.shipping.status === 'shipped') {
-                    let json = {
-                        id_venda: response.id,
-                        status: response.status,
-                        data_venda: util.formatarDataHora(response.date_closed),
-                        itens_pedido: {
-                            quantidade_vendido: response.order_items[0].quantity,
-                            id_variacao: response.order_items[0].item.variation_id,
-                            sku: response.order_items[0].item.seller_sku,
-                            id_anuncio: response.order_items[0].item.id,
-                            condicao: response.order_items[0].item.condition,
-                            garantia: response.order_items[0].item.warranty,
-                            id_categoria: response.order_items[0].item.category_id,
-                            titulo_anuncio: response.order_items[0].item.title,
-                            taxa_venda: response.order_items[0].sale_fee,
-                            variation_attributes: response.order_items[0].item.variation_attributes,
-                        },
-                        valor_venda: response.total_amount,
-                        comprador: {
-                            whatsapp: util.tratarNumeroCelularComDDD(response.buyer.phone.area_code, response.buyer.phone.number) === null ?
-                                'Não informado' : 'https://api.whatsapp.com/send?phone=55' + util.tratarNumeroCelularComDDD(response.buyer.phone.area_code, response.buyer.phone.number) + '',
-                            numero_contato: util.tratarNumeroCelularComDDD(response.buyer.phone.area_code, response.buyer.phone.number) === null ?
-                                'Não informado' : util.tratarNumeroCelularComDDD(response.buyer.phone.area_code, response.buyer.phone.number),
-                            ddd: response.buyer.phone.area_code,
-                            nickname_comprador: response.buyer.nickname,
-                            email_comprador: response.buyer.email,
-                            first_name_comprador: response.buyer.first_name,
-                            last_name_comprador: response.buyer.last_name,
-                            tipo_documento_comprador: response.buyer.billing_info.doc_type,
-                            documento_comprador: response.buyer.billing_info.doc_number === undefined ||
-                                response.buyer.billing_info.doc_number === null ? 'Não informado' : response.buyer.billing_info.doc_number
-                        },
-                        dados_pagamento: obterDadosPagamento(response.payments),
-                        dados_entrega: {
-                            id: response.shipping.id
+        await axios.get(`https://api.mercadolibre.com/orders/search/recent?seller=${user.id}&access_token=${user.accessToken}`).then(async resp => {
+            let vendasEmTransito = await resp.data.results.map(async response => {
+                if (response.shipping.id != null) {
+                     return await axios.get(`https://api.mercadolibre.com/shipments/${response.shipping.id}?access_token=${user.accessToken}`).then(ship => {
+                        if (response.shipping.status === 'shipped') {
+                            let json = {
+                                id_venda: response.id,
+                                status: response.status,
+                                data_venda: util.formatarDataHora(response.date_closed),
+                                itens_pedido: {
+                                    quantidade_vendido: response.order_items[0].quantity,
+                                    id_variacao: response.order_items[0].item.variation_id,
+                                    sku: response.order_items[0].item.seller_sku,
+                                    id_anuncio: response.order_items[0].item.id,
+                                    condicao: response.order_items[0].item.condition,
+                                    garantia: response.order_items[0].item.warranty,
+                                    id_categoria: response.order_items[0].item.category_id,
+                                    titulo_anuncio: response.order_items[0].item.title,
+                                    taxa_venda: response.order_items[0].sale_fee,
+                                    variation_attributes: response.order_items[0].item.variation_attributes,
+                                },
+                                valor_venda: response.total_amount,
+                                comprador: {
+                                    whatsapp: util.tratarNumeroCelularComDDD(response.buyer.phone.area_code, response.buyer.phone.number) === null ?
+                                        'Não informado' : 'https://api.whatsapp.com/send?phone=55' + util.tratarNumeroCelularComDDD(response.buyer.phone.area_code, response.buyer.phone.number) + '',
+                                    numero_contato: util.tratarNumeroCelularComDDD(response.buyer.phone.area_code, response.buyer.phone.number) === null ?
+                                        'Não informado' : util.tratarNumeroCelularComDDD(response.buyer.phone.area_code, response.buyer.phone.number),
+                                    ddd: response.buyer.phone.area_code,
+                                    nickname_comprador: response.buyer.nickname,
+                                    email_comprador: response.buyer.email,
+                                    first_name_comprador: response.buyer.first_name,
+                                    last_name_comprador: response.buyer.last_name,
+                                    tipo_documento_comprador: response.buyer.billing_info.doc_type,
+                                    documento_comprador: response.buyer.billing_info.doc_number === undefined ||
+                                        response.buyer.billing_info.doc_number === null ? 'Não informado' : response.buyer.billing_info.doc_number
+                                },
+                                dados_pagamento: obterDadosPagamento(response.payments),
+                                dados_entrega: {
+                                    status: ship.data.status,
+                                    id: ship.data.id,
+                                    cod_rastreamento: ship.data.tracking_number,
+                                    metodo_envio: ship.data.tracking_method,
+                                    endereco_entrega: {
+                                        rua: ship.data.receiver_address.street_name,
+                                        numero: ship.data.receiver_address.street_number,
+                                        cep: ship.data.receiver_address.zip_code,
+                                        cidade: ship.data.receiver_address.city,
+                                        estado: ship.data.receiver_address.state,
+                                        bairro: ship.data.receiver_address.neighborhood,
+                                        latitude: ship.data.receiver_address.latitude,
+                                        longitude: ship.data.receiver_address.longitude,
+                                        nomePessoaEntrega: ship.data.receiver_address.receiver_name,
+                                        telefonePessoaEntrega: ship.data.receiver_address.receiver_phone
+                                    }
+                                }
+                            }
+                           return json
                         }
-                    }
-                    jsonVenda.push(json)
+                    })
                 }
             })
-            Promise.all(jsonVenda).then(vendas => {
-                res.status(200).send(vendas)
+
+            Promise.all(vendasEmTransito).then(vendas => {
+                let newVendas = []
+                vendas.map(venda => {
+                    if(venda != null){
+                        newVendas.push(venda)
+                    }
+                })
+                res.status(200).send(newVendas)
             })
+
         }).catch(error => { res.send(error) })
     })
 }
@@ -115,66 +142,72 @@ exports.obterVendasConcluidas = async (req, res) => {
     usuarioService.buscarUsuarioPorID().then(async user => {
         await axios.get(`https://api.mercadolibre.com/orders/search?seller=${user.id}&access_token=${user.accessToken}`).then(resp => {
             let vendasConcluidas = resp.data.results.map(async response => {
-                return await axios.get(`https://api.mercadolibre.com/shipments/${response.shipping.id}?access_token=${user.accessToken}`).then(ship => {
-                    let json = {
-                        id_venda: response.id,
-                        status: response.status,
-                        data_venda: util.formatarDataHora(response.date_closed),
-                        itens_pedido: {
-                            quantidade_vendido: response.order_items[0].quantity,
-                            id_variacao: response.order_items[0].item.variation_id,
-                            sku: response.order_items[0].item.seller_sku,
-                            id_anuncio: response.order_items[0].item.id,
-                            condicao: response.order_items[0].item.condition,
-                            garantia: response.order_items[0].item.warranty,
-                            id_categoria: response.order_items[0].item.category_id,
-                            titulo_anuncio: response.order_items[0].item.title,
-                            taxa_venda: response.order_items[0].sale_fee,
-                            variation_attributes: response.order_items[0].item.variation_attributes,
-                        },
-                        valor_venda: response.total_amount,
-                        comprador: {
-                            whatsapp: util.tratarNumeroCelularComDDD(response.buyer.phone.area_code, response.buyer.phone.number) === null ?
-                                'Não informado' : 'https://api.whatsapp.com/send?phone=55' + util.tratarNumeroCelularComDDD(response.buyer.phone.area_code, response.buyer.phone.number) + '',
-                            numero_contato: util.tratarNumeroCelularComDDD(response.buyer.phone.area_code, response.buyer.phone.number) === null ?
-                                'Não informado' : util.tratarNumeroCelularComDDD(response.buyer.phone.area_code, response.buyer.phone.number),
-                            ddd: response.buyer.phone.area_code,
-                            nickname_comprador: response.buyer.nickname,
-                            email_comprador: response.buyer.email,
-                            first_name_comprador: response.buyer.first_name,
-                            last_name_comprador: response.buyer.last_name,
-                            tipo_documento_comprador: response.buyer.billing_info.doc_type,
-                            documento_comprador: response.buyer.billing_info.doc_number === undefined ||
-                                response.buyer.billing_info.doc_number === null ? 'Não informado' : response.buyer.billing_info.doc_number
-                        },
-                        dados_pagamento: obterDadosPagamento(response.payments),
-                        dados_entrega: {
-                            status: ship.data.status,
-                            id: ship.data.id,
-                            cod_rastreamento: ship.data.tracking_number,
-                            metodo_envio: ship.data.tracking_method,
-                            endereco_entrega: {
-                                rua: ship.data.receiver_address.street_name,
-                                numero: ship.data.receiver_address.street_number,
-                                cep: ship.data.receiver_address.zip_code,
-                                cidade: ship.data.receiver_address.city,
-                                estado: ship.data.receiver_address.state,
-                                bairro: ship.data.receiver_address.neighborhood,
-                                latitude: ship.data.receiver_address.latitude,
-                                longitude: ship.data.receiver_address.longitude,
-                                nomePessoaEntrega: ship.data.receiver_address.receiver_name,
-                                telefonePessoaEntrega: ship.data.receiver_address.receiver_phone
+                if (response.shipping.id != null) {
+                    return await axios.get(`https://api.mercadolibre.com/shipments/${response.shipping.id}?access_token=${user.accessToken}`).then(ship => {
+                        let json = {
+                            id_venda: response.id,
+                            status: response.status,
+                            data_venda: util.formatarDataHora(response.date_closed),
+                            itens_pedido: {
+                                quantidade_vendido: response.order_items[0].quantity,
+                                id_variacao: response.order_items[0].item.variation_id,
+                                sku: response.order_items[0].item.seller_sku,
+                                id_anuncio: response.order_items[0].item.id,
+                                condicao: response.order_items[0].item.condition,
+                                garantia: response.order_items[0].item.warranty,
+                                id_categoria: response.order_items[0].item.category_id,
+                                titulo_anuncio: response.order_items[0].item.title,
+                                taxa_venda: response.order_items[0].sale_fee,
+                                variation_attributes: response.order_items[0].item.variation_attributes,
+                            },
+                            valor_venda: response.total_amount,
+                            comprador: {
+                                whatsapp: util.tratarNumeroCelularComDDD(response.buyer.phone.area_code, response.buyer.phone.number) === null ?
+                                    'Não informado' : 'https://api.whatsapp.com/send?phone=55' + util.tratarNumeroCelularComDDD(response.buyer.phone.area_code, response.buyer.phone.number) + '',
+                                numero_contato: util.tratarNumeroCelularComDDD(response.buyer.phone.area_code, response.buyer.phone.number) === null ?
+                                    'Não informado' : util.tratarNumeroCelularComDDD(response.buyer.phone.area_code, response.buyer.phone.number),
+                                ddd: response.buyer.phone.area_code,
+                                nickname_comprador: response.buyer.nickname,
+                                email_comprador: response.buyer.email,
+                                first_name_comprador: response.buyer.first_name,
+                                last_name_comprador: response.buyer.last_name,
+                                tipo_documento_comprador: response.buyer.billing_info.doc_type,
+                                documento_comprador: response.buyer.billing_info.doc_number === undefined ||
+                                    response.buyer.billing_info.doc_number === null ? 'Não informado' : response.buyer.billing_info.doc_number
+                            },
+                            dados_pagamento: obterDadosPagamento(response.payments),
+                            dados_entrega: {
+                                status: ship.data.status,
+                                id: ship.data.id,
+                                cod_rastreamento: ship.data.tracking_number,
+                                metodo_envio: ship.data.tracking_method,
+                                endereco_entrega: {
+                                    rua: ship.data.receiver_address.street_name,
+                                    numero: ship.data.receiver_address.street_number,
+                                    cep: ship.data.receiver_address.zip_code,
+                                    cidade: ship.data.receiver_address.city,
+                                    estado: ship.data.receiver_address.state,
+                                    bairro: ship.data.receiver_address.neighborhood,
+                                    latitude: ship.data.receiver_address.latitude,
+                                    longitude: ship.data.receiver_address.longitude,
+                                    nomePessoaEntrega: ship.data.receiver_address.receiver_name,
+                                    telefonePessoaEntrega: ship.data.receiver_address.receiver_phone
+                                }
                             }
                         }
-                    }
-                    return json
-                })
-
-
+                        return json
+                    })
+                }
             })
 
             Promise.all(vendasConcluidas).then(vendas => {
-                res.send(vendas)
+                let newVendas = []
+                vendas.map(venda => {
+                    if(venda != null){
+                        newVendas.push(venda)
+                    }
+                })
+                res.status(200).send(newVendas)
             })
 
         }).catch(error => res.send(error))
@@ -198,31 +231,7 @@ let obterDadosPagamento = (payments) => {
     })
 }
 
-exports.obterDadosEnvio = (req, res) => {
-    usuarioService.buscarUsuarioPorID().then(async user => {
-        await axios.get(`https://api.mercadolibre.com/shipments/${req.params.shippingId}?access_token=${user.accessToken}`).then(resp => {
-            let json = {
-                status: ship.data.status,
-                id: ship.data.id,
-                cod_rastreamento: ship.data.tracking_number,
-                metodo_envio: ship.data.tracking_method,
-                endereco_entrega: {
-                    rua: ship.data.receiver_address.street_name,
-                    numero: ship.data.receiver_address.street_number,
-                    cep: ship.data.receiver_address.zip_code,
-                    cidade: ship.data.receiver_address.city,
-                    estado: resshipp.dashipta.receiver_address.state,
-                    bairro: ship.data.receiver_address.neighborhood,
-                    latitude: ship.data.receiver_address.latitude,
-                    longitude: ship.data.receiver_address.longitude,
-                    nomePessoaEntrega: ship.data.receiver_address.receiver_name,
-                    telefonePessoaEntrega: ship.data.receiver_address.receiver_phone
-                }
-            }
-            res.send(json)
-        }).catch(error => res.send(error))
-    }).catch(error => res.send(error))
-}
+
 
 
 
