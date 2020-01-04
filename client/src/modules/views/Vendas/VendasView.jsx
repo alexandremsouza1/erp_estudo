@@ -110,6 +110,9 @@ export default class VendasView extends React.Component {
                                                                 <div>
                                                                     {venda.comprador.nickname_comprador}
                                                                 </div>
+                                                                <div>
+                                                                    <a href='#'>Enviar mensagem</a>
+                                                                </div>
                                                                 <Divider />
                                                                 <div>
                                                                     CPF: {venda.comprador.documento_comprador}
@@ -155,7 +158,7 @@ export default class VendasView extends React.Component {
                                                                 Envio
                                                         </Card.Header>
                                                             <Card.Meta>
-                                                                Código de Rastreio:
+                                    Código de Rastreio: <a href='https://rastreamentocorreios.info/consulta/PX858327215BR'>{venda.dados_entrega.cod_rastreamento}</a>
                                                         </Card.Meta>
                                                             <Divider />
                                                             <Card.Description>

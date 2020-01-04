@@ -66,7 +66,7 @@ exports.obterVendasEmTransito = async (req, res) => {
             let vendasEmTransito = await resp.data.results.map(async response => {
                 if (response.shipping.id != null) {
                      return await axios.get(`https://api.mercadolibre.com/shipments/${response.shipping.id}?access_token=${user.accessToken}`).then(ship => {
-                        if (response.shipping.status === 'shipped') {
+                        if (ship.data.status === 'shipped') {
                             let json = {
                                 id_venda: response.id,
                                 status: response.status,
