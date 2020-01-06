@@ -13,6 +13,7 @@ import iconUser from '../../../assets/img/user16px.png'
 import iconEnvio from '../../../assets/img/delivery-truck-icon16px.png'
 import iconMoney from '../../../assets/img/money16px.png'
 import iconPagamentoConfirmado from '../../../assets/img/success-icon16px.png'
+import { Button, Icon } from 'semantic-ui-react'
 
 
 export default class VendasView extends React.Component {
@@ -88,126 +89,135 @@ export default class VendasView extends React.Component {
                     </div>
                 </div>
                 {this.props.vendas.map((venda, key) => {
-                    
+
                     if (venda.dados_entrega.status === this.state.status_envio) {
-
-                        console.log(venda.dados_entrega.status)
                         return (
-                            
-                                <Panel key={key} title={<>Pedido <span className="badge badge-success" style={{ 'color': 'white' }}>
-                                    {this.getTraduzirStatusEnvio(this.state.status_envio)}</span> - Nº #{venda.id_venda} - {venda.itens_pedido.titulo_anuncio}</>}
-                                    content={
-                                        <>
-                                            <Row>
-                                                <Col md={4}>
-                                                    <Card fluid color='blue'>
-                                                        <Card.Content>
-                                                            <Card.Header style={{ 'marginLeft': '-15px' }}>
-                                                                <img src={iconUser}></img>{' '}
-                                                                {venda.comprador.first_name_comprador} {venda.comprador.last_name_comprador}
-                                                            </Card.Header>
-                                                            <Card.Meta>
-                                                                <div>
-                                                                    {venda.comprador.nickname_comprador}
-                                                                </div>
-                                                                <div>
-                                                                    <a href='#'>Enviar mensagem</a>
-                                                                </div>
-                                                                <Divider />
-                                                                <div>
-                                                                    CPF: {venda.comprador.documento_comprador}
-                                                                </div>
-                                                                <div>
-                                                                    <img src={iconWhatsapp}></img>{' '}
-                                                                    <a href={venda.comprador.whatsapp} target='_blank' data-toggle="tooltip" title='Número de contato do Whatsapp web!'>{venda.comprador.numero_contato}</a>
-                                                                </div>
-
-                                                            </Card.Meta>
-                                                            <Card.Description>
-
-                                                            </Card.Description>
-                                                        </Card.Content>
-                                                    </Card>
-                                                </Col>
-
-                                                <Col md={4}>
-                                                    <Card fluid color='blue'>
-                                                        <Card.Content>
-                                                            <Card.Header style={{ 'marginLeft': '-15px' }}>
-                                                                <img src={iconMoney}></img>{' '}
-                                                                Recebimento
+                            <Panel key={key} title={<>Pedido <span className="badge badge-success" style={{ 'color': 'white' }}>
+                                {this.getTraduzirStatusEnvio(this.state.status_envio)}</span> - Nº #{venda.id_venda} - {venda.itens_pedido.titulo_anuncio}</>}
+                                content={
+                                    <>
+                                        <Row>
+                                            <Col md={4}>
+                                                <Card fluid color='blue'>
+                                                    <Card.Content>
+                                                        <Card.Header style={{ 'marginLeft': '-15px' }}>
+                                                            <img src={iconUser}></img>{' '}
+                                                            {venda.comprador.first_name_comprador} {venda.comprador.last_name_comprador}
                                                         </Card.Header>
-                                                            <Card.Meta>{venda.data_venda}</Card.Meta>
+                                                        <Card.Meta>
+                                                            <div>
+                                                                {venda.comprador.nickname_comprador}
+                                                            </div>
+                                                            <div>
+                                                                <a href='#'>Enviar mensagem</a>
+                                                            </div>
                                                             <Divider />
-                                                            <Card.Description>
+                                                            <div>
+                                                                CPF: {venda.comprador.documento_comprador}
+                                                            </div>
+                                                            <div>
+                                                                <img src={iconWhatsapp}></img>{' '}
+                                                                <a href={venda.comprador.whatsapp} target='_blank' data-toggle="tooltip" title='Número de contato do Whatsapp web!'>{venda.comprador.numero_contato}</a>
+                                                            </div>
+
+                                                        </Card.Meta>
+                                                        <Card.Description>
+
+                                                        </Card.Description>
+                                                    </Card.Content>
+                                                </Card>
+                                            </Col>
+
+                                            <Col md={4}>
+                                                <Card fluid color='blue'>
+                                                    <Card.Content>
+                                                        <Card.Header style={{ 'marginLeft': '-15px' }}>
+                                                            <img src={iconMoney}></img>{' '}
+                                                            Pagamento
+                                                        </Card.Header>
+                                                        <Card.Meta>{venda.data_venda}</Card.Meta>
+                                                        <Divider />
+                                                        <Card.Description style={{ 'height': '65px' }}>
+                                                            <p>
                                                                 <img src={iconPagamentoConfirmado}></img>{' '}
                                                                 <span style={{ 'color': '#19b698', 'fontSize': '18px', 'fontFamily': 'Open Sans' }}>R$ {venda.valor_venda.toFixed(2).toLocaleString('pt-BR')}</span>
-                                                                <div data-toggle="tooltip" title={venda.status_pagamento === 'approved' ? 'Aprovado' : 'Não aprovado'}>
-                                                                    <span className={venda.dados_pagamento[0].status_pagamento === 'approved' ? this.state.badgeSucess : this.state.badgeDange} style={{ 'color': 'white' }}>{venda.dados_pagamento[0].status_pagamento === 'approved' ? 'Aprovado' : 'Estornado'}</span>
-                                                                </div>
-                                                            </Card.Description>
-                                                        </Card.Content>
-                                                    </Card>
-                                                </Col>
+                                                                <span className={venda.dados_pagamento[0].status_pagamento === 'approved' ? this.state.badgeSucess : this.state.badgeDange}
+                                                                    style={{ 'color': 'white', 'marginLeft': '115px' }}>{venda.dados_pagamento[0].status_pagamento === 'approved' ? 'Aprovado' : 'Estornado'}</span>
+                                                            </p>
+                                                            <p>
+                                                                <span>
+                                                                    {venda.dados_pagamento[0].tipoPagamento}
+                                                                    {venda.dados_pagamento[0].boleto_url != null &&
+                                                                        <Button icon labelPosition='left' style={{ 'fontSize': '10px', 'marginLeft': '200px' }} color='orange'>
+                                                                            <Icon name='file pdf outline'></Icon>
+                                                                            <a style={{ 'color': 'white' }} href={venda.dados_pagamento[0].boleto_url} target='_blank' rel="noopener noreferrer"> Boleto</a>
+                                                                        </Button>
+                                                                    }
+                                                                </span>
+                                                            </p>
+                                                        </Card.Description>
+                                                    </Card.Content>
+                                                </Card>
+                                            </Col>
 
-                                                <Col md={4}>
-                                                    <Card fluid color='blue'>
-                                                        <Card.Content>
-                                                            <Card.Header style={{ 'marginLeft': '-15px' }}>
-                                                                <img src={iconEnvio}></img>{' '}
-                                                                Envio
+                                            <Col md={4}>
+                                                <Card fluid color='blue'>
+                                                    <Card.Content>
+                                                        <Card.Header style={{ 'marginLeft': '-15px' }}>
+                                                            <img src={iconEnvio}></img>{' '}
+                                                            Envio
                                                         </Card.Header>
-                                                            <Card.Meta>
-                                    Código de Rastreio: <a href='https://rastreamentocorreios.info/consulta/PX858327215BR'>{venda.dados_entrega.cod_rastreamento}</a>
+                                                        <Card.Meta>
+                                                            Código de Rastreio: <a href='https://rastreamentocorreios.info/consulta/PX858327215BR'>{venda.dados_entrega.cod_rastreamento}</a>
                                                         </Card.Meta>
-                                                            <Divider />
-                                                            <Card.Description>
-                                                                <div>
-                                                                    CEP: {venda.dados_entrega.cep}
-                                                                </div>
-                                                                <div>
-                                                                    Valor pago: {venda.valor_venda.toFixed(2).toLocaleString('pt-BR')}
-                                                                </div>
-                                                            </Card.Description>
-                                                        </Card.Content>
-                                                    </Card>
-                                                </Col>
-                                            </Row>
-                                            <Divider />
-                                            <Row>
-                                                <Col md={6}>
-                                                    <div className='panel panel-info'>
-                                                        <div className='panel-heading oneLine'>
-                                                            <h3 className='panel-title'>
-                                                                Dados da Entrega
+                                                        <Divider />
+                                                        <Card.Description style={{ 'height': '65px' }}>
+                                                            <div>
+                                                                CEP: {venda.dados_entrega.cep}
+                                                            </div>
+                                                            <div>
+                                                                Valor pago: {venda.valor_venda.toFixed(2).toLocaleString('pt-BR')}
+                                                            </div>
+                                                        </Card.Description>
+                                                    </Card.Content>
+                                                </Card>
+                                            </Col>
+                                        </Row>
+                                        <Divider />
+                                        <Row>
+                                            <Col md={6}>
+                                                <div className='panel panel-info'>
+                                                    <div className='panel-heading oneLine'>
+                                                        <h3 className='panel-title'>
+                                                            Dados da Entrega
                                                         </h3>
-                                                        </div>
-                                                        <div className='panel-body'>
-                                                            <div>Destinatário: <b>{venda.comprador.first_name_comprador} {venda.comprador.last_name_comprador}</b></div>
-                                                            <div>CEP: <b>{venda.dados_entrega.cep}</b></div>
-                                                            <div>Endereço: <b>{venda.dados_entrega.rua}</b></div>
-                                                            <div>Complemento:</div>
-                                                            <div>Bairro: </div>
-                                                            <div>Cidade: <b>{venda.dados_entrega.cidade}</b> - Estado: <b>{venda.dados_entrega.estado}</b></div>
-                                                        </div>
                                                     </div>
-                                                </Col>
-                                                <Col md={6}>
-                                                    <div className='panel panel-info'>
-                                                        <div className='panel-heading oneLine'>
-                                                            <h3 className='panel-title'>
-                                                                Detalhes do Envio
-                                                        </h3>
-                                                        </div>
-                                                        <div className='panel-body'>
+                                                    <div className='panel-body'>
+                                                        <div>Destinatário: <b>{venda.comprador.first_name_comprador} {venda.comprador.last_name_comprador}</b></div>
+                                                        <div>CEP: <b>{venda.dados_entrega.cep}</b></div>
+                                                        <div>Endereço: <b>{venda.dados_entrega.rua}</b></div>
+                                                        <div>Complemento:</div>
+                                                        <div>Bairro: </div>
+                                                        <div>Cidade: <b>{venda.dados_entrega.cidade}</b> - Estado: <b>{venda.dados_entrega.estado}</b></div>
+                                                    </div>
+                                                </div>
+                                            </Col>
+                                            <Col md={6}>
+                                                <div className='panel panel-info'>
+                                                    <div className='panel-heading oneLine'>
+                                                        <h3 className='panel-title'>
                                                             Detalhes do Envio
+                                                        </h3>
                                                     </div>
+                                                    <div className='panel-body'>
+                                                        Detalhes do Envio
                                                     </div>
-                                                </Col>
-                                            </Row>
-                                        </>
-                                    }>
-                                </Panel>
+                                                </div>
+                                            </Col>
+                                        </Row>
+                                    </>
+                                }>
+                            </Panel>
                         )
                     }
                 })}
