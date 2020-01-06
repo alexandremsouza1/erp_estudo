@@ -147,7 +147,7 @@ export default class VendasView extends React.Component {
                                                                 <span className={venda.dados_pagamento[0].status_pagamento === 'approved' ? this.state.badgeSucess : this.state.badgeDange}
                                                                     style={{ 'color': 'white', 'marginLeft': '115px' }}>{venda.dados_pagamento[0].status_pagamento === 'approved' ? 'Aprovado' : 'Estornado'}</span>
                                                                 <img src={iconCustoEnvio}></img>{' '}
-                                                                <span>Custo de envio: {venda.dados_pagamento[0].custo_envio.toFixed(2).toLocaleString('pt-BR')}</span>   
+                                                                <span>Frete: {venda.dados_pagamento[0].custo_envio.toFixed(2).toLocaleString('pt-BR')}</span>   
                                                             </p>
                                                             
                                                             <span>Tipo de pagamento: {venda.dados_pagamento[0].tipoPagamento}</span>
