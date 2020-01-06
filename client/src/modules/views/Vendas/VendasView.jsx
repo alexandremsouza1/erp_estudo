@@ -12,6 +12,7 @@ import iconWhatsapp from '../../../assets/img/WhatsApp-icon.png'
 import iconUser from '../../../assets/img/user16px.png'
 import iconEnvio from '../../../assets/img/delivery-truck-icon16px.png'
 import iconMoney from '../../../assets/img/money16px.png'
+import iconMessage from '../../../assets/img/messages-icon16px.png'
 import iconPagamentoConfirmado from '../../../assets/img/success-icon16px.png'
 import { Button, Icon } from 'semantic-ui-react'
 
@@ -109,6 +110,7 @@ export default class VendasView extends React.Component {
                                                                 {venda.comprador.nickname_comprador}
                                                             </div>
                                                             <div>
+                                                                <img src={iconMessage}></img>{' '}
                                                                 <a href='#'>Enviar mensagem</a>
                                                             </div>
                                                             <Divider />
@@ -140,21 +142,16 @@ export default class VendasView extends React.Component {
                                                         <Card.Description style={{ 'height': '65px' }}>
                                                             <p>
                                                                 <img src={iconPagamentoConfirmado}></img>{' '}
-                                                                <span style={{ 'color': '#19b698', 'fontSize': '18px', 'fontFamily': 'Open Sans' }}>R$ {venda.valor_venda.toFixed(2).toLocaleString('pt-BR')}</span>
+                                                                <span style={{ 'color': '#19b698', 'fontSize': '18px', 'fontFamily': 'Open Sans' }}>R$ {venda.dados_pagamento[0].total_pago.toFixed(2).toLocaleString('pt-BR')}</span>
                                                                 <span className={venda.dados_pagamento[0].status_pagamento === 'approved' ? this.state.badgeSucess : this.state.badgeDange}
                                                                     style={{ 'color': 'white', 'marginLeft': '115px' }}>{venda.dados_pagamento[0].status_pagamento === 'approved' ? 'Aprovado' : 'Estornado'}</span>
                                                             </p>
-                                                            <p>
-                                                                <span>
-                                                                    {venda.dados_pagamento[0].tipoPagamento}
-                                                                    {venda.dados_pagamento[0].boleto_url != null &&
-                                                                        <Button icon labelPosition='left' style={{ 'fontSize': '10px', 'marginLeft': '200px' }} color='orange'>
-                                                                            <Icon name='file pdf outline'></Icon>
-                                                                            <a style={{ 'color': 'white' }} href={venda.dados_pagamento[0].boleto_url} target='_blank' rel="noopener noreferrer"> Boleto</a>
-                                                                        </Button>
-                                                                    }
-                                                                </span>
-                                                            </p>
+                                                            {venda.dados_pagamento[0].boleto_url != null &&
+                                                                <Button icon labelPosition='left' style={{ 'fontSize': '10px', 'marginLeft': '200px' }} color='orange'>
+                                                                    <Icon name='file pdf outline'></Icon>
+                                                                    <a style={{ 'color': 'white' }} href={venda.dados_pagamento[0].boleto_url} target='_blank' rel="noopener noreferrer"> Boleto</a>
+                                                                </Button>
+                                                            }
                                                         </Card.Description>
                                                     </Card.Content>
                                                 </Card>
