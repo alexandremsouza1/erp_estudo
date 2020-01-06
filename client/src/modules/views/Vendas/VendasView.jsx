@@ -146,12 +146,8 @@ export default class VendasView extends React.Component {
                                                                 <span className={venda.dados_pagamento[0].status_pagamento === 'approved' ? this.state.badgeSucess : this.state.badgeDange}
                                                                     style={{ 'color': 'white', 'marginLeft': '115px' }}>{venda.dados_pagamento[0].status_pagamento === 'approved' ? 'Aprovado' : 'Estornado'}</span>
                                                             </p>
-                                                            {venda.dados_pagamento[0].boleto_url != null &&
-                                                                <Button icon labelPosition='left' style={{ 'fontSize': '10px', 'marginLeft': '200px' }} color='orange'>
-                                                                    <Icon name='file pdf outline'></Icon>
-                                                                    <a style={{ 'color': 'white' }} href={venda.dados_pagamento[0].boleto_url} target='_blank' rel="noopener noreferrer"> Boleto</a>
-                                                                </Button>
-                                                            }
+                                                            <span>Tipo de pagamento: {venda.dados_pagamento[0].tipoPagamento}</span>
+                                                            
                                                         </Card.Description>
                                                     </Card.Content>
                                                 </Card>
