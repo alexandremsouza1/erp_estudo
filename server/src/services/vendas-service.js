@@ -141,7 +141,7 @@ exports.obterVendasConcluidas = async (req, res) => {
     usuarioService.buscarUsuarioPorID().then(async user => {
         await axios.get(`https://api.mercadolibre.com/orders/search?seller=${user.id}&access_token=${user.accessToken}`).then(resp => {
             let vendasConcluidas = resp.data.results.map(async response => {
-                if (response.shipping.id != null) {
+               
                     return await axios.get(`https://api.mercadolibre.com/shipments/${response.shipping.id}?access_token=${user.accessToken}`).then(ship => {
                         let json = {
                             id_venda: response.id,
@@ -196,7 +196,7 @@ exports.obterVendasConcluidas = async (req, res) => {
                         }
                         return json
                     })
-                }
+                
             })
 
             Promise.all(vendasConcluidas).then(vendas => {
