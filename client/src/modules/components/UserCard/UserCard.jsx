@@ -9,7 +9,7 @@ export class UserCard extends Component {
           <div className="image">
             <a src={this.props.bgImage} />
           </div>
-          <div className="content">
+          <div className="content" style={{'minHeight': '150px'}}>
             <div className="author">
 
               <img
