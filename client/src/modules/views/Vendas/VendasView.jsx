@@ -2,12 +2,10 @@ import React from 'react'
 import '../../../assets/css/Global/style.css'
 import { Row, Col } from "react-bootstrap"
 import Panel from '../../components/Panel/Panel'
-import UserCard from '../../components/UserCard/UserCard'
 import imgParaPreparar from '../../../assets/img/delivery-box-icon128px.png'
 import imgProntoParaEnviar from '../../../assets/img/delivery-truck-icon128px.png'
-import imgEmTrasito from '../../../assets/img/truck-icon128px.png'
 import imgConcluido from '../../../assets/img/Accept-icon128px.png'
-import { Card, Divider, Dimmer, Loader, Segment } from 'semantic-ui-react'
+import { Card, Divider, Icon, Step } from 'semantic-ui-react'
 import iconWhatsapp from '../../../assets/img/WhatsApp-icon.png'
 import iconUser from '../../../assets/img/user16px.png'
 import iconEnvio from '../../../assets/img/delivery-truck-icon16px.png'
@@ -15,8 +13,8 @@ import iconMoney from '../../../assets/img/money16px.png'
 import iconMessage from '../../../assets/img/messages-icon16px.png'
 import iconPagamentoConfirmado from '../../../assets/img/success-icon16px.png'
 import iconCustoEnvio from '../../../assets/img/delete-icon16px.png'
-import { Button, Icon } from 'semantic-ui-react'
-
+import Avatar from '@material-ui/core/Avatar';
+import Grid from '@material-ui/core/Grid';
 
 export default class VendasView extends React.Component {
 
@@ -54,40 +52,44 @@ export default class VendasView extends React.Component {
                 <div >
                     <div >
                         <Row>
-                            <Col md={3}>
-                                <UserCard
-                                    name="Para preparar"
-                                    userName="0 vendas"
-                                    avatar={imgParaPreparar}>
-                                </UserCard>
-                            </Col>
+                            <Grid container direction="row" justify="center" alignItems="center">
+                                <Step.Group>
+                                    <Step active href="#">
+                                        <Avatar alt="concluido" src={imgParaPreparar} />
+                                        <Step.Content style={{ 'marginLeft': '10px' }}>
+                                            <Step.Title>Para preparar</Step.Title>
+                                            <Step.Description>0 vendas</Step.Description>
+                                        </Step.Content>
+                                    </Step>
 
-                            <Col md={3}>
-                                <UserCard
-                                    name="Pronto para enviar"
-                                    userName="1 venda"
-                                    avatar={imgProntoParaEnviar}>
-                                </UserCard>
-                            </Col>
+                                    <Step active href="#">
+                                        <Avatar alt="concluido" src={imgProntoParaEnviar} />
+                                        <Step.Content style={{ 'marginLeft': '10px' }}>
+                                            <Step.Title>Pronto para enviar</Step.Title>
+                                            <Step.Description>5 vendas</Step.Description>
+                                        </Step.Content>
+                                    </Step>
 
-                            <Col md={3}>
-                                <UserCard
-                                    name="Em trânsito"
-                                    userName="2 venda"
-                                    avatar={imgEmTrasito}
-                                    onClick={() => this.getStatusEmTransito()}>
-                                </UserCard>
-                            </Col>
+                                    <Step active onClick={() => this.getStatusEmTransito()}>
+                                        <Icon name="truck" />
+                                        <Step.Content style={{ 'marginLeft': '10px' }}>
+                                            <Step.Title>Em trânsito</Step.Title>
+                                            <Step.Description>13 vendas</Step.Description>
+                                        </Step.Content>
+                                    </Step>
 
-                            <Col md={3}>
-                                <UserCard
-                                    name="Concluídas"
-                                    userName="55 vendas"
-                                    avatar={imgConcluido}
-                                    onClick={() => this.getStatusEntregue()}>
-                                </UserCard>
-                            </Col>
+                                    <Step active onClick={() => this.getStatusEntregue()}>
+                                        <Avatar alt="concluido" src={imgConcluido} />
+                                        <Step.Content style={{ 'marginLeft': '10px' }}>
+                                            <Step.Title>Concluídas</Step.Title>
+                                            <Step.Description>69 vendas</Step.Description>
+                                        </Step.Content>
+                                    </Step>
+                                </Step.Group>
+
+                            </Grid>
                         </Row>
+                        <Divider />
                     </div>
                 </div>
                 {this.props.vendas.map((venda, key) => {
@@ -96,8 +98,8 @@ export default class VendasView extends React.Component {
                         return (
                             <Panel key={key} title={<div>Pedido <span className="badge badge-success" style={{ 'color': 'white' }}>
                                 {this.getTraduzirStatusEnvio(this.state.status_envio)}</span> - Nº #{venda.id_venda} - {venda.itens_pedido.titulo_anuncio}
-                                   <a href='#' style={{'marginLeft': '10px', 'color': 'white'}}>- Ver detalhes</a>
-                                </div>}
+                                <a href='#' style={{ 'marginLeft': '10px', 'color': 'white' }}>- Ver detalhes</a>
+                            </div>}
                                 content={
                                     <>
                                         <Row>
@@ -149,11 +151,11 @@ export default class VendasView extends React.Component {
                                                                 <span className={venda.dados_pagamento[0].status_pagamento === 'approved' ? this.state.badgeSucess : this.state.badgeDange}
                                                                     style={{ 'color': 'white', 'marginLeft': '115px' }}>{venda.dados_pagamento[0].status_pagamento === 'approved' ? 'Aprovado' : 'Estornado'}</span>
                                                                 <img src={iconCustoEnvio}></img>{' '}
-                                                                <span>Frete: {venda.dados_pagamento[0].custo_envio.toFixed(2).toLocaleString('pt-BR')}</span>   
+                                                                <span>Frete: {venda.dados_pagamento[0].custo_envio.toFixed(2).toLocaleString('pt-BR')}</span>
                                                             </p>
-                                                            
+
                                                             <span>Tipo de pagamento: {venda.dados_pagamento[0].tipoPagamento}</span>
-                                                            
+
                                                         </Card.Description>
                                                     </Card.Content>
                                                 </Card>

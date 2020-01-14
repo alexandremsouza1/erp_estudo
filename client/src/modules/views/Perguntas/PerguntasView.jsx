@@ -8,7 +8,7 @@ export default class PerguntasView extends React.Component {
 
     render() {
         return (
-            <Chat/>
+            <Chat></Chat>
         )
     }
 }
