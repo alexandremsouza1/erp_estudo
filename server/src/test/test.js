@@ -6,6 +6,7 @@ const usuarioService = require('../services/usuario-service')
 const anuncioService = require('../services/anuncio-service')
 const util = require('../helpers/util')
 const postAnuncio = require('./postAnuncio')
+const cheerio = require('cheerio');
 
 
 const usuario = {
@@ -397,75 +398,133 @@ let obterVendasEmTransito = () => {
         await axios.get(`https://api.mercadolibre.com/orders/search/recent?seller=${user.id}&access_token=${user.accessToken}`).then(async resp => {
             let vendasEmTransito = await resp.data.results.map(async response => {
                 if (response.shipping.id != null) {
-                   return await axios.get(`https://api.mercadolibre.com/shipments/${response.shipping.id}?access_token=${user.accessToken}`).then(ship => {
-                    let json = {
-                        id_venda: response.id,
-                        status: response.status,
-                        data_venda: util.formatarDataHora(response.date_closed),
-                        itens_pedido: {
-                            quantidade_vendido: response.order_items[0].quantity,
-                            id_variacao: response.order_items[0].item.variation_id,
-                            sku: response.order_items[0].item.seller_sku,
-                            id_anuncio: response.order_items[0].item.id,
-                            condicao: response.order_items[0].item.condition,
-                            garantia: response.order_items[0].item.warranty,
-                            id_categoria: response.order_items[0].item.category_id,
-                            titulo_anuncio: response.order_items[0].item.title,
-                            taxa_venda: response.order_items[0].sale_fee,
-                            variation_attributes: response.order_items[0].item.variation_attributes,
-                        },
-                        valor_venda: response.total_amount,
-                        comprador: {
-                            whatsapp: util.tratarNumeroCelularComDDD(response.buyer.phone.area_code, response.buyer.phone.number) === null ?
-                                'Não informado' : 'https://api.whatsapp.com/send?phone=55' + util.tratarNumeroCelularComDDD(response.buyer.phone.area_code, response.buyer.phone.number) + '',
-                            numero_contato: util.tratarNumeroCelularComDDD(response.buyer.phone.area_code, response.buyer.phone.number) === null ?
-                                'Não informado' : util.tratarNumeroCelularComDDD(response.buyer.phone.area_code, response.buyer.phone.number),
-                            ddd: response.buyer.phone.area_code,
-                            nickname_comprador: response.buyer.nickname,
-                            email_comprador: response.buyer.email,
-                            first_name_comprador: response.buyer.first_name,
-                            last_name_comprador: response.buyer.last_name,
-                            tipo_documento_comprador: response.buyer.billing_info.doc_type,
-                            documento_comprador: response.buyer.billing_info.doc_number === undefined ||
-                                response.buyer.billing_info.doc_number === null ? 'Não informado' : response.buyer.billing_info.doc_number
-                        },
-                        dados_pagamento: {},
-                        dados_entrega: {
-                            status: ship.data.status,
-                            id: ship.data.id,
-                            cod_rastreamento: ship.data.tracking_number,
-                            metodo_envio: ship.data.tracking_method,
-                            endereco_entrega: {
-                                rua: ship.data.receiver_address.street_name,
-                                numero: ship.data.receiver_address.street_number,
-                                cep: ship.data.receiver_address.zip_code,
-                                cidade: ship.data.receiver_address.city,
-                                estado: ship.data.receiver_address.state,
-                                bairro: ship.data.receiver_address.neighborhood,
-                                latitude: ship.data.receiver_address.latitude,
-                                longitude: ship.data.receiver_address.longitude,
-                                nomePessoaEntrega: ship.data.receiver_address.receiver_name,
-                                telefonePessoaEntrega: ship.data.receiver_address.receiver_phone
+                    return await axios.get(`https://api.mercadolibre.com/shipments/${response.shipping.id}?access_token=${user.accessToken}`).then(ship => {
+                        let json = {
+                            id_venda: response.id,
+                            status: response.status,
+                            data_venda: util.formatarDataHora(response.date_closed),
+                            itens_pedido: {
+                                quantidade_vendido: response.order_items[0].quantity,
+                                id_variacao: response.order_items[0].item.variation_id,
+                                sku: response.order_items[0].item.seller_sku,
+                                id_anuncio: response.order_items[0].item.id,
+                                condicao: response.order_items[0].item.condition,
+                                garantia: response.order_items[0].item.warranty,
+                                id_categoria: response.order_items[0].item.category_id,
+                                titulo_anuncio: response.order_items[0].item.title,
+                                taxa_venda: response.order_items[0].sale_fee,
+                                variation_attributes: response.order_items[0].item.variation_attributes,
+                            },
+                            valor_venda: response.total_amount,
+                            comprador: {
+                                whatsapp: util.tratarNumeroCelularComDDD(response.buyer.phone.area_code, response.buyer.phone.number) === null ?
+                                    'Não informado' : 'https://api.whatsapp.com/send?phone=55' + util.tratarNumeroCelularComDDD(response.buyer.phone.area_code, response.buyer.phone.number) + '',
+                                numero_contato: util.tratarNumeroCelularComDDD(response.buyer.phone.area_code, response.buyer.phone.number) === null ?
+                                    'Não informado' : util.tratarNumeroCelularComDDD(response.buyer.phone.area_code, response.buyer.phone.number),
+                                ddd: response.buyer.phone.area_code,
+                                nickname_comprador: response.buyer.nickname,
+                                email_comprador: response.buyer.email,
+                                first_name_comprador: response.buyer.first_name,
+                                last_name_comprador: response.buyer.last_name,
+                                tipo_documento_comprador: response.buyer.billing_info.doc_type,
+                                documento_comprador: response.buyer.billing_info.doc_number === undefined ||
+                                    response.buyer.billing_info.doc_number === null ? 'Não informado' : response.buyer.billing_info.doc_number
+                            },
+                            dados_pagamento: {},
+                            dados_entrega: {
+                                status: ship.data.status,
+                                id: ship.data.id,
+                                cod_rastreamento: ship.data.tracking_number,
+                                metodo_envio: ship.data.tracking_method,
+                                endereco_entrega: {
+                                    rua: ship.data.receiver_address.street_name,
+                                    numero: ship.data.receiver_address.street_number,
+                                    cep: ship.data.receiver_address.zip_code,
+                                    cidade: ship.data.receiver_address.city,
+                                    estado: ship.data.receiver_address.state,
+                                    bairro: ship.data.receiver_address.neighborhood,
+                                    latitude: ship.data.receiver_address.latitude,
+                                    longitude: ship.data.receiver_address.longitude,
+                                    nomePessoaEntrega: ship.data.receiver_address.receiver_name,
+                                    telefonePessoaEntrega: ship.data.receiver_address.receiver_phone
+                                }
                             }
                         }
-                    }
-                    return json
+                        return json
                     })
                 }
             })
-            
+
             Promise.resolve(vendasEmTransito).then(vendas => {
                 Promise.all(vendas).then(vnd => {
                     console.log(vnd)
                 })
             })
-            
+
 
         }).catch(error => { console.error(error) })
     })
 }
 
-obterVendasEmTransito()
+
+let getDataSite = () => {
+    axios.get('https://www.mercadolivre.com.br/perfil/comproline').then(response => {
+        let $ = cheerio.load(response.data)
+        let reputacao = $('#profile > div > div.main-wrapper > div.content-wrapper > div.seller-info > div:nth-child(1) > p > span').text()
+        let tempoEmVenda = $('#profile > div > div.main-wrapper > div.content-wrapper > div.store-info > div:nth-child(2) > div > p > span').text()
+        let qualidadeAtendimento = $('#profile > div > div.main-wrapper > div.inner-wrapper > div.metric__wrapper > div:nth-child(1) > div.metric__description > h2').text()
+        let qualidadeAtendimentoCompradores = $('#profile > div > div.main-wrapper > div.inner-wrapper > div.metric__wrapper > div:nth-child(1) > div.metric__description > p > span').text()
+
+        let qualidadeEntrega = $('#profile > div > div.main-wrapper > div.inner-wrapper > div.metric__wrapper > div.metric.metric--last > div.metric__description > h2').text()
+        let possuiAtraso = $('#profile > div > div.main-wrapper > div.inner-wrapper > div.metric__wrapper > div.metric.metric--last > div.metric__description > p').text()
+
+        let totalFeedback = $("#profile > div > div.main-wrapper > div.inner-wrapper > section > div.buyers-feedback__wrapper > span").text()
+        let feedback = $('#feedback_good').text()
+
+        console.log('-------------------------------------------------')
+        console.log('Reputação: ' + reputacao)
+        console.log('-------------------------------------------------')
+        console.log("Tempo de vendas: " + tempoEmVenda)
+        console.log("Qualidade no atendimento: " + qualidadeAtendimento)
+        console.log('Qualidade no atendimento para os compradores: ' + qualidadeAtendimentoCompradores)
+        console.log('Qualidade da entrega: ' + qualidadeEntrega)
+        console.log("Possui atraso na entrega: " + possuiAtraso)
+        console.log('-------------------------------------------------')
+        console.log('Feedback: ' + feedback)
+        console.log('Total de Feedback: ' + totalFeedback)
+        console.log('-------------------------------------------------')
+        axios.get('https://api.mercadolibre.com/sites/MLB/search?nickname=comproline').then(response => {
+
+            let totalVenda = response.data.results.map(result => {
+                return result.price * result.sold_quantity
+            })
+            let soma = totalVenda.reduce((soma, valorCorrente) => {
+                return soma + valorCorrente
+            })
+
+            console.log("Total de faturamento: " + soma.toLocaleString("pt-BR", { minimumFractionDigits: 2, style: 'currency', currency: 'BRL' }))
+
+        }).catch(error => console.error(error))
+
+        
+
+        axios.get('https://api.mercadolibre.com/users/362614126').then(resp => {
+            console.log('Transações:')
+            console.log('Total de transações canceladas: ' + resp.data.seller_reputation.transactions.canceled)
+            console.log('Total de transações completadas: ' + resp.data.seller_reputation.transactions.completed)
+            console.log('-------------------------------------------------')
+            console.log('Classificações')
+            console.log('Classificação negativa: ' + (resp.data.seller_reputation.transactions.ratings.negative * 100).toFixed(0) + '%')
+            console.log('Classificação neutra: ' + (resp.data.seller_reputation.transactions.ratings.neutral * 100).toFixed(0) + '%')
+            console.log('Classificação positiva: ' + (resp.data.seller_reputation.transactions.ratings.positive * 100).toFixed(0) + '%')
+            console.log('Perfil: '+resp.data.permalink)
+        }).catch(error => console.error(error))
+
+    }).catch(error => console.error(error))
+}
+
+getDataSite()
+
 
 
 
