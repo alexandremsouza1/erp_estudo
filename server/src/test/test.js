@@ -486,6 +486,15 @@ let getDataSite = async () => {
             let totalVenda = response.data.results.map(result => {
                 return result.price * result.sold_quantity
             })
+            let quantidadeVendas = response.data.results.map(result => {
+                return result.sold_quantity
+            })
+            console.log("quantidadeVendas: "+quantidadeVendas)
+
+            let quantidadeTotalVendas = quantidadeVendas.reduce((soma, valorCorrente) => {
+                return soma + valorCorrente
+            })
+
             let soma = totalVenda.reduce((soma, valorCorrente) => {
                 return soma + valorCorrente
             })
@@ -523,7 +532,8 @@ let getDataSite = async () => {
                     console.log('Total de Feedback: ' + totalFeedback)
                     console.log('-------------------------------------------------')
 
-                    console.log('Total de visitas: ' + totalVisitas.toLocaleString('pt-BR', { minimumFractionDigits: 2, currency: 'BRL' }))
+                    console.log('Total de visitas: ' + totalVisitas)
+                    console.log('Unidades vendidas: '+ quantidadeTotalVendas)
                     console.log("Total de faturamento: " + soma.toLocaleString("pt-BR", { minimumFractionDigits: 2, style: 'currency', currency: 'BRL' }))
 
                 }).catch(error => console.error(error))
