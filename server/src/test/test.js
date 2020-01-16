@@ -467,8 +467,8 @@ let obterVendasEmTransito = () => {
 }
 
 
-let getDataSite = () => {
-    axios.get('https://www.mercadolivre.com.br/perfil/comproline').then(response => {
+let getDataSite = async () => {
+    await axios.get('https://www.mercadolivre.com.br/perfil/comproline').then(async response => {
         let $ = cheerio.load(response.data)
         let reputacao = $('#profile > div > div.main-wrapper > div.content-wrapper > div.seller-info > div:nth-child(1) > p > span').text()
         let tempoEmVenda = $('#profile > div > div.main-wrapper > div.content-wrapper > div.store-info > div:nth-child(2) > div > p > span').text()
@@ -481,19 +481,7 @@ let getDataSite = () => {
         let totalFeedback = $("#profile > div > div.main-wrapper > div.inner-wrapper > section > div.buyers-feedback__wrapper > span").text()
         let feedback = $('#feedback_good').text()
 
-        console.log('-------------------------------------------------')
-        console.log('Reputação: ' + reputacao)
-        console.log('-------------------------------------------------')
-        console.log("Tempo de vendas: " + tempoEmVenda)
-        console.log("Qualidade no atendimento: " + qualidadeAtendimento)
-        console.log('Qualidade no atendimento para os compradores: ' + qualidadeAtendimentoCompradores)
-        console.log('Qualidade da entrega: ' + qualidadeEntrega)
-        console.log("Possui atraso na entrega: " + possuiAtraso)
-        console.log('-------------------------------------------------')
-        console.log('Feedback: ' + feedback)
-        console.log('Total de Feedback: ' + totalFeedback)
-        console.log('-------------------------------------------------')
-        axios.get('https://api.mercadolibre.com/sites/MLB/search?nickname=comproline').then(response => {
+        await axios.get('https://api.mercadolibre.com/sites/MLB/search?nickname=comproline').then(async response => {
 
             let totalVenda = response.data.results.map(result => {
                 return result.price * result.sold_quantity
@@ -501,25 +489,46 @@ let getDataSite = () => {
             let soma = totalVenda.reduce((soma, valorCorrente) => {
                 return soma + valorCorrente
             })
+            let visitas = response.data.results.map(async result => {
+                return await axios.get(`https://api.mercadolibre.com/visits/items?ids=${result.id}`).then(resp => {
+                    return Object.values(resp.data).reduce((acumulador, valorCorrente) => { return valorCorrente })
+                }).catch(error => console.error(error))
+            })
 
-            console.log("Total de faturamento: " + soma.toLocaleString("pt-BR", { minimumFractionDigits: 2, style: 'currency', currency: 'BRL' }))
+            Promise.all(visitas).then(async resp => {
 
+                let totalVisitas = resp.reduce((acumulador, valorCorrente) => { return acumulador + valorCorrente })
+
+                await axios.get('https://api.mercadolibre.com/users/362614126').then(resp => {
+                    console.log('Transações:')
+                    console.log('Total de transações canceladas: ' + resp.data.seller_reputation.transactions.canceled)
+                    console.log('Total de transações completadas: ' + resp.data.seller_reputation.transactions.completed)
+                    console.log('-------------------------------------------------')
+                    console.log('Classificações')
+                    console.log('Classificação negativa: ' + (resp.data.seller_reputation.transactions.ratings.negative * 100).toFixed(0) + '%')
+                    console.log('Classificação neutra: ' + (resp.data.seller_reputation.transactions.ratings.neutral * 100).toFixed(0) + '%')
+                    console.log('Classificação positiva: ' + (resp.data.seller_reputation.transactions.ratings.positive * 100).toFixed(0) + '%')
+                    console.log('Perfil: ' + resp.data.permalink)
+
+                    console.log('-------------------------------------------------')
+                    console.log('Reputação: ' + reputacao)
+                    console.log('-------------------------------------------------')
+                    console.log("Tempo de vendas: " + tempoEmVenda)
+                    console.log("Qualidade no atendimento: " + qualidadeAtendimento)
+                    console.log('Qualidade no atendimento para os compradores: ' + qualidadeAtendimentoCompradores)
+                    console.log('Qualidade da entrega: ' + qualidadeEntrega)
+                    console.log("Possui atraso na entrega: " + possuiAtraso)
+                    console.log('-------------------------------------------------')
+                    console.log('Feedback: ' + feedback)
+                    console.log('Total de Feedback: ' + totalFeedback)
+                    console.log('-------------------------------------------------')
+
+                    console.log('Total de visitas: ' + totalVisitas.toLocaleString('pt-BR', { minimumFractionDigits: 2, currency: 'BRL' }))
+                    console.log("Total de faturamento: " + soma.toLocaleString("pt-BR", { minimumFractionDigits: 2, style: 'currency', currency: 'BRL' }))
+
+                }).catch(error => console.error(error))
+            }).catch(error => console.error(error))
         }).catch(error => console.error(error))
-
-        
-
-        axios.get('https://api.mercadolibre.com/users/362614126').then(resp => {
-            console.log('Transações:')
-            console.log('Total de transações canceladas: ' + resp.data.seller_reputation.transactions.canceled)
-            console.log('Total de transações completadas: ' + resp.data.seller_reputation.transactions.completed)
-            console.log('-------------------------------------------------')
-            console.log('Classificações')
-            console.log('Classificação negativa: ' + (resp.data.seller_reputation.transactions.ratings.negative * 100).toFixed(0) + '%')
-            console.log('Classificação neutra: ' + (resp.data.seller_reputation.transactions.ratings.neutral * 100).toFixed(0) + '%')
-            console.log('Classificação positiva: ' + (resp.data.seller_reputation.transactions.ratings.positive * 100).toFixed(0) + '%')
-            console.log('Perfil: '+resp.data.permalink)
-        }).catch(error => console.error(error))
-
     }).catch(error => console.error(error))
 }
 
