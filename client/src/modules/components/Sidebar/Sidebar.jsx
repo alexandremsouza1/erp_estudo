@@ -22,6 +22,7 @@ import logo from "assets/img/reactlogo.png";
 
 export default function Sidebar(props) {
 
+  
 
 
   const drawerWidth = 240;
@@ -151,6 +152,12 @@ export default function Sidebar(props) {
     return props.location.pathname.indexOf(routeName) > -1 ? "active" : "";
   }
 
+  const [selectedIndex, setSelectedIndex] = React.useState(0);
+
+  const handleListItemClick = (index) => {
+    setSelectedIndex(index);
+  };
+
   return (
     <>
       <Drawer
@@ -175,13 +182,15 @@ export default function Sidebar(props) {
 
         {props.routes.map((prop, key) => {
           if (!prop.redirect) {
+            //https://material-ui.com/pt/components/lists/#simple-list
             return (
-              <List className={activeRoute(prop.layout + prop.path)} key={key}>
+              <List key={key}>
                 <NavLink
                   to={prop.layout + prop.path}
                   className="nav-link"
-                  activeClassName="active">
-                  <ListItem button key={key}>
+                  activeClassName="active"
+                  style={{'color':'black'}}>
+                  <ListItem button key={key} onClick={() => handleListItemClick(key)} selected={selectedIndex === key}>
                     <ListItemIcon><i className={prop.icon} style={{ 'fontSize': '15px' }} /></ListItemIcon>
                     <ListItemText primary={prop.name} />
                   </ListItem>
