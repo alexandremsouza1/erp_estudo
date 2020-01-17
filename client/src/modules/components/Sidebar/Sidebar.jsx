@@ -22,9 +22,7 @@ import logo from "assets/img/reactlogo.png";
 
 export default function Sidebar(props) {
 
-  const activeRoute = (routeName) => {
-    return props.location.pathname.indexOf(routeName) > -1 ? "active" : "";
-  }
+
 
   const drawerWidth = 240;
 
@@ -137,7 +135,7 @@ export default function Sidebar(props) {
 
   const classes = useStyles();
   const theme = useTheme();
-  
+
 
   const [open, setOpen] = React.useState(false);
 
@@ -148,6 +146,10 @@ export default function Sidebar(props) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  const activeRoute = (routeName) => {
+    return props.location.pathname.indexOf(routeName) > -1 ? "active" : "";
+  }
 
   return (
     <>
@@ -170,25 +172,26 @@ export default function Sidebar(props) {
           </IconButton>
         </div>
         <Divider />
-        
-        <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-          
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
+
+        {props.routes.map((prop, key) => {
+          if (!prop.redirect) {
+            return (
+              <List className={activeRoute(prop.layout + prop.path)} key={key}>
+                <NavLink
+                  to={prop.layout + prop.path}
+                  className="nav-link"
+                  activeClassName="active">
+                  <ListItem button key={key}>
+                    <ListItemIcon><i className={prop.icon} style={{ 'fontSize': '15px' }} /></ListItemIcon>
+                    <ListItemText primary={prop.name} />
+                  </ListItem>
+                </NavLink>
+              </List>
+            );
+          }
+          return null;
+        })}
+
       </Drawer>
     </>
   );
