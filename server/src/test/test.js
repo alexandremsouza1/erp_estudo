@@ -468,8 +468,9 @@ let obterVendasEmTransito = () => {
 
 
 let getDataSite = async () => {
-    await axios.get('https://www.mercadolivre.com.br/perfil/comproline').then(async response => {
+    await axios.get('https://www.mercadolivre.com.br/perfil/ZANUTIN+MODA').then(async response => {
         let $ = cheerio.load(response.data)
+        let totalVendas = $('#profile > div > div.main-wrapper > div.content-wrapper > div.seller-info > div:nth-child(1) > p > span > span').text()
         let reputacao = $('#profile > div > div.main-wrapper > div.content-wrapper > div.seller-info > div:nth-child(1) > p > span').text()
         let tempoEmVenda = $('#profile > div > div.main-wrapper > div.content-wrapper > div.store-info > div:nth-child(2) > div > p > span').text()
         let qualidadeAtendimento = $('#profile > div > div.main-wrapper > div.inner-wrapper > div.metric__wrapper > div:nth-child(1) > div.metric__description > h2').text()
@@ -481,7 +482,7 @@ let getDataSite = async () => {
         let totalFeedback = $("#profile > div > div.main-wrapper > div.inner-wrapper > section > div.buyers-feedback__wrapper > span").text()
         let feedback = $('#feedback_good').text()
 
-        await axios.get('https://api.mercadolibre.com/sites/MLB/search?nickname=comproline').then(async response => {
+        await axios.get('https://api.mercadolibre.com/sites/MLB/search?nickname=ZANUTIN+MODA').then(async response => {
 
             let totalVenda = response.data.results.map(result => {
                 return result.price * result.sold_quantity
@@ -489,12 +490,12 @@ let getDataSite = async () => {
             let quantidadeVendas = response.data.results.map(result => {
                 return result.sold_quantity
             })
-            console.log("quantidadeVendas: "+quantidadeVendas)
 
+            /*
             let quantidadeTotalVendas = quantidadeVendas.reduce((soma, valorCorrente) => {
                 return soma + valorCorrente
             })
-
+            */
             let soma = totalVenda.reduce((soma, valorCorrente) => {
                 return soma + valorCorrente
             })
@@ -504,11 +505,13 @@ let getDataSite = async () => {
                 }).catch(error => console.error(error))
             })
 
+            let faturamento = soma.toLocaleString("pt-BR", { minimumFractionDigits: 2, style: 'currency', currency: 'BRL' })
+
             Promise.all(visitas).then(async resp => {
 
                 let totalVisitas = resp.reduce((acumulador, valorCorrente) => { return acumulador + valorCorrente })
 
-                await axios.get('https://api.mercadolibre.com/users/362614126').then(resp => {
+                await axios.get(`https://api.mercadolibre.com/users/${response.data.seller.id}`).then(resp => {
                     console.log('Transações:')
                     console.log('Total de transações canceladas: ' + resp.data.seller_reputation.transactions.canceled)
                     console.log('Total de transações completadas: ' + resp.data.seller_reputation.transactions.completed)
@@ -533,8 +536,9 @@ let getDataSite = async () => {
                     console.log('-------------------------------------------------')
 
                     console.log('Total de visitas: ' + totalVisitas)
-                    console.log('Unidades vendidas: '+ quantidadeTotalVendas)
-                    console.log("Total de faturamento: " + soma.toLocaleString("pt-BR", { minimumFractionDigits: 2, style: 'currency', currency: 'BRL' }))
+                    console.log('Ticket médio: '+ (soma / totalVendas).toLocaleString("pt-BR", { minimumFractionDigits: 2, style: 'currency', currency: 'BRL' }))
+                    console.log('Total de vendas: '+totalVendas)
+                    console.log("Total de faturamento: " + faturamento)
 
                 }).catch(error => console.error(error))
             }).catch(error => console.error(error))

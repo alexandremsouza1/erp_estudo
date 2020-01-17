@@ -57,7 +57,7 @@ export default class VendasView extends React.Component {
                                     <Step active href="#">
                                         <Avatar alt="concluido" src={imgParaPreparar} />
                                         <Step.Content style={{ 'marginLeft': '10px' }}>
-                                            <Step.Title>Para preparar</Step.Title>
+                                            <Step.Title>Pendentes</Step.Title>
                                             <Step.Description>0 vendas</Step.Description>
                                         </Step.Content>
                                     </Step>
