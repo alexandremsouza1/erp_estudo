@@ -2,6 +2,7 @@ import {combineReducers} from 'redux';
 import anuncioReducer from './anuncio/anuncio.reducer';
 import clienteReducer from './cliente/cliente.reducer';
 import dashboardReducer from './dashboard/dashboard.reducer'
+import sidebarReducer from './Sidebar/sidebar.reducer'
 
 /**
  * Created by: 
@@ -12,5 +13,6 @@ import dashboardReducer from './dashboard/dashboard.reducer'
 export const reducers = combineReducers({
     anuncio: anuncioReducer,
     cliente: clienteReducer,
-    dashboard: dashboardReducer
+    dashboard: dashboardReducer,
+    sidebar: sidebarReducer
 });

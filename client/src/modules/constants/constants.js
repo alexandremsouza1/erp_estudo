@@ -19,6 +19,9 @@ export const OBTER_SALDO_TOTAL = 'OBTER_SALDO_TOTAL'
 //Loading
 export const CARREGANDO_AGUARDE = 'Carregando, aguarde...'
 
+//OPEN_DRAWER_MENU
+export const OPEN_DRAWER_MENU = 'OPEN_DRAWER_MENU'
+
 //Domain production
 //export const DOMAIN = ''
 

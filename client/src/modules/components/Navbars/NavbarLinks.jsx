@@ -1,24 +1,21 @@
 import React from "react";
-import { NavItem, Nav, NavDropdown } from "react-bootstrap";
+import {useDispatch, useSelector} from 'react-redux'
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import InputBase from '@material-ui/core/InputBase';
 import Badge from '@material-ui/core/Badge';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import MenuIcon from '@material-ui/icons/Menu';
-import SearchIcon from '@material-ui/icons/Search';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import MoreIcon from '@material-ui/icons/MoreVert';
 import Button from '@material-ui/core/Button';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Avatar from '@material-ui/core/Avatar';
+import {OPEN_DRAWER_MENU} from '../../constants/constants'
+import clsx from 'clsx';
 
 
 
@@ -84,38 +81,15 @@ const useStyles = makeStyles(theme => ({
       display: 'block',
     },
   },
-  searchIcon: {
-    width: theme.spacing(7),
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  inputRoot: {
-    color: 'inherit',
-  },
-  inputInput: {
-    padding: theme.spacing(1, 1, 1, 7),
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: 200,
-    },
+  hide: {
+    display: 'none',
   },
   sectionDesktop: {
     display: 'none',
     [theme.breakpoints.up('md')]: {
       display: 'flex',
     },
-  },
-  sectionMobile: {
-    display: 'flex',
-    [theme.breakpoints.up('md')]: {
-      display: 'none',
-    },
-  },
+  }
 }));
 
 const StyledMenuItem = withStyles(theme => ({
@@ -133,8 +107,8 @@ export default function AdminNavbarLinks(props) {
 
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
-
-  const isMenuOpen = Boolean(anchorEl);
+  const dispatch = useDispatch()
+  const sideBarState = useSelector(store => store.sidebar)
 
   const handleClick = event => {
     setAnchorEl(event.currentTarget);
@@ -144,31 +118,22 @@ export default function AdminNavbarLinks(props) {
     setAnchorEl(null);
   };
 
-  const menuId = 'primary-search-account-menu';
-  const renderMenu = (
-    <Menu
-      anchorEl={anchorEl}
-      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-      id={menuId}
-      keepMounted
-      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-      open={isMenuOpen}
-      onClose={handleClose}
-    >
-      <MenuItem onClick={handleClose}><b>Nova mensagem</b>: Qual o preço do kit?</MenuItem>
-    </Menu>
-  );
+  const handleClickOpen = () => {
+    dispatch({type: OPEN_DRAWER_MENU, isSidebar: true})
+  }
 
+  const menuId = 'primary-search-account-menu';
+ 
   return (
     <div className={classes.grow}>
       <AppBar position="fixed">
         <Toolbar>
           <IconButton
             edge="start"
-            className={classes.menuButton}
+            className={clsx(classes.menuButton, sideBarState && classes.hide)}
             color="inherit"
-            aria-label="open drawer">
-
+            aria-label="open drawer"
+            onClick={handleClickOpen}>
             <MenuIcon />
 
           </IconButton>
