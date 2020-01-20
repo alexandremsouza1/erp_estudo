@@ -111,6 +111,24 @@ export default function Sidebar(props) {
       flexGrow: 1,
       padding: theme.spacing(3),
     },
+    drawerOpen: {
+      width: drawerWidth,
+      transition: theme.transitions.create('width', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+    },
+    drawerClose: {
+      transition: theme.transitions.create('width', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
+      overflowX: 'hidden',
+      width: theme.spacing(7) + 1,
+      [theme.breakpoints.up('sm')]: {
+        width: theme.spacing(9) + 1,
+      },
+    },
   }));
 
   const classes = useStyles();
@@ -122,10 +140,10 @@ export default function Sidebar(props) {
     return props.location.pathname.indexOf(routeName) > -1 ? "active" : "";
   }
 
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const [selectedIndex, setSelectedIndex] = React.useState(props.location.pathname);
 
-  const handleListItemClick = (index) => {
-    setSelectedIndex(index);
+  const handleListItemClick = (path) => {
+    setSelectedIndex(path);
   };
 
   const handleClickClose = () => {
@@ -135,11 +153,16 @@ export default function Sidebar(props) {
   return (
     <>
       <Drawer
-        variant="persistent"
-        anchor='left'
-        open={sideBarState}
+        variant="permanent"
+        className={clsx(classes.drawer, {
+          [classes.drawerOpen]: sideBarState.isSidebar,
+          [classes.drawerClose]: !sideBarState.isSidebar,
+        })}
         classes={{
-          paper: classes.drawerPaper
+          paper: clsx({
+            [classes.drawerOpen]: sideBarState.isSidebar,
+            [classes.drawerClose]: !sideBarState.isSidebar,
+          }),
         }}
       >
         <div className={classes.toolbar}>
@@ -147,6 +170,7 @@ export default function Sidebar(props) {
             {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
           </IconButton>
         </div>
+
         <Divider />
 
         {props.routes.map((prop, key) => {
@@ -159,8 +183,8 @@ export default function Sidebar(props) {
                   className="nav-link"
                   activeClassName="active"
                   style={{'color':'black'}}>
-                  <ListItem button key={key} onClick={() => handleListItemClick(key)} selected={selectedIndex === key}>
-                    <ListItemIcon><i className={prop.icon} style={{ 'fontSize': '15px' }} /></ListItemIcon>
+                  <ListItem button key={key} onClick={() => handleListItemClick(prop.layout + prop.path)} selected={selectedIndex === prop.layout + prop.path}>
+                    <ListItemIcon style={{'marginLeft':'10px'}}><i className={prop.icon} style={{ 'fontSize': '15px' }} /></ListItemIcon>
                     <ListItemText primary={prop.name} />
                   </ListItem>
                 </NavLink>

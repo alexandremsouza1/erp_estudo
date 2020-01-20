@@ -4,6 +4,7 @@ import ClienteController from "modules/views/Cliente/ClienteController";
 import ControleEstoqueController from 'modules/views/Controle-estoque/ControlleEstoqueController'
 import VendasController from 'modules/views/Vendas/VendasController'
 import PerguntasController from 'modules/views/Perguntas/PerguntasController'
+import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 
 const dashboardRoutes = [{
   path: "/dashboard",
@@ -13,21 +14,21 @@ const dashboardRoutes = [{
   layout: "/admin"
 },
 {
-  path: "/user",
+  path: "/anuncios",
   name: "Anúncios",
   icon: "tags icon",
   component: AnuncioController,
   layout: "/admin"
 },
 {
-  path: '/cliente',
+  path: '/clientes',
   name: 'Clientes',
   icon: 'users icon',
   component: ClienteController,
   layout: '/admin'
 },
 {
-  path: "/table",
+  path: "/controle_estoque",
   name: "Controle de estoque",
   icon: "edit icon",
   component: ControleEstoqueController,

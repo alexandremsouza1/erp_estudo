@@ -3,19 +3,33 @@ import { Route, Switch } from "react-router-dom";
 import NavbarController from "../modules/components/Navbars/NavbarController";
 import Footer from "../modules/components/Footer/Footer";
 import Sidebar from "../modules/components/Sidebar/Sidebar";
-
+import { makeStyles } from '@material-ui/core/styles';
 import routes from "routes.js";
 
-class Admin extends React.Component {
-  constructor(props) {
-    super(props);
+export default function Admin(props) {
 
-    this.state = {
-      fixedClasses: "dropdown show-dropdown open"
-    };
-  }
+  const useStyles = makeStyles(theme => (
+    {
+      content: {
+        flexGrow: 1,
+        padding: theme.spacing(3),
+      },
+      toolbar: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        padding: theme.spacing(0, 1),
+        ...theme.mixins.toolbar,
+      },
+      root: {
+        display: 'flex',
+      },
+    }
+  ))
 
-  getRoutes = routes => {
+  const classes = useStyles();
+
+  const getRoutes = routes => {
     return routes.map((prop, key) => {
       if (prop.layout === "/admin") {
         return (
@@ -24,7 +38,6 @@ class Admin extends React.Component {
             render={props => (
               <prop.component
                 {...props}
-                handleClick={this.handleNotificationClick}
               />
             )}
             key={key}
@@ -36,36 +49,34 @@ class Admin extends React.Component {
     });
   };
 
-  getPathName = path => {
+  const getPathName = path => {
     for (let i = 0; i < routes.length; i++) {
-      if (this.props.location.pathname.indexOf(routes[i].layout + routes[i].path) !== -1) {
+      if (props.location.pathname.indexOf(routes[i].layout + routes[i].path) !== -1) {
         return routes[i].name;
       }
     }
     return "";
   };
+// <Footer />
 
-  render() {
-    return (
+  return (
 
-      <div className="wrapper">
+    <div className={classes.root}>
+      <NavbarController
+        {...props}
+        ref={React.createRef()}
+        brandText={getPathName(props.location.pathname)}
+      />
 
-        <Sidebar {...this.props} routes={routes}/>
+      <Sidebar {...props} routes={routes} ref={React.createRef()} />
 
-        <div id="main-panel" className="main-panel" ref="mainPanel">
+      <main className={classes.content} ref={React.createRef()}>
+      <div className={classes.toolbar} />
+        <Switch>{getRoutes(routes)}</Switch>
+      </main>
 
-          <NavbarController
-            {...this.props}
-            brandText={this.getPathName(this.props.location.pathname)}
-          />
+    </div>
+  );
 
-          <Switch>{this.getRoutes(routes)}</Switch>
-
-          <Footer />
-        </div>
-      </div>
-    );
-  }
 }
 
-export default Admin;
