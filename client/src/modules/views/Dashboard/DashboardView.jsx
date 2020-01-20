@@ -6,46 +6,34 @@ import StatsCard from "modules/components/StatsCard/StatsCard.jsx";
 import Carregando from '../../components/Loading/LoadingCarregandoSolicitacao'
 import { Button, Icon, Item, Label, Segment } from 'semantic-ui-react'
 import Paper from '@material-ui/core/Paper';
-import LocalGroceryStoreIcon from '@material-ui/icons/LocalGroceryStore';
 
 export default function DashboardView(props) {
 
   return (
     <div className="content">
-      <Grid container spacing={1}>
-        <Grid item xs={6}>
-          <Paper elevation={3}>
-            <StatsCard
-              bigIcon={<i className="fa fa-shopping-cart" />}
-              statsText="Total de vendas"
-              statsValue={props.totalVendas}
-              statsIcon={<i className="fa fa-calendar-o" />}
-              statsIconText={<span>Mês de {props.nomeMes}</span>}
-              isLoading={props.isLoading} />
-          </Paper>
-        </Grid>
+      <Grid container spacing={3}>
 
-        <Grid item xs={6}>
-          <Paper elevation={3} style={{'height':'130px'}}>
+        <Grid item xs={12}>
+          <Paper elevation={3} style={{ 'height': '130px' }}>
             <Row>
               <Col md={12}>
-                <div style={{ 'color': '#4194D8', 'fontSize': '15px', 'lineHeight': '30px', 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center', 'fontWeight': 'bold' }}>Mercado Pago</div>
+                <div style={{ 'color': '#4194D8', 'fontSize': '20px', 'lineHeight': '30px', 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center', 'fontWeight': 'bold' }}>Mercado Pago</div>
               </Col>
             </Row>
 
-            <Row>
+            <Row style={{ 'paddingTop': '15px' }}>
               <Col md={4}>
-                <div style={{ 'color': '#4194D8', 'fontSize': '25px', 'lineHeight': '30px', 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center', 'fontWeight': 'bold' }}>R$ {props.totalVendas}</div>
+                <div style={{ 'color': '#4194D8', 'fontSize': '25px', 'lineHeight': '30px', 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center', 'fontWeight': 'bold' }}>R$ {props.saldoTotal}</div>
                 <div style={{ 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center' }}>Dinheiro em conta</div>
               </Col>
-           
+
               <Col md={4}>
-                <div style={{ 'color': '#4194D8', 'fontSize': '25px', 'lineHeight': '30px', 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center', 'fontWeight': 'bold' }}>R$ 0,00</div>
+                <div style={{ 'color': '#4194D8', 'fontSize': '25px', 'lineHeight': '30px', 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center', 'fontWeight': 'bold' }}>R$ {props.saldoDisponivel}</div>
                 <div style={{ 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center' }}>Dinheiro disponível</div>
               </Col>
-           
+
               <Col md={4}>
-                <div style={{ 'color': '#4194D8', 'fontSize': '25px', 'lineHeight': '30px', 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center', 'fontWeight': 'bold' }}>R$ 0,00</div>
+                <div style={{ 'color': '#4194D8', 'fontSize': '25px', 'lineHeight': '30px', 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center', 'fontWeight': 'bold' }}>R$ {props.saldoALiberar}</div>
                 <div style={{ 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center' }}>Dinheiro a liberar</div>
               </Col>
             </Row>
@@ -53,12 +41,12 @@ export default function DashboardView(props) {
           </Paper>
         </Grid>
 
-        <Grid item xs={4}>
+        <Grid item xs={6}>
           <Paper elevation={3}>
 
             <Row>
               <Col md={12}>
-                <div style={{ 'color': '#4194D8', 'fontSize': '15px', 'lineHeight': '30px', 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center', 'fontWeight': 'bold' }}>Estado das publicações</div>
+                <div style={{ 'color': '#4194D8', 'fontSize': '20px', 'lineHeight': '30px', 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center', 'fontWeight': 'bold' }}>Estado das publicações</div>
               </Col>
             </Row>
 
@@ -76,15 +64,15 @@ export default function DashboardView(props) {
               </Col>
             </Row>
 
-            <Row>
+            <Row style={{ 'paddingBottom': '20px', 'paddingTop': '10px' }}>
               <Col md={6}>
-                <div style={{ 'color': '#4194D8', 'fontSize': '25px', 'lineHeight': '30px', 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center', 'fontWeight': 'bold' }}>0</div>
+                <div style={{ 'color': '#4194D8', 'fontSize': '25px', 'lineHeight': '30px', 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center', 'fontWeight': 'bold' }}>{props.totalAtivos}</div>
                 <div style={{ 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center' }}>Publicações</div>
                 <div style={{ 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center' }}>ativas</div>
               </Col>
 
               <Col md={6}>
-                <div style={{ 'color': '#4194D8', 'fontSize': '25px', 'lineHeight': '30px', 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center', 'fontWeight': 'bold' }}>0</div>
+                <div style={{ 'color': '#4194D8', 'fontSize': '25px', 'lineHeight': '30px', 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center', 'fontWeight': 'bold' }}>{props.totalPausados}</div>
                 <div style={{ 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center' }}>Publicações</div>
                 <div style={{ 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center' }}>pausadas</div>
               </Col>
@@ -93,7 +81,41 @@ export default function DashboardView(props) {
           </Paper>
         </Grid>
 
-        
+        <Grid item xs={6}>
+          <Paper elevation={3} style={{ 'height': '200px' }}>
+
+            <Row>
+              <Col md={12}>
+                <div style={{ 'color': '#4194D8', 'fontSize': '20px', 'lineHeight': '30px', 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center', 'fontWeight': 'bold' }}>Atividade de hoje</div>
+              </Col>
+            </Row>
+
+            <Row>
+              <Col md={6}>
+                <div style={{ 'color': '#4194D8', 'fontSize': '25px', 'lineHeight': '30px', 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center', 'fontWeight': 'bold' }}>0</div>
+                <div style={{ 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center' }}>Vendas</div>
+              </Col>
+
+              <Col md={6}>
+                <div style={{ 'color': '#4194D8', 'fontSize': '25px', 'lineHeight': '30px', 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center', 'fontWeight': 'bold' }}>R$ 0,00</div>
+                <div style={{ 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center' }}>Faturamento</div>
+              </Col>
+            </Row>
+
+            <Row style={{ 'paddingBottom': '20px', 'paddingTop': '30px' }}>
+              <Col md={6}>
+                <div style={{ 'color': '#4194D8', 'fontSize': '25px', 'lineHeight': '30px', 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center', 'fontWeight': 'bold' }}>0</div>
+                <div style={{ 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center' }}>Perguntas</div>
+              </Col>
+
+              <Col md={6}>
+                <div style={{ 'color': '#4194D8', 'fontSize': '25px', 'lineHeight': '30px', 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center', 'fontWeight': 'bold' }}>R$ 0,00</div>
+                <div style={{ 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center' }}>Ticket médio</div>
+              </Col>
+            </Row>
+
+          </Paper>
+        </Grid>
 
 
         {props.vendasPendente.length > 0 &&

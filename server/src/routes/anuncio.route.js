@@ -4,6 +4,7 @@ const express = require('express');
 const router = express.Router();
 const anuncioService = require('../services/anuncio-service');
 
+router.get('/total_status', anuncioService.totalStatusAnuncios)
 router.get('/', anuncioService.listarTodosAnuncio);
 router.get('/:titulo', anuncioService.listarTodosAnuncio)
 router.post('/post', anuncioService.salvar);

@@ -1,7 +1,8 @@
 import {
     OBTER_SALDO_TOTAL,
     OBTER_TOTAL_VENDAS_NO_MES,
-    OBTER_VENDAS_PENDENTE
+    OBTER_VENDAS_PENDENTE,
+    OBTER_STATUS_ANUNCIOS
 }
     from '../../constants/constants'
 
@@ -23,7 +24,8 @@ export default function dashboardReducer(state = INITIAL_STATE, action) {
                 ...state,
                 saldoTotal: action.saldoTotal,
                 saldoDisponivel: action.saldoDisponivel,
-                isLoading: action.isLoading
+                isLoading: action.isLoading,
+                saldoALiberar: action.saldoALiberar
             }
         }
         case OBTER_TOTAL_VENDAS_NO_MES: {
@@ -39,6 +41,14 @@ export default function dashboardReducer(state = INITIAL_STATE, action) {
                 ...state,
                 vendasPendente: action.vendasPendente,
                 totalVendasPendentes: action.totalVendasPendentes,
+                isLoading: action.isLoading
+            }
+        }
+        case OBTER_STATUS_ANUNCIOS: {
+            return {
+                ...state,
+                totalAtivos: action.totalAtivos,
+                totalPausados: action.totalPausados,
                 isLoading: action.isLoading
             }
         }

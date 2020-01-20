@@ -7,7 +7,8 @@ import {
     OBTER_SALDO_TOTAL,
     OBTER_TOTAL_VENDAS_NO_MES,
     OBTER_VENDAS_PENDENTE,
-    CARREGANDO_AGUARDE
+    CARREGANDO_AGUARDE,
+    OBTER_STATUS_ANUNCIOS
 }
     from '../../constants/constants'
 import {DOMAIN} from '../../constants/constants'    
@@ -15,7 +16,7 @@ import {DOMAIN} from '../../constants/constants'
 export default function DashboardController() {
 
     const dispatch = useDispatch()
-    const store = useSelector(store => store.dashboard)
+    const state = useSelector(state => state.dashboard)
 
     document.title = "Dashboard"
     /*
@@ -27,17 +28,18 @@ export default function DashboardController() {
         get()
     }, [])
 
-    function get() {
-        axios.get(`${DOMAIN}/saldo`).then(res => {
+    const get = async () => {
+        await axios.get(`${DOMAIN}/saldo`).then(res => {
             dispatch({
                 type: OBTER_SALDO_TOTAL,
                 saldoTotal: res.data.saldo_total.toLocaleString('pt-BR'),
                 saldoDisponivel: res.data.disponivel.toLocaleString('pt-BR'),
+                saldoALiberar: res.data.liberar.toLocaleString('pt-BR'),
                 isLoading: false
             })
         })
 
-        axios.get(`${DOMAIN}/vendas/getTotalDeVendas`).then(resp => {
+        await axios.get(`${DOMAIN}/vendas/getTotalDeVendas`).then(resp => {
             dispatch({
                 type: OBTER_TOTAL_VENDAS_NO_MES,
                 totalVendas: resp.data.total_vendas,
@@ -46,7 +48,7 @@ export default function DashboardController() {
             })
         })
 
-        axios.get(`${DOMAIN}/vendas/getVendasPendentes`).then(resp => {
+        await axios.get(`${DOMAIN}/vendas/getVendasPendentes`).then(resp => {
             dispatch({
                 type: OBTER_VENDAS_PENDENTE,
                 vendasPendente: resp.data,
@@ -54,15 +56,24 @@ export default function DashboardController() {
                 isLoading: false
             })
         })
+
+        await axios.get(`${DOMAIN}/anuncio/total_status`).then(status => {
+            dispatch({
+                type: OBTER_STATUS_ANUNCIOS,
+                totalAtivos: status.data.total_ativos,
+                totalPausados: status.data.total_pausados,
+                isLoading: false
+            })
+        })
     }
 
     return (
         <>
-            <Dimmer.Dimmable as={Segment} dimmer={store.isLoading}>
-                <Dimmer active={store.isLoading} inverted>
+            <Dimmer.Dimmable as={Segment} dimmer={state.isLoading}>
+                <Dimmer active={state.isLoading} inverted>
                     <Loader>{CARREGANDO_AGUARDE}</Loader>
                 </Dimmer>
-                <DashboardView {...store} />
+                <DashboardView {...state} />
             </Dimmer.Dimmable>
         </>
     )

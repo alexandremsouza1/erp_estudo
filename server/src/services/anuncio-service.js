@@ -16,6 +16,29 @@ exports.obterVisualizacao = (req, res) => {
     })
 }
 
+exports.totalStatusAnuncios = async (req, res) => {
+    usuarioService.buscarUsuarioPorID().then(async user => {
+        await axios.get(`${constants.API_MERCADO_LIVRE}/users/${user.id}/items/search?search_type=scan&access_token=${user.accessToken}`).then(anuncioID => {
+            let anunciosID = anuncioID.data.results.map(async anuncio => {
+                return await axios.get(`${constants.API_MERCADO_LIVRE}/items/${anuncio}?access_token=${user.accessToken}`).then(detalhe =>{
+                     let statusAnuncio = {
+                         status: detalhe.data.status
+                     } 
+                     return statusAnuncio
+                }).catch(error => console.error(error))
+            })
+            Promise.all(anunciosID).then(status => {
+                let data = {
+                    total_ativos: status.filter(s =>  s.status === 'active').length,
+                    total_pausados: status.filter(s => s.status !== 'active').length
+                }
+                res.send(data)
+            })
+        }).catch(error => console.error(error))
+    }).catch(error => console.error(error))
+    
+}
+
 /** Function responsible for get for all product */
 exports.listarTodosAnuncio = async (req, res) => {
     usuarioService.buscarUsuarioPorID().then(resp01 => {

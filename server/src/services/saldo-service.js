@@ -10,7 +10,8 @@ exports.obterSaldo = (req, res, next) => {
             res.send({
                 id_usuario: resp.data.user_id,
                 saldo_total: resp.data.total_amount,
-                disponivel: resp.data.available_balance
+                disponivel: resp.data.available_balance,
+                liberar: resp.data.pending_to_review
             })
         }).catch(err => {
             res.send(err)
