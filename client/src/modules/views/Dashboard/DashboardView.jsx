@@ -2,7 +2,6 @@ import React from "react";
 import { Row, Col } from "react-bootstrap";
 import Grid from '@material-ui/core/Grid';
 import { Card } from "modules/components/Card/Card.jsx";
-import StatsCard from "modules/components/StatsCard/StatsCard.jsx";
 import Carregando from '../../components/Loading/LoadingCarregandoSolicitacao'
 import { Button, Icon, Item, Label, Segment } from 'semantic-ui-react'
 import Paper from '@material-ui/core/Paper';
@@ -23,17 +22,17 @@ export default function DashboardView(props) {
 
             <Row style={{ 'paddingTop': '15px' }}>
               <Col md={4}>
-                <div style={{ 'color': '#4194D8', 'fontSize': '25px', 'lineHeight': '30px', 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center', 'fontWeight': 'bold' }}>R$ {props.saldoTotal}</div>
+                <div style={{ 'color': '#4194D8', 'fontSize': '25px', 'lineHeight': '30px', 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center', 'fontWeight': 'bold' }}>{props.saldoTotal}</div>
                 <div style={{ 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center' }}>Dinheiro em conta</div>
               </Col>
 
               <Col md={4}>
-                <div style={{ 'color': '#4194D8', 'fontSize': '25px', 'lineHeight': '30px', 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center', 'fontWeight': 'bold' }}>R$ {props.saldoDisponivel}</div>
+                <div style={{ 'color': '#4194D8', 'fontSize': '25px', 'lineHeight': '30px', 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center', 'fontWeight': 'bold' }}>{props.saldoDisponivel}</div>
                 <div style={{ 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center' }}>Dinheiro disponível</div>
               </Col>
 
               <Col md={4}>
-                <div style={{ 'color': '#4194D8', 'fontSize': '25px', 'lineHeight': '30px', 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center', 'fontWeight': 'bold' }}>R$ {props.saldoALiberar}</div>
+                <div style={{ 'color': '#4194D8', 'fontSize': '25px', 'lineHeight': '30px', 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center', 'fontWeight': 'bold' }}>{props.saldoALiberar}</div>
                 <div style={{ 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center' }}>Dinheiro a liberar</div>
               </Col>
             </Row>

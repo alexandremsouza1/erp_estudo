@@ -15,6 +15,7 @@ import iconPagamentoConfirmado from '../../../assets/img/success-icon16px.png'
 import iconCustoEnvio from '../../../assets/img/delete-icon16px.png'
 import Avatar from '@material-ui/core/Avatar';
 import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
 
 export default class VendasView extends React.Component {
 
@@ -103,86 +104,67 @@ export default class VendasView extends React.Component {
                                 content={
                                     <>
                                         <Row>
-                                            <Col md={4}>
-                                                <Card fluid color='blue'>
-                                                    <Card.Content>
-                                                        <Card.Header style={{ 'marginLeft': '-15px' }}>
-                                                            <img src={iconUser}></img>{' '}
-                                                            {venda.comprador.first_name_comprador} {venda.comprador.last_name_comprador}
+                                            <Col md={6}>
+                                                <Paper elevation={3}>
+
+                                                    <img src={iconUser}></img>{' '}
+                                                    {venda.comprador.first_name_comprador} {venda.comprador.last_name_comprador}
+
+
+                                                    <div>
+                                                        {venda.comprador.nickname_comprador}
+                                                    </div>
+                                                    <div>
+                                                        <img src={iconMessage}></img>{' '}
+                                                        <a href='#'>Enviar mensagem</a>
+                                                    </div>
+                                                    <Divider />
+                                                    <div>
+                                                        CPF: {venda.comprador.documento_comprador}
+                                                    </div>
+                                                    <div>
+                                                        <img src={iconWhatsapp}></img>{' '}
+                                                        <a href={venda.comprador.whatsapp} target='_blank' data-toggle="tooltip" title='Número de contato do Whatsapp web!'>{venda.comprador.numero_contato}</a>
+                                                    </div>
+
+
+                                                    <Row>
+                                                        <Col md={12}>
+                                                            <div style={{ 'color': '#4194D8', 'fontSize': '20px', 'lineHeight': '30px', 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center', 'fontWeight': 'bold' }}>{venda.comprador.first_name_comprador} {venda.comprador.last_name_comprador}</div>
+                                                            <div style={{ 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center' }}>{venda.comprador.nickname_comprador}</div>
+                                                        </Col>
+                                                    </Row>
+                                                </Paper>
+                                            </Col>
+
+                                            <Col md={6}>
+                                                <Paper elevation={3}>
+                                                    <Card fluid color='blue'>
+                                                        <Card.Content>
+                                                            <Card.Header style={{ 'marginLeft': '-15px' }}>
+                                                                <img src={iconMoney}></img>{' '}
+                                                                Pagamento
                                                         </Card.Header>
-                                                        <Card.Meta>
-                                                            <div>
-                                                                {venda.comprador.nickname_comprador}
-                                                            </div>
-                                                            <div>
-                                                                <img src={iconMessage}></img>{' '}
-                                                                <a href='#'>Enviar mensagem</a>
-                                                            </div>
+                                                            <Card.Meta>{venda.data_venda}</Card.Meta>
                                                             <Divider />
-                                                            <div>
-                                                                CPF: {venda.comprador.documento_comprador}
-                                                            </div>
-                                                            <div>
-                                                                <img src={iconWhatsapp}></img>{' '}
-                                                                <a href={venda.comprador.whatsapp} target='_blank' data-toggle="tooltip" title='Número de contato do Whatsapp web!'>{venda.comprador.numero_contato}</a>
-                                                            </div>
+                                                            <Card.Description style={{ 'height': '65px' }}>
+                                                                <p>
+                                                                    <img src={iconPagamentoConfirmado}></img>{' '}
+                                                                    <span style={{ 'color': '#19b698', 'fontSize': '18px', 'fontFamily': 'Open Sans' }}>R$ {venda.dados_pagamento[0].total_pago.toFixed(2).toLocaleString('pt-BR')}</span>
+                                                                    <span className={venda.dados_pagamento[0].status_pagamento === 'approved' ? this.state.badgeSucess : this.state.badgeDange}
+                                                                        style={{ 'color': 'white', 'marginLeft': '115px' }}>{venda.dados_pagamento[0].status_pagamento === 'approved' ? 'Aprovado' : 'Estornado'}</span>
+                                                                    <img src={iconCustoEnvio}></img>{' '}
+                                                                    <span>Frete: {venda.dados_pagamento[0].custo_envio.toFixed(2).toLocaleString('pt-BR')}</span>
+                                                                </p>
 
-                                                        </Card.Meta>
-                                                        <Card.Description>
+                                                                <span>Tipo de pagamento: {venda.dados_pagamento[0].tipoPagamento}</span>
 
-                                                        </Card.Description>
-                                                    </Card.Content>
-                                                </Card>
+                                                            </Card.Description>
+                                                        </Card.Content>
+                                                    </Card>
+                                                </Paper>
                                             </Col>
 
-                                            <Col md={4}>
-                                                <Card fluid color='blue'>
-                                                    <Card.Content>
-                                                        <Card.Header style={{ 'marginLeft': '-15px' }}>
-                                                            <img src={iconMoney}></img>{' '}
-                                                            Pagamento
-                                                        </Card.Header>
-                                                        <Card.Meta>{venda.data_venda}</Card.Meta>
-                                                        <Divider />
-                                                        <Card.Description style={{ 'height': '65px' }}>
-                                                            <p>
-                                                                <img src={iconPagamentoConfirmado}></img>{' '}
-                                                                <span style={{ 'color': '#19b698', 'fontSize': '18px', 'fontFamily': 'Open Sans' }}>R$ {venda.dados_pagamento[0].total_pago.toFixed(2).toLocaleString('pt-BR')}</span>
-                                                                <span className={venda.dados_pagamento[0].status_pagamento === 'approved' ? this.state.badgeSucess : this.state.badgeDange}
-                                                                    style={{ 'color': 'white', 'marginLeft': '115px' }}>{venda.dados_pagamento[0].status_pagamento === 'approved' ? 'Aprovado' : 'Estornado'}</span>
-                                                                <img src={iconCustoEnvio}></img>{' '}
-                                                                <span>Frete: {venda.dados_pagamento[0].custo_envio.toFixed(2).toLocaleString('pt-BR')}</span>
-                                                            </p>
-
-                                                            <span>Tipo de pagamento: {venda.dados_pagamento[0].tipoPagamento}</span>
-
-                                                        </Card.Description>
-                                                    </Card.Content>
-                                                </Card>
-                                            </Col>
-
-                                            <Col md={4}>
-                                                <Card fluid color='blue'>
-                                                    <Card.Content>
-                                                        <Card.Header style={{ 'marginLeft': '-15px' }}>
-                                                            <img src={iconEnvio}></img>{' '}
-                                                            Envio
-                                                        </Card.Header>
-                                                        <Card.Meta>
-                                                            Código de Rastreio: <a href='https://rastreamentocorreios.info/consulta/PX858327215BR'>{venda.dados_entrega.cod_rastreamento}</a>
-                                                        </Card.Meta>
-                                                        <Divider />
-                                                        <Card.Description style={{ 'height': '65px' }}>
-                                                            <div>
-                                                                CEP: {venda.dados_entrega.cep}
-                                                            </div>
-                                                            <div>
-                                                                Valor pago: {venda.valor_venda.toFixed(2).toLocaleString('pt-BR')}
-                                                            </div>
-                                                        </Card.Description>
-                                                    </Card.Content>
-                                                </Card>
-                                            </Col>
                                         </Row>
                                         <Divider />
                                         <Row>
@@ -211,7 +193,13 @@ export default class VendasView extends React.Component {
                                                         </h3>
                                                     </div>
                                                     <div className='panel-body'>
-                                                        Detalhes do Envio
+                                                        Código de Rastreio: <a href='https://rastreamentocorreios.info/consulta/PX858327215BR'>{venda.dados_entrega.cod_rastreamento}</a>
+                                                        <div>
+                                                            CEP: {venda.dados_entrega.cep}
+                                                        </div>
+                                                        <div>
+                                                            Valor pago: {venda.valor_venda.toFixed(2).toLocaleString('pt-BR')}
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </Col>

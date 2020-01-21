@@ -9,9 +9,9 @@ exports.obterSaldo = (req, res, next) => {
         axios.get(`https://api.mercadolibre.com/users/${resp.id}/mercadopago_account/balance?access_token=${resp.accessToken}`).then(resp => {
             res.send({
                 id_usuario: resp.data.user_id,
-                saldo_total: resp.data.total_amount,
-                disponivel: resp.data.available_balance,
-                liberar: resp.data.pending_to_review
+                saldo_total: resp.data.total_amount.toLocaleString('pt-BR', { minimumFractionDigits: 2, style: 'currency', currency: 'BRL' }),
+                disponivel: resp.data.available_balance.toLocaleString('pt-BR', { minimumFractionDigits: 2, style: 'currency', currency: 'BRL' }),
+                liberar: resp.data.pending_to_review.toLocaleString('pt-BR', { minimumFractionDigits: 2, style: 'currency', currency: 'BRL' })
             })
         }).catch(err => {
             res.send(err)
