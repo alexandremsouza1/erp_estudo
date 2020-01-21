@@ -5,17 +5,23 @@ import Panel from '../../components/Panel/Panel'
 import imgParaPreparar from '../../../assets/img/delivery-box-icon128px.png'
 import imgProntoParaEnviar from '../../../assets/img/delivery-truck-icon128px.png'
 import imgConcluido from '../../../assets/img/Accept-icon128px.png'
-import { Card, Divider, Icon, Step } from 'semantic-ui-react'
-import iconWhatsapp from '../../../assets/img/WhatsApp-icon.png'
-import iconUser from '../../../assets/img/user16px.png'
-import iconEnvio from '../../../assets/img/delivery-truck-icon16px.png'
-import iconMoney from '../../../assets/img/money16px.png'
-import iconMessage from '../../../assets/img/messages-icon16px.png'
+import { Divider, Icon, Step } from 'semantic-ui-react'
+import WhatsAppIcon from '@material-ui/icons/WhatsApp';
+import SmsIcon from '@material-ui/icons/Sms';
 import iconPagamentoConfirmado from '../../../assets/img/success-icon16px.png'
 import iconCustoEnvio from '../../../assets/img/delete-icon16px.png'
+import RoomIcon from '@material-ui/icons/Room';
 import Avatar from '@material-ui/core/Avatar';
+import LocalShippingIcon from '@material-ui/icons/LocalShipping';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
+import Card from '@material-ui/core/Card';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import Tooltip from '@material-ui/core/Tooltip';
 
 export default class VendasView extends React.Component {
 
@@ -97,49 +103,48 @@ export default class VendasView extends React.Component {
 
                     if (venda.dados_entrega.status === this.state.status_envio) {
                         return (
-                            <Panel key={key} title={<div>Pedido <span className="badge badge-success" style={{ 'color': 'white' }}>
-                                {this.getTraduzirStatusEnvio(this.state.status_envio)}</span> - Nº #{venda.id_venda} - {venda.itens_pedido.titulo_anuncio}
-                                <a href='#' style={{ 'marginLeft': '10px', 'color': 'white' }}>- Ver detalhes</a>
-                            </div>}
-                                content={
-                                    <>
-                                        <Row>
-                                            <Col md={6}>
-                                                <Paper elevation={3}>
+                            <Paper variant={3}>
+                                <Panel style={{ 'backgroundColor': '#1976d2', 'color': 'white' }} key={key} title={<div>Pedido <span className="badge badge-success" style={{ 'color': 'white' }}>
+                                    {this.getTraduzirStatusEnvio(this.state.status_envio)}</span> - Nº #{venda.id_venda} - {venda.itens_pedido.titulo_anuncio}
+                                </div>}
+                                    content={
+                                        <>
+                                            <Row>
+                                                <Col md={6}>
 
-                                                    <img src={iconUser}></img>{' '}
-                                                    {venda.comprador.first_name_comprador} {venda.comprador.last_name_comprador}
+                                                    <Card>
+                                                        <CardActionArea>
+                                                            <CardContent>
+                                                                <Typography gutterBottom variant="h5" component="h2">
+                                                                    Nome: {venda.comprador.first_name_comprador} {venda.comprador.last_name_comprador}
+                                                                </Typography>
+                                                                <Typography variant="body2" color="textSecondary" component="p">
+                                                                    <strong>Usuário:</strong> {venda.comprador.nickname_comprador}  <strong>CPF:</strong> {venda.comprador.documento_comprador}
+                                                                </Typography>
+                                                            </CardContent>
+                                                        </CardActionArea>
+                                                        <CardActions>
+                                                            <Button
+                                                                variant="contained"
+                                                                style={{ 'color': 'white', 'backgroundColor': 'green' }}
+                                                                startIcon={<WhatsAppIcon />}>
+                                                                <a href={venda.comprador.whatsapp} style={{ 'color': 'white' }} target='_blank' data-toggle="tooltip" title='Enviar mensagem WhatsApp'>Enviar mensagem WhatsApp</a>
+                                                            </Button>
+                                                            <Button
+                                                                variant="contained"
+                                                                style={{ 'color': 'black', 'backgroundColor': '#ffe600' }}
+                                                                startIcon={<SmsIcon />}>
+                                                                Enviar Mensagem Mercado Livre
+                                                            </Button>
+                                                        </CardActions>
+                                                    </Card>
 
+                                                </Col>
 
-                                                    <div>
-                                                        {venda.comprador.nickname_comprador}
-                                                    </div>
-                                                    <div>
-                                                        <img src={iconMessage}></img>{' '}
-                                                        <a href='#'>Enviar mensagem</a>
-                                                    </div>
-                                                    <Divider />
-                                                    <div>
-                                                        CPF: {venda.comprador.documento_comprador}
-                                                    </div>
-                                                    <div>
-                                                        <img src={iconWhatsapp}></img>{' '}
-                                                        <a href={venda.comprador.whatsapp} target='_blank' data-toggle="tooltip" title='Número de contato do Whatsapp web!'>{venda.comprador.numero_contato}</a>
-                                                    </div>
-
-
-                                                    <Row>
-                                                        <Col md={12}>
-                                                            <div style={{ 'color': '#4194D8', 'fontSize': '20px', 'lineHeight': '30px', 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center', 'fontWeight': 'bold' }}>{venda.comprador.first_name_comprador} {venda.comprador.last_name_comprador}</div>
-                                                            <div style={{ 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center' }}>{venda.comprador.nickname_comprador}</div>
-                                                        </Col>
-                                                    </Row>
-                                                </Paper>
-                                            </Col>
-
-                                            <Col md={6}>
-                                                <Paper elevation={3}>
-                                                    <Card fluid color='blue'>
+                                                <Col md={6}>
+                                                    <Paper elevation={3}>
+                                                        {/** 
+                                                     * <Card fluid color='blue'>
                                                         <Card.Content>
                                                             <Card.Header style={{ 'marginLeft': '-15px' }}>
                                                                 <img src={iconMoney}></img>{' '}
@@ -162,51 +167,101 @@ export default class VendasView extends React.Component {
                                                             </Card.Description>
                                                         </Card.Content>
                                                     </Card>
-                                                </Paper>
-                                            </Col>
+                                                    */}
 
-                                        </Row>
-                                        <Divider />
-                                        <Row>
-                                            <Col md={6}>
-                                                <div className='panel panel-info'>
-                                                    <div className='panel-heading oneLine'>
-                                                        <h3 className='panel-title'>
-                                                            Dados da Entrega
-                                                        </h3>
-                                                    </div>
-                                                    <div className='panel-body'>
-                                                        <div>Destinatário: <b>{venda.comprador.first_name_comprador} {venda.comprador.last_name_comprador}</b></div>
-                                                        <div>CEP: <b>{venda.dados_entrega.cep}</b></div>
-                                                        <div>Endereço: <b>{venda.dados_entrega.rua}</b></div>
-                                                        <div>Complemento:</div>
-                                                        <div>Bairro: </div>
-                                                        <div>Cidade: <b>{venda.dados_entrega.cidade}</b> - Estado: <b>{venda.dados_entrega.estado}</b></div>
-                                                    </div>
-                                                </div>
-                                            </Col>
-                                            <Col md={6}>
-                                                <div className='panel panel-info'>
-                                                    <div className='panel-heading oneLine'>
-                                                        <h3 className='panel-title'>
-                                                            Detalhes do Envio
-                                                        </h3>
-                                                    </div>
-                                                    <div className='panel-body'>
-                                                        Código de Rastreio: <a href='https://rastreamentocorreios.info/consulta/PX858327215BR'>{venda.dados_entrega.cod_rastreamento}</a>
-                                                        <div>
-                                                            CEP: {venda.dados_entrega.cep}
+                                                        <Card>
+                                                            <CardActionArea>
+                                                                <CardContent>
+                                                                    <Typography gutterBottom variant="h5" component="h2">
+
+                                                                    </Typography>
+                                                                    <Typography variant="body2" color="textSecondary" component="p">
+                                                                        <p>
+                                                                            <img src={iconPagamentoConfirmado}></img>{' '}
+                                                                            <span style={{ 'color': '#19b698', 'fontSize': '18px', 'fontFamily': 'Open Sans' }}>R$ {venda.dados_pagamento[0].total_pago.toFixed(2).toLocaleString('pt-BR')}</span>
+                                                                            <span className={venda.dados_pagamento[0].status_pagamento === 'approved' ? this.state.badgeSucess : this.state.badgeDange}
+                                                                                style={{ 'color': 'white', 'marginLeft': '115px' }}>{venda.dados_pagamento[0].status_pagamento === 'approved' ? 'Aprovado' : 'Estornado'}</span>
+                                                                            <img src={iconCustoEnvio}></img>{' '}
+                                                                            <span>Frete: {venda.dados_pagamento[0].custo_envio.toFixed(2).toLocaleString('pt-BR')}</span>
+                                                                        </p>
+
+                                                                        <span>Tipo de pagamento: {venda.dados_pagamento[0].tipoPagamento}</span>
+                                                                    </Typography>
+                                                                </CardContent>
+                                                            </CardActionArea>
+
+                                                        </Card>
+                                                    </Paper>
+                                                </Col>
+
+                                            </Row>
+                                            <Divider />
+                                            <Row>
+                                                <Col md={6}>
+
+                                                    <div className='panel'>
+                                                        <div className='panel-heading oneLine'>
+                                                            <h3 className='panel-title'>
+                                                                Dados da Entrega
+                                                                </h3>
                                                         </div>
-                                                        <div>
-                                                            Valor pago: {venda.valor_venda.toFixed(2).toLocaleString('pt-BR')}
+                                                        <div className='panel-body'>
+                                                            <div>Destinatário: <b>{venda.comprador.first_name_comprador} {venda.comprador.last_name_comprador}</b></div>
+                                                            <Typography variant="body2">
+                                                                CEP: <b>{venda.dados_entrega.endereco_entrega.cep}</b>
+                                                            </Typography>
+                                                            <div>Telefone da pessoa responsável pelo recebimento: <b>{venda.dados_entrega.endereco_entrega.telefonePessoaEntrega}</b></div>
+                                                            <div>Nome da pessoa responsável pelo recebimento: <b>{venda.dados_entrega.endereco_entrega.nomePessoaEntrega}</b></div>
+                                                            <div>Endereço: <b>{venda.dados_entrega.endereco_entrega.rua}</b> - Nº <b>{venda.dados_entrega.endereco_entrega.numero}</b></div>
+                                                            <div>Bairro: <b>{venda.dados_entrega.endereco_entrega.bairro.name}</b></div>
+                                                            <div>Cidade: <b>{venda.dados_entrega.endereco_entrega.cidade.name}</b> - Estado: <b>{venda.dados_entrega.endereco_entrega.estado.name}</b></div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </Col>
-                                        </Row>
-                                    </>
-                                }>
-                            </Panel>
+
+                                                </Col>
+
+
+
+                                                <Col md={6}>
+
+                                                    <div className='panel' style={{ 'height': '193px' }}>
+                                                        <div className='panel-heading oneLine'>
+                                                            <h3 className='panel-title'>
+                                                                Detalhes do Envio
+                                                                </h3>
+                                                        </div>
+                                                        <div className='panel-body'>
+                                                            <Typography variant="body2">
+                                                                Código de Rastreio: {venda.dados_entrega.cod_rastreamento}
+                                                            </Typography>
+                                                            <Typography variant="body2">
+                                                                Método de envio: <b>{venda.dados_entrega.metodo_envio}</b>
+                                                            </Typography>
+                                                            <CardActions>
+                                                                <Button
+                                                                    variant="contained"
+                                                                    color="default"
+                                                                    startIcon={<RoomIcon />}>
+                                                                    Ver endereço no Google Maps
+                                                                 </Button>
+                                                                 <Tooltip title="Acompanhar o rastreamento do produto">
+                                                                    <Button
+                                                                        variant="contained"
+                                                                        color="default"
+                                                                        startIcon={<LocalShippingIcon />}>
+                                                                        Visualizar rastreamento
+                                                                    </Button>
+                                                                 </Tooltip>
+                                                            </CardActions>
+                                                        </div>
+                                                    </div>
+
+                                                </Col>
+                                            </Row>
+                                        </>
+                                    }>
+                                </Panel>
+                            </Paper>
                         )
                     }
                 })}
