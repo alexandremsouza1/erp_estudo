@@ -170,25 +170,36 @@ export default class VendasView extends React.Component {
                                                     */}
 
                                                         <Card>
-                                                            <CardActionArea>
+                                                            
                                                                 <CardContent>
                                                                     <Typography gutterBottom variant="h5" component="h2">
 
                                                                     </Typography>
                                                                     <Typography variant="body2" color="textSecondary" component="p">
-                                                                        <p>
-                                                                            <img src={iconPagamentoConfirmado}></img>{' '}
-                                                                            <span style={{ 'color': '#19b698', 'fontSize': '18px', 'fontFamily': 'Open Sans' }}>R$ {venda.dados_pagamento[0].total_pago.toFixed(2).toLocaleString('pt-BR')}</span>
-                                                                            <span className={venda.dados_pagamento[0].status_pagamento === 'approved' ? this.state.badgeSucess : this.state.badgeDange}
-                                                                                style={{ 'color': 'white', 'marginLeft': '115px' }}>{venda.dados_pagamento[0].status_pagamento === 'approved' ? 'Aprovado' : 'Estornado'}</span>
-                                                                            <img src={iconCustoEnvio}></img>{' '}
-                                                                            <span>Frete: {venda.dados_pagamento[0].custo_envio.toFixed(2).toLocaleString('pt-BR')}</span>
-                                                                        </p>
 
-                                                                        <span>Tipo de pagamento: {venda.dados_pagamento[0].tipoPagamento}</span>
+                                                                        <Row>
+                                                                            <Col md={6}>
+                                                                                <div>Data da venda: <b>{venda.data_venda}</b></div>
+                                                                                <div>Valor da venda: <b>R$ {venda.valor_venda.toLocaleString('pt-BR', { minimumFractionDigits: 2, currency: 'BRL' })}</b></div>
+                                                                                <div>
+                                                                                    Status de pagamento:
+                                                                                <div className={venda.dados_pagamento[0].status_pagamento === 'approved' ? this.state.badgeSucess : this.state.badgeDange}
+                                                                                        style={{ 'color': 'white' }}>{venda.dados_pagamento[0].status_pagamento === 'approved' ? 'Aprovado' : 'Estornado'}</div>
+                                                                                </div>
+                                                                                <div>Custo de envio: <b>R$ {venda.dados_pagamento[0].custo_envio.toLocaleString('pt-BR', { minimumFractionDigits: 2, currency: 'BRL' })}</b></div>
+                                                                                <div>Valor pago: <b>R$ {venda.dados_pagamento[0].total_pago.toLocaleString('pt-BR', { minimumFractionDigits: 2, currency: 'BRL' })}</b></div>
+                                                                            </Col>
+
+                                                                            <Col md={6}>
+                                                                                <div>Boleto: <b>{venda.dados_pagamento[0].boleto_url}</b></div>
+                                                                                <div>Método de pagamento: <b>{venda.dados_pagamento[0].metodoPagamento}</b></div>
+                                                                                <div>Tipo de pagamento: <b>{venda.dados_pagamento[0].tipoPagamento}</b></div>
+                                                                            </Col>
+                                                                        </Row>
+
                                                                     </Typography>
                                                                 </CardContent>
-                                                            </CardActionArea>
+                                                            
 
                                                         </Card>
                                                     </Paper>
@@ -244,14 +255,14 @@ export default class VendasView extends React.Component {
                                                                     startIcon={<RoomIcon />}>
                                                                     Ver endereço no Google Maps
                                                                  </Button>
-                                                                 <Tooltip title="Acompanhar o rastreamento do produto">
+                                                                <Tooltip title="Acompanhar o rastreamento do produto">
                                                                     <Button
                                                                         variant="contained"
                                                                         color="default"
                                                                         startIcon={<LocalShippingIcon />}>
                                                                         Visualizar rastreamento
                                                                     </Button>
-                                                                 </Tooltip>
+                                                                </Tooltip>
                                                             </CardActions>
                                                         </div>
                                                     </div>
