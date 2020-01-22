@@ -284,7 +284,7 @@ function adicionarNove(numero) {
 
 async function example() {
 
-    const track = await rastro.track('JT124720455BR');
+    const track = await rastro.track('PX858327215BR');
 
     console.log(track);
 
@@ -546,7 +546,7 @@ let getDataSite = async () => {
     }).catch(error => console.error(error))
 }
 
-getDataSite()
+example()
 
 
 

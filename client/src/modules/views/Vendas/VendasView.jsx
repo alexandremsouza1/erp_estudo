@@ -22,6 +22,9 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
+import GoogleMaps from '../../components/GoogleMaps/GoogleMaps'
+import PictureAsPdfIcon from '@material-ui/icons/PictureAsPdf';
+import IconButton from '@material-ui/core/IconButton';
 
 export default class VendasView extends React.Component {
 
@@ -103,7 +106,7 @@ export default class VendasView extends React.Component {
 
                     if (venda.dados_entrega.status === this.state.status_envio) {
                         return (
-                            <Paper variant={3}>
+                            <Paper elevation={3}>
                                 <Panel style={{ 'backgroundColor': '#1976d2', 'color': 'white' }} key={key} title={<div>Pedido <span className="badge badge-success" style={{ 'color': 'white' }}>
                                     {this.getTraduzirStatusEnvio(this.state.status_envio)}</span> - Nº #{venda.id_venda} - {venda.itens_pedido.titulo_anuncio}
                                 </div>}
@@ -118,7 +121,7 @@ export default class VendasView extends React.Component {
                                                                 <Typography gutterBottom variant="h5" component="h2">
                                                                     Nome: {venda.comprador.first_name_comprador} {venda.comprador.last_name_comprador}
                                                                 </Typography>
-                                                                <Typography variant="body2" color="textSecondary" component="p">
+                                                                <Typography variant="body2" component="p">
                                                                     <strong>Usuário:</strong> {venda.comprador.nickname_comprador}  <strong>CPF:</strong> {venda.comprador.documento_comprador}
                                                                 </Typography>
                                                             </CardContent>
@@ -170,36 +173,41 @@ export default class VendasView extends React.Component {
                                                     */}
 
                                                         <Card>
-                                                            
-                                                                <CardContent>
-                                                                    <Typography gutterBottom variant="h5" component="h2">
 
-                                                                    </Typography>
-                                                                    <Typography variant="body2" color="textSecondary" component="p">
+                                                            <CardContent>
 
-                                                                        <Row>
-                                                                            <Col md={6}>
-                                                                                <div>Data da venda: <b>{venda.data_venda}</b></div>
-                                                                                <div>Valor da venda: <b>R$ {venda.valor_venda.toLocaleString('pt-BR', { minimumFractionDigits: 2, currency: 'BRL' })}</b></div>
-                                                                                <div>
-                                                                                    Status de pagamento:
+                                                                <Row>
+                                                                    <Col md={6}>
+                                                                        <div>Data da venda: <b>{venda.data_venda}</b></div>
+                                                                        <div>Valor do produto: <b>R$ {venda.valor_venda.toLocaleString('pt-BR', { minimumFractionDigits: 2, currency: 'BRL' })}</b></div>
+                                                                        <div>
+                                                                            Status de pagamento:
                                                                                 <div className={venda.dados_pagamento[0].status_pagamento === 'approved' ? this.state.badgeSucess : this.state.badgeDange}
-                                                                                        style={{ 'color': 'white' }}>{venda.dados_pagamento[0].status_pagamento === 'approved' ? 'Aprovado' : 'Estornado'}</div>
-                                                                                </div>
-                                                                                <div>Custo de envio: <b>R$ {venda.dados_pagamento[0].custo_envio.toLocaleString('pt-BR', { minimumFractionDigits: 2, currency: 'BRL' })}</b></div>
-                                                                                <div>Valor pago: <b>R$ {venda.dados_pagamento[0].total_pago.toLocaleString('pt-BR', { minimumFractionDigits: 2, currency: 'BRL' })}</b></div>
-                                                                            </Col>
+                                                                                style={{ 'color': 'white', 'fontSize': '10px', 'marginLeft': '5px' }}>{venda.dados_pagamento[0].status_pagamento === 'approved' ? 'Aprovado' : 'Estornado'}</div>
+                                                                        </div>
+                                                                        <div>Custo de envio: <b>R$ {venda.dados_pagamento[0].custo_envio.toLocaleString('pt-BR', { minimumFractionDigits: 2, currency: 'BRL' })}</b></div>
+                                                                        <div>Valor pago: <b>R$ {venda.dados_pagamento[0].total_pago.toLocaleString('pt-BR', { minimumFractionDigits: 2, currency: 'BRL' })}</b></div>
+                                                                    </Col>
 
-                                                                            <Col md={6}>
-                                                                                <div>Boleto: <b>{venda.dados_pagamento[0].boleto_url}</b></div>
-                                                                                <div>Método de pagamento: <b>{venda.dados_pagamento[0].metodoPagamento}</b></div>
-                                                                                <div>Tipo de pagamento: <b>{venda.dados_pagamento[0].tipoPagamento}</b></div>
-                                                                            </Col>
-                                                                        </Row>
+                                                                    <Col md={6}>
+                                                                        {venda.dados_pagamento[0].boleto_url !== null &&
+                                                                            <Button
+                                                                                variant="contained"
+                                                                                style={{ 'color': 'white', 'marginBottom': '20px' }}
+                                                                                color='default'
+                                                                                startIcon={<PictureAsPdfIcon color="primary"/>}>
+                                                                                <a style={{ 'color': 'black' }} href={venda.dados_pagamento[0].boleto_url} target='_blank' rel="noopener noreferrer">Boleto</a>
+                                                                            </Button>
+                                                                        }
+                                                                        <div>Método de pagamento: <b>{venda.dados_pagamento[0].metodoPagamento}</b></div>
+                                                                        <div>Tipo de pagamento: <b>{venda.dados_pagamento[0].tipoPagamento}</b></div>
+                                                                    </Col>
 
-                                                                    </Typography>
-                                                                </CardContent>
-                                                            
+                                                                </Row>
+
+
+                                                            </CardContent>
+
 
                                                         </Card>
                                                     </Paper>
@@ -264,6 +272,9 @@ export default class VendasView extends React.Component {
                                                                     </Button>
                                                                 </Tooltip>
                                                             </CardActions>
+
+
+
                                                         </div>
                                                     </div>
 
