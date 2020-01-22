@@ -227,7 +227,7 @@ export default class VendasView extends React.Component {
                                                                         <div>Valor pago: <b>R$ {venda.dados_pagamento[0].total_pago.toLocaleString('pt-BR', { minimumFractionDigits: 2, currency: 'BRL' })}</b></div>
                                                                         <div>Qtde vendido: <b>{venda.itens_pedido.quantidade_vendido}</b></div>
                                                                         <Tooltip title="Clique aqui ver mais detalhes">
-                                                                            <Button style={{'marginLeft':'-8px', 'marginTop':'8px'}} onClick={() => this.exibirVerMaisDetalhes(venda)}>Mais detalhes</Button>
+                                                                            <Button style={{ 'marginLeft': '-8px', 'marginTop': '8px' }} onClick={() => this.exibirVerMaisDetalhes(venda)}>Mais detalhes</Button>
                                                                         </Tooltip>
                                                                     </Col>
 
@@ -351,18 +351,18 @@ export default class VendasView extends React.Component {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                            <TableRow>
-                                                <TableCell component="th" scope="row">
-                                                    {this.state.venda.itens_pedido.sku === null ? <>Não informado</> : this.state.venda.itens_pedido.sku}
-                                                </TableCell>
-                                                <TableCell align="right">R$ {this.state.venda.itens_pedido.taxa_venda.toFixed(2)}</TableCell>
-                                                <TableCell align="right">{this.state.venda.itens_pedido.garantia === null ? <>Não informado</> : this.state.venda.itens_pedido.garantia}</TableCell>
-                                                {this.state.venda.itens_pedido.variation_attributes.map((variation, key) => {
-                                                    return (
-                                                        <TableCell key={key} align="right"><b>{variation.value_name}</b></TableCell>
-                                                    )
-                                                })}
-                                            </TableRow>
+                                        <TableRow>
+                                            <TableCell component="th" scope="row">
+                                                {this.state.venda.itens_pedido.sku === null ? <>Não informado</> : this.state.venda.itens_pedido.sku}
+                                            </TableCell>
+                                            <TableCell align="right">R$ {this.state.venda.itens_pedido.taxa_venda.toFixed(2)}</TableCell>
+                                            <TableCell align="right">{this.state.venda.itens_pedido.garantia === null ? <>Não informado</> : this.state.venda.itens_pedido.garantia}</TableCell>
+                                            {this.state.venda.itens_pedido.variation_attributes.map((variation, key) => {
+                                                return (
+                                                    <TableCell key={key} align="right"><b>{variation.value_name}</b></TableCell>
+                                                )
+                                            })}
+                                        </TableRow>
                                     </TableBody>
                                 </Table>
                             </TableContainer>
