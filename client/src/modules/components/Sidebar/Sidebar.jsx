@@ -1,5 +1,5 @@
 import React from "react";
-import {useSelector, useDispatch} from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { NavLink } from "react-router-dom";
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
@@ -10,7 +10,8 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import {OPEN_DRAWER_MENU} from '../../constants/constants'
+import { OPEN_DRAWER_MENU } from '../../constants/constants'
+import Badge from '@material-ui/core/Badge';
 
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -19,7 +20,7 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 export default function Sidebar(props) {
 
 
-  const drawerWidth = 240;
+  const drawerWidth = 250;
 
   /**
    * <div
@@ -147,7 +148,7 @@ export default function Sidebar(props) {
   };
 
   const handleClickClose = () => {
-    dispatch({type: OPEN_DRAWER_MENU, isSidebar: false})
+    dispatch({ type: OPEN_DRAWER_MENU, isSidebar: false })
   }
 
   return (
@@ -182,11 +183,15 @@ export default function Sidebar(props) {
                   to={prop.layout + prop.path}
                   className="nav-link"
                   activeClassName="active"
-                  style={{'color':'black'}}>
+                  style={{ 'color': 'black' }}>
+
                   <ListItem button key={key} onClick={() => handleListItemClick(prop.layout + prop.path)} selected={selectedIndex === prop.layout + prop.path}>
-                    <ListItemIcon style={{'marginLeft':'10px'}}><i className={prop.icon} style={{ 'fontSize': '15px' }} /></ListItemIcon>
+                    <Badge anchorOrigin={{vertical: 'top', horizontal: 'left'}} badgeContent={prop.name === 'Mensagens de Pos venda' ? 1 : 0} color="primary">
+                      <ListItemIcon style={{ 'marginLeft': '10px' }}><i className={prop.icon} style={{ 'fontSize': '15px' }} /></ListItemIcon>
+                    </Badge>
                     <ListItemText primary={prop.name} />
                   </ListItem>
+
                 </NavLink>
               </List>
             );

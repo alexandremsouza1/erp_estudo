@@ -42,8 +42,8 @@ const dashboardRoutes = [{
   layout: "/admin"
 },
 {
-  path: "/icons",
-  name: "Perguntas",
+  path: "/mensagens",
+  name: "Mensagens de Pos venda",
   icon: "conversation icon",
   component: PerguntasController,
   layout: "/admin"

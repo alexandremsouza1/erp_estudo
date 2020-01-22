@@ -47,7 +47,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
     </div>
  */
 
-const drawerWidth = 240
+const drawerWidth = 250
 
 const StyledMenu = withStyles({
   paper: {
