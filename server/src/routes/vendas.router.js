@@ -6,5 +6,6 @@ router.get('/getTotalDeVendas', vendasService.obterTotalDeVendas)
 router.get('/getVendasConcluidas', vendasService.obterVendasConcluidas)
 router.get('/getVendasPendentes', vendasService.obterVendasPendentes)
 router.get('/getVendasEmTransito', vendasService.obterVendasEmTransito)
+router.get('/getTotalVendas', vendasService.obterTotalVendasConcluidas)
 
 module.exports = router

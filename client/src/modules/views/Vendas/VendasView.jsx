@@ -29,6 +29,13 @@ import Iframe from 'react-iframe'
 import DialogFull from '../../components/Dialogs/DialogFull'
 import { Timeline, TimelineItem } from 'vertical-timeline-component-for-react'
 
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+
 export default class VendasView extends React.Component {
 
     constructor(props) {
@@ -39,7 +46,8 @@ export default class VendasView extends React.Component {
             badgeDange: 'badge badge-danger',
             openDialogFull: false,
             openDialogCodigoRastreio: false,
-            venda: {}
+            venda: {},
+            openModalVerMaisDetalhes: false
         }
     }
 
@@ -79,6 +87,15 @@ export default class VendasView extends React.Component {
         this.props.obterRastreioCorreios(codigo)
     }
 
+    exibirVerMaisDetalhes = (venda) => {
+        this.setState(
+            {
+                openModalVerMaisDetalhes: true,
+                venda: venda
+            }
+        )
+    }
+
     render() {
         return (
             <div className="content">
@@ -88,7 +105,7 @@ export default class VendasView extends React.Component {
                             <Grid container direction="row" justify="center" alignItems="center">
                                 <Paper elevation={2}>
                                     <Step.Group>
-                                        <Step active href="#" style={{'fontSize': '16px'}}>
+                                        <Step active href="#" style={{ 'fontSize': '16px' }}>
                                             <Avatar alt="concluido" src={imgParaPreparar} />
                                             <Step.Content style={{ 'marginLeft': '10px' }}>
                                                 <Step.Title>Pendentes</Step.Title>
@@ -96,7 +113,7 @@ export default class VendasView extends React.Component {
                                             </Step.Content>
                                         </Step>
 
-                                        <Step active href="#" style={{'fontSize': '16px'}}>
+                                        <Step active href="#" style={{ 'fontSize': '16px' }}>
                                             <Avatar alt="concluido" src={imgProntoParaEnviar} />
                                             <Step.Content style={{ 'marginLeft': '10px' }}>
                                                 <Step.Title>Pronto para enviar</Step.Title>
@@ -104,7 +121,7 @@ export default class VendasView extends React.Component {
                                             </Step.Content>
                                         </Step>
 
-                                        <Step active onClick={() => this.getStatusEmTransito()} style={{'fontSize': '16px'}}>
+                                        <Step active onClick={() => this.getStatusEmTransito()} style={{ 'fontSize': '16px' }}>
                                             <Icon name="truck" />
                                             <Step.Content style={{ 'marginLeft': '10px' }}>
                                                 <Step.Title>Em trânsito</Step.Title>
@@ -112,7 +129,7 @@ export default class VendasView extends React.Component {
                                             </Step.Content>
                                         </Step>
 
-                                        <Step active onClick={() => this.getStatusEntregue()} style={{'fontSize': '16px'}}>
+                                        <Step active onClick={() => this.getStatusEntregue()} style={{ 'fontSize': '16px' }}>
                                             <Avatar alt="concluido" src={imgConcluido} />
                                             <Step.Content style={{ 'marginLeft': '10px' }}>
                                                 <Step.Title>Concluídas</Step.Title>
@@ -210,8 +227,8 @@ export default class VendasView extends React.Component {
                                                                         <div>Valor pago: <b>R$ {venda.dados_pagamento[0].total_pago.toLocaleString('pt-BR', { minimumFractionDigits: 2, currency: 'BRL' })}</b></div>
                                                                         <div>Qtde vendido: <b>{venda.itens_pedido.quantidade_vendido}</b></div>
                                                                         <Tooltip title="Clique aqui ver mais detalhes">
-                                                                            <a href='#'>Mais detalhes</a>
-                                                                        </Tooltip>       
+                                                                            <Button style={{'marginLeft':'-8px', 'marginTop':'8px'}} onClick={() => this.exibirVerMaisDetalhes(venda)}>Mais detalhes</Button>
+                                                                        </Tooltip>
                                                                     </Col>
 
 
@@ -311,6 +328,44 @@ export default class VendasView extends React.Component {
                             <Iframe url={this.state.venda.dados_pagamento[0].boleto_url}
                                 width='880px'
                                 height='450px' />
+                        </Modal.Body>
+                    </Modal>
+                }
+
+                {this.state.openModalVerMaisDetalhes &&
+
+                    <Modal show={this.state.openModalVerMaisDetalhes} onHide={() => this.setState({ openModalVerMaisDetalhes: false })} style={{ 'marginTop': '50px' }} dialogClassName="width_modal_1000px">
+                        <Modal.Header closeButton style={{ 'backgroundColor': '#467EED', 'color': 'white' }}>
+                            <Modal.Title>Mais detalhes - {this.state.venda.itens_pedido.titulo_anuncio}</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+
+                            <TableContainer component={Paper}>
+                                <Table aria-label="simple table">
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell>SKU</TableCell>
+                                            <TableCell align="right">Taxa da venda</TableCell>
+                                            <TableCell align="right">Garantia</TableCell>
+                                            <TableCell align="right"></TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                            <TableRow>
+                                                <TableCell component="th" scope="row">
+                                                    {this.state.venda.itens_pedido.sku === null ? <>Não informado</> : this.state.venda.itens_pedido.sku}
+                                                </TableCell>
+                                                <TableCell align="right">R$ {this.state.venda.itens_pedido.taxa_venda.toFixed(2)}</TableCell>
+                                                <TableCell align="right">{this.state.venda.itens_pedido.garantia === null ? <>Não informado</> : this.state.venda.itens_pedido.garantia}</TableCell>
+                                                {this.state.venda.itens_pedido.variation_attributes.map((variation, key) => {
+                                                    return (
+                                                        <TableCell key={key} align="right"><b>{variation.value_name}</b></TableCell>
+                                                    )
+                                                })}
+                                            </TableRow>
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
                         </Modal.Body>
                     </Modal>
                 }
