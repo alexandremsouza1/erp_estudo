@@ -5,6 +5,7 @@ import Panel from '../../components/Panel/Panel'
 import imgParaPreparar from '../../../assets/img/delivery-box-icon128px.png'
 import imgProntoParaEnviar from '../../../assets/img/delivery-truck-icon128px.png'
 import imgConcluido from '../../../assets/img/Accept-icon128px.png'
+import iconCancelled from '../../../assets/img/cancelled.png'
 import { Divider, Icon, Step } from 'semantic-ui-react'
 import WhatsAppIcon from '@material-ui/icons/WhatsApp';
 import SmsIcon from '@material-ui/icons/Sms';
@@ -65,7 +66,14 @@ export default class VendasView extends React.Component {
         let vendasDelivered = this.props.vendas.filter(venda => {
             return venda.dados_entrega.status === 'delivered'
         })
-        this.setState({ vendas: vendasDelivered, renderizar: true})
+        this.setState({ vendas: vendasDelivered, renderizar: true })
+    }
+
+    getStatusCanceladas = () => {
+        let vendasDelivered = this.props.vendas.filter(venda => {
+            return venda.dados_entrega.status === 'cancelled'
+        })
+        this.setState({ vendas: vendasDelivered, renderizar: true })
     }
 
     getTraduzirStatusEnvio = status_envio => {
@@ -74,6 +82,9 @@ export default class VendasView extends React.Component {
         }
         if (status_envio === 'delivered') {
             return 'ENTREGUE'
+        }
+        if (status_envio === 'cancelled') {
+            return 'CANCELADA'
         }
     }
 
@@ -165,6 +176,14 @@ export default class VendasView extends React.Component {
                                             </Step.Content>
                                         </Step>
 
+                                        <Step active onClick={() => this.getStatusCanceladas()} style={{ fontSize: '16px' }}>
+                                            <Avatar alt="cancelado" src={iconCancelled} />
+                                            <Step.Content style={{ 'marginLeft': '10px' }}>
+                                                <Step.Title>Canceladas</Step.Title>
+                                                <Step.Description>8 vendas</Step.Description>
+                                            </Step.Content>
+                                        </Step>
+
                                     </Step.Group>
                                 </Paper>
 
@@ -172,10 +191,10 @@ export default class VendasView extends React.Component {
                         </Row>
 
                         <Divider />
-                        <form noValidate autoComplete="off" onSubmit={() => this.handleClickSearch()}>
+                        <span>
                             <TextField style={{ width: '80%' }}
                                 value={this.state.textFieldSearch}
-                                label='Buscar por n.º, título ou comprador'
+                                label='Buscar por título'
                                 variant='outlined'
                                 onChange={(event) => this.handleSearch(event)} />
 
@@ -183,12 +202,12 @@ export default class VendasView extends React.Component {
                                 variant="contained"
                                 color="primary"
                                 startIcon={<SearchIcon />}
-                                type="submit"
+                                onClick={() => this.handleClickSearch()}
                                 style={{ height: '51px', margin: '0 5px 0', backgroundColor: '#1976d2' }}>
                                 Pesquisar
                             </Button>
 
-                           </form>
+                        </span>
                         <Divider />
                     </div>
                 </div>
@@ -200,7 +219,7 @@ export default class VendasView extends React.Component {
                         if (this.state.renderizar) {
                             return (
                                 <Paper elevation={3} key={key}>
-                                    <Panel style={{ 'backgroundColor': '#1976d2', 'color': 'white' }} key={key} title={<div>Pedido <span style={{ 'color': 'white'}}>
+                                    <Panel style={{ 'backgroundColor': '#1976d2', 'color': 'white' }} key={key} title={<div>Pedido <span style={{ 'color': 'white' }}>
                                         |{this.getTraduzirStatusEnvio(venda.dados_entrega.status)}|</span> - Nº #{venda.id_venda} - {venda.itens_pedido.titulo_anuncio} - {venda.data_venda}
                                     </div>}
                                         content={
@@ -277,7 +296,7 @@ export default class VendasView extends React.Component {
                                                                             <div>Valor pago: <b>R$ {venda.dados_pagamento[0].total_pago.toLocaleString('pt-BR', { minimumFractionDigits: 2, currency: 'BRL' })}</b></div>
                                                                             <div>Qtde vendido: <b>{venda.itens_pedido.quantidade_vendido}</b></div>
                                                                             <Tooltip title="Clique aqui ver mais detalhes">
-                                                                                <Button style={{ 'marginLeft': '-8px', 'marginTop': '8px' }} onClick={() => this.exibirVerMaisDetalhes(venda)}>Mais detalhes</Button>
+                                                                                <Button style={{ 'marginLeft': '-8px', 'marginTop': '8px' }} onClick={() => this.exibirVerMaisDetalhes(venda)}>Ver mais detalhes</Button>
                                                                             </Tooltip>
                                                                         </Col>
 
@@ -339,19 +358,22 @@ export default class VendasView extends React.Component {
                                                                 </Typography>
                                                             </div>
 
+                                                            {venda.dados_entrega.cod_rastreamento !== null
+                                                                ?
+                                                                <CardActions style={{ 'marginTop': '-15px' }}>
+                                                                    <Tooltip title="Acompanhar o rastreamento do produto">
+                                                                        <Button
+                                                                            variant="contained"
+                                                                            color="default"
+                                                                            onClick={() => this.exibirRastreamento(venda.dados_entrega.cod_rastreamento)}
+                                                                            startIcon={<LocalShippingIcon />}>
+                                                                            Visualizar rastreamento
+                                                                            </Button>
+                                                                    </Tooltip>
+                                                                </CardActions>
+                                                                : <></>
+                                                            }
 
-                                                            <CardActions style={{ 'marginTop': '-15px' }}>
-
-                                                                <Tooltip title="Acompanhar o rastreamento do produto">
-                                                                    <Button
-                                                                        variant="contained"
-                                                                        color="default"
-                                                                        onClick={() => this.exibirRastreamento(venda.dados_entrega.cod_rastreamento)}
-                                                                        startIcon={<LocalShippingIcon />}>
-                                                                        Visualizar rastreamento
-                                                                    </Button>
-                                                                </Tooltip>
-                                                            </CardActions>
                                                         </div>
 
 
@@ -398,7 +420,7 @@ export default class VendasView extends React.Component {
 
                     <Modal show={this.state.openModalVerMaisDetalhes} onHide={() => this.setState({ openModalVerMaisDetalhes: false })} style={{ 'marginTop': '50px' }} dialogClassName="width_modal_1000px">
                         <Modal.Header closeButton style={{ 'backgroundColor': '#467EED', 'color': 'white' }}>
-                            <Modal.Title>Mais detalhes - {this.state.venda.itens_pedido.titulo_anuncio}</Modal.Title>
+                            <Modal.Title>{this.state.venda.itens_pedido.titulo_anuncio} - {this.state.venda.itens_pedido.id_anuncio}</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
 
