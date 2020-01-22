@@ -114,34 +114,34 @@ export default class VendasView extends React.Component {
                                         <>
                                             <Row>
                                                 <Col md={6}>
-
-                                                    <Card>
-                                                        <CardActionArea>
-                                                            <CardContent>
-                                                                <Typography gutterBottom variant="h5" component="h2">
-                                                                    Nome: {venda.comprador.first_name_comprador} {venda.comprador.last_name_comprador}
-                                                                </Typography>
-                                                                <Typography variant="body2" component="p">
-                                                                    <strong>Usuário:</strong> {venda.comprador.nickname_comprador}  <strong>CPF:</strong> {venda.comprador.documento_comprador}
-                                                                </Typography>
-                                                            </CardContent>
-                                                        </CardActionArea>
-                                                        <CardActions>
-                                                            <Button
-                                                                variant="contained"
-                                                                style={{ 'color': 'white', 'backgroundColor': 'green' }}
-                                                                startIcon={<WhatsAppIcon />}>
-                                                                <a href={venda.comprador.whatsapp} style={{ 'color': 'white' }} target='_blank' data-toggle="tooltip" title='Enviar mensagem WhatsApp'>Enviar mensagem WhatsApp</a>
+                                                    <Paper elevation={3}>
+                                                        <Card>
+                                                            <CardActionArea>
+                                                                <CardContent>
+                                                                    <Typography gutterBottom variant="h5" component="h2">
+                                                                        Nome: {venda.comprador.first_name_comprador} {venda.comprador.last_name_comprador}
+                                                                    </Typography>
+                                                                    <Typography variant="body2" component="p">
+                                                                        <strong>Usuário:</strong> {venda.comprador.nickname_comprador}  <strong>CPF:</strong> {venda.comprador.documento_comprador}
+                                                                    </Typography>
+                                                                </CardContent>
+                                                            </CardActionArea>
+                                                            <CardActions>
+                                                                <Button
+                                                                    variant="contained"
+                                                                    style={{ 'color': 'white', 'backgroundColor': 'green' }}
+                                                                    startIcon={<WhatsAppIcon />}>
+                                                                    <a href={venda.comprador.whatsapp} style={{ 'color': 'white' }} target='_blank' data-toggle="tooltip" title='Enviar mensagem WhatsApp'>Enviar mensagem WhatsApp</a>
+                                                                </Button>
+                                                                <Button
+                                                                    variant="contained"
+                                                                    style={{ 'color': 'black', 'backgroundColor': '#ffe600' }}
+                                                                    startIcon={<SmsIcon />}>
+                                                                    Enviar Mensagem Mercado Livre
                                                             </Button>
-                                                            <Button
-                                                                variant="contained"
-                                                                style={{ 'color': 'black', 'backgroundColor': '#ffe600' }}
-                                                                startIcon={<SmsIcon />}>
-                                                                Enviar Mensagem Mercado Livre
-                                                            </Button>
-                                                        </CardActions>
-                                                    </Card>
-
+                                                            </CardActions>
+                                                        </Card>
+                                                    </Paper>
                                                 </Col>
 
                                                 <Col md={6}>
@@ -172,12 +172,13 @@ export default class VendasView extends React.Component {
                                                     </Card>
                                                     */}
 
-                                                        <Card>
+                                                        <Card style={{ 'height': '135px' }}>
 
                                                             <CardContent>
 
                                                                 <Row>
                                                                     <Col md={6}>
+                                                                    
                                                                         <div>Data da venda: <b>{venda.data_venda}</b></div>
                                                                         <div>Valor do produto: <b>R$ {venda.valor_venda.toLocaleString('pt-BR', { minimumFractionDigits: 2, currency: 'BRL' })}</b></div>
                                                                         <div>
@@ -185,23 +186,29 @@ export default class VendasView extends React.Component {
                                                                                 <div className={venda.dados_pagamento[0].status_pagamento === 'approved' ? this.state.badgeSucess : this.state.badgeDange}
                                                                                 style={{ 'color': 'white', 'fontSize': '10px', 'marginLeft': '5px' }}>{venda.dados_pagamento[0].status_pagamento === 'approved' ? 'Aprovado' : 'Estornado'}</div>
                                                                         </div>
+
+                                                                        <CardActions>
+                                                                        {venda.dados_pagamento[0].boleto_url !== null &&
+                                                                            <Button
+                                                                                variant="contained"
+                                                                                style={{ 'color': 'white', 'marginBottom': '20px', 'marginTop':'15px' }}
+                                                                                color='default'
+                                                                                startIcon={<PictureAsPdfIcon color="primary" />}>
+                                                                                <a style={{ 'color': 'black' }} href={venda.dados_pagamento[0].boleto_url} target='_blank' rel="noopener noreferrer">Visualizar Boleto</a>
+                                                                            </Button>
+                                                                        }
+                                                                    </CardActions>
+                                                                    </Col>
+
+                                                                    <Col md={6}>
+
+
+                                                                        <div>Tipo de pagamento: <b>{venda.dados_pagamento[0].tipoPagamento}</b></div>
                                                                         <div>Custo de envio: <b>R$ {venda.dados_pagamento[0].custo_envio.toLocaleString('pt-BR', { minimumFractionDigits: 2, currency: 'BRL' })}</b></div>
                                                                         <div>Valor pago: <b>R$ {venda.dados_pagamento[0].total_pago.toLocaleString('pt-BR', { minimumFractionDigits: 2, currency: 'BRL' })}</b></div>
                                                                     </Col>
 
-                                                                    <Col md={6}>
-                                                                        {venda.dados_pagamento[0].boleto_url !== null &&
-                                                                            <Button
-                                                                                variant="contained"
-                                                                                style={{ 'color': 'white', 'marginBottom': '20px' }}
-                                                                                color='default'
-                                                                                startIcon={<PictureAsPdfIcon color="primary"/>}>
-                                                                                <a style={{ 'color': 'black' }} href={venda.dados_pagamento[0].boleto_url} target='_blank' rel="noopener noreferrer">Boleto</a>
-                                                                            </Button>
-                                                                        }
-                                                                        <div>Método de pagamento: <b>{venda.dados_pagamento[0].metodoPagamento}</b></div>
-                                                                        <div>Tipo de pagamento: <b>{venda.dados_pagamento[0].tipoPagamento}</b></div>
-                                                                    </Col>
+                                                                    
 
                                                                 </Row>
 
@@ -244,6 +251,8 @@ export default class VendasView extends React.Component {
                                                 <Col md={6}>
 
                                                     <div className='panel' style={{ 'height': '193px' }}>
+
+
                                                         <div className='panel-heading oneLine'>
                                                             <h3 className='panel-title'>
                                                                 Detalhes do Envio
@@ -256,28 +265,26 @@ export default class VendasView extends React.Component {
                                                             <Typography variant="body2">
                                                                 Método de envio: <b>{venda.dados_entrega.metodo_envio}</b>
                                                             </Typography>
-                                                            <CardActions>
+                                                        </div>
+
+
+                                                        <CardActions>
+                                                            <Button
+                                                                variant="contained"
+                                                                color="default"
+                                                                startIcon={<RoomIcon />}>
+                                                                Ver endereço no Google Maps
+                                                                 </Button>
+                                                            <Tooltip title="Acompanhar o rastreamento do produto">
                                                                 <Button
                                                                     variant="contained"
                                                                     color="default"
-                                                                    startIcon={<RoomIcon />}>
-                                                                    Ver endereço no Google Maps
-                                                                 </Button>
-                                                                <Tooltip title="Acompanhar o rastreamento do produto">
-                                                                    <Button
-                                                                        variant="contained"
-                                                                        color="default"
-                                                                        startIcon={<LocalShippingIcon />}>
-                                                                        Visualizar rastreamento
+                                                                    startIcon={<LocalShippingIcon />}>
+                                                                    Visualizar rastreamento
                                                                     </Button>
-                                                                </Tooltip>
-                                                            </CardActions>
-
-
-
-                                                        </div>
+                                                            </Tooltip>
+                                                        </CardActions>
                                                     </div>
-
                                                 </Col>
                                             </Row>
                                         </>
