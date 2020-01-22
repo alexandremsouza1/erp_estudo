@@ -195,6 +195,9 @@ export default class VendasView extends React.Component {
                                                                         <div>Custo de envio: <b>R$ {venda.dados_pagamento[0].custo_envio.toLocaleString('pt-BR', { minimumFractionDigits: 2, currency: 'BRL' })}</b></div>
                                                                         <div>Valor pago: <b>R$ {venda.dados_pagamento[0].total_pago.toLocaleString('pt-BR', { minimumFractionDigits: 2, currency: 'BRL' })}</b></div>
                                                                         <div>Qtde vendido: <b>{venda.itens_pedido.quantidade_vendido}</b></div>
+                                                                        {venda.itens_pedido.variation_attributes.map(item => {
+                                                                            return (<><div>item.id</div> <b>item.value_name</b></>)
+                                                                        })}
                                                                     </Col>
 
 
@@ -256,8 +259,8 @@ export default class VendasView extends React.Component {
                                                         </div>
 
 
-                                                        <CardActions style={{'marginTop':'-15px'}}>
-                                                            
+                                                        <CardActions style={{ 'marginTop': '-15px' }}>
+
                                                             <Tooltip title="Acompanhar o rastreamento do produto">
                                                                 <Button
                                                                     variant="contained"
