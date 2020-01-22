@@ -1,6 +1,6 @@
 import React from 'react'
 import '../../../assets/css/Global/style.css'
-import { Row, Col } from "react-bootstrap"
+import { Row, Col, Modal } from "react-bootstrap"
 import Panel from '../../components/Panel/Panel'
 import imgParaPreparar from '../../../assets/img/delivery-box-icon128px.png'
 import imgProntoParaEnviar from '../../../assets/img/delivery-truck-icon128px.png'
@@ -25,6 +25,8 @@ import Tooltip from '@material-ui/core/Tooltip';
 import GoogleMaps from '../../components/GoogleMaps/GoogleMaps'
 import PictureAsPdfIcon from '@material-ui/icons/PictureAsPdf';
 import IconButton from '@material-ui/core/IconButton';
+import Iframe from 'react-iframe'
+import DialogFull from '../../components/Dialogs/DialogFull'
 
 export default class VendasView extends React.Component {
 
@@ -33,12 +35,13 @@ export default class VendasView extends React.Component {
         this.state = {
             status_envio: '',
             badgeSucess: 'badge badge-success',
-            badgeDange: 'badge badge-danger'
+            badgeDange: 'badge badge-danger',
+            openDialogFull: false,
+            venda: {}
         }
     }
 
     getStatusEmTransito = () => {
-        //console.log({ status_envio: 'shipped' })
         this.setState({ status_envio: 'shipped' })
     }
 
@@ -54,6 +57,15 @@ export default class VendasView extends React.Component {
         if (status_envio === 'delivered') {
             return 'ENTREGUE'
         }
+    }
+
+    exibirBoleto = (venda) => {
+        this.setState(
+            {
+                openDialogFull: true,
+                venda: venda
+            }
+        )
     }
 
     render() {
@@ -106,9 +118,9 @@ export default class VendasView extends React.Component {
 
                     if (venda.dados_entrega.status === this.state.status_envio) {
                         return (
-                            <Paper elevation={3}>
+                            <Paper elevation={3} key={key}>
                                 <Panel style={{ 'backgroundColor': '#1976d2', 'color': 'white' }} key={key} title={<div>Pedido <span className="badge badge-success" style={{ 'color': 'white' }}>
-                                    {this.getTraduzirStatusEnvio(this.state.status_envio)}</span> - Nº #{venda.id_venda} - {venda.itens_pedido.titulo_anuncio}
+                                    {this.getTraduzirStatusEnvio(this.state.status_envio)}</span> - Nº #{venda.id_venda} - {venda.itens_pedido.titulo_anuncio} - {venda.data_venda}
                                 </div>}
                                     content={
                                         <>
@@ -146,31 +158,6 @@ export default class VendasView extends React.Component {
 
                                                 <Col md={6}>
                                                     <Paper elevation={3}>
-                                                        {/** 
-                                                     * <Card fluid color='blue'>
-                                                        <Card.Content>
-                                                            <Card.Header style={{ 'marginLeft': '-15px' }}>
-                                                                <img src={iconMoney}></img>{' '}
-                                                                Pagamento
-                                                        </Card.Header>
-                                                            <Card.Meta>{venda.data_venda}</Card.Meta>
-                                                            <Divider />
-                                                            <Card.Description style={{ 'height': '65px' }}>
-                                                                <p>
-                                                                    <img src={iconPagamentoConfirmado}></img>{' '}
-                                                                    <span style={{ 'color': '#19b698', 'fontSize': '18px', 'fontFamily': 'Open Sans' }}>R$ {venda.dados_pagamento[0].total_pago.toFixed(2).toLocaleString('pt-BR')}</span>
-                                                                    <span className={venda.dados_pagamento[0].status_pagamento === 'approved' ? this.state.badgeSucess : this.state.badgeDange}
-                                                                        style={{ 'color': 'white', 'marginLeft': '115px' }}>{venda.dados_pagamento[0].status_pagamento === 'approved' ? 'Aprovado' : 'Estornado'}</span>
-                                                                    <img src={iconCustoEnvio}></img>{' '}
-                                                                    <span>Frete: {venda.dados_pagamento[0].custo_envio.toFixed(2).toLocaleString('pt-BR')}</span>
-                                                                </p>
-
-                                                                <span>Tipo de pagamento: {venda.dados_pagamento[0].tipoPagamento}</span>
-
-                                                            </Card.Description>
-                                                        </Card.Content>
-                                                    </Card>
-                                                    */}
 
                                                         <Card style={{ 'height': '135px' }}>
 
@@ -178,7 +165,7 @@ export default class VendasView extends React.Component {
 
                                                                 <Row>
                                                                     <Col md={6}>
-                                                                    
+
                                                                         <div>Data da venda: <b>{venda.data_venda}</b></div>
                                                                         <div>Valor do produto: <b>R$ {venda.valor_venda.toLocaleString('pt-BR', { minimumFractionDigits: 2, currency: 'BRL' })}</b></div>
                                                                         <div>
@@ -188,16 +175,17 @@ export default class VendasView extends React.Component {
                                                                         </div>
 
                                                                         <CardActions>
-                                                                        {venda.dados_pagamento[0].boleto_url !== null &&
-                                                                            <Button
-                                                                                variant="contained"
-                                                                                style={{ 'color': 'white', 'marginBottom': '20px', 'marginTop':'15px' }}
-                                                                                color='default'
-                                                                                startIcon={<PictureAsPdfIcon color="primary" />}>
-                                                                                <a style={{ 'color': 'black' }} href={venda.dados_pagamento[0].boleto_url} target='_blank' rel="noopener noreferrer">Visualizar Boleto</a>
-                                                                            </Button>
-                                                                        }
-                                                                    </CardActions>
+                                                                            {venda.dados_pagamento[0].boleto_url !== null &&
+                                                                                <Button
+                                                                                    variant="contained"
+                                                                                    style={{ 'color': 'black', 'marginBottom': '20px', 'marginTop': '15px', 'marginLeft': '-9px' }}
+                                                                                    color='default'
+                                                                                    onClick={() => this.exibirBoleto(venda)}
+                                                                                    startIcon={<PictureAsPdfIcon color="primary" />}>
+                                                                                    Visualizar Boleto
+                                                                                </Button>
+                                                                            }
+                                                                        </CardActions>
                                                                     </Col>
 
                                                                     <Col md={6}>
@@ -208,7 +196,7 @@ export default class VendasView extends React.Component {
                                                                         <div>Valor pago: <b>R$ {venda.dados_pagamento[0].total_pago.toLocaleString('pt-BR', { minimumFractionDigits: 2, currency: 'BRL' })}</b></div>
                                                                     </Col>
 
-                                                                    
+
 
                                                                 </Row>
 
@@ -285,15 +273,34 @@ export default class VendasView extends React.Component {
                                                             </Tooltip>
                                                         </CardActions>
                                                     </div>
+
+
                                                 </Col>
                                             </Row>
                                         </>
                                     }>
                                 </Panel>
+
+
+
                             </Paper>
                         )
                     }
                 })}
+
+                {this.state.openDialogFull &&
+
+                    <Modal show={this.state.openDialogFull} onHide={() => this.setState({ openDialogFull: false })} style={{ 'marginTop': '50px' }} dialogClassName="width_modal_900px">
+                        <Modal.Header closeButton style={{ 'backgroundColor': '#467EED', 'color': 'white' }}>
+                            <Modal.Title>{this.state.venda.dados_pagamento[0].tipoPagamento}</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <Iframe url={this.state.venda.dados_pagamento[0].boleto_url}
+                                width='880px'
+                                height='450px' />
+                        </Modal.Body>
+                    </Modal>
+                }
             </div>
         )
     }

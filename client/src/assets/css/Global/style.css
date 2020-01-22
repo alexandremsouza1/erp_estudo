@@ -3,6 +3,10 @@
     height: 100%
 }
 
+.width_modal_900px {
+    width: 900px;
+}
+
 @media (min-width: 768px){
     .radio-col-sm-2 {
         width: 7%
