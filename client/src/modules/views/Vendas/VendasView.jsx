@@ -194,6 +194,7 @@ export default class VendasView extends React.Component {
                                                                         <div>Tipo de pagamento: <b>{venda.dados_pagamento[0].tipoPagamento}</b></div>
                                                                         <div>Custo de envio: <b>R$ {venda.dados_pagamento[0].custo_envio.toLocaleString('pt-BR', { minimumFractionDigits: 2, currency: 'BRL' })}</b></div>
                                                                         <div>Valor pago: <b>R$ {venda.dados_pagamento[0].total_pago.toLocaleString('pt-BR', { minimumFractionDigits: 2, currency: 'BRL' })}</b></div>
+                                                                        <div>Qtde vendido: <b>{venda.itens_pedido.quantidade_vendido}</b></div>
                                                                     </Col>
 
 
@@ -224,8 +225,7 @@ export default class VendasView extends React.Component {
                                                             <Typography variant="body2">
                                                                 CEP: <b>{venda.dados_entrega.endereco_entrega.cep}</b>
                                                             </Typography>
-                                                            <div>Telefone da pessoa responsável pelo recebimento: <b>{venda.dados_entrega.endereco_entrega.telefonePessoaEntrega}</b></div>
-                                                            <div>Nome da pessoa responsável pelo recebimento: <b>{venda.dados_entrega.endereco_entrega.nomePessoaEntrega}</b></div>
+                                                            <div>Quem recebe: <b>{venda.dados_entrega.endereco_entrega.nomePessoaEntrega}</b> - <b>Tel.: {venda.dados_entrega.endereco_entrega.telefonePessoaEntrega}</b></div>
                                                             <div>Endereço: <b>{venda.dados_entrega.endereco_entrega.rua}</b> - Nº <b>{venda.dados_entrega.endereco_entrega.numero}</b></div>
                                                             <div>Bairro: <b>{venda.dados_entrega.endereco_entrega.bairro.name}</b></div>
                                                             <div>Cidade: <b>{venda.dados_entrega.endereco_entrega.cidade.name}</b> - Estado: <b>{venda.dados_entrega.endereco_entrega.estado.name}</b></div>
@@ -256,13 +256,8 @@ export default class VendasView extends React.Component {
                                                         </div>
 
 
-                                                        <CardActions>
-                                                            <Button
-                                                                variant="contained"
-                                                                color="default"
-                                                                startIcon={<RoomIcon />}>
-                                                                Ver endereço no Google Maps
-                                                                 </Button>
+                                                        <CardActions style={{'marginTop':'-15px'}}>
+                                                            
                                                             <Tooltip title="Acompanhar o rastreamento do produto">
                                                                 <Button
                                                                     variant="contained"
