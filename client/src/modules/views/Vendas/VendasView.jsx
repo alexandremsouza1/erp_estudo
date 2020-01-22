@@ -144,7 +144,7 @@ export default class VendasView extends React.Component {
                             <Grid container direction="row" justify="center" alignItems="center">
                                 <Paper elevation={2}>
                                     <Step.Group>
-                                        <Step active href="#" style={{ 'fontSize': '16px' }}>
+                                        <Step active href="#" style={{ 'fontSize': '12px' }}>
                                             <Avatar alt="concluido" src={imgParaPreparar} />
                                             <Step.Content style={{ 'marginLeft': '10px' }}>
                                                 <Step.Title>Pendentes</Step.Title>
@@ -152,7 +152,7 @@ export default class VendasView extends React.Component {
                                             </Step.Content>
                                         </Step>
 
-                                        <Step active href="#" style={{ 'fontSize': '16px' }}>
+                                        <Step active href="#" style={{ 'fontSize': '12px' }}>
                                             <Avatar alt="concluido" src={imgProntoParaEnviar} />
                                             <Step.Content style={{ 'marginLeft': '10px' }}>
                                                 <Step.Title>Pronto para enviar</Step.Title>
@@ -160,7 +160,7 @@ export default class VendasView extends React.Component {
                                             </Step.Content>
                                         </Step>
 
-                                        <Step active onClick={() => this.getStatusEmTransito()} style={{ 'fontSize': '16px' }}>
+                                        <Step active onClick={() => this.getStatusEmTransito()} style={{ 'fontSize': '12px' }}>
                                             <Icon name="truck" />
                                             <Step.Content style={{ 'marginLeft': '10px' }}>
                                                 <Step.Title>Em trânsito</Step.Title>
@@ -168,7 +168,7 @@ export default class VendasView extends React.Component {
                                             </Step.Content>
                                         </Step>
 
-                                        <Step active onClick={() => this.getStatusEntregue()} style={{ fontSize: '16px' }}>
+                                        <Step active onClick={() => this.getStatusEntregue()} style={{ fontSize: '12px' }}>
                                             <Avatar alt="concluido" src={imgConcluido} />
                                             <Step.Content style={{ 'marginLeft': '10px' }}>
                                                 <Step.Title>Concluídas</Step.Title>
@@ -176,7 +176,7 @@ export default class VendasView extends React.Component {
                                             </Step.Content>
                                         </Step>
 
-                                        <Step active onClick={() => this.getStatusCanceladas()} style={{ fontSize: '16px' }}>
+                                        <Step active onClick={() => this.getStatusCanceladas()} style={{ fontSize: '12px' }}>
                                             <Avatar alt="cancelado" src={iconCancelled} />
                                             <Step.Content style={{ 'marginLeft': '10px' }}>
                                                 <Step.Title>Canceladas</Step.Title>
