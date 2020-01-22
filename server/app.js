@@ -21,6 +21,7 @@ const saldoRoute = require('./src/routes/saldo.route')
 const vendasRoute = require('./src/routes/vendas.router')
 const clienteRoute = require('./src/routes/cliente.route')
 const notificacoesMercadoLivreRoute = require('./src/routes/notificacoes.mercadolivre')
+const rastreioRoute = require('./src/routes/rastreio.route')
 
 //  Adicionar e configurar middleware
 app.use(session({
@@ -53,5 +54,7 @@ app.use('/vendas', vendasRoute);
 app.use('/clientes', clienteRoute);
 
 app.use('/notifications', notificacoesMercadoLivreRoute);
+
+app.use('/rastreio', rastreioRoute)
 
 module.exports = app;

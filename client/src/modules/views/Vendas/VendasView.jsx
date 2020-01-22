@@ -27,6 +27,7 @@ import PictureAsPdfIcon from '@material-ui/icons/PictureAsPdf';
 import IconButton from '@material-ui/core/IconButton';
 import Iframe from 'react-iframe'
 import DialogFull from '../../components/Dialogs/DialogFull'
+import { Timeline, TimelineItem } from 'vertical-timeline-component-for-react'
 
 export default class VendasView extends React.Component {
 
@@ -37,6 +38,7 @@ export default class VendasView extends React.Component {
             badgeSucess: 'badge badge-success',
             badgeDange: 'badge badge-danger',
             openDialogFull: false,
+            openDialogCodigoRastreio: false,
             venda: {}
         }
     }
@@ -66,6 +68,16 @@ export default class VendasView extends React.Component {
                 venda: venda
             }
         )
+    }
+
+    exibirRastreamento = (codigo) => {
+        this.setState(
+            {
+                openDialogCodigoRastreio: true,
+                codigo: codigo
+            }
+        )
+        this.props.obterRastreioCorreios('PX858327215BR')
     }
 
     render() {
@@ -195,9 +207,8 @@ export default class VendasView extends React.Component {
                                                                         <div>Custo de envio: <b>R$ {venda.dados_pagamento[0].custo_envio.toLocaleString('pt-BR', { minimumFractionDigits: 2, currency: 'BRL' })}</b></div>
                                                                         <div>Valor pago: <b>R$ {venda.dados_pagamento[0].total_pago.toLocaleString('pt-BR', { minimumFractionDigits: 2, currency: 'BRL' })}</b></div>
                                                                         <div>Qtde vendido: <b>{venda.itens_pedido.quantidade_vendido}</b></div>
-                                                                        {venda.itens_pedido.variation_attributes.map(item => {
-                                                                            return (<><div>item.id</div> <b>item.value_name</b></>)
-                                                                        })}
+
+
                                                                     </Col>
 
 
@@ -265,6 +276,7 @@ export default class VendasView extends React.Component {
                                                                 <Button
                                                                     variant="contained"
                                                                     color="default"
+                                                                    onClick={() => this.exibirRastreamento(venda.dados_entrega.cod_rastreamento)}
                                                                     startIcon={<LocalShippingIcon />}>
                                                                     Visualizar rastreamento
                                                                     </Button>
@@ -296,6 +308,47 @@ export default class VendasView extends React.Component {
                             <Iframe url={this.state.venda.dados_pagamento[0].boleto_url}
                                 width='880px'
                                 height='450px' />
+                        </Modal.Body>
+                    </Modal>
+                }
+
+                {this.state.openDialogCodigoRastreio &&
+
+                    <Modal show={this.state.openDialogCodigoRastreio} onHide={() => this.setState({ openDialogCodigoRastreio: false })} style={{ 'marginTop': '50px' }} dialogClassName="width_modal_900px">
+                        <Modal.Header closeButton style={{ 'backgroundColor': '#467EED', 'color': 'white' }}>
+                            <Modal.Title>Rastreamento</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            {this.props.dadosRastreamento.map((rastreio, key) => {
+                                return (
+                                    <div key={key}>
+                                        <div>{rastreio.code}</div>
+                                        <div>Entregue ? <b>{rastreio.isDelivered === true ? 'Sim' : 'Não'}</b></div>
+                                        <div>Data da postagem: <b>{rastreio.postedAt}</b></div>
+                                        <div>Última atualização: <b>{rastreio.updatedAt}</b></div>
+                                        {rastreio.tracks.map((track, key) => {
+                                            return (
+                                                <>
+                                                    <Timeline lineColor={'#ddd'} key={key}>
+                                                        <TimelineItem
+                                                            key={key}
+                                                            dateText={track.trackedAt}
+                                                            style={{ color: '#337ab7' }}>
+
+                                                            <div>{track.locale.toUpperCase()}</div>
+                                                            <Divider />
+                                                            <div>{track.status.toUpperCase()}</div>
+                                                            <Divider />
+                                                            {track.observation !== null ? <div>Observação: <b>{track.observation.toUpperCase()}</b></div> : ''}
+                                                        
+                                                        </TimelineItem>
+                                                    </Timeline>
+                                                </>
+                                            )
+                                        })}
+                                    </div>
+                                )
+                            })}
                         </Modal.Body>
                     </Modal>
                 }

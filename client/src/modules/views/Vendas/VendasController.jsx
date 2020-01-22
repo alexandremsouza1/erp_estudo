@@ -11,7 +11,8 @@ export default class VendasController extends React.Component {
         super(props)
         document.title = "Vendas"
         this.state = {
-            vendas: []
+            vendas: [],
+            dadosRastreamento: []
         }
     }
 
@@ -33,13 +34,24 @@ export default class VendasController extends React.Component {
         }).catch(error => {
             swal("Error", "Houve um erro ao listar todas as vendas em transito(VendasController:29): \n \n " + error, "error");
         })
+  
+    }
+
+    obterRastreioCorreios = async(codigo) => {
+        await axios.get(`${DOMAIN}/rastreio/${codigo}`).then(response =>{
+            this.setState({
+                dadosRastreamento: response.data
+            })
+        })
     }
 
 
     render() {
         return (
             <VendasView
-                vendas={this.state.vendas}/>
+                vendas={this.state.vendas}
+                obterRastreioCorreios={this.obterRastreioCorreios}
+                dadosRastreamento={this.state.dadosRastreamento}/>
         )
     }
 }
