@@ -86,39 +86,42 @@ export default class VendasView extends React.Component {
                     <div >
                         <Row>
                             <Grid container direction="row" justify="center" alignItems="center">
-                                <Step.Group>
-                                    <Step active href="#">
-                                        <Avatar alt="concluido" src={imgParaPreparar} />
-                                        <Step.Content style={{ 'marginLeft': '10px' }}>
-                                            <Step.Title>Pendentes</Step.Title>
-                                            <Step.Description>0 vendas</Step.Description>
-                                        </Step.Content>
-                                    </Step>
+                                <Paper elevation={2}>
+                                    <Step.Group>
+                                        <Step active href="#" style={{'fontSize': '16px'}}>
+                                            <Avatar alt="concluido" src={imgParaPreparar} />
+                                            <Step.Content style={{ 'marginLeft': '10px' }}>
+                                                <Step.Title>Pendentes</Step.Title>
+                                                <Step.Description>0 vendas</Step.Description>
+                                            </Step.Content>
+                                        </Step>
 
-                                    <Step active href="#">
-                                        <Avatar alt="concluido" src={imgProntoParaEnviar} />
-                                        <Step.Content style={{ 'marginLeft': '10px' }}>
-                                            <Step.Title>Pronto para enviar</Step.Title>
-                                            <Step.Description>5 vendas</Step.Description>
-                                        </Step.Content>
-                                    </Step>
+                                        <Step active href="#" style={{'fontSize': '16px'}}>
+                                            <Avatar alt="concluido" src={imgProntoParaEnviar} />
+                                            <Step.Content style={{ 'marginLeft': '10px' }}>
+                                                <Step.Title>Pronto para enviar</Step.Title>
+                                                <Step.Description>5 vendas</Step.Description>
+                                            </Step.Content>
+                                        </Step>
 
-                                    <Step active onClick={() => this.getStatusEmTransito()}>
-                                        <Icon name="truck" />
-                                        <Step.Content style={{ 'marginLeft': '10px' }}>
-                                            <Step.Title>Em trânsito</Step.Title>
-                                            <Step.Description>13 vendas</Step.Description>
-                                        </Step.Content>
-                                    </Step>
+                                        <Step active onClick={() => this.getStatusEmTransito()} style={{'fontSize': '16px'}}>
+                                            <Icon name="truck" />
+                                            <Step.Content style={{ 'marginLeft': '10px' }}>
+                                                <Step.Title>Em trânsito</Step.Title>
+                                                <Step.Description>13 vendas</Step.Description>
+                                            </Step.Content>
+                                        </Step>
 
-                                    <Step active onClick={() => this.getStatusEntregue()}>
-                                        <Avatar alt="concluido" src={imgConcluido} />
-                                        <Step.Content style={{ 'marginLeft': '10px' }}>
-                                            <Step.Title>Concluídas</Step.Title>
-                                            <Step.Description>69 vendas</Step.Description>
-                                        </Step.Content>
-                                    </Step>
-                                </Step.Group>
+                                        <Step active onClick={() => this.getStatusEntregue()} style={{'fontSize': '16px'}}>
+                                            <Avatar alt="concluido" src={imgConcluido} />
+                                            <Step.Content style={{ 'marginLeft': '10px' }}>
+                                                <Step.Title>Concluídas</Step.Title>
+                                                <Step.Description>69 vendas</Step.Description>
+                                            </Step.Content>
+                                        </Step>
+
+                                    </Step.Group>
+                                </Paper>
 
                             </Grid>
                         </Row>
