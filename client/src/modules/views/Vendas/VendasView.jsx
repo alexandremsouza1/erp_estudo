@@ -150,18 +150,22 @@ export default class VendasView extends React.Component {
                                                                 </CardContent>
                                                             </CardActionArea>
                                                             <CardActions>
-                                                                <Button
-                                                                    variant="contained"
-                                                                    style={{ 'color': 'white', 'backgroundColor': 'green' }}
-                                                                    startIcon={<WhatsAppIcon />}>
-                                                                    <a href={venda.comprador.whatsapp} style={{ 'color': 'white' }} target='_blank' data-toggle="tooltip" title='Enviar mensagem WhatsApp'>Enviar mensagem WhatsApp</a>
-                                                                </Button>
-                                                                <Button
-                                                                    variant="contained"
-                                                                    style={{ 'color': 'black', 'backgroundColor': '#ffe600' }}
-                                                                    startIcon={<SmsIcon />}>
-                                                                    Enviar Mensagem Mercado Livre
-                                                            </Button>
+                                                                <Tooltip title="Clique aqui para enviar mensagem para o comprador pelo Whatsapp Web">
+                                                                    <Button
+                                                                        variant="contained"
+                                                                        style={{ 'color': 'white', 'backgroundColor': 'green' }}
+                                                                        startIcon={<WhatsAppIcon />}>
+                                                                        <a href={venda.comprador.whatsapp} style={{ 'color': 'white' }} target='_blank' data-toggle="tooltip" title='Enviar mensagem WhatsApp'>Enviar mensagem WhatsApp</a>
+                                                                    </Button>
+                                                                </Tooltip>
+                                                                <Tooltip title="Clique aqui para enviar mensagem para o comprador para ser lido na plataforma do Mercado Livre">
+                                                                    <Button
+                                                                        variant="contained"
+                                                                        style={{ 'color': 'black', 'backgroundColor': '#ffe600' }}
+                                                                        startIcon={<SmsIcon />}>
+                                                                        Enviar Mensagem Mercado Livre
+                                                                    </Button>
+                                                                </Tooltip>
                                                             </CardActions>
                                                         </Card>
                                                     </Paper>
@@ -341,7 +345,7 @@ export default class VendasView extends React.Component {
                                                             <TimelineItem
                                                                 key={key}
                                                                 dateText={track.trackedAt}
-                                                                style={{ color: '#337ab7' }}>
+                                                                style={{ 'color': '#337ab7' }}>
 
                                                                 <div style={{ 'textTransform': 'uppercase' }}>{track.locale}</div>
                                                                 <Divider />
