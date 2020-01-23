@@ -48,7 +48,6 @@ export default class VendasView extends React.Component {
     }
 
     getStatusEntregue = () => {
-        console.log({ status_envio: 'delivered' })
         this.setState({ status_envio: 'delivered' })
     }
 
@@ -77,7 +76,7 @@ export default class VendasView extends React.Component {
                 codigo: codigo
             }
         )
-        this.props.obterRastreioCorreios('PX858327215BR')
+        this.props.obterRastreioCorreios(codigo)
     }
 
     render() {
@@ -316,39 +315,50 @@ export default class VendasView extends React.Component {
 
                     <Modal show={this.state.openDialogCodigoRastreio} onHide={() => this.setState({ openDialogCodigoRastreio: false })} style={{ 'marginTop': '50px' }} dialogClassName="width_modal_900px">
                         <Modal.Header closeButton style={{ 'backgroundColor': '#467EED', 'color': 'white' }}>
-                            <Modal.Title>Rastreamento</Modal.Title>
+                            <Modal.Title>{this.props.dadosRastreamento.error !== '404' ? <>Rastreamento - {this.props.dadosRastreamento.code}</> : <>Atenção</>}</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                            {this.props.dadosRastreamento.map((rastreio, key) => {
-                                return (
-                                    <div key={key}>
-                                        <div>{rastreio.code}</div>
-                                        <div>Entregue ? <b>{rastreio.isDelivered === true ? 'Sim' : 'Não'}</b></div>
-                                        <div>Data da postagem: <b>{rastreio.postedAt}</b></div>
-                                        <div>Última atualização: <b>{rastreio.updatedAt}</b></div>
-                                        {rastreio.tracks.map((track, key) => {
-                                            return (
-                                                <>
-                                                    <Timeline lineColor={'#ddd'} key={key}>
-                                                        <TimelineItem
-                                                            key={key}
-                                                            dateText={track.trackedAt}
-                                                            style={{ color: '#337ab7' }}>
+                            {this.props.isLoading === false ?
+                                this.props.dadosRastreamento.error !== '404' ?
+                                    <div>
+                                        <Row style={{ 'fontSize': '15px' }}>
+                                            <Col md={2}>
+                                                <div>Entregue ? <b>{this.props.dadosRastreamento.isDelivered === true ? 'Sim' : 'Não'}</b></div>
+                                            </Col>
+                                            <Col md={5}>
+                                                <div>Data da postagem: <b>{this.props.dadosRastreamento.postedAt}</b></div>
+                                            </Col>
+                                            <Col md={5}>
+                                                <div>Última atualização: <b>{this.props.dadosRastreamento.updatedAt}</b></div>
+                                            </Col>
+                                        </Row>
 
-                                                            <div>{track.locale.toUpperCase()}</div>
-                                                            <Divider />
-                                                            <div>{track.status.toUpperCase()}</div>
-                                                            <Divider />
-                                                            {track.observation !== null ? <div>Observação: <b>{track.observation.toUpperCase()}</b></div> : ''}
-                                                        
-                                                        </TimelineItem>
-                                                    </Timeline>
-                                                </>
-                                            )
-                                        })}
-                                    </div>
-                                )
-                            })}
+                                        {this.props.dadosRastreamento.tracks !== null ?
+                                            this.props.dadosRastreamento.tracks.map((track, key) => {
+                                                return (
+                                                    <>
+                                                        <Timeline lineColor={'#ddd'} key={key}>
+                                                            <TimelineItem
+                                                                key={key}
+                                                                dateText={track.trackedAt}
+                                                                style={{ color: '#337ab7' }}>
+
+                                                                <div style={{ 'textTransform': 'uppercase' }}>{track.locale}</div>
+                                                                <Divider />
+                                                                <div style={{ 'textTransform': 'uppercase' }}><b>{track.status}</b></div>
+                                                                <Divider />
+                                                                {track.observation !== null ? <div style={{ 'textTransform': 'uppercase' }}><b>{track.observation}</b></div> : ''}
+
+                                                            </TimelineItem>
+                                                        </Timeline>
+                                                    </>
+                                                )
+                                            })
+                                            : ''}
+                                    </div> : <div>{this.props.dadosRastreamento.message}</div>
+                                : <div>Carregando dados...</div>
+                            }
+
                         </Modal.Body>
                     </Modal>
                 }

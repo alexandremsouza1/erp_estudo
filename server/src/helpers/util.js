@@ -1,6 +1,7 @@
 
 //Converter date em String
 exports.formatarDataHora = (date) => {
+    date = date.replace(/"/g, '')
     let formatData = date.substring(0,10).split('-')
     let hora = date.substring(11,16)
     let dataHoraFormatada = formatData[2]+'/'+formatData[1]+'/'+formatData[0]+ ' as '+hora

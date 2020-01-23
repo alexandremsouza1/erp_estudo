@@ -12,7 +12,8 @@ export default class VendasController extends React.Component {
         document.title = "Vendas"
         this.state = {
             vendas: [],
-            dadosRastreamento: []
+            dadosRastreamento: {},
+            isLoading: true
         }
     }
 
@@ -38,9 +39,10 @@ export default class VendasController extends React.Component {
     }
 
     obterRastreioCorreios = async(codigo) => {
-        await axios.get(`${DOMAIN}/rastreio/${codigo}`).then(response =>{
-            this.setState({
-                dadosRastreamento: response.data
+        await axios.get(`${DOMAIN}/rastreio/${codigo}`).then(async response =>{
+            await this.setState({
+                dadosRastreamento: response.data,
+                isLoading: false
             })
         })
     }
@@ -51,7 +53,8 @@ export default class VendasController extends React.Component {
             <VendasView
                 vendas={this.state.vendas}
                 obterRastreioCorreios={this.obterRastreioCorreios}
-                dadosRastreamento={this.state.dadosRastreamento}/>
+                dadosRastreamento={this.state.dadosRastreamento}
+                isLoading={this.state.isLoading}/>
         )
     }
 }
