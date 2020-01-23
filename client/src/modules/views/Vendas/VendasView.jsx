@@ -186,11 +186,7 @@ export default class VendasView extends React.Component {
 
                                                                         <div>Data da venda: <b>{venda.data_venda}</b></div>
                                                                         <div>Valor do produto: <b>R$ {venda.valor_venda.toLocaleString('pt-BR', { minimumFractionDigits: 2, currency: 'BRL' })}</b></div>
-                                                                        <div>
-                                                                            Status de pagamento:
-                                                                                <div className={venda.dados_pagamento[0].status_pagamento === 'approved' ? this.state.badgeSucess : this.state.badgeDange}
-                                                                                style={{ 'color': 'white', 'fontSize': '10px', 'marginLeft': '5px' }}>{venda.dados_pagamento[0].status_pagamento === 'approved' ? 'Aprovado' : 'Estornado'}</div>
-                                                                        </div>
+                                                                        <div>Status de pagamento: <b>{venda.dados_pagamento[0].status_pagamento === 'approved' ? 'Aprovado' : 'Estornado'}</b></div>
 
                                                                         <CardActions>
                                                                             {venda.dados_pagamento[0].boleto_url !== null &&
@@ -213,8 +209,9 @@ export default class VendasView extends React.Component {
                                                                         <div>Custo de envio: <b>R$ {venda.dados_pagamento[0].custo_envio.toLocaleString('pt-BR', { minimumFractionDigits: 2, currency: 'BRL' })}</b></div>
                                                                         <div>Valor pago: <b>R$ {venda.dados_pagamento[0].total_pago.toLocaleString('pt-BR', { minimumFractionDigits: 2, currency: 'BRL' })}</b></div>
                                                                         <div>Qtde vendido: <b>{venda.itens_pedido.quantidade_vendido}</b></div>
-
-
+                                                                        <Tooltip title="Clique aqui ver mais detalhes">
+                                                                            <a href='#'>Mais detalhes</a>
+                                                                        </Tooltip>       
                                                                     </Col>
 
 
