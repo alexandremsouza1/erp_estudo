@@ -31,7 +31,6 @@ export default class VendasController extends React.Component {
                 vendas.push(venda)
             })
             this.setState({ vendas })
-            
         }).catch(error => {
             swal("Error", "Houve um erro ao listar todas as vendas em transito(VendasController:29): \n \n " + error, "error");
         })

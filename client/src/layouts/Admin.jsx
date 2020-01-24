@@ -1,7 +1,6 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 import NavbarController from "../modules/components/Navbars/NavbarController";
-import Footer from "../modules/components/Footer/Footer";
 import Sidebar from "../modules/components/Sidebar/Sidebar";
 import { makeStyles } from '@material-ui/core/styles';
 import routes from "routes.js";
@@ -14,6 +13,7 @@ export default function Admin(props) {
         flexGrow: 1,
         padding: theme.spacing(3),
       },
+
       toolbar: {
         display: 'flex',
         alignItems: 'center',
@@ -21,9 +21,16 @@ export default function Admin(props) {
         padding: theme.spacing(0, 1),
         ...theme.mixins.toolbar,
       },
+
       root: {
         display: 'flex',
       },
+
+      speedDial: {
+        position: 'absolute',
+        bottom: theme.spacing(2),
+        right: theme.spacing(2)
+      }
     }
   ))
 
@@ -57,7 +64,7 @@ export default function Admin(props) {
     }
     return "";
   };
-// <Footer />
+
 
   return (
 
@@ -70,9 +77,12 @@ export default function Admin(props) {
 
       <Sidebar {...props} routes={routes} ref={React.createRef()} />
 
-      <main className={classes.content} ref={React.createRef()}>
-      <div className={classes.toolbar} />
+      <main className={classes.content} >
+
+        <div className={classes.toolbar} />
+
         <Switch>{getRoutes(routes)}</Switch>
+
       </main>
 
     </div>
