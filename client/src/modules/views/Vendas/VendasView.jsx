@@ -23,6 +23,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import PictureAsPdfIcon from '@material-ui/icons/PictureAsPdf';
 import Iframe from 'react-iframe'
 import { Timeline, TimelineItem } from 'vertical-timeline-component-for-react'
+import SearchIcon from '@material-ui/icons/Search';
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -64,7 +65,7 @@ export default class VendasView extends React.Component {
         let vendasDelivered = this.props.vendas.filter(venda => {
             return venda.dados_entrega.status === 'delivered'
         })
-        this.setState({ vendas: vendasDelivered, renderizar: true })
+        this.setState({ vendas: vendasDelivered, renderizar: true})
     }
 
     getTraduzirStatusEnvio = status_envio => {
@@ -113,9 +114,8 @@ export default class VendasView extends React.Component {
     }
 
     handleClickSearch = () => {
-        console.log(this.state.textFieldSearch)
         let pesquisa = this.props.vendas.filter(venda => {
-            return venda.itens_pedido.titulo_anuncio.includes(this.state.textFieldSearch)
+            return venda.itens_pedido.titulo_anuncio.toLowerCase().includes(this.state.textFieldSearch.toLowerCase())
         })
         this.setState(
             {
@@ -172,18 +172,23 @@ export default class VendasView extends React.Component {
                         </Row>
 
                         <Divider />
-                        <TextField style={{ width: '90%' }}
-                            value={this.state.textFieldSearch}
-                            label='Buscar por n.º, título ou comprador'
-                            variant='outlined'
-                            onChange={(event) => this.handleSearch(event)} />
-                        <Button 
-                            variant="contained"
-                            color="primary"
-                            onClick={() => this.handleClickSearch()}
-                            style={{height:'51px', margin: '0 5px 0'}}>
-                            Pesquisar        
-                        </Button>            
+                        <form noValidate autoComplete="off" onSubmit={() => this.handleClickSearch()}>
+                            <TextField style={{ width: '80%' }}
+                                value={this.state.textFieldSearch}
+                                label='Buscar por n.º, título ou comprador'
+                                variant='outlined'
+                                onChange={(event) => this.handleSearch(event)} />
+
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                startIcon={<SearchIcon />}
+                                type="submit"
+                                style={{ height: '51px', margin: '0 5px 0', backgroundColor: '#1976d2' }}>
+                                Pesquisar
+                            </Button>
+
+                           </form>
                         <Divider />
                     </div>
                 </div>
@@ -195,8 +200,8 @@ export default class VendasView extends React.Component {
                         if (this.state.renderizar) {
                             return (
                                 <Paper elevation={3} key={key}>
-                                    <Panel style={{ 'backgroundColor': '#1976d2', 'color': 'white' }} key={key} title={<div>Pedido <span className="badge badge-success" style={{ 'color': 'white' }}>
-                                        {this.getTraduzirStatusEnvio(this.state.status_envio)}</span> - Nº #{venda.id_venda} - {venda.itens_pedido.titulo_anuncio} - {venda.data_venda}
+                                    <Panel style={{ 'backgroundColor': '#1976d2', 'color': 'white' }} key={key} title={<div>Pedido <span style={{ 'color': 'white'}}>
+                                        |{this.getTraduzirStatusEnvio(venda.dados_entrega.status)}|</span> - Nº #{venda.id_venda} - {venda.itens_pedido.titulo_anuncio} - {venda.data_venda}
                                     </div>}
                                         content={
                                             <>
