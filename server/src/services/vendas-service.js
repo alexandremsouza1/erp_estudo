@@ -137,45 +137,40 @@ exports.obterVendasEmTransito = async (req, res) => {
     })
 }
 
-exports.obterTotalVendasConcluidas = async (req, res) => {
+exports.obterTotalVendas = async (req, res) => {
     usuarioService.buscarUsuarioPorID().then(async user => {
         await axios.get(`https://api.mercadolibre.com/orders/search?seller=${user.id}&access_token=${user.accessToken}`).then(response => {
             let resultVendas = response.data.results.map(async result => {
                 return await axios.get(`https://api.mercadolibre.com/shipments/${result.shipping.id}?access_token=${user.accessToken}`).then(ship => {
                     if (ship.data.status === 'delivered') {
-                        return 1
+                        return 'delivered'
+                    }
+                    if (ship.data.status === 'cancelled') {
+                        return 'cancelled'
+                    }
+                    if (ship.data.status === 'shipped') {
+                        return 'shipped'
+                    }
+                    if(ship.data.status !== 'delivered' && ship.data.status !== 'cancelled' && ship.data.status !== 'shipped'){
+                        return ship.data.status
                     }
                 })
             })
 
             Promise.all(resultVendas).then(vendas => {
-                let qtdeVendasConcluidas = vendas.filter(venda => {return venda === 1}).reduce((acumulador, valorCorrente) => {return acumulador + valorCorrente})
-                res.send({ qtdeVendasConcluidas: qtdeVendasConcluidas })
-            })
-        })
-    })
-}
-
-exports.obterTotalVendasCanceladas = async (req, res) => {
-    usuarioService.buscarUsuarioPorID().then(async user => {
-        await axios.get(`https://api.mercadolibre.com/orders/search?seller=${user.id}&access_token=${user.accessToken}`).then(response => {
-            let resultVendasCanceladas = response.data.results.map(async result => {
-                return await axios.get(`https://api.mercadolibre.com/shipments/${result.shipping.id}?access_token=${user.accessToken}`).then(ship => {
-                    
-                    if (ship.data.status === 'cancelled') {
-                        return 1
-                    }
-
+                let qtdeVendasConcluidas = vendas.filter(vendasConcluidas => {return vendasConcluidas === 'delivered'}).length      
+                let qtdeVendasEmTransito = vendas.filter(vendasEmTransito => {return vendasEmTransito === 'shipped'}).length
+                let qtdeVendasCanceladas = vendas.filter(vendaCancelada   => {return vendaCancelada   === 'cancelled'}).length
+                res.status(200).send({
+                    qtdeVendasConcluidas,
+                    qtdeVendasCanceladas,
+                    qtdeVendasEmTransito
                 })
             })
-
-            Promise.all(resultVendasCanceladas).then(vendasCanceladas => {
-                let qtdeVendasCanceladas = vendasCanceladas.filter(vendas => {return vendas === 1}).reduce((acumulador, valorCorrente) => {return acumulador + valorCorrente})
-                res.send({ qtdeVendasCanceladas: qtdeVendasCanceladas })
-            })
         })
     })
 }
+
 
 exports.obterVendasConcluidas = async (req, res) => {
     usuarioService.buscarUsuarioPorID().then(async user => {

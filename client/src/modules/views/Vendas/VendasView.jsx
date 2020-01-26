@@ -34,6 +34,9 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TextField from '@material-ui/core/TextField';
 
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 export default class VendasView extends React.Component {
 
     constructor(props) {
@@ -48,7 +51,8 @@ export default class VendasView extends React.Component {
             vendas: [],
             renderizar: false,
             openModalVerMaisDetalhes: false,
-            textFieldSearch: ''
+            textFieldSearch: '',
+            temporalizar: false
         }
 
         this.handleClickSearch = this.handleClickSearch.bind(this)
@@ -60,6 +64,7 @@ export default class VendasView extends React.Component {
             return venda.dados_entrega.status === 'shipped'
         })
         this.setState({ vendas: vendasDelivered, renderizar: true })
+        this.mostrarLoading()
     }
 
     getStatusEntregue = () => {
@@ -67,6 +72,7 @@ export default class VendasView extends React.Component {
             return venda.dados_entrega.status === 'delivered'
         })
         this.setState({ vendas: vendasDelivered, renderizar: true })
+        this.mostrarLoading()
     }
 
     getStatusCanceladas = () => {
@@ -74,6 +80,14 @@ export default class VendasView extends React.Component {
             return venda.dados_entrega.status === 'cancelled'
         })
         this.setState({ vendas: vendasDelivered, renderizar: true })
+        this.mostrarLoading()
+    }
+
+    mostrarLoading = () => {
+        this.setState({temporalizar: true})
+        setInterval(() => {
+            this.setState({temporalizar: false})
+        }, 3000)
     }
 
     getTraduzirStatusEnvio = status_envio => {
@@ -164,7 +178,7 @@ export default class VendasView extends React.Component {
                                             <Icon name="truck" />
                                             <Step.Content style={{ 'marginLeft': '10px' }}>
                                                 <Step.Title>Em trânsito</Step.Title>
-                                                <Step.Description>0 vendas</Step.Description>
+                                                <Step.Description><b>{this.props.qtdeVendasEmTransito === 0 ? <>Carregando...</> : this.props.qtdeVendasEmTransito}</b> vendas</Step.Description>
                                             </Step.Content>
                                         </Step>
 
@@ -172,7 +186,7 @@ export default class VendasView extends React.Component {
                                             <Avatar alt="concluido" src={imgConcluido} />
                                             <Step.Content style={{ 'marginLeft': '10px' }}>
                                                 <Step.Title>Concluídas</Step.Title>
-                                                <Step.Description><b>{this.props.qtdeVendasConcluidas || <>Carregando...</>}</b> vendas</Step.Description>
+                                                <Step.Description><b>{this.props.qtdeVendasConcluidas === 0 ? <>Carregando...</> : this.props.qtdeVendasConcluidas}</b> vendas</Step.Description>
                                             </Step.Content>
                                         </Step>
 
@@ -180,7 +194,7 @@ export default class VendasView extends React.Component {
                                             <Avatar alt="cancelado" src={iconCancelled} />
                                             <Step.Content style={{ 'marginLeft': '10px' }}>
                                                 <Step.Title>Canceladas</Step.Title>
-                                                <Step.Description><b>{this.props.qtdeVendasCanceladas || <>Carregando...</>}</b> vendas</Step.Description>
+                                                <Step.Description><b>{this.props.qtdeVendasCanceladas === 0 ? <>Carregando...</> : this.props.qtdeVendasCanceladas}</b> vendas</Step.Description>
                                             </Step.Content>
                                         </Step>
 
@@ -212,192 +226,197 @@ export default class VendasView extends React.Component {
                     </div>
                 </div>
 
+                {this.state.temporalizar && <Backdrop open={this.state.temporalizar}><CircularProgress></CircularProgress></Backdrop>}
+
                 {this.state.vendas.length > 0
 
                     ? this.state.vendas.map((venda, key) => {
 
                         if (this.state.renderizar) {
                             return (
-                                <Paper elevation={3} key={key}>
-                                    <Panel style={{ 'backgroundColor': '#1976d2', 'color': 'white' }} key={key} title={<div>Pedido <span style={{ 'color': 'white' }}>
-                                        |{this.getTraduzirStatusEnvio(venda.dados_entrega.status)}|</span> - Nº #{venda.id_venda} - {venda.itens_pedido.titulo_anuncio} - {venda.data_venda}
-                                    </div>}
-                                        content={
-                                            <>
-                                                <Row>
-                                                    <Col md={6}>
-                                                        <Paper elevation={3}>
-                                                            <Card>
+                                <>
+                                    <Paper elevation={3} key={key}>
+                                        <Panel style={{ 'backgroundColor': '#1976d2', 'color': 'white' }} key={key} title={<div>Pedido <span style={{ 'color': 'white' }}>
+                                            |{this.getTraduzirStatusEnvio(venda.dados_entrega.status)}|</span> - Nº #{venda.id_venda} - {venda.itens_pedido.titulo_anuncio} - {venda.data_venda}
+                                        </div>}
+                                            content={
+                                                <>
+                                                    <Row>
+                                                        <Col md={6}>
+                                                            <Paper elevation={3}>
+                                                                <Card>
 
-                                                                <CardContent>
-                                                                    <Typography gutterBottom variant="h5" component="h2">
-                                                                        Nome: {venda.comprador.first_name_comprador} {venda.comprador.last_name_comprador}
-                                                                    </Typography>
-                                                                    <Typography variant="body2" component="p">
-                                                                        <strong>Usuário:</strong> {venda.comprador.nickname_comprador}  <strong>CPF:</strong> {venda.comprador.documento_comprador}
-                                                                    </Typography>
-                                                                </CardContent>
-
-                                                                <CardActions>
-                                                                    <Tooltip title="Clique aqui para enviar mensagem para o comprador pelo Whatsapp Web">
-                                                                        <Button
-                                                                            variant="contained"
-                                                                            style={{ 'color': 'white', 'backgroundColor': 'green' }}
-                                                                            startIcon={<WhatsAppIcon />}>
-                                                                            <a href={venda.comprador.whatsapp} style={{ 'color': 'white' }} target='_blank' data-toggle="tooltip" title='Enviar mensagem WhatsApp'>Enviar mensagem WhatsApp</a>
-                                                                        </Button>
-                                                                    </Tooltip>
-                                                                    <Tooltip title="Clique aqui para enviar mensagem para o comprador para ser lido na plataforma do Mercado Livre">
-                                                                        <Button
-                                                                            variant="contained"
-                                                                            style={{ 'color': 'black', 'backgroundColor': '#ffe600' }}
-                                                                            startIcon={<SmsIcon />}>
-                                                                            Enviar Mensagem Mercado Livre
-                                                                    </Button>
-                                                                    </Tooltip>
-                                                                </CardActions>
-                                                            </Card>
-                                                        </Paper>
-                                                    </Col>
-
-                                                    <Col md={6}>
-                                                        <Paper elevation={3}>
-
-                                                            <Card style={{ 'height': '135px' }}>
-
-                                                                <CardContent>
-
-                                                                    <Row>
-                                                                        <Col md={6}>
-
-                                                                            <div>Data da venda: <b>{venda.data_venda}</b></div>
-                                                                            <div>Valor do produto: <b>R$ {venda.valor_venda.toLocaleString('pt-BR', { minimumFractionDigits: 2, currency: 'BRL' })}</b></div>
-                                                                            <div>Status de pagamento: <b>{venda.dados_pagamento[0].status_pagamento === 'approved' ? 'Aprovado' : 'Estornado'}</b></div>
-
-                                                                            <CardActions>
-                                                                                {venda.dados_pagamento[0].boleto_url !== null &&
-                                                                                    <Button
-                                                                                        variant="contained"
-                                                                                        style={{ 'color': 'black', 'marginBottom': '20px', 'marginTop': '15px', 'marginLeft': '-9px' }}
-                                                                                        color='default'
-                                                                                        onClick={() => this.exibirBoleto(venda)}
-                                                                                        startIcon={<PictureAsPdfIcon color="primary" />}>
-                                                                                        Visualizar Boleto
-                                                                                </Button>
-                                                                                }
-                                                                            </CardActions>
-                                                                        </Col>
-
-                                                                        <Col md={6}>
-
-
-                                                                            <div>Tipo de pagamento: <b>{venda.dados_pagamento[0].tipoPagamento}</b></div>
-                                                                            <div>Custo de envio: <b>R$ {venda.dados_pagamento[0].custo_envio.toLocaleString('pt-BR', { minimumFractionDigits: 2, currency: 'BRL' })}</b></div>
-                                                                            <div>Valor pago: <b>R$ {venda.dados_pagamento[0].total_pago.toLocaleString('pt-BR', { minimumFractionDigits: 2, currency: 'BRL' })}</b></div>
-                                                                            <div>Qtde vendido: <b>{venda.itens_pedido.quantidade_vendido}</b></div>
-                                                                            <Tooltip title="Clique aqui ver mais detalhes">
-                                                                                <Button style={{ 'marginLeft': '-8px', 'marginTop': '8px' }} onClick={() => this.exibirVerMaisDetalhes(venda)}>Ver mais detalhes</Button>
-                                                                            </Tooltip>
-                                                                        </Col>
-
-
-
-                                                                    </Row>
-
-
-                                                                </CardContent>
-
-
-                                                            </Card>
-                                                        </Paper>
-                                                    </Col>
-
-                                                </Row>
-                                                <Divider />
-                                                <Row>
-                                                    <Col md={6}>
-
-                                                        <div className='panel'>
-                                                            <div className='panel-heading oneLine'>
-                                                                <h3 className='panel-title'>
-                                                                    Dados da Entrega
-                                                                </h3>
-                                                            </div>
-                                                            <div className='panel-body'>
-                                                                <div>Destinatário: <b>{venda.comprador.first_name_comprador} {venda.comprador.last_name_comprador}</b></div>
-                                                                <Typography variant="body2">
-                                                                    CEP: <b>{venda.dados_entrega.endereco_entrega.cep}</b>
-                                                                </Typography>
-                                                                <div>Quem recebe: <b>{venda.dados_entrega.endereco_entrega.nomePessoaEntrega}</b> - <b>Tel.: {venda.dados_entrega.endereco_entrega.telefonePessoaEntrega}</b></div>
-                                                                <div>Endereço: <b>{venda.dados_entrega.endereco_entrega.rua}</b> - Nº <b>{venda.dados_entrega.endereco_entrega.numero}</b></div>
-                                                                <div>Bairro: <b>{venda.dados_entrega.endereco_entrega.bairro.name}</b></div>
-                                                                <div>Cidade: <b>{venda.dados_entrega.endereco_entrega.cidade.name}</b> - Estado: <b>{venda.dados_entrega.endereco_entrega.estado.name}</b></div>
-                                                            </div>
-                                                        </div>
-
-                                                    </Col>
-
-
-
-                                                    <Col md={6}>
-
-                                                        <div className='panel' style={{ 'height': '193px'}}>
-
-                                                            {venda.dados_entrega.cod_rastreamento === null
-                                                                ?
-                                                                <div>
-                                                                    <div className='panel-heading oneLine' style={{marginLeft : '-15px'}}>
-                                                                        <h3 className='panel-title'>
-                                                                            Notas:
-                                                                        </h3>
-                                                                    </div>
-                                                                   
-                                                                    <div>Uma ordem pode ser cancelada pelos seguintes motivos:</div>
-                                                                    <div>- Requeria aprovação do pagamento para descontar do estoque, mas, no tempo de processo de aprovação, o item foi pausado/finalizado por falta de estoque, portanto, o pagamento é retornado ao comprador.</div>
-                                                                    <div>- Requeria pagamento, mas, após certo tempo, não foi paga, por isso é automaticamente cancelada.</div>
-                                                                </div>
-                                                                : <>
-                                                                    <div className='panel-heading oneLine'>
-                                                                        <h3 className='panel-title'>
-                                                                            Detalhes do Envio
-                                                                        </h3>
-                                                                    </div>
-                                                                    <div className='panel-body'>
-                                                                        <Typography variant="body2">
-                                                                            Código de Rastreio: {venda.dados_entrega.cod_rastreamento}
+                                                                    <CardContent>
+                                                                        <Typography gutterBottom variant="h5" component="h2">
+                                                                            Nome: {venda.comprador.first_name_comprador} {venda.comprador.last_name_comprador}
                                                                         </Typography>
-                                                                        <Typography variant="body2">
-                                                                            Método de envio: <b>{venda.dados_entrega.metodo_envio}</b>
+                                                                        <Typography variant="body2" component="p">
+                                                                            <strong>Usuário:</strong> {venda.comprador.nickname_comprador}  <strong>CPF:</strong> {venda.comprador.documento_comprador}
                                                                         </Typography>
-                                                                    </div>
-                                                                </>
-                                                            }
+                                                                    </CardContent>
 
-                                                            {venda.dados_entrega.cod_rastreamento !== null
-                                                                ?
-                                                                <CardActions style={{ 'marginTop': '-15px' }}>
-                                                                    <Tooltip title="Acompanhar o rastreamento do produto">
-                                                                        <Button
-                                                                            variant="contained"
-                                                                            color="default"
-                                                                            onClick={() => this.exibirRastreamento(venda.dados_entrega.cod_rastreamento)}
-                                                                            startIcon={<LocalShippingIcon />}>
-                                                                            Visualizar rastreamento
+                                                                    <CardActions>
+                                                                        <Tooltip title="Clique aqui para enviar mensagem para o comprador pelo Whatsapp Web">
+                                                                            <Button
+                                                                                variant="contained"
+                                                                                style={{ 'color': 'white', 'backgroundColor': 'green' }}
+                                                                                startIcon={<WhatsAppIcon />}>
+                                                                                <a href={venda.comprador.whatsapp} style={{ 'color': 'white' }} target='_blank' data-toggle="tooltip" title='Enviar mensagem WhatsApp'>Enviar mensagem WhatsApp</a>
                                                                             </Button>
-                                                                    </Tooltip>
-                                                                </CardActions>
-                                                                : <></>
-                                                            }
+                                                                        </Tooltip>
+                                                                        <Tooltip title="Clique aqui para enviar mensagem para o comprador para ser lido na plataforma do Mercado Livre">
+                                                                            <Button
+                                                                                variant="contained"
+                                                                                style={{ 'color': 'black', 'backgroundColor': '#ffe600' }}
+                                                                                startIcon={<SmsIcon />}>
+                                                                                Enviar Mensagem Mercado Livre
+                                                                    </Button>
+                                                                        </Tooltip>
+                                                                    </CardActions>
+                                                                </Card>
+                                                            </Paper>
+                                                        </Col>
 
-                                                        </div>
+                                                        <Col md={6}>
+                                                            <Paper elevation={3}>
+
+                                                                <Card style={{ 'height': '135px' }}>
+
+                                                                    <CardContent>
+
+                                                                        <Row>
+                                                                            <Col md={6}>
+
+                                                                                <div>Data da venda: <b>{venda.data_venda}</b></div>
+                                                                                <div>Valor do produto: <b>R$ {venda.valor_venda.toLocaleString('pt-BR', { minimumFractionDigits: 2, currency: 'BRL' })}</b></div>
+                                                                                <div>Status de pagamento: <b>{venda.dados_pagamento[0].status_pagamento === 'approved' ? 'Aprovado' : 'Estornado'}</b></div>
+
+                                                                                <CardActions>
+                                                                                    {venda.dados_pagamento[0].boleto_url !== null &&
+                                                                                        <Button
+                                                                                            variant="contained"
+                                                                                            style={{ 'color': 'black', 'marginBottom': '20px', 'marginTop': '15px', 'marginLeft': '-9px' }}
+                                                                                            color='default'
+                                                                                            onClick={() => this.exibirBoleto(venda)}
+                                                                                            startIcon={<PictureAsPdfIcon color="primary" />}>
+                                                                                            Visualizar Boleto
+                                                                                </Button>
+                                                                                    }
+                                                                                </CardActions>
+                                                                            </Col>
+
+                                                                            <Col md={6}>
 
 
-                                                    </Col>
-                                                </Row>
-                                            </>
-                                        }>
-                                    </Panel>
-                                </Paper>
+                                                                                <div>Tipo de pagamento: <b>{venda.dados_pagamento[0].tipoPagamento}</b></div>
+                                                                                <div>Custo de envio: <b>R$ {venda.dados_pagamento[0].custo_envio.toLocaleString('pt-BR', { minimumFractionDigits: 2, currency: 'BRL' })}</b></div>
+                                                                                <div>Valor pago: <b>R$ {venda.dados_pagamento[0].total_pago.toLocaleString('pt-BR', { minimumFractionDigits: 2, currency: 'BRL' })}</b></div>
+                                                                                <div>Qtde vendido: <b>{venda.itens_pedido.quantidade_vendido}</b></div>
+                                                                                <Tooltip title="Clique aqui ver mais detalhes">
+                                                                                    <Button style={{ 'marginLeft': '-8px', 'marginTop': '8px' }} onClick={() => this.exibirVerMaisDetalhes(venda)}>Ver mais detalhes</Button>
+                                                                                </Tooltip>
+                                                                            </Col>
+
+
+
+                                                                        </Row>
+
+
+                                                                    </CardContent>
+
+
+                                                                </Card>
+                                                            </Paper>
+                                                        </Col>
+
+                                                    </Row>
+                                                    <Divider />
+                                                    <Row>
+                                                        <Col md={6}>
+
+                                                            <div className='panel'>
+                                                                <div className='panel-heading oneLine'>
+                                                                    <h3 className='panel-title'>
+                                                                        Dados da Entrega
+                                                                </h3>
+                                                                </div>
+                                                                <div className='panel-body'>
+                                                                    <div>Destinatário: <b>{venda.comprador.first_name_comprador} {venda.comprador.last_name_comprador}</b></div>
+                                                                    <Typography variant="body2">
+                                                                        CEP: <b>{venda.dados_entrega.endereco_entrega.cep}</b>
+                                                                    </Typography>
+                                                                    <div>Quem recebe: <b>{venda.dados_entrega.endereco_entrega.nomePessoaEntrega}</b> - <b>Tel.: {venda.dados_entrega.endereco_entrega.telefonePessoaEntrega}</b></div>
+                                                                    <div>Endereço: <b>{venda.dados_entrega.endereco_entrega.rua}</b> - Nº <b>{venda.dados_entrega.endereco_entrega.numero}</b></div>
+                                                                    <div>Bairro: <b>{venda.dados_entrega.endereco_entrega.bairro.name}</b></div>
+                                                                    <div>Cidade: <b>{venda.dados_entrega.endereco_entrega.cidade.name}</b> - Estado: <b>{venda.dados_entrega.endereco_entrega.estado.name}</b></div>
+                                                                </div>
+                                                            </div>
+
+                                                        </Col>
+
+
+
+                                                        <Col md={6}>
+
+                                                            <div className='panel' style={{ 'height': '193px' }}>
+
+                                                                {venda.dados_entrega.cod_rastreamento === null
+                                                                    ?
+                                                                    <div>
+                                                                        <div className='panel-heading oneLine' style={{ marginLeft: '-15px' }}>
+                                                                            <h3 className='panel-title'>
+                                                                                Notas:
+                                                                        </h3>
+                                                                        </div>
+
+                                                                        <div>Uma ordem pode ser cancelada pelos seguintes motivos:</div>
+                                                                        <div>- Requeria aprovação do pagamento para descontar do estoque, mas, no tempo de processo de aprovação, o item foi pausado/finalizado por falta de estoque, portanto, o pagamento é retornado ao comprador.</div>
+                                                                        <div>- Requeria pagamento, mas, após certo tempo, não foi paga, por isso é automaticamente cancelada.</div>
+                                                                    </div>
+                                                                    : <>
+                                                                        <div className='panel-heading oneLine'>
+                                                                            <h3 className='panel-title'>
+                                                                                Detalhes do Envio
+                                                                        </h3>
+                                                                        </div>
+                                                                        <div className='panel-body'>
+                                                                            <Typography variant="body2">
+                                                                                Código de Rastreio: {venda.dados_entrega.cod_rastreamento}
+                                                                            </Typography>
+                                                                            <Typography variant="body2">
+                                                                                Método de envio: <b>{venda.dados_entrega.metodo_envio}</b>
+                                                                            </Typography>
+                                                                        </div>
+                                                                    </>
+                                                                }
+
+                                                                {venda.dados_entrega.cod_rastreamento !== null
+                                                                    ?
+                                                                    <CardActions style={{ 'marginTop': '-15px' }}>
+                                                                        <Tooltip title="Acompanhar o rastreamento do produto">
+                                                                            <Button
+                                                                                variant="contained"
+                                                                                color="default"
+                                                                                onClick={() => this.exibirRastreamento(venda.dados_entrega.cod_rastreamento)}
+                                                                                startIcon={<LocalShippingIcon />}>
+                                                                                Visualizar rastreamento
+                                                                            </Button>
+                                                                        </Tooltip>
+                                                                    </CardActions>
+                                                                    : <></>
+                                                                }
+
+                                                            </div>
+
+
+                                                        </Col>
+                                                    </Row>
+                                                </>
+                                            }>
+                                        </Panel>
+                                    </Paper>
+                                </>
+
                             )
                         }
                     }

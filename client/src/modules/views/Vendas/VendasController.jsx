@@ -15,7 +15,8 @@ export default class VendasController extends React.Component {
             dadosRastreamento: {},
             isLoading: true,
             qtdeVendasConcluidas: 0,
-            qtdeVendasCanceladas: 0
+            qtdeVendasCanceladas: 0,
+            qtdeVendasEmTransito: 0
         }
     }
 
@@ -37,18 +38,14 @@ export default class VendasController extends React.Component {
             swal("Error", "Houve um erro ao listar todas as vendas em transito(VendasController:29): \n \n " + error, "error");
         })
 
-        await axios.get(`${DOMAIN}/vendas/getTotalVendasConcluidas`).then(vendasConcluidas => {
+        await axios.get(`${DOMAIN}/vendas/getTotalVendas`).then(vendas => {
             this.setState({
-                qtdeVendasConcluidas: vendasConcluidas.data.qtdeVendasConcluidas
+                qtdeVendasConcluidas: vendas.data.qtdeVendasConcluidas,
+                qtdeVendasCanceladas: vendas.data.qtdeVendasCanceladas,
+                qtdeVendasEmTransito: vendas.data.qtdeVendasEmTransito
             })
-        }).catch(error => swal('Error','Houve um erro ao mostrar a quantidade total de vendas concluidas! \n \n ' + error, 'error'))
+        }).catch(error => swal('Error','Houve um erro ao mostrar a quantidade total de vendas! \n \n ' + error, 'error'))
 
-        await axios.get(`${DOMAIN}/vendas/getTotalVendasCanceladas`).then(vendasCanceladas => {
-            this.setState({
-                qtdeVendasCanceladas: vendasCanceladas.data.qtdeVendasCanceladas
-            })
-        }).catch(error => swal('Error','Houve um erro ao mostrar a quantidade total de vendas concluidas! \n \n ' + error, 'error'))
-  
     }
 
     obterRastreioCorreios = async(codigo) => {
@@ -62,7 +59,7 @@ export default class VendasController extends React.Component {
 
 
     render() {
-        
+
         return (
             <VendasView
                 vendas={this.state.vendas}
@@ -70,7 +67,8 @@ export default class VendasController extends React.Component {
                 dadosRastreamento={this.state.dadosRastreamento}
                 isLoading={this.state.isLoading}
                 qtdeVendasConcluidas={this.state.qtdeVendasConcluidas}
-                qtdeVendasCanceladas={this.state.qtdeVendasCanceladas}/>
+                qtdeVendasCanceladas={this.state.qtdeVendasCanceladas}
+                qtdeVendasEmTransito={this.state.qtdeVendasEmTransito}/>
         )
     }
 }
