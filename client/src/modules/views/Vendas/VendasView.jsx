@@ -84,7 +84,7 @@ export default class VendasView extends React.Component {
             return 'ENTREGUE'
         }
         if (status_envio === 'cancelled') {
-            return 'CANCELADA'
+            return 'CANCELADO'
         }
     }
 
@@ -156,7 +156,7 @@ export default class VendasView extends React.Component {
                                             <Avatar alt="concluido" src={imgProntoParaEnviar} />
                                             <Step.Content style={{ 'marginLeft': '10px' }}>
                                                 <Step.Title>Pronto para enviar</Step.Title>
-                                                <Step.Description>5 vendas</Step.Description>
+                                                <Step.Description>0 vendas</Step.Description>
                                             </Step.Content>
                                         </Step>
 
@@ -164,7 +164,7 @@ export default class VendasView extends React.Component {
                                             <Icon name="truck" />
                                             <Step.Content style={{ 'marginLeft': '10px' }}>
                                                 <Step.Title>Em trânsito</Step.Title>
-                                                <Step.Description>13 vendas</Step.Description>
+                                                <Step.Description>0 vendas</Step.Description>
                                             </Step.Content>
                                         </Step>
 
@@ -172,7 +172,7 @@ export default class VendasView extends React.Component {
                                             <Avatar alt="concluido" src={imgConcluido} />
                                             <Step.Content style={{ 'marginLeft': '10px' }}>
                                                 <Step.Title>Concluídas</Step.Title>
-                                                <Step.Description>69 vendas</Step.Description>
+                                                <Step.Description><b>{this.props.qtdeVendasConcluidas || <>Carregando...</>}</b> vendas</Step.Description>
                                             </Step.Content>
                                         </Step>
 
@@ -180,7 +180,7 @@ export default class VendasView extends React.Component {
                                             <Avatar alt="cancelado" src={iconCancelled} />
                                             <Step.Content style={{ 'marginLeft': '10px' }}>
                                                 <Step.Title>Canceladas</Step.Title>
-                                                <Step.Description>8 vendas</Step.Description>
+                                                <Step.Description><b>{this.props.qtdeVendasCanceladas || <>Carregando...</>}</b> vendas</Step.Description>
                                             </Step.Content>
                                         </Step>
 
@@ -228,16 +228,16 @@ export default class VendasView extends React.Component {
                                                     <Col md={6}>
                                                         <Paper elevation={3}>
                                                             <Card>
-                                                                <CardActionArea>
-                                                                    <CardContent>
-                                                                        <Typography gutterBottom variant="h5" component="h2">
-                                                                            Nome: {venda.comprador.first_name_comprador} {venda.comprador.last_name_comprador}
-                                                                        </Typography>
-                                                                        <Typography variant="body2" component="p">
-                                                                            <strong>Usuário:</strong> {venda.comprador.nickname_comprador}  <strong>CPF:</strong> {venda.comprador.documento_comprador}
-                                                                        </Typography>
-                                                                    </CardContent>
-                                                                </CardActionArea>
+
+                                                                <CardContent>
+                                                                    <Typography gutterBottom variant="h5" component="h2">
+                                                                        Nome: {venda.comprador.first_name_comprador} {venda.comprador.last_name_comprador}
+                                                                    </Typography>
+                                                                    <Typography variant="body2" component="p">
+                                                                        <strong>Usuário:</strong> {venda.comprador.nickname_comprador}  <strong>CPF:</strong> {venda.comprador.documento_comprador}
+                                                                    </Typography>
+                                                                </CardContent>
+
                                                                 <CardActions>
                                                                     <Tooltip title="Clique aqui para enviar mensagem para o comprador pelo Whatsapp Web">
                                                                         <Button
@@ -341,22 +341,37 @@ export default class VendasView extends React.Component {
 
                                                     <Col md={6}>
 
-                                                        <div className='panel' style={{ 'height': '193px' }}>
+                                                        <div className='panel' style={{ 'height': '193px'}}>
 
-
-                                                            <div className='panel-heading oneLine'>
-                                                                <h3 className='panel-title'>
-                                                                    Detalhes do Envio
-                                                                </h3>
-                                                            </div>
-                                                            <div className='panel-body'>
-                                                                <Typography variant="body2">
-                                                                    Código de Rastreio: {venda.dados_entrega.cod_rastreamento}
-                                                                </Typography>
-                                                                <Typography variant="body2">
-                                                                    Método de envio: <b>{venda.dados_entrega.metodo_envio}</b>
-                                                                </Typography>
-                                                            </div>
+                                                            {venda.dados_entrega.cod_rastreamento === null
+                                                                ?
+                                                                <div>
+                                                                    <div className='panel-heading oneLine' style={{marginLeft : '-15px'}}>
+                                                                        <h3 className='panel-title'>
+                                                                            Notas:
+                                                                        </h3>
+                                                                    </div>
+                                                                   
+                                                                    <div>Uma ordem pode ser cancelada pelos seguintes motivos:</div>
+                                                                    <div>- Requeria aprovação do pagamento para descontar do estoque, mas, no tempo de processo de aprovação, o item foi pausado/finalizado por falta de estoque, portanto, o pagamento é retornado ao comprador.</div>
+                                                                    <div>- Requeria pagamento, mas, após certo tempo, não foi paga, por isso é automaticamente cancelada.</div>
+                                                                </div>
+                                                                : <>
+                                                                    <div className='panel-heading oneLine'>
+                                                                        <h3 className='panel-title'>
+                                                                            Detalhes do Envio
+                                                                        </h3>
+                                                                    </div>
+                                                                    <div className='panel-body'>
+                                                                        <Typography variant="body2">
+                                                                            Código de Rastreio: {venda.dados_entrega.cod_rastreamento}
+                                                                        </Typography>
+                                                                        <Typography variant="body2">
+                                                                            Método de envio: <b>{venda.dados_entrega.metodo_envio}</b>
+                                                                        </Typography>
+                                                                    </div>
+                                                                </>
+                                                            }
 
                                                             {venda.dados_entrega.cod_rastreamento !== null
                                                                 ?

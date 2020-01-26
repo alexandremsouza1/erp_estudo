@@ -13,7 +13,9 @@ export default class VendasController extends React.Component {
         this.state = {
             vendas: [],
             dadosRastreamento: {},
-            isLoading: true
+            isLoading: true,
+            qtdeVendasConcluidas: 0,
+            qtdeVendasCanceladas: 0
         }
     }
 
@@ -34,6 +36,18 @@ export default class VendasController extends React.Component {
         }).catch(error => {
             swal("Error", "Houve um erro ao listar todas as vendas em transito(VendasController:29): \n \n " + error, "error");
         })
+
+        await axios.get(`${DOMAIN}/vendas/getTotalVendasConcluidas`).then(vendasConcluidas => {
+            this.setState({
+                qtdeVendasConcluidas: vendasConcluidas.data.qtdeVendasConcluidas
+            })
+        }).catch(error => swal('Error','Houve um erro ao mostrar a quantidade total de vendas concluidas! \n \n ' + error, 'error'))
+
+        await axios.get(`${DOMAIN}/vendas/getTotalVendasCanceladas`).then(vendasCanceladas => {
+            this.setState({
+                qtdeVendasCanceladas: vendasCanceladas.data.qtdeVendasCanceladas
+            })
+        }).catch(error => swal('Error','Houve um erro ao mostrar a quantidade total de vendas concluidas! \n \n ' + error, 'error'))
   
     }
 
@@ -48,12 +62,15 @@ export default class VendasController extends React.Component {
 
 
     render() {
+        
         return (
             <VendasView
                 vendas={this.state.vendas}
                 obterRastreioCorreios={this.obterRastreioCorreios}
                 dadosRastreamento={this.state.dadosRastreamento}
-                isLoading={this.state.isLoading}/>
+                isLoading={this.state.isLoading}
+                qtdeVendasConcluidas={this.state.qtdeVendasConcluidas}
+                qtdeVendasCanceladas={this.state.qtdeVendasCanceladas}/>
         )
     }
 }
