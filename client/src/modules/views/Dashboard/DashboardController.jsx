@@ -35,7 +35,9 @@ export default function DashboardController() {
                 saldoTotal: res.data.saldo_total.toLocaleString('pt-BR'),
                 saldoDisponivel: res.data.disponivel.toLocaleString('pt-BR'),
                 saldoALiberar: res.data.liberar.toLocaleString('pt-BR'),
-                isLoading: false
+                saldoBloqueado: res.data.bloqueado.toLocaleString('pt-BR'),
+                isLoading: false,
+                isLoadingStatusPublicacoes: false
             })
         })
 

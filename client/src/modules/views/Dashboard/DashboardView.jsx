@@ -3,7 +3,7 @@ import { Row, Col } from "react-bootstrap";
 import Grid from '@material-ui/core/Grid';
 import { Card } from "modules/components/Card/Card.jsx";
 import Carregando from '../../components/Loading/LoadingCarregandoSolicitacao'
-import { Button, Icon, Item, Label, Segment } from 'semantic-ui-react'
+import { Loader } from 'semantic-ui-react'
 import Paper from '@material-ui/core/Paper';
 
 export default function DashboardView(props) {
@@ -21,19 +21,24 @@ export default function DashboardView(props) {
             </Row>
 
             <Row style={{ 'paddingTop': '15px' }}>
-              <Col md={4}>
+              <Col md={3}>
                 <div style={{ 'color': '#4194D8', 'fontSize': '25px', 'lineHeight': '30px', 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center', 'fontWeight': 'bold' }}>{props.saldoTotal}</div>
-                <div style={{ 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center' }}>Dinheiro em conta</div>
+                <div style={{ 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center' }}>Em conta</div>
               </Col>
 
-              <Col md={4}>
+              <Col md={3}>
                 <div style={{ 'color': '#4194D8', 'fontSize': '25px', 'lineHeight': '30px', 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center', 'fontWeight': 'bold' }}>{props.saldoDisponivel}</div>
-                <div style={{ 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center' }}>Dinheiro disponível</div>
+                <div style={{ 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center' }}>Disponível</div>
               </Col>
 
-              <Col md={4}>
+              <Col md={3}>
                 <div style={{ 'color': '#4194D8', 'fontSize': '25px', 'lineHeight': '30px', 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center', 'fontWeight': 'bold' }}>{props.saldoALiberar}</div>
-                <div style={{ 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center' }}>Dinheiro a liberar</div>
+                <div style={{ 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center' }}>A liberar</div>
+              </Col>
+
+              <Col md={3}>
+                <div style={{ 'color': '#4194D8', 'fontSize': '25px', 'lineHeight': '30px', 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center', 'fontWeight': 'bold' }}>{props.saldoBloqueado}</div>
+                <div style={{ 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center' }}>Bloqueado</div>
               </Col>
             </Row>
 
@@ -65,13 +70,19 @@ export default function DashboardView(props) {
 
             <Row style={{ 'paddingBottom': '20px', 'paddingTop': '10px' }}>
               <Col md={6}>
-                <div style={{ 'color': '#71D8BF', 'fontSize': '25px', 'lineHeight': '30px', 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center', 'fontWeight': 'bold' }}>{props.totalAtivos}</div>
+                {props.totalAtivos === undefined
+                ? <Loader size='mini' active={props.totalAtivos === undefined} inline style={{margin : '16px 130px 0'}}/>
+                :<div style={{ 'color': '#71D8BF', 'fontSize': '25px', 'lineHeight': '30px', 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center', 'fontWeight': 'bold' }}>{props.totalAtivos}</div>
+                }
                 <div style={{ 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center' }}>Publicações</div>
                 <div style={{ 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center' }}>ativas</div>
               </Col>
 
               <Col md={6}>
-                <div style={{ 'color': '#71D8BF', 'fontSize': '25px', 'lineHeight': '30px', 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center', 'fontWeight': 'bold' }}>{props.totalPausados}</div>
+                {props.totalPausados === undefined
+                ? <Loader size='mini' active={props.totalPausados === undefined} inline style={{margin : '16px 130px 0'}}/>
+                : <div style={{ 'color': '#71D8BF', 'fontSize': '25px', 'lineHeight': '30px', 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center', 'fontWeight': 'bold' }}>{props.totalPausados}</div>
+                } 
                 <div style={{ 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center' }}>Publicações</div>
                 <div style={{ 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center' }}>pausadas</div>
               </Col>
@@ -115,54 +126,6 @@ export default function DashboardView(props) {
 
           </Paper>
         </Grid>
-
-
-        {props.vendasPendente.length > 0 &&
-          <Grid item xs={12}>
-            <Card
-              title={<>Pedido de vendas pendente {props.totalVendasPendentes}</>}
-              category="Aguardando confirmação do pagamento"
-              content={
-                <Segment raised color='grey'>
-                  {props.vendasPendente.map((prop, key) => {
-                    if (!props.isLoading) {
-                      return (
-                        <Item.Group divided key={key}>
-                          <Item key={key}>
-                            <Item.Image src={prop.fotoPrincipal} style={{ 'height': '100px', 'width': '80px', 'marginTop': '13px' }} />
-                            <Item.Content>
-                              <Item.Header style={{ 'marginLeft': '-16px' }}>{prop.titulo}</Item.Header>
-                              <Item.Meta>
-                                <span className='cinema'>{prop.dataPedido}</span>
-                              </Item.Meta>
-                              <Item.Description>
-                                <b>Cliente:</b> {prop.cliente}
-                                <br></br>
-                              </Item.Description>
-                              <Item.Extra>
-                                <Label>{prop.variacao}</Label>
-                                <Label icon='money' content={<>{prop.preco} reais</>} />
-                                <Button icon labelPosition='left' style={{ 'fontSize': '10px' }} color='orange'>
-                                  <Icon name='file pdf outline'></Icon>
-                                  <a style={{ 'color': 'white' }} href={prop.boleto} target='_blank' rel="noopener noreferrer"> Boleto</a>
-                                </Button>
-                              </Item.Extra>
-                            </Item.Content>
-                          </Item>
-                        </Item.Group>
-                      )
-                    } else {
-                      return (
-                        <Carregando width={450} key={key} />
-                      )
-                    }
-                  })
-                  }
-                </Segment>
-              }
-            />
-          </Grid>
-        }
       </Grid>
     </div >
   );

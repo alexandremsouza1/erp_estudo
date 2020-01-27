@@ -16,16 +16,31 @@ export default class VendasController extends React.Component {
             isLoading: true,
             qtdeVendasConcluidas: 0,
             qtdeVendasCanceladas: 0,
-            qtdeVendasEmTransito: 0
+            qtdeVendasEmTransito: 0,
+            qtdeVendasPendentes: 0
         }
     }
 
     componentDidMount = async () => {
-        
-        await axios.get(`${DOMAIN}/vendas/getVendasConcluidas`).then(vendas => {
-            this.setState({ vendas: vendas.data })
+
+        await axios.get(`${DOMAIN}/vendas/getVendasPendentes`).then(vendasPendentes => {
+            let vendas = this.state.vendas
+            vendasPendentes.data.map(venda => {
+                vendas.push(venda)
+            })
+            this.setState({ vendas })
         }).catch(error => {
-            swal("Error", "Houve um erro ao listar todas as vendas concluídas (VendasController:23):  \n \n " + error, "error");
+            swal("Error", "Houve um erro ao listar todas as vendas pendentes (VendasController:28):  \n \n " + error, "error");
+        })
+        
+        await axios.get(`${DOMAIN}/vendas/getVendasConcluidas`).then(vendasConcluidas => {
+            let vendas = this.state.vendas
+            vendasConcluidas.data.map(venda => {
+                vendas.push(venda)
+            })
+            this.setState({ vendas })
+        }).catch(error => {
+            swal("Error", "Houve um erro ao listar todas as vendas concluídas (VendasController:34):  \n \n " + error, "error");
         })
 
         await axios.get(`${DOMAIN}/vendas/getVendasEmTransito`).then(vendasEmTransito => {
@@ -35,14 +50,22 @@ export default class VendasController extends React.Component {
             })
             this.setState({ vendas })
         }).catch(error => {
-            swal("Error", "Houve um erro ao listar todas as vendas em transito(VendasController:29): \n \n " + error, "error");
+            swal("Error", "Houve um erro ao listar todas as vendas em transito(VendasController:44): \n \n " + error, "error");
         })
 
         await axios.get(`${DOMAIN}/vendas/getTotalVendas`).then(vendas => {
             this.setState({
                 qtdeVendasConcluidas: vendas.data.qtdeVendasConcluidas,
                 qtdeVendasCanceladas: vendas.data.qtdeVendasCanceladas,
-                qtdeVendasEmTransito: vendas.data.qtdeVendasEmTransito
+                qtdeVendasEmTransito: vendas.data.qtdeVendasEmTransito,
+                isLoading: false
+            })
+        }).catch(error => swal('Error','Houve um erro ao mostrar a quantidade total de vendas! \n \n ' + error, 'error'))
+
+        await axios.get(`${DOMAIN}/vendas/getTotalVendasPendentes`).then(vendas => {
+            this.setState({
+                qtdeVendasPendentes: vendas.data.qtdeVendasPendentes,
+                isLoading: false
             })
         }).catch(error => swal('Error','Houve um erro ao mostrar a quantidade total de vendas! \n \n ' + error, 'error'))
 
@@ -55,6 +78,7 @@ export default class VendasController extends React.Component {
                 isLoading: false
             })
         })
+        
     }
 
 
@@ -68,7 +92,8 @@ export default class VendasController extends React.Component {
                 isLoading={this.state.isLoading}
                 qtdeVendasConcluidas={this.state.qtdeVendasConcluidas}
                 qtdeVendasCanceladas={this.state.qtdeVendasCanceladas}
-                qtdeVendasEmTransito={this.state.qtdeVendasEmTransito}/>
+                qtdeVendasEmTransito={this.state.qtdeVendasEmTransito}
+                qtdeVendasPendentes={this.state.qtdeVendasPendentes}/>
         )
     }
 }

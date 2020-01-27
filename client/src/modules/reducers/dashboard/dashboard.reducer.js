@@ -10,10 +10,13 @@ import {
 const INITIAL_STATE = {
     vendasPendente: [{}],
     isLoading: true,
+    isLoadingStatusPublicacoes: true,
     saldoTotal: Number(),
     saldoDisponivel: Number(),
     totalVendas: Number(),
     nomeMes: '',
+    saldoALiberar: Number(),
+    saldoBloqueado: Number(),
     totalVendasPendentes: Number()
 }
 
@@ -25,7 +28,10 @@ export default function dashboardReducer(state = INITIAL_STATE, action) {
                 saldoTotal: action.saldoTotal,
                 saldoDisponivel: action.saldoDisponivel,
                 isLoading: action.isLoading,
-                saldoALiberar: action.saldoALiberar
+                isLoadingStatusPublicacoes: action.isLoadingStatusPublicacoes,
+                saldoBloqueado: action.saldoBloqueado,
+                saldoALiberar: action.saldoALiberar,
+
             }
         }
         case OBTER_TOTAL_VENDAS_NO_MES: {
