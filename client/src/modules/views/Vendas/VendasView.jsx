@@ -35,8 +35,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TextField from '@material-ui/core/TextField';
 
-import Backdrop from '@material-ui/core/Backdrop';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import PrintIcon from '@material-ui/icons/Print';
 
 export default class VendasView extends React.Component {
 
@@ -64,8 +63,15 @@ export default class VendasView extends React.Component {
         let vendasPending = this.props.vendas.filter(venda => {
             return venda.status === 'payment_required'
         })
-        console.log("pendas pendentes: " + JSON.stringify(this.props.vendas))
         this.setState({ vendas: vendasPending, renderizar: true })
+        this.mostrarLoading()
+    }
+
+    getStatusProntoParaEnviar = () => {
+        let vendasAEnviar = this.props.vendas.filter(venda => {
+            return venda.dados_entrega.substatus === 'ready_to_print' || venda.dados_entrega.substatus === 'printed'
+        })
+        this.setState({ vendas: vendasAEnviar, renderizar: true })
         this.mostrarLoading()
     }
 
@@ -114,6 +120,9 @@ export default class VendasView extends React.Component {
         }
         if (status_envio === 'pending') {
             return 'PENDENTE'
+        }
+        if (status_envio === 'ready_to_ship') {
+            return 'A ENVIAR'
         }
     }
 
@@ -183,11 +192,11 @@ export default class VendasView extends React.Component {
                                                     ? <><Loader size='mini' active={this.props.isLoading} inline /> vendas</>
                                                     : <Step.Description><b>{this.props.qtdeVendasPendentes}</b> vendas</Step.Description>
                                                 }
-            
+
                                             </Step.Content>
                                         </Step>
 
-                                        <Step active href="#" style={{ 'fontSize': '12px' }}>
+                                        <Step active href="#" style={{ 'fontSize': '12px' }} onClick={() => this.getStatusProntoParaEnviar()}>
                                             <Avatar alt="AEnviar" src={imgProntoParaEnviar} />
                                             <Step.Content style={{ 'marginLeft': '10px' }}>
                                                 <Step.Title>Pronto para enviar</Step.Title>
@@ -283,7 +292,7 @@ export default class VendasView extends React.Component {
                                                     <Row>
                                                         <Col md={6}>
                                                             <Paper elevation={3}>
-                                                                <Card>
+                                                                <Card style={{ height: venda.comprador.first_name_comprador === undefined ? '134px' : '' }}>
 
                                                                     <CardContent>
                                                                         <Typography gutterBottom variant="h5" component="h2">
@@ -295,23 +304,28 @@ export default class VendasView extends React.Component {
                                                                     </CardContent>
 
                                                                     <CardActions>
-                                                                        {venda.comprador.first_name_comprador === undefined ? <></> :
-                                                                            <Tooltip title="Clique aqui para enviar mensagem para o comprador pelo Whatsapp Web">
-                                                                                <Button
-                                                                                    variant="contained"
-                                                                                    style={{ 'color': 'white', 'backgroundColor': 'green' }}
-                                                                                    startIcon={<WhatsAppIcon />}>
-                                                                                    <a href={venda.comprador.whatsapp} style={{ 'color': 'white' }} target='_blank' data-toggle="tooltip" title='Enviar mensagem WhatsApp'>Enviar mensagem WhatsApp</a>
-                                                                                </Button>
-                                                                            </Tooltip>}
-                                                                        <Tooltip title="Clique aqui para enviar mensagem para o comprador para ser lido na plataforma do Mercado Livre">
-                                                                            <Button
-                                                                                variant="contained"
-                                                                                style={{ 'color': 'black', 'backgroundColor': '#ffe600' }}
-                                                                                startIcon={<SmsIcon />}>
-                                                                                Enviar Mensagem Mercado Livre
-                                                                    </Button>
-                                                                        </Tooltip>
+                                                                        {venda.comprador.first_name_comprador === undefined
+                                                                            ? <>
+
+                                                                            </> :
+                                                                            <>
+                                                                                <Tooltip title="Clique aqui para enviar mensagem para o comprador pelo Whatsapp Web">
+                                                                                    <Button
+                                                                                        variant="contained"
+                                                                                        style={{ 'color': 'white', 'backgroundColor': 'green' }}
+                                                                                        startIcon={<WhatsAppIcon />}>
+                                                                                        <a href={venda.comprador.whatsapp} style={{ 'color': 'white' }} target='_blank' data-toggle="tooltip" title='Enviar mensagem WhatsApp'>Enviar mensagem WhatsApp</a>
+                                                                                    </Button>
+                                                                                </Tooltip>
+                                                                                <Tooltip title="Clique aqui para enviar mensagem para o comprador para ser lido na plataforma do Mercado Livre">
+                                                                                    <Button
+                                                                                        variant="contained"
+                                                                                        style={{ 'color': 'black', 'backgroundColor': '#ffe600' }}
+                                                                                        startIcon={<SmsIcon />}>
+                                                                                        Enviar Mensagem Mercado Livre
+                                                                                    </Button>
+                                                                                </Tooltip>
+                                                                            </>}
                                                                     </CardActions>
                                                                 </Card>
                                                             </Paper>
@@ -452,13 +466,24 @@ export default class VendasView extends React.Component {
                                                                     ?
                                                                     <CardActions style={{ 'marginTop': '-15px' }}>
                                                                         <Tooltip title="Acompanhar o rastreamento do produto">
-                                                                            <Button
-                                                                                variant="contained"
-                                                                                color="default"
-                                                                                onClick={() => this.exibirRastreamento(venda.dados_entrega.cod_rastreamento)}
-                                                                                startIcon={<LocalShippingIcon />}>
-                                                                                Visualizar rastreamento
+                                                                            {venda.dados_entrega.substatus !== 'printed'
+                                                                                ?
+                                                                                <Button
+                                                                                    variant="contained"
+                                                                                    color="default"
+                                                                                    onClick={() => this.exibirRastreamento(venda.dados_entrega.cod_rastreamento)}
+                                                                                    startIcon={<LocalShippingIcon />}>
+                                                                                    Visualizar rastreamento
                                                                             </Button>
+                                                                                : <>
+                                                                                    <Button
+                                                                                        variant="contained"
+                                                                                        color="default"
+                                                                                     
+                                                                                        startIcon={<PrintIcon />}>
+                                                                                        Imprimir etiqueta
+                                                                                    </Button>
+                                                                                </>}
                                                                         </Tooltip>
                                                                     </CardActions>
                                                                     : <></>
@@ -591,7 +616,7 @@ export default class VendasView extends React.Component {
                                                     </>
                                                 )
                                             })
-                                        : ''}
+                                            : ''}
                                     </div> : <div>{this.props.dadosRastreamento.message}</div>
 
                                 : <div>Carregando dados...</div>

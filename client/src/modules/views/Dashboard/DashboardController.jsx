@@ -73,7 +73,7 @@ export default function DashboardController() {
         <>
             <Dimmer.Dimmable as={Segment} dimmer={state.isLoading}>
                 <Dimmer active={state.isLoading} inverted>
-                    <Loader>{CARREGANDO_AGUARDE}</Loader>
+                    <Loader>Carregando dados do Mercado Livre, por favor aguarde...</Loader>
                 </Dimmer>
                 <DashboardView {...state} />
             </Dimmer.Dimmable>

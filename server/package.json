@@ -18,6 +18,7 @@
     "express": "^4.16.2",
     "express-session": "^1.17.0",
     "firebase": "^7.5.0",
+    "fs": "^0.0.1-security",
     "http": "0.0.0",
     "https-proxy-agent": "^4.0.0",
     "localStorage": "^1.0.4",

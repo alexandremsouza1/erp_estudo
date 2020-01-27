@@ -4,6 +4,7 @@ import axios from 'axios'
 import { DOMAIN } from '../../constants/constants'
 //import sendNotification from '../../components/Notification/Notification'
 import swal from 'sweetalert'
+import { Dimmer, Loader, Segment } from 'semantic-ui-react'
 
 export default class VendasController extends React.Component {
 
@@ -17,7 +18,11 @@ export default class VendasController extends React.Component {
             qtdeVendasConcluidas: 0,
             qtdeVendasCanceladas: 0,
             qtdeVendasEmTransito: 0,
-            qtdeVendasPendentes: 0
+            qtdeVendasPendentes: 0,
+            isLoadingVendasPendentes: true,
+            isLoadingVendasConcluidas: true,
+            isLoadingVendasEmTransito: true,
+            isLoadingVendasAEnviar: true
         }
     }
 
@@ -28,17 +33,17 @@ export default class VendasController extends React.Component {
             vendasPendentes.data.map(venda => {
                 vendas.push(venda)
             })
-            this.setState({ vendas })
+            this.setState({ vendas: vendas, isLoadingVendasPendentes: false })
         }).catch(error => {
             swal("Error", "Houve um erro ao listar todas as vendas pendentes (VendasController:28):  \n \n " + error, "error");
         })
-        
+
         await axios.get(`${DOMAIN}/vendas/getVendasConcluidas`).then(vendasConcluidas => {
             let vendas = this.state.vendas
             vendasConcluidas.data.map(venda => {
                 vendas.push(venda)
             })
-            this.setState({ vendas })
+            this.setState({ vendas: vendas, isLoadingVendasConcluidas: false })
         }).catch(error => {
             swal("Error", "Houve um erro ao listar todas as vendas concluídas (VendasController:34):  \n \n " + error, "error");
         })
@@ -48,7 +53,17 @@ export default class VendasController extends React.Component {
             vendasEmTransito.data.map(venda => {
                 vendas.push(venda)
             })
-            this.setState({ vendas })
+            this.setState({ vendas: vendas, isLoadingVendasEmTransito: false })
+        }).catch(error => {
+            swal("Error", "Houve um erro ao listar todas as vendas em transito(VendasController:44): \n \n " + error, "error");
+        })
+
+        await axios.get(`${DOMAIN}/vendas/getVendasAEnviar`).then(vendasAEnviar => {
+            let vendas = this.state.vendas
+            vendasAEnviar.data.map(venda => {
+                vendas.push(venda)
+            })
+            this.setState({ vendas: vendas, isLoadingVendasAEnviar: false })
         }).catch(error => {
             swal("Error", "Houve um erro ao listar todas as vendas em transito(VendasController:44): \n \n " + error, "error");
         })
@@ -60,40 +75,49 @@ export default class VendasController extends React.Component {
                 qtdeVendasEmTransito: vendas.data.qtdeVendasEmTransito,
                 isLoading: false
             })
-        }).catch(error => swal('Error','Houve um erro ao mostrar a quantidade total de vendas! \n \n ' + error, 'error'))
+        }).catch(error => swal('Error', 'Houve um erro ao mostrar a quantidade total de vendas! \n \n ' + error, 'error'))
 
         await axios.get(`${DOMAIN}/vendas/getTotalVendasPendentes`).then(vendas => {
             this.setState({
                 qtdeVendasPendentes: vendas.data.qtdeVendasPendentes,
                 isLoading: false
             })
-        }).catch(error => swal('Error','Houve um erro ao mostrar a quantidade total de vendas! \n \n ' + error, 'error'))
+        }).catch(error => swal('Error', 'Houve um erro ao mostrar a quantidade total de vendas! \n \n ' + error, 'error'))
 
+    
     }
 
-    obterRastreioCorreios = async(codigo) => {
-        await axios.get(`${DOMAIN}/rastreio/${codigo}`).then(async response =>{
+ 
+    obterRastreioCorreios = async (codigo) => {
+        await axios.get(`${DOMAIN}/rastreio/${codigo}`).then(async response => {
             await this.setState({
                 dadosRastreamento: response.data,
                 isLoading: false
             })
         })
-        
+
     }
 
 
     render() {
-
+        let isShowLoading = this.state.isLoadingVendasPendentes && this.state.isLoadingVendasConcluidas && this.state.isLoadingVendasEmTransito && this.state.isLoadingVendasAEnviar
         return (
-            <VendasView
-                vendas={this.state.vendas}
-                obterRastreioCorreios={this.obterRastreioCorreios}
-                dadosRastreamento={this.state.dadosRastreamento}
-                isLoading={this.state.isLoading}
-                qtdeVendasConcluidas={this.state.qtdeVendasConcluidas}
-                qtdeVendasCanceladas={this.state.qtdeVendasCanceladas}
-                qtdeVendasEmTransito={this.state.qtdeVendasEmTransito}
-                qtdeVendasPendentes={this.state.qtdeVendasPendentes}/>
+            <>
+                <Dimmer.Dimmable as={Segment} dimmer={isShowLoading}>
+                    <Dimmer active={isShowLoading } inverted>
+                        <Loader>Carregando dados do Mercado Livre, por favor aguarde...</Loader>
+                    </Dimmer>
+                    <VendasView
+                        vendas={this.state.vendas}
+                        obterRastreioCorreios={this.obterRastreioCorreios}
+                        dadosRastreamento={this.state.dadosRastreamento}
+                        isLoading={this.state.isLoading}
+                        qtdeVendasConcluidas={this.state.qtdeVendasConcluidas}
+                        qtdeVendasCanceladas={this.state.qtdeVendasCanceladas}
+                        qtdeVendasEmTransito={this.state.qtdeVendasEmTransito}
+                        qtdeVendasPendentes={this.state.qtdeVendasPendentes} />
+                </Dimmer.Dimmable>
+            </>
         )
     }
 }
