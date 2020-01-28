@@ -2,6 +2,8 @@ import React from 'react'
 import { Input, Button } from 'semantic-ui-react'
 import '../../../assets/css/Global/chat.css'
 
+/** Created by Felipe M Santos */
+
 export default class Chat extends React.Component {
 
     render() {
@@ -20,6 +22,8 @@ export default class Chat extends React.Component {
                 </div>
                 <div className='box-body'>
                     <div>
+                        {this.props.pergunta !== null 
+                        ?
                         <div className='direct-chat-msg'>
                             <div className='direct-chat-info clearfix'>
                                 <span className="direct-chat-name pull-left">{this.props.nomeCompletoCliente}</span>
@@ -29,14 +33,16 @@ export default class Chat extends React.Component {
                                 {this.props.pergunta}
                             </div>
                         </div>
+                       : <></> 
+                       }
                         <span className="direct-chat-info clearfix direct-chat-name pull-left">{this.props.dataHoraPergunta}</span>
 
                         <div className='direct-chat-msg right'>
                             <div className="direct-chat-info clearfix">
-                            <span className="direct-chat-name pull-right">{this.props.nomeEmpresa}</span>
+                                <span className="direct-chat-name pull-right">{this.props.nomeEmpresa}</span>
                             </div>
-                            <img className="direct-chat-img" src='https://adminlte.io/themes/AdminLTE/dist/img/user7-128x128.jpg' alt="Message User Image"></img>
-                            <div className="direct-chat-text" style={{ "background": '#337AB7', 'backgroundColor': '#337AB7', 'color': '#fff' }}>
+                            <img className="direct-chat-img" src='https://adminlte.io/themes/AdminLTE/dist/img/user7-128x128.jpg' alt="Message User Image" style={{display: 'none'}}></img>
+                            <div className="direct-chat-text">
                                 {this.props.resposta}
                             </div>
                         </div>

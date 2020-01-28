@@ -236,6 +236,7 @@ exports.obterVendasEmTransito = async (req, res) => {
                             id_venda: response.id,
                             status: response.status,
                             data_venda: util.formatarDataHora(response.date_closed),
+                            packId: response.pack_id,
                             itens_pedido: {
                                 quantidade_vendido: response.order_items[0].quantity,
                                 id_variacao: response.order_items[0].item.variation_id,
@@ -408,6 +409,7 @@ exports.obterVendasConcluidas = async (req, res) => {
                         id_venda: response.id,
                         status: response.status,
                         data_venda: util.formatarDataHora(response.date_closed),
+                        packId: response.pack_id,
                         itens_pedido: {
                             quantidade_vendido: response.order_items[0].quantity,
                             id_variacao: response.order_items[0].item.variation_id,

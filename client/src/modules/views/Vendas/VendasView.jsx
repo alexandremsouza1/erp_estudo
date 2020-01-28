@@ -26,6 +26,7 @@ import PictureAsPdfIcon from '@material-ui/icons/PictureAsPdf';
 import Iframe from 'react-iframe'
 import { Timeline, TimelineItem } from 'vertical-timeline-component-for-react'
 import SearchIcon from '@material-ui/icons/Search';
+import Chat from '../../components/Chat/Chat'
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -215,8 +216,9 @@ export default class VendasView extends React.Component {
                                         <Step active href="#" style={{ 'fontSize': '12px' }} onClick={() => this.getStatusPendente()}>
                                             <Avatar alt="pendente" src={imgVendaPendente} />
                                             <Step.Content style={{ 'marginLeft': '10px' }}>
+                                               
                                                 <Step.Title>Pendentes</Step.Title>
-
+                                         
                                                 {this.props.isLoading
                                                     ? <><Loader size='mini' active={this.props.isLoading} inline /> vendas</>
                                                     : <Step.Description><b>{this.props.qtdeVendasPendentes}</b> vendas</Step.Description>
@@ -585,27 +587,34 @@ export default class VendasView extends React.Component {
                 {this.state.openModalEnviarMensagemMercadoLivre &&
 
                     <Modal show={this.state.openModalEnviarMensagemMercadoLivre} onHide={() => this.setState({ openModalEnviarMensagemMercadoLivre: false })} style={{ 'marginTop': '50px' }} dialogClassName="width_modal_900px">
-                        
+
                         <Modal.Header closeButton style={{ 'backgroundColor': '#ffe600', 'color': 'black' }}>
                             <Modal.Title>Mensagem de Pós venda</Modal.Title>
                             <div>Pedido #{this.state.venda.id_venda} - {this.state.venda.data_venda}</div>
                         </Modal.Header>
 
                         <Modal.Body style={{ height: '400px' }}>
-                            
+
                             <Message warning>
                                 <Message.Header>Lembre-se de que não enviaremos mensagens com linguagem ofensiva nem com links de redes sociais.</Message.Header>
                             </Message>
 
+                            <Chat nomeCompletoCliente='Ana Paula' 
+                              pergunta={null}
+                              resposta='Ola boa noite'
+                              nomeEmpresa='Comproline'
+                              displayFooter={'none'}
+                              displayButtonClose={'none'}/>
+
                         </Modal.Body>
 
                         <form noValidate autoComplete='off'>
-                            <TextField variant='filled' label='Escreva ao comprador' style={{width: '80%'}}></TextField>
+                            <TextField variant='filled' label='Escreva ao comprador' style={{ width: '80%' }}></TextField>
                             <Button
                                 variant="contained"
                                 color="primary"
                                 startIcon={<SendIcon />}
-                                style={{backgroundColor: '#1976d2', height: '53px'}}>
+                                style={{ backgroundColor: '#1976d2', height: '53px' }}>
                                 Enviar mensagem
                             </Button>
                         </form>
@@ -675,7 +684,7 @@ export default class VendasView extends React.Component {
                                             </Col>
                                         </Row>
 
-                                        {console.log("Tracks: "+JSON.stringify(this.props.dadosRastreamento.tracks))}
+                                        {console.log("Tracks: " + JSON.stringify(this.props.dadosRastreamento.tracks))}
 
                                         {this.props.dadosRastreamento.tracks !== undefined ?
                                             this.props.dadosRastreamento.tracks.map((track, key) => {
@@ -699,7 +708,7 @@ export default class VendasView extends React.Component {
                                                     </>
                                                 )
                                             })
-                                        : ''}
+                                            : ''}
                                     </div> : <div>{this.props.dadosRastreamento.message}</div>
 
                                 : <div>Carregando dados...</div>
