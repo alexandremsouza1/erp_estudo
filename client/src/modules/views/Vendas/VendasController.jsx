@@ -15,15 +15,18 @@ export default class VendasController extends React.Component {
             vendas: [],
             dadosRastreamento: {},
             isLoading: true,
-            isLoadingQtdeVendasAEnviar: true,
             qtdeVendasConcluidas: 0,
             qtdeVendasCanceladas: 0,
             qtdeVendasEmTransito: 0,
             qtdeVendasPendentes: 0,
             qtdeVendasAEnviar: 0,
+
             isLoadingVendasPendentes: true,
             isLoadingVendasConcluidas: true,
             isLoadingVendasEmTransito: true,
+
+            isLoadingQtdeVendasAEnviar: true,
+            isLoadingQtdeVendasEmTransito: true,
             isLoadingVendasAEnviar: true
         }
     }
@@ -61,11 +64,14 @@ export default class VendasController extends React.Component {
         })
 
         await axios.get(`${DOMAIN}/vendas/getVendasAEnviar`).then(vendasAEnviar => {
-            let vendas = this.state.vendas
-            vendasAEnviar.data.map(venda => {
-                vendas.push(venda)
-            })
-            this.setState({ vendas: vendas, isLoadingVendasAEnviar: false })
+            if(vendasAEnviar.data !== null){
+                let vendas = this.state.vendas
+                vendasAEnviar.data.map(venda => {
+                    vendas.push(venda)
+                })
+               this.setState({ vendas: vendas, isLoadingVendasAEnviar: false })
+            }
+            
         }).catch(error => {
             swal("Error", "Houve um erro ao listar todas as vendas em transito(VendasController:44): \n \n " + error, "error");
         })
@@ -74,8 +80,14 @@ export default class VendasController extends React.Component {
             this.setState({
                 qtdeVendasConcluidas: vendas.data.qtdeVendasConcluidas,
                 qtdeVendasCanceladas: vendas.data.qtdeVendasCanceladas,
-                qtdeVendasEmTransito: vendas.data.qtdeVendasEmTransito,
                 isLoading: false
+            })
+        }).catch(error => swal('Error', 'Houve um erro ao mostrar a quantidade total de vendas! \n \n ' + error, 'error'))
+
+        await axios.get(`${DOMAIN}/vendas/getTotalVendasEmTransito`).then(vendas => {
+            this.setState({
+                qtdeVendasEmTransito: vendas.data.qtdeVendasEmTransito,
+                isLoadingQtdeVendasEmTransito: false
             })
         }).catch(error => swal('Error', 'Houve um erro ao mostrar a quantidade total de vendas! \n \n ' + error, 'error'))
 
@@ -116,7 +128,10 @@ export default class VendasController extends React.Component {
 
 
     render() {
-        let isShowLoading = this.state.isLoadingVendasPendentes && this.state.isLoadingVendasConcluidas && this.state.isLoadingVendasEmTransito && this.state.isLoadingVendasAEnviar
+        let isShowLoading = this.state.isLoadingVendasPendentes 
+            && this.state.isLoadingVendasConcluidas 
+            && this.state.isLoadingVendasEmTransito 
+            && this.state.isLoadingVendasAEnviar
         return (
             <>
                 <Dimmer.Dimmable as={Segment} dimmer={isShowLoading}>
@@ -129,11 +144,13 @@ export default class VendasController extends React.Component {
                         dadosRastreamento={this.state.dadosRastreamento}
                         isLoading={this.state.isLoading}
                         isLoadingQtdeVendasAEnviar={this.state.isLoadingQtdeVendasAEnviar}
+                        isLoadingQtdeVendasEmTransito={this.state.isLoadingQtdeVendasEmTransito}
                         qtdeVendasConcluidas={this.state.qtdeVendasConcluidas}
                         qtdeVendasCanceladas={this.state.qtdeVendasCanceladas}
                         qtdeVendasEmTransito={this.state.qtdeVendasEmTransito}
                         qtdeVendasPendentes={this.state.qtdeVendasPendentes} 
                         qtdeVendasAEnviar={this.state.qtdeVendasAEnviar}
+                        qtdeVendasEmTransito={this.state.qtdeVendasEmTransito}
                         gerarEtiqueteEnvio={this.gerarEtiqueteEnvio}/>
                 </Dimmer.Dimmable>
             </>

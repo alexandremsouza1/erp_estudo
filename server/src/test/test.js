@@ -351,8 +351,8 @@ let obterVendaProntoParaEnviar = () => {
     usuarioService.buscarUsuarioPorID().then(async user => {
         await axios.get(`https://api.mercadolibre.com/orders/search?seller=${user.id}&order.date_created.from=${anoAtual}-${mesAtual}-${cincoDiasAtras}T00:00:00.000-00:00&order.date_created.to=${anoAtual}-${mesAtual}-${diaAtual}T00:00:00.000-00:00&&access_token=${user.accessToken}`).then(resp => {
             let vendasAEnviar = resp.data.results.map(async response => {
-                if (response.shipping.substatus !== null) {
-                    if (response.shipping.substatus === 'ready_to_print') {
+                /*if (response.shipping.substatus !== null) {
+                    if (response.shipping.substatus === 'ready_to_print' || response.shipping.substatus === 'printed') {
                         if (response.shipping.id != null) {
                             return await axios.get(`https://api.mercadolibre.com/shipments/${response.shipping.id}?access_token=${user.accessToken}`).then(ship => {
                                 let json = {
@@ -411,7 +411,8 @@ let obterVendaProntoParaEnviar = () => {
                             })
                         }
                     }
-                }
+                }*/
+                return response
             })
 
             Promise.resolve(vendasAEnviar).then(vendas => {

@@ -9,6 +9,7 @@ router.get('/getVendasEmTransito', vendasService.obterVendasEmTransito)
 router.get('/getTotalVendas', vendasService.obterTotalVendas)
 router.get('/getTotalVendasPendentes', vendasService.obterTotalVendasPendentes)
 router.get('/getTotalVendasAEnviar', vendasService.obterTotalVendasAEnviar)
+router.get('/getTotalVendasEmTransito', vendasService.obterTotalVendasEmTransito)
 router.get('/getVendasAEnviar', vendasService.obterVendaProntoParaEnviar)
 router.get('/gerarEtiquetaEnvio/:shipping_id', vendasService.gerarEtiquetaEnvio)
 

@@ -7,7 +7,7 @@ import imgProntoParaEnviar from '../../../assets/img/delivery-truck-icon128px.pn
 import imgConcluido from '../../../assets/img/Accept-icon128px.png'
 import iconCancelled from '../../../assets/img/cancelled.png'
 
-import { Divider, Icon, Step, Dimmer, Loader, Segment } from 'semantic-ui-react'
+import { Divider, Icon, Step, Dimmer, Loader, Segment, Message } from 'semantic-ui-react'
 
 import WhatsAppIcon from '@material-ui/icons/WhatsApp';
 import SmsIcon from '@material-ui/icons/Sms';
@@ -33,9 +33,13 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import Checkbox from '@material-ui/core/Checkbox';
+import TableSortLabel from '@material-ui/core/TableSortLabel';
+
 import TextField from '@material-ui/core/TextField';
 import Chip from '@material-ui/core/Chip';
 import PrintIcon from '@material-ui/icons/Print';
+import SendIcon from '@material-ui/icons/Send';
 
 export default class VendasView extends React.Component {
 
@@ -51,6 +55,7 @@ export default class VendasView extends React.Component {
             vendas: [],
             renderizar: false,
             openModalVerMaisDetalhes: false,
+            openModalEnviarMensagemMercadoLivre: false,
             textFieldSearch: '',
             temporalizar: false
         }
@@ -61,23 +66,34 @@ export default class VendasView extends React.Component {
 
     getStatusPendente = () => {
         let vendasPending = this.props.vendas.filter(venda => {
-            return venda.status === 'payment_required'
+            if (venda !== null) {
+                return venda.status === 'payment_required'
+            }
         })
         this.setState({ vendas: vendasPending, renderizar: true })
         this.mostrarLoading()
+
     }
 
     getStatusProntoParaEnviar = () => {
         let vendasAEnviar = this.props.vendas.filter(venda => {
-            return (venda.dados_entrega.substatus === 'ready_to_print' ||  venda.dados_entrega.substatus === 'printed')
+            if (venda !== null) {
+                return (venda.dados_entrega.substatus === 'ready_to_print' || venda.dados_entrega.substatus === 'printed')
+            }
         })
-        this.setState({ vendas: vendasAEnviar, renderizar: true })
-        this.mostrarLoading()
+
+        if (vendasAEnviar !== null) {
+            this.setState({ vendas: vendasAEnviar, renderizar: true })
+            this.mostrarLoading()
+        }
+
     }
 
     getStatusEmTransito = () => {
         let vendasDelivered = this.props.vendas.filter(venda => {
-            return venda.dados_entrega.status === 'shipped'
+            if (venda !== null) {
+                return venda.dados_entrega.status === 'shipped'
+            }
         })
         this.setState({ vendas: vendasDelivered, renderizar: true })
         this.mostrarLoading()
@@ -85,7 +101,9 @@ export default class VendasView extends React.Component {
 
     getStatusEntregue = () => {
         let vendasDelivered = this.props.vendas.filter(venda => {
-            return venda.dados_entrega.status === 'delivered'
+            if (venda !== null) {
+                return venda.dados_entrega.status === 'delivered'
+            }
         })
         this.setState({ vendas: vendasDelivered, renderizar: true })
         this.mostrarLoading()
@@ -93,7 +111,9 @@ export default class VendasView extends React.Component {
 
     getStatusCanceladas = () => {
         let vendasDelivered = this.props.vendas.filter(venda => {
-            return venda.dados_entrega.status === 'cancelled'
+            if (venda !== null) {
+                return venda.dados_entrega.status === 'cancelled'
+            }
         })
         this.setState({ vendas: vendasDelivered, renderizar: true })
         this.mostrarLoading()
@@ -154,6 +174,15 @@ export default class VendasView extends React.Component {
         )
     }
 
+    exibirModalEnviarMensagemMercadolivre = (venda) => {
+        this.setState(
+            {
+                openModalEnviarMensagemMercadoLivre: true,
+                venda: venda
+            }
+        )
+    }
+
     handleSearch = (event) => {
         this.setState(
             {
@@ -200,12 +229,12 @@ export default class VendasView extends React.Component {
                                             <Avatar alt="AEnviar" src={imgProntoParaEnviar} />
                                             <Step.Content style={{ 'marginLeft': '10px' }}>
                                                 <Step.Title>Pronto para enviar</Step.Title>
-                                                
+
                                                 {this.props.isLoadingQtdeVendasAEnviar
                                                     ? <><Loader size='mini' active={this.props.isLoadingQtdeVendasAEnviar} inline /> vendas</>
                                                     : <Step.Description><b>{this.props.qtdeVendasAEnviar}</b> vendas</Step.Description>
                                                 }
-                                        
+
                                             </Step.Content>
                                         </Step>
 
@@ -214,8 +243,8 @@ export default class VendasView extends React.Component {
                                             <Step.Content style={{ 'marginLeft': '10px' }}>
                                                 <Step.Title>Em trânsito</Step.Title>
 
-                                                {this.props.isLoading
-                                                    ? <><Loader size='mini' active={this.props.isLoading} inline /> vendas</>
+                                                {this.props.isLoadingQtdeVendasEmTransito
+                                                    ? <><Loader size='mini' active={this.props.isLoadingQtdeVendasEmTransito} inline /> vendas</>
                                                     : <Step.Description><b>{this.props.qtdeVendasEmTransito}</b> vendas</Step.Description>
                                                 }
 
@@ -276,6 +305,20 @@ export default class VendasView extends React.Component {
                     </div>
                 </div>
 
+                <TableHead>
+                    <TableRow>
+                        <TableCell padding="checkbox">
+                            <Checkbox />
+                        </TableCell>
+                        <TableCell>
+                            <TableSortLabel>
+
+
+                            </TableSortLabel>
+                        </TableCell>
+                    </TableRow>
+                </TableHead>
+
                 {this.state.vendas.length > 0
 
                     ? this.state.vendas.map((venda, key) => {
@@ -326,6 +369,7 @@ export default class VendasView extends React.Component {
                                                                                     <Button
                                                                                         variant="contained"
                                                                                         style={{ 'color': 'black', 'backgroundColor': '#ffe600' }}
+                                                                                        onClick={() => this.exibirModalEnviarMensagemMercadolivre(venda)}
                                                                                         startIcon={<SmsIcon />}>
                                                                                         Enviar Mensagem Mercado Livre
                                                                                     </Button>
@@ -538,6 +582,38 @@ export default class VendasView extends React.Component {
                     </Modal>
                 }
 
+                {this.state.openModalEnviarMensagemMercadoLivre &&
+
+                    <Modal show={this.state.openModalEnviarMensagemMercadoLivre} onHide={() => this.setState({ openModalEnviarMensagemMercadoLivre: false })} style={{ 'marginTop': '50px' }} dialogClassName="width_modal_900px">
+                        
+                        <Modal.Header closeButton style={{ 'backgroundColor': '#ffe600', 'color': 'black' }}>
+                            <Modal.Title>Mensagem de Pós venda</Modal.Title>
+                            <div>Pedido #{this.state.venda.id_venda} - {this.state.venda.data_venda}</div>
+                        </Modal.Header>
+
+                        <Modal.Body style={{ height: '400px' }}>
+                            
+                            <Message warning>
+                                <Message.Header>Lembre-se de que não enviaremos mensagens com linguagem ofensiva nem com links de redes sociais.</Message.Header>
+                            </Message>
+
+                        </Modal.Body>
+
+                        <form noValidate autoComplete='off'>
+                            <TextField variant='filled' label='Escreva ao comprador' style={{width: '80%'}}></TextField>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                startIcon={<SendIcon />}
+                                style={{backgroundColor: '#1976d2', height: '53px'}}>
+                                Enviar mensagem
+                            </Button>
+                        </form>
+
+                    </Modal>
+
+                }
+
                 {this.state.openModalVerMaisDetalhes &&
 
                     <Modal show={this.state.openModalVerMaisDetalhes} onHide={() => this.setState({ openModalVerMaisDetalhes: false })} style={{ 'marginTop': '50px' }} dialogClassName="width_modal_1000px">
@@ -599,7 +675,9 @@ export default class VendasView extends React.Component {
                                             </Col>
                                         </Row>
 
-                                        {this.props.dadosRastreamento.tracks !== null ?
+                                        {console.log("Tracks: "+JSON.stringify(this.props.dadosRastreamento.tracks))}
+
+                                        {this.props.dadosRastreamento.tracks !== undefined ?
                                             this.props.dadosRastreamento.tracks.map((track, key) => {
                                                 return (
                                                     <>
@@ -621,7 +699,7 @@ export default class VendasView extends React.Component {
                                                     </>
                                                 )
                                             })
-                                            : ''}
+                                        : ''}
                                     </div> : <div>{this.props.dadosRastreamento.message}</div>
 
                                 : <div>Carregando dados...</div>

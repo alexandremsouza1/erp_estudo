@@ -90,6 +90,7 @@ exports.obterVendaProntoParaEnviar = async (req, res) => {
                         }
                     }
                 }
+                return response.data
             })
 
             Promise.all(vendasAEnviar).then(vendas => {
@@ -316,9 +317,6 @@ exports.obterTotalVendas = async (req, res) => {
                     if (ship.data.status === 'shipped') {
                         return 'shipped'
                     }
-                    if (ship.data.status !== 'delivered' && ship.data.status !== 'cancelled' && ship.data.status !== 'shipped') {
-                        return ship.data.status
-                    }
                 })
             })
 
@@ -329,6 +327,26 @@ exports.obterTotalVendas = async (req, res) => {
                 res.status(200).send({
                     qtdeVendasConcluidas,
                     qtdeVendasCanceladas,
+                    qtdeVendasEmTransito
+                })
+            })
+        })
+    })
+}
+
+exports.obterTotalVendasEmTransito = async (req, res) => {
+    usuarioService.buscarUsuarioPorID().then(async user => {
+        await axios.get(`https://api.mercadolibre.com/orders/search/recent?seller=${user.id}&access_token=${user.accessToken}`).then(response => {
+            let resultVendas = response.data.results.map(async result => {
+                return await axios.get(`https://api.mercadolibre.com/shipments/${result.shipping.id}?access_token=${user.accessToken}`).then(ship => {
+                    if (ship.data.status === 'shipped') {
+                        return 'shipped'
+                    }
+                })
+            })
+            Promise.all(resultVendas).then(vendas => {
+                let qtdeVendasEmTransito = vendas.filter(vendasEmTransito => { return vendasEmTransito === 'shipped' }).length
+                res.status(200).send({
                     qtdeVendasEmTransito
                 })
             })
