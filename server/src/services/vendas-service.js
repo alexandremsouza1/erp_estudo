@@ -102,28 +102,17 @@ exports.obterVendaProntoParaEnviar = async (req, res) => {
     }).catch(error => res.send(error))
 }
 
-exports.imprimirEtiquetaEnvio = async (req, res) => {
+exports.gerarEtiquetaEnvio = async (req, res) => {
     usuarioService.buscarUsuarioPorID().then(async user => {
-        await axios.get(`https://api.mercadolibre.com/shipment_labels?shipment_ids=${req.params.shipping_id}&savePdf=Y&access_token=${user.accessToken}`).then(response => {
-
-            //var data =fs.readFileSync(response.data);
-            //var fileName = `ETIQUETA-${req.params.shipping_id}.pdf`;
-
-
-            console.log("req.params.shipping_id: " + req.params.shipping_id)
-            console.log("user.accessToken" + user.accessToken)
-
-            res.header('content-disposition', 'inline; filename=E04BA19C081AA992BA2A429F807E0878_labels.pdf');
+        /*await axios.get(`https://api.mercadolibre.com/shipment_labels?shipment_ids=${req.params.shipping_id}&savePdf=Y&access_token=${user.accessToken}`).then(response => {
+            //res.header('content-disposition', 'inline');
             //res.contentType("application/pdf")
-
-            var blob = new Blob([response.data], {
-                type: 'application/pdf'
-            });
-            var url = window.URL.createObjectURL(blob)
-
-            res.send(response.data)
-
-        }).catch(error => res.send(error))
+            //res.send('https://api.mercadolibre.com/shipment_labels?shipment_ids='+req.params.shipping_id+'&savePdf=Y&access_token='+user.accessToken)
+            //res.send(response.data)
+            //var data = fs.readFileSync(response.data);
+            //res.send(data)
+        }).catch(error => res.send(error))*/
+        res.send('https://api.mercadolibre.com/shipment_labels?shipment_ids='+req.params.shipping_id+'&savePdf=Y&access_token='+user.accessToken)
     }).catch(error => res.send(error))
 }
 
@@ -347,6 +336,28 @@ exports.obterTotalVendas = async (req, res) => {
     })
 }
 
+exports.obterTotalVendasAEnviar = async (req, res) => {
+    let anoAtual = new Date().getFullYear()
+    let mesAtual = new Date().getMonth() + 1
+    let cincoDiasAtras = new Date().getDate() - 5
+    let diaAtual = new Date().getDate()
+
+    await usuarioService.buscarUsuarioPorID().then(async user => {
+        await axios.get(`https://api.mercadolibre.com/orders/search?seller=${user.id}&order.date_created.from=${anoAtual}-${mesAtual}-${cincoDiasAtras}T00:00:00.000-00:00&order.date_created.to=${anoAtual}-${mesAtual}-${diaAtual}T00:00:00.000-00:00&&access_token=${user.accessToken}`).then(response => {
+            let resultVendas = response.data.results.map(result => {
+                if(result.shipping.status === 'ready_to_ship'){
+                    return 'ready_to_ship'
+                }
+            })
+
+            Promise.all(resultVendas).then(vendas => {
+                qtdeVendasProntoEnvio = vendas.filter(status => {return status === 'ready_to_ship'}).length
+                res.send({qtdeVendasAEnviar: qtdeVendasProntoEnvio})
+            })
+        })
+    }).catch(error => res.send(error))
+}
+
 exports.obterTotalVendasPendentes = async (req, res) => {
     usuarioService.buscarUsuarioPorID().then(async user => {
         await axios.get(`https://api.mercadolibre.com/orders/search/pending?seller=${user.id}&access_token=${user.accessToken}`).then(response => {
@@ -409,6 +420,7 @@ exports.obterVendasConcluidas = async (req, res) => {
                         dados_pagamento: obterDadosPagamento(response.payments),
                         dados_entrega: {
                             status: ship.data.status,
+                            substatus: ship.data.substatus,
                             id: ship.data.id,
                             cod_rastreamento: ship.data.tracking_number,
                             metodo_envio: ship.data.tracking_method,

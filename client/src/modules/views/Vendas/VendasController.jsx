@@ -15,10 +15,12 @@ export default class VendasController extends React.Component {
             vendas: [],
             dadosRastreamento: {},
             isLoading: true,
+            isLoadingQtdeVendasAEnviar: true,
             qtdeVendasConcluidas: 0,
             qtdeVendasCanceladas: 0,
             qtdeVendasEmTransito: 0,
             qtdeVendasPendentes: 0,
+            qtdeVendasAEnviar: 0,
             isLoadingVendasPendentes: true,
             isLoadingVendasConcluidas: true,
             isLoadingVendasEmTransito: true,
@@ -77,6 +79,13 @@ export default class VendasController extends React.Component {
             })
         }).catch(error => swal('Error', 'Houve um erro ao mostrar a quantidade total de vendas! \n \n ' + error, 'error'))
 
+        await axios.get(`${DOMAIN}/vendas/getTotalVendasAEnviar`).then(vendas => {
+            this.setState({
+                qtdeVendasAEnviar: vendas.data.qtdeVendasAEnviar,
+                isLoadingQtdeVendasAEnviar: false
+            })
+        }).catch(error => swal('Error', 'Houve um erro ao mostrar a quantidade total de vendas! \n \n ' + error, 'error'))
+
         await axios.get(`${DOMAIN}/vendas/getTotalVendasPendentes`).then(vendas => {
             this.setState({
                 qtdeVendasPendentes: vendas.data.qtdeVendasPendentes,
@@ -84,10 +93,9 @@ export default class VendasController extends React.Component {
             })
         }).catch(error => swal('Error', 'Houve um erro ao mostrar a quantidade total de vendas! \n \n ' + error, 'error'))
 
-    
+
     }
 
- 
     obterRastreioCorreios = async (codigo) => {
         await axios.get(`${DOMAIN}/rastreio/${codigo}`).then(async response => {
             await this.setState({
@@ -95,7 +103,15 @@ export default class VendasController extends React.Component {
                 isLoading: false
             })
         })
+    }
 
+    gerarEtiqueteEnvio = async (shippingId) => {
+
+        await axios.get(`${DOMAIN}/vendas/gerarEtiquetaEnvio/${shippingId}`).then(response => {
+            
+            window.open(response.data);
+
+        }).catch(error => swal('Error', 'Houve um erro ao tentar gerar a etiqueta de envio! \n \n ' + error, 'error'))
     }
 
 
@@ -104,7 +120,7 @@ export default class VendasController extends React.Component {
         return (
             <>
                 <Dimmer.Dimmable as={Segment} dimmer={isShowLoading}>
-                    <Dimmer active={isShowLoading } inverted>
+                    <Dimmer active={isShowLoading} inverted>
                         <Loader>Carregando dados do Mercado Livre, por favor aguarde...</Loader>
                     </Dimmer>
                     <VendasView
@@ -112,10 +128,13 @@ export default class VendasController extends React.Component {
                         obterRastreioCorreios={this.obterRastreioCorreios}
                         dadosRastreamento={this.state.dadosRastreamento}
                         isLoading={this.state.isLoading}
+                        isLoadingQtdeVendasAEnviar={this.state.isLoadingQtdeVendasAEnviar}
                         qtdeVendasConcluidas={this.state.qtdeVendasConcluidas}
                         qtdeVendasCanceladas={this.state.qtdeVendasCanceladas}
                         qtdeVendasEmTransito={this.state.qtdeVendasEmTransito}
-                        qtdeVendasPendentes={this.state.qtdeVendasPendentes} />
+                        qtdeVendasPendentes={this.state.qtdeVendasPendentes} 
+                        qtdeVendasAEnviar={this.state.qtdeVendasAEnviar}
+                        gerarEtiqueteEnvio={this.gerarEtiqueteEnvio}/>
                 </Dimmer.Dimmable>
             </>
         )

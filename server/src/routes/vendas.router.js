@@ -8,7 +8,8 @@ router.get('/getVendasPendentes', vendasService.obterVendasPendentes)
 router.get('/getVendasEmTransito', vendasService.obterVendasEmTransito)
 router.get('/getTotalVendas', vendasService.obterTotalVendas)
 router.get('/getTotalVendasPendentes', vendasService.obterTotalVendasPendentes)
+router.get('/getTotalVendasAEnviar', vendasService.obterTotalVendasAEnviar)
 router.get('/getVendasAEnviar', vendasService.obterVendaProntoParaEnviar)
-router.get('/imprimirEtiquetaEnvio/:shipping_id', vendasService.imprimirEtiquetaEnvio)
+router.get('/gerarEtiquetaEnvio/:shipping_id', vendasService.gerarEtiquetaEnvio)
 
 module.exports = router

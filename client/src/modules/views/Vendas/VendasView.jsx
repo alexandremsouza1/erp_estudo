@@ -34,7 +34,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TextField from '@material-ui/core/TextField';
-
+import Chip from '@material-ui/core/Chip';
 import PrintIcon from '@material-ui/icons/Print';
 
 export default class VendasView extends React.Component {
@@ -69,7 +69,7 @@ export default class VendasView extends React.Component {
 
     getStatusProntoParaEnviar = () => {
         let vendasAEnviar = this.props.vendas.filter(venda => {
-            return venda.dados_entrega.substatus === 'ready_to_print' || venda.dados_entrega.substatus === 'printed'
+            return (venda.dados_entrega.substatus === 'ready_to_print' ||  venda.dados_entrega.substatus === 'printed')
         })
         this.setState({ vendas: vendasAEnviar, renderizar: true })
         this.mostrarLoading()
@@ -200,7 +200,12 @@ export default class VendasView extends React.Component {
                                             <Avatar alt="AEnviar" src={imgProntoParaEnviar} />
                                             <Step.Content style={{ 'marginLeft': '10px' }}>
                                                 <Step.Title>Pronto para enviar</Step.Title>
-                                                <Step.Description>0 vendas</Step.Description>
+                                                
+                                                {this.props.isLoadingQtdeVendasAEnviar
+                                                    ? <><Loader size='mini' active={this.props.isLoadingQtdeVendasAEnviar} inline /> vendas</>
+                                                    : <Step.Description><b>{this.props.qtdeVendasAEnviar}</b> vendas</Step.Description>
+                                                }
+                                        
                                             </Step.Content>
                                         </Step>
 
@@ -285,7 +290,7 @@ export default class VendasView extends React.Component {
 
                                     <Paper elevation={3} key={key}>
                                         <Panel style={{ 'backgroundColor': '#1976d2', 'color': 'white' }} key={key} title={<div>Pedido <span style={{ 'color': 'white' }}>
-                                            |{this.getTraduzirStatusEnvio(venda.dados_entrega.status)}|</span> - Nº #{venda.id_venda} - {venda.itens_pedido.titulo_anuncio} - {venda.data_venda}
+                                            <Chip size="small" label={this.getTraduzirStatusEnvio(venda.dados_entrega.status)}></Chip></span> - Nº #{venda.id_venda} - {venda.itens_pedido.titulo_anuncio} - {venda.data_venda}
                                         </div>}
                                             content={
                                                 <>
@@ -466,7 +471,7 @@ export default class VendasView extends React.Component {
                                                                     ?
                                                                     <CardActions style={{ 'marginTop': '-15px' }}>
                                                                         <Tooltip title="Acompanhar o rastreamento do produto">
-                                                                            {venda.dados_entrega.substatus !== 'printed'
+                                                                            {venda.dados_entrega.status !== 'ready_to_ship'
                                                                                 ?
                                                                                 <Button
                                                                                     variant="contained"
@@ -479,7 +484,7 @@ export default class VendasView extends React.Component {
                                                                                     <Button
                                                                                         variant="contained"
                                                                                         color="default"
-                                                                                     
+                                                                                        onClick={() => this.props.gerarEtiqueteEnvio(venda.dados_entrega.id)}
                                                                                         startIcon={<PrintIcon />}>
                                                                                         Imprimir etiqueta
                                                                                     </Button>
