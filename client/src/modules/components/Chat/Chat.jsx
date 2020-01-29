@@ -29,9 +29,9 @@ export default class Chat extends React.Component {
                                     <span className="direct-chat-name pull-left"><b>{this.props.nomeCompletoCliente}</b></span>
                                 </div>
                                 <img className="direct-chat-img" src='https://adminlte.io/themes/AdminLTE/dist/img/user1-128x128.jpg' alt="Message User Image" style={{ display: 'none' }}></img>
-                                <div className="direct-chat-text" style={{width : '100%', margin: '0 0 0', color: 'white', backgroundColor: '#4169E1'}}>
-                                    {this.props.pergunta}
-                                </div>
+                                <textarea  value={this.props.pergunta} className="direct-chat-text" style={{width : '100%', margin: '0 0 0', color: 'white', backgroundColor: '#4169E1'}}>
+                                    
+                                </textarea>
                             </div>
                             : <></>
                         }
@@ -44,9 +44,9 @@ export default class Chat extends React.Component {
                                     <span className="direct-chat-name pull-right"><b>{this.props.nomeEmpresa}</b></span>
                                 </div>
                                 <img className="direct-chat-img" src='https://adminlte.io/themes/AdminLTE/dist/img/user7-128x128.jpg' alt="Message User Image" style={{ display: 'none' }}></img>
-                                <div className="direct-chat-text" style={{width : '100%', color: 'black', backgroundColor: '#87CEFA'}}>
-                                    {this.props.resposta}
-                                </div>
+                                <textarea value={this.props.resposta} className="direct-chat-text" style={{width : '100%', color: 'black', backgroundColor: '#87CEFA'}}>
+                                   
+                                </textarea>
                             </div>
                             : <></>
                         }

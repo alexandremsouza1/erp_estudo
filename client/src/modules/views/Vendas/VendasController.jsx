@@ -64,14 +64,14 @@ export default class VendasController extends React.Component {
         })
 
         await axios.get(`${DOMAIN}/vendas/getVendasAEnviar`).then(vendasAEnviar => {
-            if(vendasAEnviar.data !== null){
+            if (vendasAEnviar.data !== null) {
                 let vendas = this.state.vendas
                 vendasAEnviar.data.map(venda => {
                     vendas.push(venda)
                 })
-               this.setState({ vendas: vendas, isLoadingVendasAEnviar: false })
+                this.setState({ vendas: vendas, isLoadingVendasAEnviar: false })
             }
-            
+
         }).catch(error => {
             swal("Error", "Houve um erro ao listar todas as vendas em transito(VendasController:44): \n \n " + error, "error");
         })
@@ -120,17 +120,26 @@ export default class VendasController extends React.Component {
     gerarEtiqueteEnvio = async (shippingId) => {
 
         await axios.get(`${DOMAIN}/vendas/gerarEtiquetaEnvio/${shippingId}`).then(response => {
-            
+
             window.open(response.data);
 
         }).catch(error => swal('Error', 'Houve um erro ao tentar gerar a etiqueta de envio! \n \n ' + error, 'error'))
     }
 
+    obterQuantidadeChar = (msg) => {
+        return msg.text.split('').reduce((acumulador, valorCorrente) => {
+            let somaChar = 0
+            if (valorCorrente === '\n') {
+                return acumulador + somaChar
+            }
+        })
+    }
+
 
     render() {
-        let isShowLoading = this.state.isLoadingVendasPendentes 
-            && this.state.isLoadingVendasConcluidas 
-            && this.state.isLoadingVendasEmTransito 
+        let isShowLoading = this.state.isLoadingVendasPendentes
+            && this.state.isLoadingVendasConcluidas
+            && this.state.isLoadingVendasEmTransito
             && this.state.isLoadingVendasAEnviar
         return (
             <>
@@ -148,10 +157,11 @@ export default class VendasController extends React.Component {
                         qtdeVendasConcluidas={this.state.qtdeVendasConcluidas}
                         qtdeVendasCanceladas={this.state.qtdeVendasCanceladas}
                         qtdeVendasEmTransito={this.state.qtdeVendasEmTransito}
-                        qtdeVendasPendentes={this.state.qtdeVendasPendentes} 
+                        qtdeVendasPendentes={this.state.qtdeVendasPendentes}
                         qtdeVendasAEnviar={this.state.qtdeVendasAEnviar}
                         qtdeVendasEmTransito={this.state.qtdeVendasEmTransito}
-                        gerarEtiqueteEnvio={this.gerarEtiqueteEnvio}/>
+                        gerarEtiqueteEnvio={this.gerarEtiqueteEnvio}
+                        obterQuantidadeChar={this.obterQuantidadeChar} />
                 </Dimmer.Dimmable>
             </>
         )

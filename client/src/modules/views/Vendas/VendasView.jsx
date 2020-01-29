@@ -602,17 +602,19 @@ export default class VendasView extends React.Component {
                                 <Message.Header>Lembre-se de que não enviaremos mensagens com linguagem ofensiva nem com links de redes sociais.</Message.Header>
                             </Message>
 
-                            {this.state.venda.msg.map(msg => {
+                            {this.state.venda.msg.map((msg, key) => {
                                 //'this.state.venda.id_usuario !== msg.from.user_id ? msg.text : null'
+                               {console.log('this.props.obterQuantidadeChar(msg): '+this.props.obterQuantidadeChar(msg))}
                                 return (
                                     <>
-                                        <Chat nomeCompletoCliente={this.state.venda.id_usuario !== msg.from.user_id ? msg.from.name : null}
+                                        <Chat key={key} nomeCompletoCliente={this.state.venda.id_usuario !== msg.from.user_id ? msg.from.name : null}
                                             pergunta={this.state.venda.id_usuario !== msg.from.user_id ? msg.text : null}
                                             resposta={this.state.venda.id_usuario === msg.from.user_id ? msg.text : null}
                                             nomeEmpresa={this.state.venda.id_usuario === msg.from.user_id ? msg.from.name : null}
                                             displayFooter={'none'}
                                             displayButtonClose={'none'}
                                             height={this.state.venda.msg.length === 0 ? '400px' : ''} />
+
                                     </>
                                 )
                             })}
