@@ -127,12 +127,12 @@ export default class VendasController extends React.Component {
     }
 
     obterQuantidadeChar = (msg) => {
-        return msg.text.split('').reduce((acumulador, valorCorrente) => {
-            let somaChar = 0
-            if (valorCorrente === '\n') {
-                return acumulador + somaChar
-            }
-        })
+        console.log('msg: ' + JSON.stringify(msg))
+        if (msg !== undefined) {
+           return msg.text.split('')
+        }else{
+            return 0
+        }
     }
 
 
