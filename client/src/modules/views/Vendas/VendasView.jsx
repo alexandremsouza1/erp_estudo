@@ -41,6 +41,7 @@ import TextField from '@material-ui/core/TextField';
 import Chip from '@material-ui/core/Chip';
 import PrintIcon from '@material-ui/icons/Print';
 import SendIcon from '@material-ui/icons/Send';
+import Badge from '@material-ui/core/Badge';
 
 export default class VendasView extends React.Component {
 
@@ -216,9 +217,9 @@ export default class VendasView extends React.Component {
                                         <Step active href="#" style={{ 'fontSize': '12px' }} onClick={() => this.getStatusPendente()}>
                                             <Avatar alt="pendente" src={imgVendaPendente} />
                                             <Step.Content style={{ 'marginLeft': '10px' }}>
-                                               
+
                                                 <Step.Title>Pendentes</Step.Title>
-                                         
+
                                                 {this.props.isLoading
                                                     ? <><Loader size='mini' active={this.props.isLoading} inline /> vendas</>
                                                     : <Step.Description><b>{this.props.qtdeVendasPendentes}</b> vendas</Step.Description>
@@ -368,13 +369,15 @@ export default class VendasView extends React.Component {
                                                                                     </Button>
                                                                                 </Tooltip>
                                                                                 <Tooltip title="Clique aqui para enviar mensagem para o comprador para ser lido na plataforma do Mercado Livre">
-                                                                                    <Button
-                                                                                        variant="contained"
-                                                                                        style={{ 'color': 'black', 'backgroundColor': '#ffe600' }}
-                                                                                        onClick={() => this.exibirModalEnviarMensagemMercadolivre(venda)}
-                                                                                        startIcon={<SmsIcon />}>
-                                                                                        Enviar Mensagem Mercado Livre
-                                                                                    </Button>
+                                                                                    <Badge badgeContent={venda.msg.length} color="primary">
+                                                                                        <Button
+                                                                                            variant="contained"
+                                                                                            style={{ 'color': 'black', 'backgroundColor': '#ffe600' }}
+                                                                                            onClick={() => this.exibirModalEnviarMensagemMercadolivre(venda)}
+                                                                                            startIcon={<SmsIcon />}>
+                                                                                            Enviar Mensagem Mercado Livre
+                                                                                        </Button>
+                                                                                    </Badge>
                                                                                 </Tooltip>
                                                                             </>}
                                                                     </CardActions>
@@ -593,18 +596,27 @@ export default class VendasView extends React.Component {
                             <div>Pedido #{this.state.venda.id_venda} - {this.state.venda.data_venda}</div>
                         </Modal.Header>
 
-                        <Modal.Body style={{ height: '400px' }}>
+                        <Modal.Body>
 
                             <Message warning>
                                 <Message.Header>Lembre-se de que não enviaremos mensagens com linguagem ofensiva nem com links de redes sociais.</Message.Header>
                             </Message>
 
-                            <Chat nomeCompletoCliente='Ana Paula' 
-                              pergunta={null}
-                              resposta='Ola boa noite'
-                              nomeEmpresa='Comproline'
-                              displayFooter={'none'}
-                              displayButtonClose={'none'}/>
+                            {this.state.venda.msg.map(msg => {
+                                //'this.state.venda.id_usuario !== msg.from.user_id ? msg.text : null'
+                                return (
+                                    <>
+                                        <Chat nomeCompletoCliente={this.state.venda.id_usuario !== msg.from.user_id ? msg.from.name : null}
+                                            pergunta={this.state.venda.id_usuario !== msg.from.user_id ? msg.text : null}
+                                            resposta={this.state.venda.id_usuario === msg.from.user_id ? msg.text : null}
+                                            nomeEmpresa={this.state.venda.id_usuario === msg.from.user_id ? msg.from.name : null}
+                                            displayFooter={'none'}
+                                            displayButtonClose={'none'}
+                                            height={this.state.venda.msg.length === 0 ? '400px' : ''} />
+                                    </>
+                                )
+                            })}
+
 
                         </Modal.Body>
 

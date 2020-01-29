@@ -15,41 +15,45 @@ export default class Chat extends React.Component {
                         {this.props.title}
                     </h3>
 
-                    <div className='box-tools pull-right' style={{'display': this.props.displayButtonClose}}>
-                        <button onClick={this.props.close} type="button" className="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                    <div className='box-tools pull-right' style={{ 'display': this.props.displayButtonClose }}>
+                        <button onClick={this.props.close} type="button" className="btn btn-box-tool" data-widget="remove"><i className="fa fa-times"></i></button>
                     </div>
 
                 </div>
-                <div className='box-body'>
+                <div className='box-body' style={{height : this.props.height}}>
                     <div>
-                        {this.props.pergunta !== null 
-                        ?
-                        <div className='direct-chat-msg'>
-                            <div className='direct-chat-info clearfix'>
-                                <span className="direct-chat-name pull-left">{this.props.nomeCompletoCliente}</span>
+                        {this.props.pergunta !== null
+                            ?
+                            <div className='direct-chat-msg'>
+                                <div className='direct-chat-info clearfix'>
+                                    <span className="direct-chat-name pull-left"><b>{this.props.nomeCompletoCliente}</b></span>
+                                </div>
+                                <img className="direct-chat-img" src='https://adminlte.io/themes/AdminLTE/dist/img/user1-128x128.jpg' alt="Message User Image" style={{ display: 'none' }}></img>
+                                <div className="direct-chat-text" style={{width : '100%', margin: '0 0 0', color: 'white', backgroundColor: '#4169E1'}}>
+                                    {this.props.pergunta}
+                                </div>
                             </div>
-                            <img className="direct-chat-img" src='https://adminlte.io/themes/AdminLTE/dist/img/user1-128x128.jpg' alt="Message User Image"></img>
-                            <div className="direct-chat-text">
-                                {this.props.pergunta}
-                            </div>
-                        </div>
-                       : <></> 
-                       }
+                            : <></>
+                        }
                         <span className="direct-chat-info clearfix direct-chat-name pull-left">{this.props.dataHoraPergunta}</span>
 
-                        <div className='direct-chat-msg right'>
-                            <div className="direct-chat-info clearfix">
-                                <span className="direct-chat-name pull-right">{this.props.nomeEmpresa}</span>
+                        {this.props.resposta !== null
+                            ? 
+                            <div className='direct-chat-msg right'>
+                                <div className="direct-chat-info clearfix">
+                                    <span className="direct-chat-name pull-right"><b>{this.props.nomeEmpresa}</b></span>
+                                </div>
+                                <img className="direct-chat-img" src='https://adminlte.io/themes/AdminLTE/dist/img/user7-128x128.jpg' alt="Message User Image" style={{ display: 'none' }}></img>
+                                <div className="direct-chat-text" style={{width : '100%', color: 'black', backgroundColor: '#87CEFA'}}>
+                                    {this.props.resposta}
+                                </div>
                             </div>
-                            <img className="direct-chat-img" src='https://adminlte.io/themes/AdminLTE/dist/img/user7-128x128.jpg' alt="Message User Image" style={{display: 'none'}}></img>
-                            <div className="direct-chat-text">
-                                {this.props.resposta}
-                            </div>
-                        </div>
+                            : <></>
+                        }
 
                     </div>
                 </div>
-                <div className='box-footer' style={{'display': this.props.displayFooter}}>
+                <div className='box-footer' style={{ 'display': this.props.displayFooter }}>
                     <Input fluid type='text' placeholder='Digite a mensagem que deseja enviar...' action>
                         <input />
                         <Button type='submit'>Enviar resposta</Button>
