@@ -108,13 +108,11 @@ export default class VendasController extends React.Component {
             })
         }).catch(error => swal('Error', 'Houve um erro ao mostrar a quantidade total de vendas! \n \n ' + error, 'error'))
         
-        axios.post('https://sisiml.firebaseio.com/usuarios/usuario.json').then(firebase => {
-            console.log(firebase.data)
-        })
+       
 
         const socket = socketIOClient(DOMAIN)
-        socket.on('ml-notification-perguntas', function (data) {
-            console.log(data);
+        socket.on('ml-notification-perguntas', (data) => {
+            console.log("message: "+data);
             
           });
     }

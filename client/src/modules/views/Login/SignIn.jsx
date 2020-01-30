@@ -132,7 +132,7 @@ export default function SignIn() {
                 {'Quer experimentar grátis o SIGIML?'}{' '}
                 <NavLink to='/signup'>
                   <Link href="#" variant="body2">
-                    {"Cadastre-se agora!"}
+                    Cadastre-se agora!
                   </Link>
                 </NavLink>
               </Grid>

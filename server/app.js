@@ -57,4 +57,8 @@ app.use('/notifications', notificacoesMercadoLivreRoute);
 
 app.use('/rastreio', rastreioRoute)
 
+
+
+
+
 module.exports = app;
