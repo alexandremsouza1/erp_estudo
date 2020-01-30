@@ -621,8 +621,7 @@ export default class VendasView extends React.Component {
 
                         </Modal.Body>
 
-                        <form noValidate autoComplete='off'>
-                            <TextField variant='filled' label='Escreva ao comprador' style={{ width: '80%' }}></TextField>
+                            <TextField multiline variant='filled' label='Escreva ao comprador' style={{ width: '80%' }}></TextField>
                             <Button
                                 variant="contained"
                                 color="primary"
@@ -630,8 +629,7 @@ export default class VendasView extends React.Component {
                                 style={{ backgroundColor: '#1976d2', height: '53px' }}>
                                 Enviar mensagem
                             </Button>
-                        </form>
-
+                        
                     </Modal>
 
                 }
