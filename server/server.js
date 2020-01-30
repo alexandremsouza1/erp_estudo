@@ -1,11 +1,15 @@
 const app = require('./app');
 const http = require('http');
-const express = require('express')
-const debug = require('debug')('nodestr: server');
+//const debug = require('debug')('nodestr: server');
 //const socketIO = require('socket.io')
 
-//const mongoose = require('mongoose');
-//mongoose.connect('mongodb+srv://admin:admin@cluster0-5qx8r.mongodb.net/test?retryWrites=true&w=majority');
+const mongoose = require('mongoose');
+mongoose.connect('mongodb+srv://admin:admin@cluster0-5qx8r.mongodb.net/sigiml?retryWrites=true&w=majority',
+    {
+        useUnifiedTopology: true, 
+        useNewUrlParser: true,
+        useCreateIndex: true
+    });
 
 const port = process.env.PORT || 5000;
 

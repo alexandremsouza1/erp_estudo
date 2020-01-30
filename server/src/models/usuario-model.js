@@ -1,27 +1,12 @@
 const mongoose = require('mongoose');
 
 const usuarioModel = mongoose.Schema({
-    id: {
-        type: Number,
-        required: true,
-        trim: true
-    },
-    accessToken: {
+    nome: {
         type: String,
         required: true,
         trim: true
     },
-    refreshToken: {
-        type: String,
-        required: true,
-        trim: true
-    },
-    nickname: {
-        type: String,
-        required: true,
-        trim: true
-    },
-    first_name: {
+    sobrenome: {
         type: String,
         required: true,
         trim: true
@@ -30,7 +15,35 @@ const usuarioModel = mongoose.Schema({
         type: String,
         required: true,
         trim: true
-    }
+    },
+    password: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    active: {
+        type: Boolean,
+        required: true,
+        default: true
+    },
+    contas: [{
+        idConta: {
+            type: Number,
+            trim: true
+        },
+        accessToken: {
+            type: String,
+            trim: true
+        },
+        refreshToken: {
+            type: String,
+            trim: true
+        },
+        nickname: {
+            type: String,
+            trim: true
+        }
+    }]
 
 
 });

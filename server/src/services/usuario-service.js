@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const axios = require("axios");
 const constants = require('../constants/constants');
+const Usuario = require('../models/usuario-model')
 
 /**
  * @author Felipe Miguel dos Santos
@@ -15,13 +16,31 @@ const salvarUsuario = async (usuario) => {
     });
 }
 
+const postUsuario = async (req, res) => {
+    let usuario = new Usuario(req.body)
+    usuario.save().then(resp => {
+        res.status(200).send({
+            message: 'Usuario cadastrado com sucesso'
+        })
+    }).catch(error => res.send(error))
+
+}
+
+const getFindAll = async (req, res) => {
+    Usuario.find({
+        id: 1
+    }, "nome password").then(response => {
+        res.send(response).status(200)
+    }).catch(error => res.send(error))
+}
+
 const editarUsuario = (_id, accessToken, refreshToken) => {
-  
-  
+
+
 }
 
 const editarUsuarioRoute = (req, res) => {
-   
+
 }
 
 
@@ -51,7 +70,7 @@ const buscarUsuarioPorID = async () => {
 }
 
 const getUserById = async (req, res) => {
-    await axios.get('https://api.mercadolibre.com/users/'+req.params.id).then(user => {
+    await axios.get('https://api.mercadolibre.com/users/' + req.params.id).then(user => {
         res.status(200).send(user.data)
     }).catch(error => {
         res.status(400).send(error)
@@ -65,5 +84,7 @@ module.exports = {
     editarUsuarioRoute,
     editarUsuario,
     listarTodosUsuarios,
-    getUserById
+    getUserById,
+    postUsuario,
+    getFindAll
 }
