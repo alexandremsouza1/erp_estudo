@@ -461,7 +461,8 @@ exports.obterVendasConcluidas = async (req, res) => {
                                 }
                             },
                             
-                            msg: msg.data.messages
+                            msg: msg.data.messages,
+                            qtde: obterQuantidadeChar(msg.data.messages)
                             
                         }
                         return json
@@ -481,6 +482,21 @@ exports.obterVendasConcluidas = async (req, res) => {
 
         }).catch(error => res.send(error))
     }).catch(error => res.send(error))
+}
+
+let obterQuantidadeChar = (messages) => {
+   
+    return messages.map(msg => {
+        if (msg !== undefined) {
+            let obj = {
+                qtdeBarraN: msg.text.split('').filter(c => {return c === "\n"}).length + 2,
+                id: msg.id
+            }
+            return obj
+         }else{
+             return 0
+         }
+    })
 }
 
 let obterDadosPagamento = (payments) => {

@@ -603,8 +603,6 @@ export default class VendasView extends React.Component {
                             </Message>
 
                             {this.state.venda.msg.map((msg, key) => {
-                                //'this.state.venda.id_usuario !== msg.from.user_id ? msg.text : null'
-                               {console.log('this.props.obterQuantidadeChar(msg): '+this.props.obterQuantidadeChar(msg))}
                                 return (
                                     <>
                                         <Chat key={key} nomeCompletoCliente={this.state.venda.id_usuario !== msg.from.user_id ? msg.from.name : null}
@@ -613,7 +611,8 @@ export default class VendasView extends React.Component {
                                             nomeEmpresa={this.state.venda.id_usuario === msg.from.user_id ? msg.from.name : null}
                                             displayFooter={'none'}
                                             displayButtonClose={'none'}
-                                            height={this.state.venda.msg.length === 0 ? '400px' : ''} />
+                                            height={this.state.venda.msg.length === 0 ? '400px' : ''} 
+                                            rows={this.state.venda.qtde[key].qtdeBarraN +1 }/>
 
                                     </>
                                 )

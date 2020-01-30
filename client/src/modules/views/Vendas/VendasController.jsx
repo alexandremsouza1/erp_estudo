@@ -44,6 +44,7 @@ export default class VendasController extends React.Component {
         })
 
         await axios.get(`${DOMAIN}/vendas/getVendasConcluidas`).then(vendasConcluidas => {
+            
             let vendas = this.state.vendas
             vendasConcluidas.data.map(venda => {
                 vendas.push(venda)
@@ -126,13 +127,10 @@ export default class VendasController extends React.Component {
         }).catch(error => swal('Error', 'Houve um erro ao tentar gerar a etiqueta de envio! \n \n ' + error, 'error'))
     }
 
-    obterQuantidadeChar = (msg) => {
-        console.log('msg: ' + JSON.stringify(msg))
-        if (msg !== undefined) {
-           return msg.text.split('')
-        }else{
-            return 0
-        }
+    obterQuantidadeDelinhasTextArea = (qtde, msgId) => {
+          return qtde.map(line => {
+            return line.id === msgId ? line.qtdeBarraN : ''
+          })
     }
 
 
@@ -161,7 +159,7 @@ export default class VendasController extends React.Component {
                         qtdeVendasAEnviar={this.state.qtdeVendasAEnviar}
                         qtdeVendasEmTransito={this.state.qtdeVendasEmTransito}
                         gerarEtiqueteEnvio={this.gerarEtiqueteEnvio}
-                        obterQuantidadeChar={this.obterQuantidadeChar} />
+                        obterQuantidadeDelinhasTextArea={this.obterQuantidadeDelinhasTextArea}/>
                 </Dimmer.Dimmable>
             </>
         )
