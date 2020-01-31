@@ -5,6 +5,8 @@ import { DOMAIN } from '../../constants/constants'
 //import sendNotification from '../../components/Notification/Notification'
 import swal from 'sweetalert'
 import { Dimmer, Loader, Segment } from 'semantic-ui-react'
+import socketIOClient from 'socket.io-client'
+
 
 export default class VendasController extends React.Component {
 
@@ -44,7 +46,7 @@ export default class VendasController extends React.Component {
         })
 
         await axios.get(`${DOMAIN}/vendas/getVendasConcluidas`).then(vendasConcluidas => {
-            
+
             let vendas = this.state.vendas
             vendasConcluidas.data.map(venda => {
                 vendas.push(venda)
@@ -105,9 +107,21 @@ export default class VendasController extends React.Component {
                 isLoading: false
             })
         }).catch(error => swal('Error', 'Houve um erro ao mostrar a quantidade total de vendas! \n \n ' + error, 'error'))
+        
+        axios.post('https://sisiml.firebaseio.com/usuarios/usuario.json').then(firebase => {
+            console.log(firebase.data)
+        })
 
-
+        const socket = socketIOClient(DOMAIN)
+        socket.on('ml-notification-perguntas', function (data) {
+            console.log(data);
+            
+          });
     }
+
+
+
+
 
     obterRastreioCorreios = async (codigo) => {
         await axios.get(`${DOMAIN}/rastreio/${codigo}`).then(async response => {
@@ -128,9 +142,9 @@ export default class VendasController extends React.Component {
     }
 
     obterQuantidadeDelinhasTextArea = (qtde, msgId) => {
-          return qtde.map(line => {
+        return qtde.map(line => {
             return line.id === msgId ? line.qtdeBarraN : ''
-          })
+        })
     }
 
 
@@ -159,7 +173,7 @@ export default class VendasController extends React.Component {
                         qtdeVendasAEnviar={this.state.qtdeVendasAEnviar}
                         qtdeVendasEmTransito={this.state.qtdeVendasEmTransito}
                         gerarEtiqueteEnvio={this.gerarEtiqueteEnvio}
-                        obterQuantidadeDelinhasTextArea={this.obterQuantidadeDelinhasTextArea}/>
+                        obterQuantidadeDelinhasTextArea={this.obterQuantidadeDelinhasTextArea} />
                 </Dimmer.Dimmable>
             </>
         )
