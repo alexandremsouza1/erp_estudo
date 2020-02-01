@@ -63,7 +63,7 @@ export default class VendasController extends React.Component {
             })
             this.setState({ vendas: vendas, isLoadingVendasEmTransito: false })
         }).catch(error => {
-            swal("Error", "Houve um erro ao listar todas as vendas em transito(VendasController:44): \n \n " + error, "error");
+            swal("Error", "Houve um erro ao listar todas as vendas em transito(VendasController:66): \n \n " + error, "error");
         })
 
         await axios.get(`${DOMAIN}/vendas/getVendasAEnviar`).then(vendasAEnviar => {
@@ -76,7 +76,7 @@ export default class VendasController extends React.Component {
             }
 
         }).catch(error => {
-            swal("Error", "Houve um erro ao listar todas as vendas em transito(VendasController:44): \n \n " + error, "error");
+            swal("Error", "Houve um erro ao listar todas as vendas a enviar(VendasController:79): \n \n " + error, "error");
         })
 
         await axios.get(`${DOMAIN}/vendas/getTotalVendas`).then(vendas => {
@@ -110,11 +110,11 @@ export default class VendasController extends React.Component {
         
        
 
-        const socket = socketIOClient(DOMAIN)
+        /*const socket = socketIOClient(DOMAIN)
         socket.on('ml-notification-perguntas', (data) => {
             console.log("message: "+data);
             
-          });
+          });*/
     }
 
 
@@ -153,7 +153,7 @@ export default class VendasController extends React.Component {
             && this.state.isLoadingVendasAEnviar
         return (
             <>
-                <Dimmer.Dimmable as={Segment} dimmer={isShowLoading}>
+                <Dimmer.Dimmable as={Segment} dimmer={isShowLoading.toString()}>
                     <Dimmer active={isShowLoading} inverted>
                         <Loader>Carregando dados do Mercado Livre, por favor aguarde...</Loader>
                     </Dimmer>

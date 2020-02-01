@@ -8,8 +8,10 @@ const fs = require('fs')
 
 exports.obterTotalDeVendas = async (req, res) => {
     var data = new Date();
+    let diaAtual = new Date().getDate()
+
     usuarioService.buscarUsuarioPorID().then(resp => {
-        axios.get(`${constants.API_MERCADO_LIVRE}/orders/search?seller=${resp.id}&order.date_created.from=${data.getFullYear()}-${data.getMonth() + 1}-01T00:00:00.000-00:00&order.date_created.to=${data.getFullYear()}-${data.getMonth() + 1}-30T00:00:00.000-00:00&&access_token=${resp.accessToken}`).then(response => {
+        axios.get(`${constants.API_MERCADO_LIVRE}/orders/search?seller=${resp.id}&order.date_created.from=${data.getFullYear()}-${data.getMonth() + 1}-01T00:00:00.000-00:00&order.date_created.to=${data.getFullYear()}-${data.getMonth() + 1}-${diaAtual}T00:00:00.000-00:00&&access_token=${resp.accessToken}`).then(response => {
             res.send({
                 total_vendas: response.data.results.length,
                 nome_mes: util.converterDataInteiroParaStringMes(data.getMonth() + 1)
@@ -27,7 +29,7 @@ exports.obterVendaProntoParaEnviar = async (req, res) => {
     let diaAtual = new Date().getDate()
 
     usuarioService.buscarUsuarioPorID().then(async user => {
-        await axios.get(`https://api.mercadolibre.com/orders/search?seller=${user.id}&order.date_created.from=${anoAtual}-${mesAtual}-${cincoDiasAtras}T00:00:00.000-00:00&order.date_created.to=${anoAtual}-${mesAtual}-${diaAtual}T00:00:00.000-00:00&&access_token=${user.accessToken}`).then(resp => {
+        await axios.get(`https://api.mercadolibre.com/orders/search?seller=${user.id}&order.date_created.from=${anoAtual}-${mesAtual}-01T00:00:00.000-00:00&order.date_created.to=${anoAtual}-${mesAtual}-${diaAtual}T00:00:00.000-00:00&&access_token=${user.accessToken}`).then(resp => {
             let vendasAEnviar = resp.data.results.map(async response => {
                 if (response.shipping.substatus !== null) {
                     if (response.shipping.substatus === 'ready_to_print' || response.shipping.substatus === 'printed') {

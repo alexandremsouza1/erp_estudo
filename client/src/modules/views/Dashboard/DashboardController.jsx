@@ -3,6 +3,7 @@ import axios from 'axios'
 import DashboardView from './DashboardView'
 import { useSelector, useDispatch } from 'react-redux'
 import { Dimmer, Loader, Segment } from 'semantic-ui-react'
+import swal from 'sweetalert'
 import {
     OBTER_SALDO_TOTAL,
     OBTER_TOTAL_VENDAS_NO_MES,
@@ -40,6 +41,8 @@ export default function DashboardController() {
                 isLoading: false,
                 isLoadingStatusPublicacoes: false
             })
+        }).catch(error => {
+            swal("Error", "Houve um erro ao mostrar os saldos (Dashboard:45):  \n \n " + error, "error");
         })
 
         await axios.get(`${DOMAIN}/vendas/getTotalDeVendas`).then(resp => {
@@ -49,6 +52,8 @@ export default function DashboardController() {
                 nomeMes: resp.data.nome_mes,
                 isLoading: false
             })
+        }).catch(error => {
+            swal("Error", "Houve um erro ao mostrar o total de vendas (Dashboard:56):  \n \n " + error, "error");
         })
 
         await axios.get(`${DOMAIN}/vendas/getVendasPendentes`).then(resp => {
@@ -58,6 +63,8 @@ export default function DashboardController() {
                 totalVendasPendentes: resp.data.totalVendasPendentes,
                 isLoading: false
             })
+        }).catch(error => {
+            swal("Error", "Houve um erro ao mostrar as vendas pendentes (Dashboard:67):  \n \n " + error, "error");
         })
 
         await axios.get(`${DOMAIN}/anuncio/total_status`).then(status => {
@@ -67,12 +74,14 @@ export default function DashboardController() {
                 totalPausados: status.data.total_pausados,
                 isLoading: false
             })
+        }).catch(error => {
+            swal("Error", "Houve um erro ao mostrar os status dos anuncios (Dashboard:78):  \n \n " + error, "error");
         })
     }
 
     return (
         <>
-            <Dimmer.Dimmable as={Segment} dimmer={state.isLoading}>
+            <Dimmer.Dimmable as={Segment} dimmer={state.isLoading.toString()}>
                 <Dimmer active={state.isLoading} inverted>
                     <Loader>Carregando dados do Mercado Livre, por favor aguarde...</Loader>
                 </Dimmer>
