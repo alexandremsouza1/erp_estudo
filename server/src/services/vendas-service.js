@@ -370,7 +370,7 @@ exports.obterTotalVendasAEnviar = async (req, res) => {
     let diaAtual = new Date().getDate()
 
     await usuarioService.buscarUsuarioPorID().then(async user => {
-        await axios.get(`https://api.mercadolibre.com/orders/search?seller=${user.id}&order.date_created.from=${anoAtual}-${mesAtual}-${cincoDiasAtras}T00:00:00.000-00:00&order.date_created.to=${anoAtual}-${mesAtual}-${diaAtual}T00:00:00.000-00:00&&access_token=${user.accessToken}`).then(response => {
+        await axios.get(`https://api.mercadolibre.com/orders/search?seller=${user.id}&order.date_created.from=${anoAtual}-${mesAtual}-01T00:00:00.000-00:00&order.date_created.to=${anoAtual}-${mesAtual}-${diaAtual}T00:00:00.000-00:00&&access_token=${user.accessToken}`).then(response => {
             let resultVendas = response.data.results.map(result => {
                 if (result.shipping.status === 'ready_to_ship') {
                     return 'ready_to_ship'
