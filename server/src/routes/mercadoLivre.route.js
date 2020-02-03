@@ -6,21 +6,22 @@ const router = express.Router();
 const constants = require('../constants/constants');
 
 /**
- * @author Felipe Miguel dos Santos
+ * @author Felipe M. Santos
  */
 
 router.get('/auth/mercadolibre', passport.authorize('mercadolibre'));
 
 //Retorno de callback do servidor do mercado livre
 router.get('/auth/mercadolibre/callback', passport.authorize('mercadolibre', { 
-    failureRedirect: '/login' 
+    failureRedirect: '/' 
 }), (req, res) => {
         // Redireciona para a página principal do sistema
-        res.redirect("http://localhost:3000/");
+       res.redirect("http://localhost:3000/");
     });
 
 router.get('/', ensureAuthenticated, async (req, res) => {
        await res.send("Usuario logado: " + req.user.nickname);
+       
     }
 );
 

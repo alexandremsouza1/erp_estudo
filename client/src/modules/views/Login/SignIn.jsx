@@ -44,7 +44,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function SignIn() {
+export default function SignIn(props) {
 
   const classes = useStyles();
   const [modalOpen, setModalOpen] = useState(true)
@@ -59,6 +59,7 @@ export default function SignIn() {
         size='small'
       >
         <Header icon='browser' content='Informação' />
+
         <Modal.Content>
           <Message info>
             <p>O E-mail e senha não são os mesmos dados que você usa para acessar a sua conta do MercadoLivre, caso nunca tenha acessado o sistema com email e senha, você
@@ -66,11 +67,13 @@ export default function SignIn() {
           </p>
           </Message>
         </Modal.Content>
+
         <Modal.Actions>
           <Button color='green' onClick={() => handleClose()} inverted>
             <Icon name='checkmark' /> Ok, entendi!
           </Button>
         </Modal.Actions>
+
       </Modal>
 
       <Container component="main" maxWidth="xs">
@@ -85,7 +88,7 @@ export default function SignIn() {
             Acesso ao sistema
         </Typography>
 
-          <form className={classes.form} noValidate>
+          
             <TextField
               variant="outlined"
               margin="normal"
@@ -96,6 +99,8 @@ export default function SignIn() {
               name="email"
               autoComplete="email"
               autoFocus
+              value={props.email}
+              onChange={(event) => props.changeEmail(event)}
             />
             <TextField
               variant="outlined"
@@ -107,19 +112,20 @@ export default function SignIn() {
               type="password"
               id="password"
               autoComplete="current-password"
+              value={props.password}
+              onChange={(event) => props.changePassword(event)}
             />
 
-            <NavLink
-              to='/admin/dashboard'>
+            
               <ButtonUI
-                type="submit"
                 fullWidth
                 variant="contained"
                 color="primary"
+                onClick={() => props.signinUsuario()}
                 className={classes.submit}>
                 Acessar
               </ButtonUI>
-            </NavLink>
+            
 
             
               <Grid item xs>
@@ -137,7 +143,7 @@ export default function SignIn() {
                 </NavLink>
               </Grid>
             
-          </form>
+        
         </div>
         <Box mt={8}>
           <Copyright />

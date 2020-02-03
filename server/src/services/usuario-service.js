@@ -27,10 +27,10 @@ const postUsuario = async (req, res) => {
 
 }
 
-const getFindAll = async (req, res) => {
+const getProcurarUsuarioPorEmail = async (req, res) => {
     Usuario.find({
-        id: 1
-    }, "nome password").then(response => {
+        email: req.params.email
+    }, "nome email password").then(response => {
         res.send(response).status(200)
     }).catch(error => res.send(error))
 }
@@ -87,5 +87,5 @@ module.exports = {
     listarTodosUsuarios,
     getUserById,
     postUsuario,
-    getFindAll
+    getProcurarUsuarioPorEmail
 }

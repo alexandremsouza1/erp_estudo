@@ -20,6 +20,7 @@ import CallApiAnuncio from './modules/components/CallApi/CallApiAnuncio'
 import CallApiClient from './modules/components/CallApi/CallApiClient'
 import SignInController from './modules/views/Login/SignInController'
 import SignUpController from './modules/views/Login/SignUpController'
+import AcessoMercadoLivre from './modules/views/Login/AcessoMercadoLivre'
 
 //<Route path="/admin" render={props => <AdminLayout {...props} />} />
 //<Redirect from="/" to="/login" />
@@ -35,6 +36,7 @@ ReactDOM.render(
         <Switch>
           <Route path="/" exact={true} component={SignInController}/>
           <Route path='/signup' component={SignUpController}/>
+          <Route path='/acesso_ml' component={AcessoMercadoLivre}/>
           <Route path="/admin" render={props => <AdminLayout {...props} />} />
           <Redirect from="/admin" to="/admin/dashboard" />
         </Switch>

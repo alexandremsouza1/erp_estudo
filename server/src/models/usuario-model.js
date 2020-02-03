@@ -26,6 +26,16 @@ const usuarioModel = mongoose.Schema({
         required: true,
         default: true
     },
+    plano: {
+        default: 'free',
+        trim: true,
+        type: String
+    },
+    data_expiracao_plano_free: {
+        default: new Date().setDate(90),
+        trim: true,
+        type: Date
+    },
     contas: [{
         idConta: {
             type: Number,

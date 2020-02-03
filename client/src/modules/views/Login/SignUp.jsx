@@ -10,6 +10,8 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import swalert from 'sweetalert'
+
 
 function Copyright() {
   return (
@@ -58,11 +60,34 @@ export default function SignUp(props) {
       email,
       password: senha
     }
-   props.salvarUsuario(usuario)
-   setNome('')
-   setSobrenome('')
-   setEmail('')
-   setSenha('')
+    if (usuario.nome === undefined) {
+      swalert('Atenção', 'O nome é obrigatório! \n Tente novamente.', 'warning')
+      return
+    } 
+
+    if (usuario.sobrenome === undefined) {
+      swalert('Atenção', 'O sobrenome é obrigatório! \n Tente novamente.', 'warning')
+      return
+    } 
+
+    if (usuario.email === undefined) {
+      swalert('Atenção', 'O e-mail é obrigatório! \n Tente novamente.', 'warning')
+      return
+    } 
+
+    if (usuario.password === undefined) {
+      swalert('Atenção', 'A senha de acesso é obrigatório! \n Tente novamente.', 'warning')
+      return
+    } 
+
+
+      props.salvarUsuario(usuario)
+      setNome('')
+      setSobrenome('')
+      setEmail('')
+      setSenha('')
+    
+
   }
 
   return (

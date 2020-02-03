@@ -44,6 +44,7 @@ app.use('/anuncio', anuncioRoute);
 
 //Mercado Livre
 app.use('/', mercadoLivreRoute);
+app.use('/novo_usuario_mercado_livre', mercadoLivreRoute);
 
 app.use('/usuario', usuarioRoute);
 

@@ -23,7 +23,7 @@ module.exports = (passport) => {
     });
     */
     usuarioService.salvarUsuario(setUsuario(profile, accessToken, refreshToken))
-    console.log("Mercado livre - session user " + accessToken)
+    //console.log("Mercado livre - session user " + accessToken)
 
     return done(null, profile);
 
@@ -42,12 +42,12 @@ module.exports = (passport) => {
     return usuarios
   }
 
-  passport.serializeUser((user, done) => {
-    done(null, user);
+  passport.serializeUser((profile, done) => {
+    done(null, profile);
   });
 
-  passport.deserializeUser((user, done) => {
-    done(null, user);
+  passport.deserializeUser((profile, done) => {
+    done(null, profile);
   });
 
 }
