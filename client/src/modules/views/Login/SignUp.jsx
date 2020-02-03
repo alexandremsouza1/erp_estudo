@@ -1,10 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
@@ -44,8 +42,28 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function SignUp() {
+export default function SignUp(props) {
+
   const classes = useStyles();
+
+  const [nome, setNome] = useState()
+  const [sobrenome, setSobrenome] = useState()
+  const [email, setEmail] = useState()
+  const [senha, setSenha] = useState()
+
+  const handleUsuario = () => {
+    let usuario = {
+      nome,
+      sobrenome,
+      email,
+      password: senha
+    }
+   props.salvarUsuario(usuario)
+   setNome('')
+   setSobrenome('')
+   setEmail('')
+   setSenha('')
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -60,74 +78,81 @@ export default function SignUp() {
           Informe os seus dados e crie sua senha
         </Typography>
 
-        <form className={classes.form} noValidate>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                autoComplete="fname"
-                name="firstName"
-                variant="outlined"
-                required
-                fullWidth
-                id="firstName"
-                label="Nome"
-                autoFocus
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="lastName"
-                label="Sobrenome"
-                name="lastName"
-                autoComplete="lname"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="email"
-                label="E-mail"
-                name="email"
-                autoComplete="email"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="password"
-                label="Senha"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-              />
-            </Grid>
-            
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <TextField
+              autoComplete="fname"
+              name="firstName"
+              variant="outlined"
+              required
+              fullWidth
+              id="firstName"
+              label="Nome"
+              autoFocus
+              value={nome}
+              onChange={(event) => setNome(event.target.value)}
+            />
           </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Criar acesso
+          <Grid item xs={12}>''
+              <TextField
+              variant="outlined"
+              required
+              fullWidth
+              id="lastName"
+              label="Sobrenome"
+              name="lastName"
+              autoComplete="lname"
+              value={sobrenome}
+              onChange={(event) => setSobrenome(event.target.value)}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              variant="outlined"
+              required
+              fullWidth
+              id="email"
+              label="E-mail"
+              name="email"
+              autoComplete="email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              variant="outlined"
+              required
+              fullWidth
+              name="password"
+              label="Senha"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              value={senha}
+              onChange={(event) => setSenha(event.target.value)}
+            />
+          </Grid>
+
+        </Grid>
+        <Button
+          fullWidth
+          variant="contained"
+          color="primary"
+          className={classes.submit}
+          onClick={() => handleUsuario()}
+        >
+          Criar acesso
           </Button>
-          <Grid container justify="flex-end">
-            <Grid item>
-              {'Já tem conta?'}{' '}  
-              <Link href="#" variant="body2">
-                 Iniciar sessão
+        <Grid container justify="flex-end">
+          <Grid item>
+            {'Já tem conta?'}{' '}
+            <Link href="#" variant="body2">
+              Iniciar sessão
               </Link>
-            </Grid>
           </Grid>
-        </form>
+        </Grid>
+
       </div>
       <Box mt={5}>
         <Copyright />

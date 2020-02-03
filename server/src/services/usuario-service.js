@@ -20,7 +20,8 @@ const postUsuario = async (req, res) => {
     let usuario = new Usuario(req.body)
     usuario.save().then(resp => {
         res.status(200).send({
-            message: 'Usuario cadastrado com sucesso'
+            isUsuarioSalvo: true,
+            usuario: resp
         })
     }).catch(error => res.send(error))
 

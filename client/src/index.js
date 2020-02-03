@@ -18,8 +18,8 @@ import { Provider } from 'react-redux';
 import { store } from './store';
 import CallApiAnuncio from './modules/components/CallApi/CallApiAnuncio'
 import CallApiClient from './modules/components/CallApi/CallApiClient'
-import SignIn from './modules/views/Login/SignIn'
-import SignUp from './modules/views/Login/SignUp'
+import SignInController from './modules/views/Login/SignInController'
+import SignUpController from './modules/views/Login/SignUpController'
 
 //<Route path="/admin" render={props => <AdminLayout {...props} />} />
 //<Redirect from="/" to="/login" />
@@ -33,8 +33,8 @@ ReactDOM.render(
 
       <BrowserRouter>
         <Switch>
-          <Route path="/" exact={true} component={SignIn}/>
-          <Route path='/signup' component={SignUp}/>
+          <Route path="/" exact={true} component={SignInController}/>
+          <Route path='/signup' component={SignUpController}/>
           <Route path="/admin" render={props => <AdminLayout {...props} />} />
           <Redirect from="/admin" to="/admin/dashboard" />
         </Switch>
