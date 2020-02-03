@@ -30,7 +30,7 @@ const postUsuario = async (req, res) => {
 const getProcurarUsuarioPorEmail = async (req, res) => {
     Usuario.find({
         email: req.params.email
-    }, "nome email password").then(response => {
+    }).then(response => {
         res.send(response).status(200)
     }).catch(error => res.send(error))
 }
