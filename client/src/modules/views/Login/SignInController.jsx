@@ -4,6 +4,7 @@ import axios from 'axios'
 import swal from 'sweetalert'
 import { DOMAIN } from '../../constants/constants'
 import { Redirect } from 'react-router-dom'
+import moment from 'moment'
 
 export default class SignInController extends React.Component {
 
@@ -44,6 +45,13 @@ export default class SignInController extends React.Component {
         })
     }
 
+    calcularDiferenteEmDias = () => {
+        const dataExpiracaoPlano = moment(new Date(localStorage.getItem('@sigiml/data_expiracao_plano_free')))
+        const dataInicioPlano = moment(new Date(localStorage.getItem('@sigiml/data_inicio_plano')))
+        const duration = moment.duration(dataExpiracaoPlano.diff(dataInicioPlano))
+        return duration.asDays().toFixed(0)
+    }
+
     signinUsuario = async () => {
         if (this.state.email.trim() === '') {
             swal('Atenção', 'Você não informou o e-mail, tente novamente! \n', 'warning')
@@ -57,7 +65,13 @@ export default class SignInController extends React.Component {
             if (resp.data.length > 0) {
                 resp.data.map(user => {
                     if (this.state.email === user.email && this.state.password === user.password) {
-                        console.log("OK")
+                        localStorage.setItem('@sigiml/nome-usuario', user.nome)
+                        localStorage.setItem('@sigiml/email-usuario', user.email)
+                        localStorage.setItem('@sigiml/_id-usuario', user._id)
+                        localStorage.setItem('@sigiml/plano', user.plano)
+                        localStorage.setItem('@sigiml/data_expiracao_plano_free', user.data_expiracao_plano_free)
+                        localStorage.setItem('@sigiml/data_inicio_plano', user.data_inicio_plano)
+                        localStorage.setItem('@sigiml/expiration_day', this.calcularDiferenteEmDias())
                         this.setState({ redirect: true })
                     } else {
                         swal('Atenção', 'Email e/ou senha incorretos! Por favor, tente novamente! \n', 'warning')

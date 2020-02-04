@@ -11,6 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import swalert from 'sweetalert'
+import { NavLink } from 'react-router-dom';
 
 
 function Copyright() {
@@ -45,6 +46,9 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function SignUp(props) {
+
+
+  
 
   const classes = useStyles();
 
@@ -81,7 +85,7 @@ export default function SignUp(props) {
     } 
 
       props.salvarUsuario(usuario)
-
+     
       setNome('')
       setSobrenome('')
       setEmail('')
@@ -104,7 +108,8 @@ export default function SignUp(props) {
         </Typography>
 
         <Grid container spacing={2}>
-          <Grid item xs={12}>
+
+          <Grid item xs={12} style={{margin: '15px 0 0'}}>
             <TextField
               autoComplete="fname"
               name="firstName"
@@ -118,6 +123,7 @@ export default function SignUp(props) {
               onChange={(event) => setNome(event.target.value)}
             />
           </Grid>
+
           <Grid item xs={12}>''
               <TextField
               variant="outlined"
@@ -172,9 +178,9 @@ export default function SignUp(props) {
         <Grid container justify="flex-end">
           <Grid item>
             {'Já tem conta?'}{' '}
-            <Link href="#" variant="body2">
+            <NavLink to='/'>
               Iniciar sessão
-              </Link>
+              </NavLink>
           </Grid>
         </Grid>
 

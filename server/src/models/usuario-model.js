@@ -36,6 +36,11 @@ const usuarioModel = mongoose.Schema({
         trim: true,
         type: Date
     },
+    data_inicio_plano: {
+        default: new Date(),
+        trim: true,
+        type: Date
+    },
     contas: [{
         idConta: {
             type: Number,

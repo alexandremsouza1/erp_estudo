@@ -185,6 +185,7 @@ export default function Sidebar(props) {
                   activeClassName="active"
                   style={{ 'color': 'black' }}>
 
+              
                   <ListItem button key={key} onClick={() => handleListItemClick(prop.layout + prop.path)} selected={selectedIndex === prop.layout + prop.path}>
                     <Badge anchorOrigin={{vertical: 'top', horizontal: 'left'}} badgeContent={prop.name === 'Mensagens de Pos venda' ? 1 : 0} color="primary">
                       <ListItemIcon style={{ 'marginLeft': '10px' }}><i className={prop.icon} style={{ 'fontSize': '15px' }} /></ListItemIcon>

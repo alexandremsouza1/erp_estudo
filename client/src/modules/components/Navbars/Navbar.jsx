@@ -145,7 +145,7 @@ export default function Navbar(props) {
     <>
       <CssBaseline />
       <AppBar
-        style={{'backgroundColor':'#1976d2'}}
+        style={{ 'backgroundColor': '#1976d2' }}
         position="fixed"
         className={clsx(classes.appBar, {
           [classes.appBarShift]: sideBarState.isSidebar,
@@ -164,6 +164,10 @@ export default function Navbar(props) {
             <MenuIcon />
 
           </IconButton>
+
+          <Typography className={classes.title} noWrap>
+            Licença {localStorage.getItem('@sigiml/plano').toLocaleUpperCase()} - {localStorage.getItem('@sigiml/expiration_day') == 0 ? <>Expira hoje</> : <>Expira daqui a {localStorage.getItem('@sigiml/expiration_day')}  dias</>}
+          </Typography>
 
           <div className={classes.grow} />
 
