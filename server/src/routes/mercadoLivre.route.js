@@ -3,7 +3,9 @@
 const express = require("express");
 const passport = require("passport");
 const router = express.Router();
-const constants = require('../constants/constants');
+const keys = require('../config/keys');
+
+const meli = require('mercadolibre');
 
 /**
  * @author Felipe M. Santos
@@ -20,8 +22,7 @@ router.get('/auth/mercadolibre/callback', passport.authorize('mercadolibre', {
     });
 
 router.get('/', ensureAuthenticated, async (req, res) => {
-       await res.send("Usuario logado: " + req.user.nickname);
-       
+       await res.send("Usuario logado: " + req.user.nickname);  
     }
 );
 
@@ -34,5 +35,11 @@ function ensureAuthenticated(req, res, next){
     res.redirect('/auth/mercadolibre');
 };
 
+
+
+
+//let meliObject = new meli.Meli(keys.mercadolivre.CLIENT_ID, keys.mercadolivre.CLIENT_SECRET);
+//let code = meliObject.getAuthURL('http://localhost:3000')
+//console.log(code)
 
 module.exports = router;

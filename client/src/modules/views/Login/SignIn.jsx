@@ -12,6 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { Button, Header, Icon, Modal, Message } from 'semantic-ui-react'
+import Switch from '@material-ui/core/Switch';
 
 function Copyright() {
   return (
@@ -50,8 +51,14 @@ export default function SignIn(props) {
   const [modalOpen, setModalOpen] = useState(true)
   const handleClose = () => setModalOpen(false)
 
+  const handleShowMessage = () => {
+    handleClose()
+    props.handleShowMessage()
+  }
+  
   return (
     <>
+    {props.isShowMessageMain === false && 
       <Modal
         open={modalOpen}
         onClose={() => handleClose()}
@@ -59,23 +66,30 @@ export default function SignIn(props) {
         size='small'
       >
         <Header icon='browser' content='Informação' />
-
-        <Modal.Content>
-          <Message info>
-            <p>O E-mail e senha não são os mesmos dados que você usa para acessar a sua conta do MercadoLivre, caso nunca tenha acessado o sistema com email e senha, você
-              deve primeiramente efetuar o seu cadastro clicando em "Cadastre-se agora!". Caso já tenha se cadastrado aqui anteriormente, basta apenas informar seu email e senha de acesso.
-          </p>
-          </Message>
-        </Modal.Content>
-
+        
+          <Modal.Content>
+            <Message info>
+              <p>O E-mail e senha não são os mesmos dados que você usa para acessar a sua conta do MercadoLivre, caso nunca tenha acessado o sistema com email e senha, você
+                deve primeiramente efetuar o seu cadastro clicando em "Cadastre-se agora!". Caso já tenha se cadastrado aqui anteriormente, basta apenas informar seu email e senha de acesso.
+             </p>
+              <Switch
+                checked={props.checked}
+                onChange={props.handleChangeCheckBox('checked')}
+                value="checked"
+                color="primary"
+              />
+              Não mostrar essa mensagem novamente?
+            </Message>
+          </Modal.Content>
+        
         <Modal.Actions>
-          <Button color='green' onClick={() => handleClose()} inverted>
+          <Button color='green' onClick={() => handleShowMessage()} inverted>
             <Icon name='checkmark' /> Ok, entendi!
           </Button>
         </Modal.Actions>
 
       </Modal>
-
+    }
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <div className={classes.paper}>
@@ -88,62 +102,62 @@ export default function SignIn(props) {
             Acesso ao sistema
         </Typography>
 
-          
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="E-mail"
-              name="email"
-              autoComplete="email"
-              autoFocus
-              value={props.email}
-              onChange={(event) => props.changeEmail(event)}
-            />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Senha"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              value={props.password}
-              onChange={(event) => props.changePassword(event)}
-            />
 
-            
-              <ButtonUI
-                fullWidth
-                variant="contained"
-                color="primary"
-                onClick={() => props.signinUsuario()}
-                className={classes.submit}>
-                Acessar
-              </ButtonUI>
-            
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="E-mail"
+            name="email"
+            autoComplete="email"
+            autoFocus
+            value={props.email}
+            onChange={(event) => props.changeEmail(event)}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Senha"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+            value={props.password}
+            onChange={(event) => props.changePassword(event)}
+          />
 
-            
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Esqueci minha senha
+
+          <ButtonUI
+            fullWidth
+            variant="contained"
+            color="primary"
+            onClick={() => props.signinUsuario()}
+            className={classes.submit}>
+            Acessar
+          </ButtonUI>
+
+
+
+          <Grid item xs>
+            <Link href="#" variant="body2">
+              Esqueci minha senha
               </Link>
-              </Grid>
+          </Grid>
 
-              <Grid item>
-                {'Quer experimentar grátis o SIGIML?'}{' '}
-                <NavLink to='/signup'>
-                  <Link href="#" variant="body2">
-                    Cadastre-se agora!
-                  </Link>
-                </NavLink>
-              </Grid>
-            
-        
+          <Grid item>
+            {'Quer experimentar grátis o SIGIML?'}{' '}
+            <NavLink to='/signup'>
+              
+                Cadastre-se agora!
+              
+            </NavLink>
+          </Grid>
+
+
         </div>
         <Box mt={8}>
           <Copyright />

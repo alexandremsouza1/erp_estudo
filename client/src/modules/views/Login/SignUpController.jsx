@@ -3,7 +3,7 @@ import SignUp from './SignUp'
 import axios from 'axios'
 import swal from 'sweetalert'
 import { DOMAIN } from '../../constants/constants'
-import {Redirect} from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 
 export default class SignUpController extends React.Component {
 
@@ -15,47 +15,47 @@ export default class SignUpController extends React.Component {
         }
     }
 
+    validarUsuario = async (usuario) => {
+
+    }
+
     salvarUsuario = async (usuario) => {
 
-        await axios.post(`${DOMAIN}/usuario/save_usuario`, usuario).then(resp => {
-
-            if (resp.data.isUsuarioSalvo !== undefined) {
-                console.log("Usuario salvo? " + resp.data.isUsuarioSalvo)
-                console.log("Usuario: " + JSON.stringify(resp.data.usuario))
-
-                //Localstorage
-                localStorage.setItem('@sigiml/_id-usuario', JSON.stringify(resp.data.usuario._id))
-                localStorage.setItem('@sigiml/nome-usuario', JSON.stringify(resp.data.usuario.nome))
-                localStorage.setItem('@sigiml/email-usuario', JSON.stringify(resp.data.usuario.email))
-
-                let user = {
-                    id : localStorage.getItem('@sigiml/_id-usuario'),
-                    nome : localStorage.getItem('@sigiml/nome-usuario'),
-                    email : localStorage.getItem('@sigiml/email-usuario')
+        await axios.get(`${DOMAIN}/usuario/procurar_usuario_byEmail/${usuario.email}`).then(async response => {
+            response.data.map(async user => {
+                if (user.email === usuario.email) {
+                    swal('Atenção', 'Já existe um usuário cadastrado com esse e-mail! \n', 'warning')
+                } else {
+                    await axios.post(`${DOMAIN}/usuario/save_usuario`, usuario).then(resp => {
+                        if (resp.data.isUsuarioSalvo !== undefined) {
+                            //Localstorage
+                            localStorage.setItem('@sigiml/_id-usuario', JSON.stringify(resp.data.usuario._id))
+                            localStorage.setItem('@sigiml/nome-usuario', JSON.stringify(resp.data.usuario.nome))
+                            localStorage.setItem('@sigiml/email-usuario', JSON.stringify(resp.data.usuario.email))
+                            this.setState({ redirect: true })
+                        } else {
+                            swal('Error', 'Ops, houve um erro ao tentar salvar o usuário: \n', 'error')
+                        }
+                    }).catch(error => swal('Error', 'Ops, houve um erro ao tentar salvar o usuário: \n' + error, 'error'))
                 }
-
-                this.setState({redirect: true})
-
-            } else {
-                swal('Error', 'Ops, houve um erro ao tentar salvar o usuário: \n', 'error')
-            }
-        }).catch(error => swal('Error', 'Ops, houve um erro ao tentar salvar o usuário: \n' + error, 'error'))
+            })
+        }).catch(error => swal('Error', 'Ops, houve um erro ao tentar buscar o usuário pelo e-mail: \n' + error, 'error'))
     }
 
     render() {
-        if(!this.state.redirect){
+        if (!this.state.redirect) {
             return (
                 <>
                     <SignUp salvarUsuario={this.salvarUsuario} />
                 </>
             )
-        }else{
+        } else {
             return (
                 <>
                     <Redirect to='/acesso_ml' />
                 </>
             )
         }
-        
+
     }
 }

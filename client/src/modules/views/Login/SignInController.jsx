@@ -7,15 +7,30 @@ import { Redirect } from 'react-router-dom'
 
 export default class SignInController extends React.Component {
 
+    
+
     constructor(props) {
         super(props)
-
+        let checkedStorage =  localStorage.getItem('@sigiml/isMostrarMensagemPrincipal') === null ? false : Boolean(localStorage.getItem('@sigiml/isMostrarMensagemPrincipal'))
         this.state = {
             email: '',
             password: '',
-            redirect: false
+            redirect: false,
+            checked: checkedStorage,
+            isShowMessageMain: checkedStorage
         }
     }
+
+    handleShowMessage = () => {
+        this.setState({
+            isShowMessageMain: this.checkedStorage
+        })
+    }
+
+    handleChangeCheckBox = name => event => {
+        this.setState({ [name]: event.target.checked })
+        localStorage.setItem('@sigiml/isMostrarMensagemPrincipal', event.target.checked)
+      }
 
     changeEmail = (event) => {
         this.setState({
@@ -67,7 +82,9 @@ export default class SignInController extends React.Component {
                         signinUsuario={this.signinUsuario}
                         {...this.state}
                         changePassword={this.changePassword}
-                        changeEmail={this.changeEmail} />
+                        changeEmail={this.changeEmail}
+                        handleChangeCheckBox={this.handleChangeCheckBox}
+                        handleShowMessage={this.handleShowMessage}/>
                 </>
             )
         }

@@ -80,8 +80,8 @@ export default function SignUp(props) {
       return
     } 
 
-
       props.salvarUsuario(usuario)
+
       setNome('')
       setSobrenome('')
       setEmail('')
