@@ -47,7 +47,7 @@ export default class SignInController extends React.Component {
 
     calcularDiferenteEmDias = () => {
         const dataExpiracaoPlano = moment(new Date(localStorage.getItem('@sigiml/data_expiracao_plano_free')))
-        const dataInicioPlano = moment(new Date(localStorage.getItem('@sigiml/data_inicio_plano')))
+        const dataInicioPlano = moment(new Date())
         const duration = moment.duration(dataExpiracaoPlano.diff(dataInicioPlano))
         return duration.asDays().toFixed(0)
     }
