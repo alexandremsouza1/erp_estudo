@@ -1,4 +1,5 @@
 import React from "react";
+import { NavLink } from 'react-router-dom'
 import { useDispatch, useSelector, connect } from 'react-redux'
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -17,6 +18,7 @@ import Avatar from '@material-ui/core/Avatar';
 import { OPEN_DRAWER_MENU } from '../../constants/constants'
 import clsx from 'clsx';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import { Confirm } from 'semantic-ui-react'
 
 /**
  * <div>
@@ -128,6 +130,9 @@ export default function Navbar(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const dispatch = useDispatch()
   const sideBarState = useSelector(store => store.sidebar)
+  const [state, setState] = React.useState({
+    open: false
+  })
 
   const handleClick = event => {
     setAnchorEl(event.currentTarget);
@@ -217,7 +222,10 @@ export default function Navbar(props) {
 
           </div>
 
-          <Button color="inherit">Sair</Button>
+
+          <NavLink to='/'>
+            <Button style={{ color: 'white' }} color="inherit" onClick={() => setState({ open: true })}>Sair</Button>
+          </NavLink>
 
         </Toolbar>
       </AppBar>

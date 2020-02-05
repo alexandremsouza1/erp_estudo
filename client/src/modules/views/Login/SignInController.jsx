@@ -87,8 +87,9 @@ export default class SignInController extends React.Component {
     render() {
         if (this.state.redirect) {
             return (
-                <Redirect to='/admin/dashboard' />
+                <Redirect to='/server-ml' />
             )
+            
         } else {
             return (
                 <>

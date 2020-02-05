@@ -124,7 +124,7 @@ export default function SignUp(props) {
             />
           </Grid>
 
-          <Grid item xs={12}>''
+          <Grid item xs={12}>
               <TextField
               variant="outlined"
               required

@@ -1,4 +1,5 @@
-const MercadoLibreStrategy = require('passport-mercadolibre').Strategy;
+//const MercadoLibreStrategy = require('passport-mercadolibre').Strategy;
+const MercadoLibreStrategy = require('./mercado-livre').Strategy
 const keys = require('./keys');
 const usuarioService = require("../services/usuario-service");
 
@@ -23,7 +24,7 @@ module.exports = (passport) => {
     });
     */
     usuarioService.salvarUsuario(setUsuario(profile, accessToken, refreshToken))
-    //console.log("Mercado livre - session user " + accessToken)
+    console.log("Mercado livre - profiler " + JSON.stringify(profile.id))
 
     return done(null, profile);
 

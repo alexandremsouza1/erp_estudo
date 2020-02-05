@@ -21,6 +21,7 @@ import CallApiClient from './modules/components/CallApi/CallApiClient'
 import SignInController from './modules/views/Login/SignInController'
 import SignUpController from './modules/views/Login/SignUpController'
 import AcessoMercadoLivre from './modules/views/Login/AcessoMercadoLivre'
+import {DOMAIN} from '../src/modules/constants/constants'
 
 //<Route path="/admin" render={props => <AdminLayout {...props} />} />
 //<Redirect from="/" to="/login" />
@@ -35,6 +36,7 @@ ReactDOM.render(
       <BrowserRouter>
         <Switch>
           <Route path="/" exact={true} component={SignInController}/>
+          <Route path="/server-ml" render={() => window.location.replace(DOMAIN)}/>
           <Route path='/signup' component={SignUpController}/>
           <Route path='/acesso_ml' component={AcessoMercadoLivre}/>
           <Route path="/admin" render={props => <AdminLayout {...props} />} />
