@@ -1,4 +1,4 @@
-import React, {useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Route, Switch } from "react-router-dom";
 import NavbarController from "../modules/components/Navbars/NavbarController";
 import Sidebar from "../modules/components/Sidebar/Sidebar";
@@ -7,6 +7,9 @@ import routes from "routes.js";
 import { Widget, addResponseMessage } from 'react-chat-widget';
 import '../../node_modules/react-chat-widget/lib/styles.css';
 import { Launcher } from 'react-chat-window'
+import CallApiAnuncio from '../modules/actions/CallApi/CallApiAnuncio'
+import CallApiClient from '../modules/actions/CallApi/CallApiClient'
+import CallApiVenda from '../modules/actions/CallApi/CallApiVenda'
 
 export default function Admin(props) {
 
@@ -97,32 +100,36 @@ export default function Admin(props) {
 
 
   return (
+    <>
+      <CallApiAnuncio />
+      <CallApiClient />
+      <CallApiVenda />
 
-    <div className={classes.root}>
-      <NavbarController
-        {...props}
-        ref={React.createRef()}
-        brandText={getPathName(props.location.pathname)}
-      />
+      <div className={classes.root}>
+        <NavbarController
+          {...props}
+          ref={React.createRef()}
+          brandText={getPathName(props.location.pathname)}
+        />
 
-      <Sidebar {...props} routes={routes} ref={React.createRef()} />
+        <Sidebar {...props} routes={routes} ref={React.createRef()} />
 
-      <main className={classes.content} >
+        <main className={classes.content} >
 
-        <div className={classes.toolbar} />
+          <div className={classes.toolbar} />
 
-        <Switch>{getRoutes(routes)}</Switch>
+          <Switch>{getRoutes(routes)}</Switch>
 
-      
-        <div style={{ 'textTransform': 'uppercase' }} className="App">
-          <Widget
-            title="Perguntas"
-            subtitle={new Date().toLocaleDateString('pt-BR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
-            badge='1'
-            handleNewUserMessage={handleNewUserMessage} />
-        </div> 
 
-        {/**<div>
+          <div style={{ 'textTransform': 'uppercase' }} className="App">
+            <Widget
+              title="Perguntas"
+              subtitle={new Date().toLocaleDateString('pt-BR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+              badge='1'
+              handleNewUserMessage={handleNewUserMessage} />
+          </div>
+
+          {/**<div>
           <Launcher
             agentProfile={{
               teamName: 'react-chat-window',
@@ -135,9 +142,10 @@ export default function Admin(props) {
           />
         </div> */}
 
-      </main>
+        </main>
 
-    </div>
+      </div>
+    </>
   );
 
 }

@@ -16,9 +16,6 @@ import '../node_modules/notyf/notyf.min.css';
 import AdminLayout from "layouts/Admin.jsx";
 import { Provider } from 'react-redux';
 import { store } from './store';
-import CallApiAnuncio from './modules/actions/CallApi/CallApiAnuncio'
-import CallApiClient from './modules/actions/CallApi/CallApiClient'
-import CallApiVenda from './modules/actions/CallApi/CallApiVenda'
 import SignInController from './modules/views/Login/SignInController'
 import SignUpController from './modules/views/Login/SignUpController'
 import AcessoMercadoLivre from './modules/views/Login/AcessoMercadoLivre'
@@ -31,10 +28,6 @@ ReactDOM.render(
 
     <Provider store={store}>
       
-      <CallApiAnuncio/>
-      <CallApiClient/>
-      <CallApiVenda/>
-
       <BrowserRouter>
         <Switch>
           <Route path="/" exact={true} component={SignInController}/>

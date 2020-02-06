@@ -1,27 +1,74 @@
 import React from 'react'
-import { DOMAIN, GET_VENDAS_PENDENTES } from '../../constants/constants'
+import {
+    GET_VENDAS_PENDENTES,
+    GET_VENDAS_CONCLUIDAS,
+    GET_VENDAS_EM_TRANSITO,
+    GET_VENDAS_A_ENVIAR,
+    GET_TOTAL_VENDAS,
+    GET_TOTAL_VENDAS_EM_TRANSITO,
+    GET_TOTAL_VENDAS_A_ENVIAR,
+    GET_TOTAL_VENDAS_PENDENTES,
+    DOMAIN
+} from '../../constants/constants'
 import axios from 'axios'
 import swal from 'sweetalert'
-import { bindActionCreators } from 'redux'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 
 class CallApiVenda extends React.Component {
 
-    constructor(props){
+    constructor(props) {
         super(props)
     }
 
-    actionVendasPendentes = (vendasPendentes) => ({
-        type: GET_VENDAS_PENDENTES,
-        vendasPendentes: vendasPendentes
-    })
-
     componentDidMount = async () => {
         await axios.get(`${DOMAIN}/vendas/getVendasPendentes`).then(vendasPendentes => {
-            console.log("vendasPendentes: "+vendasPendentes.data)
             this.props.vendasPendentes(vendasPendentes)
         }).catch(error => {
             swal('Error', 'Ops, ocorreu um problema ao carregar as vendas pendentes: \n' + error, 'error')
+        })
+
+        await axios.get(`${DOMAIN}/vendas/getVendasConcluidas`).then(vendasConcluidas => {
+            if(vendasConcluidas !== null){
+                this.props.vendasConcluidas(vendasConcluidas)
+            }
+        }).catch(error => {
+            swal('Error', 'Ops, ocorreu um problema ao carregar as vendas concluidas: \n' + error, 'error')
+        })
+
+        await axios.get(`${DOMAIN}/vendas/getVendasEmTransito`).then(vendasEmTransito => {
+            this.props.vendasEmTransito(vendasEmTransito)
+        }).catch(error => {
+            swal('Error', 'Ops, ocorreu um problema ao carregar as vendas em transito: \n' + error, 'error')
+        })
+
+        await axios.get(`${DOMAIN}/vendas/getVendasAEnviar`).then(vendasAEnviar => {
+            this.props.vendasAEnviar(vendasAEnviar)
+        }).catch(error => {
+            swal('Error', 'Ops, ocorreu um problema ao carregar as vendas a enviar: \n' + error, 'error')
+        })
+
+        await axios.get(`${DOMAIN}/vendas/getTotalVendas`).then(totalVendas => {
+            this.props.totalVendas(totalVendas)
+        }).catch(error => {
+            swal('Error', 'Ops, ocorreu um problema ao carregar a quantidade de vendas: \n' + error, 'error')
+        })
+
+        await axios.get(`${DOMAIN}/vendas/getTotalVendasEmTransito`).then(totalVendasEmTransito => {
+            this.props.totalVendasEmTransito(totalVendasEmTransito)
+        }).catch(error => {
+            swal('Error', 'Ops, ocorreu um problema ao carregar a quantidade de vendas em transito: \n' + error, 'error')
+        })
+
+        await axios.get(`${DOMAIN}/vendas/getTotalVendasAEnviar`).then(totalVendasAEnviar => {
+            this.props.totalVendasAEnviar(totalVendasAEnviar)
+        }).catch(error => {
+            swal('Error', 'Ops, ocorreu um problema ao carregar a quantidade de vendas em transito: \n' + error, 'error')
+        })
+
+        await axios.get(`${DOMAIN}/vendas/getTotalVendasPendentes`).then(totalVendasPendentes => {
+            this.props.totalVendasPendentes(totalVendasPendentes)
+        }).catch(error => {
+            swal('Error', 'Ops, ocorreu um problema ao carregar a quantidade de vendas em transito: \n' + error, 'error')
         })
     }
 
@@ -33,14 +80,62 @@ class CallApiVenda extends React.Component {
 }
 
 const mapDispatchToProps = dispatch => {
-    bindActionCreators({
+    return ({
         vendasPendentes: (vendasPendentes) => {
             dispatch({
                 type: GET_VENDAS_PENDENTES,
                 vendasPendentes: vendasPendentes
             })
+        },
+        vendasConcluidas: (vendasConcluidas) => {
+            dispatch({
+                type: GET_VENDAS_CONCLUIDAS,
+                vendasConcluidas: vendasConcluidas
+            })
+        },
+        vendasEmTransito: (vendasEmTransito) => {
+            dispatch({
+                type: GET_VENDAS_EM_TRANSITO,
+                vendasEmTransito: vendasEmTransito
+            })
         }
-    }, dispatch)
+
+        ,
+        vendasAEnviar: (vendasAEnviar) => {
+            dispatch({
+                type: GET_VENDAS_A_ENVIAR,
+                vendasAEnviar: vendasAEnviar
+            })
+        },
+        totalVendas: (totalVendas) => {
+            dispatch({
+                type: GET_TOTAL_VENDAS,
+                qtdeVendasConcluidas: totalVendas.data.qtdeVendasConcluidas,
+                qtdeVendasCanceladas: totalVendas.data.qtdeVendasCanceladas
+            })
+        },
+        totalVendasEmTransito: (totalVendasEmTransito) => {
+            dispatch({
+                type: GET_TOTAL_VENDAS_EM_TRANSITO,
+                qtdeVendasEmTransito: totalVendasEmTransito.data.qtdeVendasEmTransito,
+                isLoadingQtdeVendasEmTransito: false
+            })
+        },
+        totalVendasAEnviar: (totalVendasAEnviar) => {
+            dispatch({
+                type: GET_TOTAL_VENDAS_A_ENVIAR,
+                qtdeVendasAEnviar: totalVendasAEnviar.data.qtdeVendasAEnviar,
+                        isLoadingQtdeVendasAEnviar: false
+            })
+        },
+        totalVendasPendentes: (totalVendasPendentes) => {
+            dispatch({
+                type: GET_TOTAL_VENDAS_PENDENTES,
+                qtdeVendasPendentes: totalVendasPendentes.data.qtdeVendasPendentes,
+                        isLoading: false
+            })
+        }
+    })
 }
 
 export default connect(null, mapDispatchToProps)(CallApiVenda)

@@ -1,5 +1,5 @@
 import React from 'react'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import VendasView from './VendasView'
 import axios from 'axios'
 import { DOMAIN } from '../../constants/constants'
@@ -15,101 +15,87 @@ class VendasController extends React.Component {
         super(props)
         document.title = "Vendas"
         this.state = {
-            vendas: [],
-            dadosRastreamento: {},
-            isLoading: true,
-            qtdeVendasConcluidas: 0,
-            qtdeVendasCanceladas: 0,
-            qtdeVendasEmTransito: 0,
-            qtdeVendasPendentes: 0,
-            qtdeVendasAEnviar: 0,
-
-            isLoadingVendasPendentes: true,
-            isLoadingVendasConcluidas: true,
-            isLoadingVendasEmTransito: true,
-
-            isLoadingQtdeVendasAEnviar: true,
-            isLoadingQtdeVendasEmTransito: true,
-            isLoadingVendasAEnviar: true
+            dadosRastreamento: {}
         }
     }
 
     componentDidMount = async () => {
+        /* 
+         await axios.get(`${DOMAIN}/vendas/getVendasPendentes`).then(vendasPendentes => {
+             let vendas = this.state.vendas
+             vendasPendentes.data.map(venda => {
+                 vendas.push(venda)
+             })
+             this.setState({ vendas: vendas, isLoadingVendasPendentes: false })
+         }).catch(error => {
+             swal("Error", "Houve um erro ao listar todas as vendas pendentes (VendasController:28):  \n \n " + error, "error");
+         })
+ 
+         await axios.get(`${DOMAIN}/vendas/getVendasConcluidas`).then(vendasConcluidas => {
+ 
+             let vendas = this.state.vendas
+             vendasConcluidas.data.map(venda => {
+                 vendas.push(venda)
+             })
+             this.setState({ vendas: vendas, isLoadingVendasConcluidas: false })
+         }).catch(error => {
+             swal("Error", "Houve um erro ao listar todas as vendas concluídas (VendasController:34):  \n \n " + error, "error");
+         })
+         */
+        /*
+         await axios.get(`${DOMAIN}/vendas/getVendasEmTransito`).then(vendasEmTransito => {
+             let vendas = this.state.vendas
+             vendasEmTransito.data.map(venda => {
+                 vendas.push(venda)
+             })
+             this.setState({ vendas: vendas, isLoadingVendasEmTransito: false })
+         }).catch(error => {
+             swal("Error", "Houve um erro ao listar todas as vendas em transito(VendasController:66): \n \n " + error, "error");
+         })
+ 
+         await axios.get(`${DOMAIN}/vendas/getVendasAEnviar`).then(vendasAEnviar => {
+             if (vendasAEnviar.data !== null) {
+                 let vendas = this.state.vendas
+                 vendasAEnviar.data.map(venda => {
+                     vendas.push(venda)
+                 })
+                 this.setState({ vendas: vendas, isLoadingVendasAEnviar: false })
+             }
+ 
+         }).catch(error => {
+             swal("Error", "Houve um erro ao listar todas as vendas a enviar(VendasController:79): \n \n " + error, "error");
+         })
+ *//*
+                       await axios.get(`${DOMAIN}/vendas/getTotalVendas`).then(vendas => {
+                           this.setState({
+                               qtdeVendasConcluidas: vendas.data.qtdeVendasConcluidas,
+                               qtdeVendasCanceladas: vendas.data.qtdeVendasCanceladas,
+                               isLoading: false
+                           })
+                       }).catch(error => swal('Error', 'Houve um erro ao mostrar a quantidade total de vendas! \n \n ' + error, 'error'))
+               *//*
+                await axios.get(`${DOMAIN}/vendas/getTotalVendasEmTransito`).then(vendas => {
+                    this.setState({
+                        qtdeVendasEmTransito: vendas.data.qtdeVendasEmTransito,
+                        isLoadingQtdeVendasEmTransito: false
+                    })
+                }).catch(error => swal('Error', 'Houve um erro ao mostrar a quantidade total de vendas! \n \n ' + error, 'error'))
+        *//*
+                await axios.get(`${DOMAIN}/vendas/getTotalVendasAEnviar`).then(vendas => {
+                    this.setState({
+                        qtdeVendasAEnviar: vendas.data.qtdeVendasAEnviar,
+                        isLoadingQtdeVendasAEnviar: false
+                    })
+                }).catch(error => swal('Error', 'Houve um erro ao mostrar a quantidade total de vendas! \n \n ' + error, 'error'))
+        *//*
+                await axios.get(`${DOMAIN}/vendas/getTotalVendasPendentes`).then(vendas => {
+                    this.setState({
+                        qtdeVendasPendentes: vendas.data.qtdeVendasPendentes,
+                        isLoading: false
+                    })
+                }).catch(error => swal('Error', 'Houve um erro ao mostrar a quantidade total de vendas! \n \n ' + error, 'error'))
+                */
 
-        await axios.get(`${DOMAIN}/vendas/getVendasPendentes`).then(vendasPendentes => {
-            let vendas = this.state.vendas
-            vendasPendentes.data.map(venda => {
-                vendas.push(venda)
-            })
-            this.setState({ vendas: vendas, isLoadingVendasPendentes: false })
-        }).catch(error => {
-            swal("Error", "Houve um erro ao listar todas as vendas pendentes (VendasController:28):  \n \n " + error, "error");
-        })
-
-        await axios.get(`${DOMAIN}/vendas/getVendasConcluidas`).then(vendasConcluidas => {
-
-            let vendas = this.state.vendas
-            vendasConcluidas.data.map(venda => {
-                vendas.push(venda)
-            })
-            this.setState({ vendas: vendas, isLoadingVendasConcluidas: false })
-        }).catch(error => {
-            swal("Error", "Houve um erro ao listar todas as vendas concluídas (VendasController:34):  \n \n " + error, "error");
-        })
-
-        await axios.get(`${DOMAIN}/vendas/getVendasEmTransito`).then(vendasEmTransito => {
-            let vendas = this.state.vendas
-            vendasEmTransito.data.map(venda => {
-                vendas.push(venda)
-            })
-            this.setState({ vendas: vendas, isLoadingVendasEmTransito: false })
-        }).catch(error => {
-            swal("Error", "Houve um erro ao listar todas as vendas em transito(VendasController:66): \n \n " + error, "error");
-        })
-
-        await axios.get(`${DOMAIN}/vendas/getVendasAEnviar`).then(vendasAEnviar => {
-            if (vendasAEnviar.data !== null) {
-                let vendas = this.state.vendas
-                vendasAEnviar.data.map(venda => {
-                    vendas.push(venda)
-                })
-                this.setState({ vendas: vendas, isLoadingVendasAEnviar: false })
-            }
-
-        }).catch(error => {
-            swal("Error", "Houve um erro ao listar todas as vendas a enviar(VendasController:79): \n \n " + error, "error");
-        })
-
-        await axios.get(`${DOMAIN}/vendas/getTotalVendas`).then(vendas => {
-            this.setState({
-                qtdeVendasConcluidas: vendas.data.qtdeVendasConcluidas,
-                qtdeVendasCanceladas: vendas.data.qtdeVendasCanceladas,
-                isLoading: false
-            })
-        }).catch(error => swal('Error', 'Houve um erro ao mostrar a quantidade total de vendas! \n \n ' + error, 'error'))
-
-        await axios.get(`${DOMAIN}/vendas/getTotalVendasEmTransito`).then(vendas => {
-            this.setState({
-                qtdeVendasEmTransito: vendas.data.qtdeVendasEmTransito,
-                isLoadingQtdeVendasEmTransito: false
-            })
-        }).catch(error => swal('Error', 'Houve um erro ao mostrar a quantidade total de vendas! \n \n ' + error, 'error'))
-
-        await axios.get(`${DOMAIN}/vendas/getTotalVendasAEnviar`).then(vendas => {
-            this.setState({
-                qtdeVendasAEnviar: vendas.data.qtdeVendasAEnviar,
-                isLoadingQtdeVendasAEnviar: false
-            })
-        }).catch(error => swal('Error', 'Houve um erro ao mostrar a quantidade total de vendas! \n \n ' + error, 'error'))
-
-        await axios.get(`${DOMAIN}/vendas/getTotalVendasPendentes`).then(vendas => {
-            this.setState({
-                qtdeVendasPendentes: vendas.data.qtdeVendasPendentes,
-                isLoading: false
-            })
-        }).catch(error => swal('Error', 'Houve um erro ao mostrar a quantidade total de vendas! \n \n ' + error, 'error'))
-        
-       
 
         /*const socket = socketIOClient(DOMAIN)
         socket.on('ml-notification-perguntas', (data) => {
@@ -148,31 +134,34 @@ class VendasController extends React.Component {
 
 
     render() {
-        let isShowLoading = this.state.isLoadingVendasPendentes
-            && this.state.isLoadingVendasConcluidas
-            && this.state.isLoadingVendasEmTransito
-            && this.state.isLoadingVendasAEnviar
+        let isShowLoading = this.props.isLoadingVendasPendentes
+            && this.props.isLoadingVendasConcluidas
+            && this.props.isLoadingVendasEmTransito
+            && this.props.isLoadingVendasAEnviar
         return (
             <>
                 <Dimmer.Dimmable as={Segment} dimmer={isShowLoading.toString()}>
+                    
                     <Dimmer active={isShowLoading} inverted>
                         <Loader>Carregando dados do Mercado Livre, por favor aguarde...</Loader>
                     </Dimmer>
+
                     <VendasView
-                        vendas={this.state.vendas}
+                        vendas={this.props.vendas}
                         obterRastreioCorreios={this.obterRastreioCorreios}
                         dadosRastreamento={this.state.dadosRastreamento}
-                        isLoading={this.state.isLoading}
-                        isLoadingQtdeVendasAEnviar={this.state.isLoadingQtdeVendasAEnviar}
-                        isLoadingQtdeVendasEmTransito={this.state.isLoadingQtdeVendasEmTransito}
-                        qtdeVendasConcluidas={this.state.qtdeVendasConcluidas}
-                        qtdeVendasCanceladas={this.state.qtdeVendasCanceladas}
-                        qtdeVendasEmTransito={this.state.qtdeVendasEmTransito}
-                        qtdeVendasPendentes={this.state.qtdeVendasPendentes}
-                        qtdeVendasAEnviar={this.state.qtdeVendasAEnviar}
-                        qtdeVendasEmTransito={this.state.qtdeVendasEmTransito}
                         gerarEtiqueteEnvio={this.gerarEtiqueteEnvio}
-                        obterQuantidadeDelinhasTextArea={this.obterQuantidadeDelinhasTextArea} />
+                        obterQuantidadeDelinhasTextArea={this.obterQuantidadeDelinhasTextArea}
+                        isLoading={this.props.isLoading}
+                        isLoadingQtdeVendasAEnviar={this.props.isLoadingQtdeVendasAEnviar}
+                        isLoadingQtdeVendasEmTransito={this.props.isLoadingQtdeVendasEmTransito}
+                        qtdeVendasConcluidas={this.props.qtdeVendasConcluidas}
+                        qtdeVendasCanceladas={this.props.qtdeVendasCanceladas}
+                        qtdeVendasEmTransito={this.props.qtdeVendasEmTransito}
+                        qtdeVendasPendentes={this.props.qtdeVendasPendentes}
+                        qtdeVendasAEnviar={this.props.qtdeVendasAEnviar}
+                        qtdeVendasEmTransito={this.props.qtdeVendasEmTransito}
+                        />
                 </Dimmer.Dimmable>
             </>
         )
@@ -180,7 +169,20 @@ class VendasController extends React.Component {
 }
 
 const mapStateToProps = store => ({
-    clientes: store.cliente.result
+    vendas: store.venda.vendas,
+    isLoading: store.venda.isLoading,
+    isLoadingQtdeVendasAEnviar: store.venda.isLoadingQtdeVendasAEnviar,
+    isLoadingQtdeVendasEmTransito: store.venda.isLoadingQtdeVendasEmTransito,
+    qtdeVendasConcluidas: store.venda.qtdeVendasConcluidas,
+    qtdeVendasCanceladas: store.venda.qtdeVendasCanceladas,
+    qtdeVendasEmTransito: store.venda.qtdeVendasEmTransito,
+    qtdeVendasPendentes: store.venda.qtdeVendasPendentes,
+    qtdeVendasAEnviar: store.venda.qtdeVendasAEnviar,
+    qtdeVendasEmTransito: store.venda.qtdeVendasEmTransito,
+    isLoadingVendasPendentes: store.venda.isLoadingVendasPendentes,
+    isLoadingVendasConcluidas: store.venda.isLoadingVendasConcluidas,
+    isLoadingVendasEmTransito: store.venda.isLoadingVendasEmTransito,
+    isLoadingVendasAEnviar: store.venda.isLoadingVendasAEnviar
 })
 
 export default connect(mapStateToProps)(VendasController)
