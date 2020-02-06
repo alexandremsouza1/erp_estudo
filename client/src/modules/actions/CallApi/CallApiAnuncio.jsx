@@ -4,6 +4,10 @@ import { LISTAR_TODOS_ANUNCIOS } from '../../constants/constants'
 import {useDispatch} from 'react-redux'
 import {DOMAIN} from '../../constants/constants'
 
+/**
+ * Criador por: @author Felipe M. Santos
+ */
+
 export default function CallApiAnuncio(props) {
     const dispatch = useDispatch()
 

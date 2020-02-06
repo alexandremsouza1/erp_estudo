@@ -1,14 +1,15 @@
 import React from 'react'
+import {connect} from 'react-redux'
 import VendasView from './VendasView'
 import axios from 'axios'
 import { DOMAIN } from '../../constants/constants'
 //import sendNotification from '../../components/Notification/Notification'
 import swal from 'sweetalert'
 import { Dimmer, Loader, Segment } from 'semantic-ui-react'
-import socketIOClient from 'socket.io-client'
+//import socketIOClient from 'socket.io-client'
 
 
-export default class VendasController extends React.Component {
+class VendasController extends React.Component {
 
     constructor(props) {
         super(props)
@@ -177,3 +178,9 @@ export default class VendasController extends React.Component {
         )
     }
 }
+
+const mapStateToProps = store => ({
+    clientes: store.cliente.result
+})
+
+export default connect(mapStateToProps)(VendasController)
