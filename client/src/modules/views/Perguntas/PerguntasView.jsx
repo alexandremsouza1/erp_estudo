@@ -4,11 +4,13 @@ import { Input, Button } from 'semantic-ui-react'
 import '../../../assets/css/Global/chat.css'
 import Chat from '../../components/Chat/Chat'
 
+
 export default class PerguntasView extends React.Component {
 
     render() {
+        //<Chat></Chat>
         return (
-            <Chat></Chat>
+            <></>
         )
     }
 }

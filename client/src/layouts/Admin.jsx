@@ -6,14 +6,17 @@ import { makeStyles } from '@material-ui/core/styles';
 import routes from "routes.js";
 import { Widget, addResponseMessage } from 'react-chat-widget';
 import '../../node_modules/react-chat-widget/lib/styles.css';
-import { Launcher } from 'react-chat-window'
 import CallApiAnuncio from '../modules/actions/CallApi/CallApiAnuncio'
 import CallApiClient from '../modules/actions/CallApi/CallApiClient'
 import CallApiVenda from '../modules/actions/CallApi/CallApiVenda'
 
+import socketIOClient from 'socket.io-client'
+import { DOMAIN } from '../../src/modules/constants/constants'
+
 export default function Admin(props) {
 
   const [message, setMessage] = useState([])
+  const [state, setState] = useState(0)
 
   const handleNewUserMessage = (newMessage) => {
     console.log(`New message incoming! ${newMessage}`);

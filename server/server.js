@@ -1,9 +1,12 @@
 const app = require('./app');
 const http = require('http');
 //const debug = require('debug')('nodestr: server');
-//const socketIO = require('socket.io')
-
 const mongoose = require('mongoose');
+const socketIO = require('socket.io')
+const server = http.createServer(app);
+const io = socketIO(server)
+const notificacoesMercadoLivreRoute = require('./src/routes/notificacoes.mercadolivre')(io)
+
 mongoose.connect('mongodb+srv://admin:admin@cluster0-5qx8r.mongodb.net/sigiml?retryWrites=true&w=majority',
     {
         useUnifiedTopology: true, 
@@ -15,7 +18,17 @@ const port = process.env.PORT || 5000;
 
 app.set('port', port);
 
-const server = http.createServer(app);
+app.set('io', io)
+app.use('/notifications', notificacoesMercadoLivreRoute);
+
+io.on('connection', socket => {
+    console.log('Connected')
+
+    socket.on('disconnected', () => {
+        console.log('disconnected')
+    })
+})
+
 
 server.listen(port, () => {
     console.log("\n");
