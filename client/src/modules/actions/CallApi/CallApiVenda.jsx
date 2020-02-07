@@ -24,7 +24,7 @@ class CallApiVenda extends React.Component {
         await axios.get(`${DOMAIN}/vendas/getVendasPendentes`).then(vendasPendentes => {
             this.props.vendasPendentes(vendasPendentes)
         }).catch(error => {
-            swal('Error', 'Ops, ocorreu um problema ao carregar as vendas pendentes: \n' + error, 'error')
+            swal('Aviso', 'O Mercado Livre está passando por instabilidade. \n\n Aguarde um instante, recarregue a página e tente novamente \n\n' + error, 'error')
         })
 
         await axios.get(`${DOMAIN}/vendas/getVendasConcluidas`).then(vendasConcluidas => {
@@ -32,43 +32,43 @@ class CallApiVenda extends React.Component {
                 this.props.vendasConcluidas(vendasConcluidas)
             }
         }).catch(error => {
-            swal('Error', 'Ops, ocorreu um problema ao carregar as vendas concluidas: \n' + error, 'error')
+            swal('Aviso', 'O Mercado Livre está passando por instabilidade. \n\n Aguarde um instante, recarregue a página e tente novamente \n\n' + error, 'error')
         })
 
         await axios.get(`${DOMAIN}/vendas/getVendasEmTransito`).then(vendasEmTransito => {
             this.props.vendasEmTransito(vendasEmTransito)
         }).catch(error => {
-            swal('Error', 'Ops, ocorreu um problema ao carregar as vendas em transito: \n' + error, 'error')
+            swal('Aviso', 'O Mercado Livre está passando por instabilidade. \n\n Aguarde um instante, recarregue a página e tente novamente \n\n' + error, 'error')
         })
 
         await axios.get(`${DOMAIN}/vendas/getVendasAEnviar`).then(vendasAEnviar => {
             this.props.vendasAEnviar(vendasAEnviar)
         }).catch(error => {
-            swal('Error', 'Ops, ocorreu um problema ao carregar as vendas a enviar: \n' + error, 'error')
+            swal('Aviso', 'O Mercado Livre está passando por instabilidade. \n\n Aguarde um instante, recarregue a página e tente novamente \n\n' + error, 'error')
         })
 
         await axios.get(`${DOMAIN}/vendas/getTotalVendas`).then(totalVendas => {
             this.props.totalVendas(totalVendas)
         }).catch(error => {
-            swal('Error', 'Ops, ocorreu um problema ao carregar a quantidade de vendas: \n' + error, 'error')
+            swal('Aviso', 'O Mercado Livre está passando por instabilidade. \n\n Aguarde um instante, recarregue a página e tente novamente \n\n' + error, 'error')
         })
 
         await axios.get(`${DOMAIN}/vendas/getTotalVendasEmTransito`).then(totalVendasEmTransito => {
             this.props.totalVendasEmTransito(totalVendasEmTransito)
         }).catch(error => {
-            swal('Error', 'Ops, ocorreu um problema ao carregar a quantidade de vendas em transito: \n' + error, 'error')
+            swal('Aviso', 'O Mercado Livre está passando por instabilidade. \n\n Aguarde um instante, recarregue a página e tente novamente \n\n' + error, 'error')
         })
 
         await axios.get(`${DOMAIN}/vendas/getTotalVendasAEnviar`).then(totalVendasAEnviar => {
             this.props.totalVendasAEnviar(totalVendasAEnviar)
         }).catch(error => {
-            swal('Error', 'Ops, ocorreu um problema ao carregar a quantidade de vendas em transito: \n' + error, 'error')
+            swal('Aviso', 'O Mercado Livre está passando por instabilidade. \n\n Aguarde um instante, recarregue a página e tente novamente \n\n' + error, 'error')
         })
 
         await axios.get(`${DOMAIN}/vendas/getTotalVendasPendentes`).then(totalVendasPendentes => {
             this.props.totalVendasPendentes(totalVendasPendentes)
         }).catch(error => {
-            swal('Error', 'Ops, ocorreu um problema ao carregar a quantidade de vendas em transito: \n' + error, 'error')
+            swal('Aviso', 'O Mercado Livre está passando por instabilidade. \n\n Aguarde um instante, recarregue a página e tente novamente \n\n' + error, 'error')
         })
     }
 

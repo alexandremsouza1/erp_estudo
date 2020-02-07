@@ -7,6 +7,7 @@
     "@material-ui/core": "^4.8.3",
     "@material-ui/icons": "^4.5.1",
     "@material-ui/lab": "^4.0.0-alpha.40",
+    "@material-ui/pickers": "^3.2.10",
     "adminlte-reactjs": "^1.0.6",
     "axios": "^0.19.0",
     "bootstrap": "^3.4.1",

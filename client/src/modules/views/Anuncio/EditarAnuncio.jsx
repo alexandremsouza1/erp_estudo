@@ -15,7 +15,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
 import Chip from '@material-ui/core/Chip';
 import EditIcon from '@material-ui/icons/Edit';
-
+import SaveIcon from '@material-ui/icons/Save';
 
 const useStyles = makeStyles(theme => ({
     appBar: {
@@ -39,11 +39,11 @@ export default function CustomModal(props) {
         <>
             <Dialog fullScreen open={props.showModal} onClose={() => props.setShowModal(false)} TransitionComponent={Transition}>
 
-                <AppBar className={classes.appBar}>
+                <AppBar className={classes.appBar} style={{ 'backgroundColor': '#1976d2' }}>
                     <Toolbar>
-                        <Chip icon={<EditIcon />} label='Modificar Anúncio'/>
+                        <Chip icon={<EditIcon />} label='Modificar Anúncio' />
                         <Typography variant="h6" className={classes.title}>
-                             {props.titulo}
+                            {props.titulo}
                         </Typography>
                         <IconButton edge="start" color="inherit" onClick={() => props.setShowModal(false)} aria-label="close">
                             <CloseIcon />
@@ -51,7 +51,7 @@ export default function CustomModal(props) {
                     </Toolbar>
                 </AppBar>
 
-                <div style={{margin: '15px 10px 0'}}>
+                <div style={{ margin: '15px 10px 0' }}>
                     <Row>
                         <Col md={8}>
 
@@ -141,11 +141,11 @@ export default function CustomModal(props) {
 
 
                     <Modal.Footer>
-                        <ButtonUI variant="contained" color="primary" onClick={() => props.setShowModal(false)}>
+                        <ButtonUI style={{margin: '0 5px 0'}} startIcon={<SaveIcon />} variant="contained" color="primary" onClick={() => props.setShowModal(false)}>
                             Salvar
                          </ButtonUI>
 
-                        <ButtonUI variant="contained" color="secondary" onClick={() => props.setShowModal(false)}>
+                        <ButtonUI  startIcon={<CloseIcon />} variant="contained" color="secondary" onClick={() => props.setShowModal(false)}>
                             Fechar
                         </ButtonUI>
                     </Modal.Footer>

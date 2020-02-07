@@ -1,15 +1,25 @@
 import React from "react";
+// import 'date-fns';
+// import DateFnsUtils from '@date-io/date-fns';
+// import {
+//   MuiPickersUtilsProvider,
+//   KeyboardTimePicker,
+//   KeyboardDatePicker,
+// } from '@material-ui/pickers';
 import { Row, Col } from "react-bootstrap";
 import Grid from '@material-ui/core/Grid';
-import { Card } from "modules/components/Card/Card.jsx";
-import Carregando from '../../components/Loading/LoadingCarregandoSolicitacao'
+//import { Card } from "modules/components/Card/Card.jsx";
+//import Carregando from '../../components/Loading/LoadingCarregandoSolicitacao'
 import { Loader } from 'semantic-ui-react'
 import Paper from '@material-ui/core/Paper';
+
 
 export default function DashboardView(props) {
 
   return (
-    <div className="content">
+
+    <>
+
       <Grid container spacing={3}>
 
         <Grid item xs={12}>
@@ -71,8 +81,8 @@ export default function DashboardView(props) {
             <Row style={{ 'paddingBottom': '20px', 'paddingTop': '10px' }}>
               <Col md={6}>
                 {props.totalAtivos === undefined
-                ? <Loader size='mini' active={props.totalAtivos === undefined} inline style={{margin : '16px 130px 0'}}/>
-                :<div style={{ 'color': '#71D8BF', 'fontSize': '25px', 'lineHeight': '30px', 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center', 'fontWeight': 'bold' }}>{props.totalAtivos}</div>
+                  ? <Loader size='mini' active={props.totalAtivos === undefined} inline style={{ margin: '16px 130px 0' }} />
+                  : <div style={{ 'color': '#71D8BF', 'fontSize': '25px', 'lineHeight': '30px', 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center', 'fontWeight': 'bold' }}>{props.totalAtivos}</div>
                 }
                 <div style={{ 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center' }}>Publicações</div>
                 <div style={{ 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center' }}>ativas</div>
@@ -80,9 +90,9 @@ export default function DashboardView(props) {
 
               <Col md={6}>
                 {props.totalPausados === undefined
-                ? <Loader size='mini' active={props.totalPausados === undefined} inline style={{margin : '16px 130px 0'}}/>
-                : <div style={{ 'color': '#71D8BF', 'fontSize': '25px', 'lineHeight': '30px', 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center', 'fontWeight': 'bold' }}>{props.totalPausados}</div>
-                } 
+                  ? <Loader size='mini' active={props.totalPausados === undefined} inline style={{ margin: '16px 130px 0' }} />
+                  : <div style={{ 'color': '#71D8BF', 'fontSize': '25px', 'lineHeight': '30px', 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center', 'fontWeight': 'bold' }}>{props.totalPausados}</div>
+                }
                 <div style={{ 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center' }}>Publicações</div>
                 <div style={{ 'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center' }}>pausadas</div>
               </Col>
@@ -127,7 +137,7 @@ export default function DashboardView(props) {
           </Paper>
         </Grid>
       </Grid>
-    </div >
+    </>
   );
 
 }
