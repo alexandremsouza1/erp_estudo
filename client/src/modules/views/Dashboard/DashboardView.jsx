@@ -10,13 +10,21 @@ import { Row, Col } from "react-bootstrap";
 import Grid from '@material-ui/core/Grid';
 //import { Card } from "modules/components/Card/Card.jsx";
 //import Carregando from '../../components/Loading/LoadingCarregandoSolicitacao'
-import { Loader } from 'semantic-ui-react'
+import { Loader, Tab } from 'semantic-ui-react'
 import Paper from '@material-ui/core/Paper';
 
-import {Chart} from 'primereact/chart';
+import { Chart } from 'primereact/chart';
 
 
 export default function DashboardView(props) {
+
+  const panes = [
+  {
+    menuItem: 'Tab 1',
+    render: () => <Tab.Pane loading>Tab 1 Content</Tab.Pane>,
+  },
+  { menuItem: 'Tab 2', render: () => <Chart type="line" data={ props.data } />}
+]
 
   return (
 
@@ -140,7 +148,8 @@ export default function DashboardView(props) {
         </Grid>
       </Grid>
 
-      <Chart type="line" data={props.data} />
+      <Tab panes={panes} renderActiveOnly={false} />
+
     </>
   );
 
