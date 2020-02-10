@@ -13,6 +13,8 @@ import Grid from '@material-ui/core/Grid';
 import { Loader } from 'semantic-ui-react'
 import Paper from '@material-ui/core/Paper';
 
+import {Chart} from 'primereact/chart';
+
 
 export default function DashboardView(props) {
 
@@ -137,6 +139,8 @@ export default function DashboardView(props) {
           </Paper>
         </Grid>
       </Grid>
+
+      <Chart type="line" data={props.data} />
     </>
   );
 

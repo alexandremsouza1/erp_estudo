@@ -77,9 +77,9 @@ export default function AnuncioView(props) {
                       if (prop.status === isActive) {
                         return (
                           <div className="panel panel-primary" key={key}>
-                            <div className="panel-heading">
+                            <div className="panel-heading" style={{backgroundColor: '#1976d2'}}>
                               <h3 className="panel-title">
-                                {prop.titulo}
+                                 #{prop.id} - {prop.titulo}
                               </h3>
                             </div>
 
@@ -91,17 +91,10 @@ export default function AnuncioView(props) {
                               </div>
 
                               <div className="col-md-5 col-xs-12 text-center-xs">
+                                
                                 <font size="4pt">
                                   <a href={prop.link_anuncio} rel="noopener noreferrer" target='_blank'>{prop.titulo}</a>
                                 </font>
-
-                                <p>
-                                  <i className="fa fa-tag text-primary"></i>
-                                  <i className="fa fa-star text-primary"></i>
-                                  <i className="fa fa-shopping-cart text-primary"></i>
-                                  <a style={{ "fontSize": "14px", "marginLeft": "5px" }} rel="noopener noreferrer" target='_blank' full_base="1">#{prop.id}</a>
-                                  <span className="badge badge-primary" style={{ "fontSize": "12px", "marginLeft": "5px" }}>{prop.totalVariacoes} Variações</span>
-                                </p>
 
                                 <p style={{ "fontSize": "15px" }}>Mercado Envios {prop.freteGratis} - R$ {prop.custoFreteGratis.toLocaleString("pt-BR")} por envio</p>
                                 <p>
@@ -109,6 +102,7 @@ export default function AnuncioView(props) {
                                   <span style={{ "fontSize": "12px" }} className="badge badge-success">{prop.visualizacao} visitas</span>
                                   <span style={{ "fontSize": "12px" }} className="badge badge-success">{prop.tipoAnuncio}</span>
                                   <span style={{ "fontSize": "12px" }} className="badge badge-danger" >{prop.sub_status}</span>
+                                  <span className="badge badge-primary" style={{ "fontSize": "12px"}}>{prop.totalVariacoes} Variações </span>
                                 </p>
 
                               </div>
@@ -163,28 +157,36 @@ export default function AnuncioView(props) {
                                       <a onClick={() => {
                                         props.setIsShowEditPrice(true)
                                         setAnuncio(prop)}}>
-                                        Alterar preço
+                                          <Dropdown.Item>
+                                              Alterar preço
+                                          </Dropdown.Item>
                                       </a>
                                     </Dropdown.Item>
                                     <Dropdown.Item>
                                       <a onClick={() => {
                                         setIsShowVariationManager(true) 
                                         setAnuncio(prop)}}>
-                                        Gerenciar variações
+                                          <Dropdown.Item>
+                                              Gerenciar variações
+                                          </Dropdown.Item>
                                       </a>
                                     </Dropdown.Item>
                                     <Dropdown.Item>
                                       <a onClick={() => {
                                         setIsShowPerguntas(true)
                                         setAnuncio(prop)}}>
-                                        Visualizar perguntas
+                                          <Dropdown.Item>
+                                              Visualizar perguntas
+                                          </Dropdown.Item>
                                       </a>
                                     </Dropdown.Item>  
                                     <Dropdown.Item>
                                           <a onClick={() => {
                                             props.setIsShowConfirmPauseProduct(true)
                                             setAnuncio(prop)}}>
-                                          Pausar
+                                              <Dropdown.Item>
+                                                  Pausar
+                                              </Dropdown.Item>
                                           </a>
                                     </Dropdown.Item>
 

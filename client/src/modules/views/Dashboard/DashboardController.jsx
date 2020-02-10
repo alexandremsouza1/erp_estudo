@@ -29,6 +29,19 @@ export default function DashboardController() {
         get()
     }, [])
 
+    const data = {
+        labels: ['01/2020','02/2020', '03/2020', '04/2020', '05/2020', '06/2020', '07/2020' , '08/2020' , '09/2020' , '10/2020', '11/2020', '12/2020'],
+        datasets: [
+            {
+                label: 'Faturamento',
+                data: [500.50, 657.98, 789.98, 547.98, 365.65, 568.98, 698.98, 780.98, 890.65, 654.32, 345.78, 456.87, 568.98, 780.90],
+                fill: false,
+                backgroundColor: '#42A5F5',
+                borderColor: '#42A5F5'
+            }
+        ]
+    };
+
    
     const get = async () => {
         await axios.get(`${DOMAIN}/saldo`).then(res => {
@@ -85,7 +98,7 @@ export default function DashboardController() {
                 <Dimmer active={state.isLoading} inverted>
                     <Loader>Carregando dados do Mercado Livre, por favor aguarde...</Loader>
                 </Dimmer>
-                <DashboardView {...state} />
+                <DashboardView {...state} data={data}/>
             </Dimmer.Dimmable>
         </>
     )

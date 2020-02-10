@@ -1,6 +1,9 @@
 import React from 'react'
-import { Button, Modal, Header, Icon, Table, Input } from 'semantic-ui-react'
+import { Button, Modal, Header, Icon, Table} from 'semantic-ui-react'
 import EditarVariacao from './EditarVariacao'
+import IconButton from '@material-ui/core/IconButton';
+import CancelIcon from '@material-ui/icons/Cancel';
+
 
 export default class GerenciarVariacoes extends React.Component {
 
@@ -43,8 +46,8 @@ export default class GerenciarVariacoes extends React.Component {
     this.getImageVariation(json, variation)
   }
 
-  handleChangeInputAvailableQuantity = (event) =>{
-      this.setState({availableQuantity: event.target.value})
+  handleChangeInputAvailableQuantity = (event) => {
+    this.setState({ availableQuantity: event.target.value })
   }
 
   updateAvailableQuantity = (itemId, id, availableQuantity) => {
@@ -53,21 +56,31 @@ export default class GerenciarVariacoes extends React.Component {
   }
 
   closeModalEditVariacao = (close) => {
-    this.setState({isShowEditarAnuncio: close})
+    this.setState({ isShowEditarAnuncio: close })
   }
 
+  
   render() {
     return (
-      <Modal open={this.props.isShowVariationManager} style={{
-        'position': 'relative',
-        'width': '70%',
-        'marginBottom': '5%',
-        'marginLeft': '50%',
-        'marginRight': '50%'
+      <div>
+        <Modal open={this.props.isShowVariationManager} style={{
+         position : 'relative',
+         width : '70%',
+         marginBottom : '5%',
+         marginLeft : '50%',
+         marginRight : '50%',
+         margin : '70px 0 0'
       }}
         closeOnDimmerClick={false} >
 
-        <Header icon='edit' content='Gerenciar Variações'
+        <Header icon='edit' content={
+
+        <div>Gerenciar Variações 
+          <IconButton style={{paddingLeft : '10px', marginLeft: '630px'}} onClick={() => this.props.setIsShowVariationManager(false)}>
+              <CancelIcon />
+          </IconButton>
+        </div>}
+
           style={{ 'backgroundColor': '#467EED', 'color': 'white' }} />
 
         <Modal.Content>
@@ -115,7 +128,7 @@ export default class GerenciarVariacoes extends React.Component {
                               attributeCombinations={this.state.attributeCombinations}
                               isShowEditarAnuncio={this.state.isShowEditarAnuncio}
                               variation={variation}
-                              closeModalEditVariacao={this.closeModalEditVariacao} 
+                              closeModalEditVariacao={this.closeModalEditVariacao}
                             />
                           </>
                         )
@@ -140,6 +153,7 @@ export default class GerenciarVariacoes extends React.Component {
         </Button>
         </Modal.Actions>
       </Modal>
+      </div>
     )
   }
 }

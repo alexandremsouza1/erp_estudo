@@ -27,17 +27,13 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
-});
-
 export default function CustomModal(props) {
 
     const classes = useStyles();
 
     return (
         <>
-            <Dialog fullScreen open={props.showModal} onClose={() => props.setShowModal(false)} TransitionComponent={Transition}>
+            <Dialog fullScreen open={props.showModal} onClose={() => props.setShowModal(false)}>
 
                 <AppBar className={classes.appBar} style={{ 'backgroundColor': '#1976d2' }}>
                     <Toolbar>

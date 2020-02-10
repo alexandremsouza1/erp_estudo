@@ -28,7 +28,7 @@ class CallApiVenda extends React.Component {
         })
 
         await axios.get(`${DOMAIN}/vendas/getVendasConcluidas`).then(vendasConcluidas => {
-            if(vendasConcluidas !== null){
+            if (vendasConcluidas !== null) {
                 this.props.vendasConcluidas(vendasConcluidas)
             }
         }).catch(error => {
@@ -98,9 +98,7 @@ const mapDispatchToProps = dispatch => {
                 type: GET_VENDAS_EM_TRANSITO,
                 vendasEmTransito: vendasEmTransito
             })
-        }
-
-        ,
+        },
         vendasAEnviar: (vendasAEnviar) => {
             dispatch({
                 type: GET_VENDAS_A_ENVIAR,
@@ -125,14 +123,14 @@ const mapDispatchToProps = dispatch => {
             dispatch({
                 type: GET_TOTAL_VENDAS_A_ENVIAR,
                 qtdeVendasAEnviar: totalVendasAEnviar.data.qtdeVendasAEnviar,
-                        isLoadingQtdeVendasAEnviar: false
+                isLoadingQtdeVendasAEnviar: false
             })
         },
         totalVendasPendentes: (totalVendasPendentes) => {
             dispatch({
                 type: GET_TOTAL_VENDAS_PENDENTES,
                 qtdeVendasPendentes: totalVendasPendentes.data.qtdeVendasPendentes,
-                        isLoading: false
+                isLoading: false
             })
         }
     })

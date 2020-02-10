@@ -1,37 +1,57 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button, Dropdown, Modal, Header, Icon, Segment } from 'semantic-ui-react'
 import { Row, Col } from 'react-bootstrap'
 import FormInput from '../../components/FormInput/FormInput'
 
-export default class EditarVariacao extends React.Component {
+import { makeStyles } from '@material-ui/core/styles';
+import Dialog from '@material-ui/core/Dialog';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
+import CloseIcon from '@material-ui/icons/Close';
 
-    constructor(props){
-        super(props)
-        this.state = {
-            image: ''
-        }        
-    }
+export default function EditarVariacao(props) {
+    const useStyles = makeStyles(theme => ({
 
-    handleChangeImage = (img) => {
-        this.setState({image: img})
-    }
+        appBar: {
+            position: 'relative',
+        },
+        title: {
+            marginLeft: theme.spacing(2),
+            flex: 1,
+        },
+    }));
 
-    render() {
-        return (
-            <Modal size='fullscreen' open={this.props.isShowEditarAnuncio}>
-                <Header icon='edit' content={<>Alterar variação - {this.props.attributeCombinations.value_name}</>}
-                    style={{ 'backgroundColor': '#467EED', 'color': 'white' }} />
+    const classes = useStyles();
 
-                <Modal.Content sytle={{ "width": "100px" }}>
+
+    return (
+        <>
+            <Dialog fullScreen open={props.isShowEditarAnuncio} onClose={() => props.closeModalEditVariacao(false)}>
+                <AppBar className={classes.appBar} style={{ 'backgroundColor': '#1976d2' }}>
+                    <Toolbar>
+
+                        <Typography variant="h6" className={classes.title}>
+                            <>Alterar variação - {props.attributeCombinations.value_name}</>
+                        </Typography>
+
+                        <IconButton edge="start" color="inherit" onClick={() => props.closeModalEditVariacao(false)} aria-label="close">
+                            <CloseIcon />
+                        </IconButton>
+                    </Toolbar>
+                </AppBar>
+
+                <div style={{ margin: '15px 10px 0' }}>
                     <Row>
                         <Col md={5}>
-                            <FormInput label="Variação" placeholder='Variação' value={this.props.attributeCombinations.value_name} style={{ "color": "blue" }} />
+                            <FormInput label="Variação" placeholder='Variação' value={props.attributeCombinations.value_name} style={{ "color": "blue" }} />
                         </Col>
                         <Col md={2}>
                             <FormInput label="SKU" placeholder='SKU' style={{ "color": "blue" }} />
                         </Col>
                         <Col md={2}>
-                            <FormInput label="Qtde estoque da variação" value={this.props.variation.available_quantity} placeholder='Estoque da variação' style={{ "color": "blue" }} />
+                            <FormInput label="Qtde estoque da variação" value={props.variation.available_quantity} placeholder='Estoque da variação' style={{ "color": "blue" }} />
                         </Col>
                         <Col md={3}>
                             <FormInput label='Código universal de produto' placeholder='Código universal de produto' />
@@ -40,40 +60,98 @@ export default class EditarVariacao extends React.Component {
                     <br></br>
                     <Segment raised color='grey'>
                         <Row>
-                            {this.props.urlImage.map((url) => {
+                            {props.urlImage.map((url, key) => {
                                 return (
-                                    <Col md={1}>
-                                        <img src={url} alt='imageVariation' height='100' width='80'/>
-                                        <Dropdown floating labeled button text='' icon='image outline' className='icon'>
-                                            <Dropdown.Menu>
-                                                <Dropdown.Header content='Selecione uma imagem!' />
-                                                {this.props.urlImage.map((image, key) => {
-                                                    return (
-                                                        <Dropdown.Item key={key}>
-                                                            <img src={image} alt='image' height='100' width='80'/>
-                                                        </Dropdown.Item>
-                                                    )
-                                                })}
-                                            </Dropdown.Menu>
-                                        </Dropdown>
-                                    </Col>
+                                    <>
+                                        <Col md={1}>
+                                            <img src={url} alt='imageVariation' height='100' width='80' />
+                                            <Dropdown floating labeled button text='' icon='image outline' className='icon'>
+                                                <Dropdown.Menu>
+                                                    <Dropdown.Header content='Selecione uma imagem!' />
+                                                    {props.urlImage.map((image, key) => {
+                                                        return (
+                                                            <Dropdown.Item key={key}>
+                                                                <img src={image} alt='image' height='100' width='80' />
+                                                            </Dropdown.Item>
+                                                        )
+                                                    })}
+                                                </Dropdown.Menu>
+                                            </Dropdown>
+                                        </Col> 
+                                    </>
                                 )
                             })}
                         </Row>
                     </Segment>
-                </Modal.Content>
 
-                <Modal.Actions>
-                    <Button color='green' onClick={() => this.props.closeModalEditVariacao(false)}>
-                        <Icon name='checkmark' /> Alterar
+                    <Modal.Actions>
+                        <Button color='green' onClick={() => props.closeModalEditVariacao(false)}>
+                            <Icon name='checkmark' /> Alterar
                     </Button>
-                    <Button color='red' onClick={() => this.props.closeModalEditVariacao(false)}>
-                        <Icon name='remove' /> Fechar
+                        <Button color='red' onClick={() => props.closeModalEditVariacao(false)}>
+                            <Icon name='remove' /> Fechar
                     </Button>
-                </Modal.Actions>
+                    </Modal.Actions>
 
-            </Modal >
-        )
-    }
+                </div>
+            </Dialog>
 
+            {/**
+            <Modal size='fullscreen' open={this.props.isShowEditarAnuncio}>
+            <Header icon='edit' content={<>Alterar variação - {this.props.attributeCombinations.value_name}</>}
+                style={{ 'backgroundColor': '#467EED', 'color': 'white' }} />
+
+            <Modal.Content sytle={{ "width": "100px" }}>
+                <Row>
+                    <Col md={5}>
+                        <FormInput label="Variação" placeholder='Variação' value={this.props.attributeCombinations.value_name} style={{ "color": "blue" }} />
+                    </Col>
+                    <Col md={2}>
+                        <FormInput label="SKU" placeholder='SKU' style={{ "color": "blue" }} />
+                    </Col>
+                    <Col md={2}>
+                        <FormInput label="Qtde estoque da variação" value={this.props.variation.available_quantity} placeholder='Estoque da variação' style={{ "color": "blue" }} />
+                    </Col>
+                    <Col md={3}>
+                        <FormInput label='Código universal de produto' placeholder='Código universal de produto' />
+                    </Col>
+                </Row>
+                <br></br>
+                <Segment raised color='grey'>
+                    <Row>
+                        {this.props.urlImage.map((url) => {
+                            return (
+                                <Col md={1}>
+                                    <img src={url} alt='imageVariation' height='100' width='80' />
+                                    <Dropdown floating labeled button text='' icon='image outline' className='icon'>
+                                        <Dropdown.Menu>
+                                            <Dropdown.Header content='Selecione uma imagem!' />
+                                            {this.props.urlImage.map((image, key) => {
+                                                return (
+                                                    <Dropdown.Item key={key}>
+                                                        <img src={image} alt='image' height='100' width='80' />
+                                                    </Dropdown.Item>
+                                                )
+                                            })}
+                                        </Dropdown.Menu>
+                                    </Dropdown>
+                                </Col>
+                            )
+                        })}
+                    </Row>
+                </Segment>
+            </Modal.Content>
+
+            <Modal.Actions>
+                <Button color='green' onClick={() => this.props.closeModalEditVariacao(false)}>
+                    <Icon name='checkmark' /> Alterar
+                    </Button>
+                <Button color='red' onClick={() => this.props.closeModalEditVariacao(false)}>
+                    <Icon name='remove' /> Fechar
+                    </Button>
+            </Modal.Actions>
+
+        </Modal > */}
+        </>
+    )
 }
