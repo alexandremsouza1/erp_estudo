@@ -299,7 +299,7 @@ export default class VendasView extends React.Component {
                                 color="primary"
                                 startIcon={<SearchIcon />}
                                 onClick={() => this.handleClickSearch()}
-                                style={{ height: '51px', margin: '0 5px 0', backgroundColor: '#1976d2' }}>
+                                style={{ height: '51px', margin: '0 5px 0', backgroundColor: '#4682B4' }}>
                                 Pesquisar
                             </Button>
 
@@ -335,7 +335,7 @@ export default class VendasView extends React.Component {
                                     </Dimmer>
 
                                     <Paper elevation={3} key={key}>
-                                        <Panel style={{ 'backgroundColor': '#1976d2', 'color': 'white' }} key={key} title={<div>Pedido <span style={{ 'color': 'white' }}>
+                                        <Panel style={{ 'backgroundColor': '#4682B4', 'color': 'white' }} key={key} title={<div>Pedido <span style={{ 'color': 'white' }}>
                                             <Chip size="small" label={this.getTraduzirStatusEnvio(venda.dados_entrega.status)}></Chip></span> - Nº #{venda.id_venda} - {venda.itens_pedido.titulo_anuncio} - {venda.data_venda}
                                         </div>}
                                             content={
@@ -626,7 +626,7 @@ export default class VendasView extends React.Component {
                                 variant="contained"
                                 color="primary"
                                 startIcon={<SendIcon />}
-                                style={{ backgroundColor: '#1976d2', height: '53px' }}>
+                                style={{ backgroundColor: '#4682B4', height: '53px' }}>
                                 Enviar mensagem
                             </Button>
                         

@@ -7,6 +7,7 @@ const anuncioService = require('../services/anuncio-service')
 const util = require('../helpers/util')
 const postAnuncio = require('./postAnuncio')
 const cheerio = require('cheerio');
+const Usuario = require('../models/usuario-model')
 
 
 const usuario = {
@@ -93,12 +94,16 @@ const listarTodosUsuarios = async () => {
 }
 
 const buscarUsuarioPorID = async () => {
-    const usuarios = await axios.get("https://sisiml.firebaseio.com/felipeanalista3.json").then(resp => {
-        console.log(resp.data)
+    /**
+     * const usuarios = await axios.get(constants.urlbase.COLLECTION_USUARIOS).then(resp => {
+        return resp.data;
     }).catch(err => {
-        console.log("Houve um erro ao listar todos os usuarios: " + err)
+        console.log("Houve um erro ao listar todos os usuarios: " + err);
     });
-    return usuarios;
+     */
+    const usuarios = Usuario.find({})
+
+    return usuarios
 }
 
 const listarTodosAnuncio = async (req, res) => {
@@ -714,4 +719,8 @@ let obterVendasConcluidas = async () => {
 }
 
 
-obterVendasConcluidas()
+Promise.resolve(buscarUsuarioPorID()).then(user => {
+    console.log(user)
+}).catch(error => {
+    console.log(error)
+})

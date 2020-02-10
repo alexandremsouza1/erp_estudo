@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from 'react-router-dom'
-import { useDispatch, useSelector, connect } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -18,7 +18,8 @@ import Avatar from '@material-ui/core/Avatar';
 import { OPEN_DRAWER_MENU } from '../../constants/constants'
 import clsx from 'clsx';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { Confirm } from 'semantic-ui-react'
+import '../../../assets/css/Global/style.css'
+import { Popup } from 'semantic-ui-react'
 
 /**
  * <div>
@@ -151,7 +152,7 @@ export default function Navbar(props) {
     <>
       <CssBaseline />
       <AppBar
-        style={{ 'backgroundColor': '#1976d2' }}
+        style={{ 'backgroundColor': '#4682B4' }}
         position="fixed"
         className={clsx(classes.appBar, {
           [classes.appBarShift]: sideBarState.isSidebar,
@@ -175,10 +176,19 @@ export default function Navbar(props) {
             Licença {localStorage.getItem('@sigiml/plano').toLocaleUpperCase()} - {localStorage.getItem('@sigiml/expiration_day') == 0 ? <>Expira hoje</> : <>Expira daqui a {localStorage.getItem('@sigiml/expiration_day')}  dias</>}
           </Typography>
 
+          <Popup
+            content={<div>Até hoje, sua cor como vendedor é verde escuro:</div>}
+            header='Reputação'
+            trigger={<img style={{height: '8px', marginLeft : '20px'}} 
+            src='https://http2.mlstatic.com/resources/frontend/statics/reputation-dashboard-frontend/green@2x.png'></img> }
+          />
+
+         
+
           <div className={classes.grow} />
 
           <Typography className={classes.title} noWrap>
-            Ola! {props.nomeUsuario}
+            Ola! {props.nomeUsuario} {props.sobrenome}
           </Typography>
 
           <div className={classes.sectionDesktop}>

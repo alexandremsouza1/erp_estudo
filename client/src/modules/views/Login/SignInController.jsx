@@ -66,6 +66,7 @@ export default class SignInController extends React.Component {
                 resp.data.map(user => {
                     if (this.state.email === user.email && this.state.password === user.password) {
                         localStorage.setItem('@sigiml/nome-usuario', user.nome)
+                        localStorage.setItem('@sigiml/sobrenome-usuario', user.sobrenome)
                         localStorage.setItem('@sigiml/email-usuario', user.email)
                         localStorage.setItem('@sigiml/_id-usuario', user._id)
                         localStorage.setItem('@sigiml/plano', user.plano)

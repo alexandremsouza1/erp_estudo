@@ -35,7 +35,7 @@ export default function CustomModal(props) {
         <>
             <Dialog fullScreen open={props.showModal} onClose={() => props.setShowModal(false)}>
 
-                <AppBar className={classes.appBar} style={{ 'backgroundColor': '#1976d2' }}>
+                <AppBar className={classes.appBar} style={{ 'backgroundColor': '#4682B4' }}>
                     <Toolbar>
                         <Chip icon={<EditIcon />} label='Modificar Anúncio' />
                         <Typography variant="h6" className={classes.title}>

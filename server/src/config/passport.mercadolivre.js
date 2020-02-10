@@ -2,6 +2,8 @@
 const MercadoLibreStrategy = require('./mercado-livre').Strategy
 const keys = require('./keys');
 const usuarioService = require("../services/usuario-service");
+const axios = require('axios')
+const constants = require('../constants/constants');
 
 module.exports = (passport) => {
 
@@ -23,8 +25,8 @@ module.exports = (passport) => {
       }
     });
     */
-    usuarioService.salvarUsuario(setUsuario(profile, accessToken, refreshToken))
-    console.log("Mercado livre - profiler " + JSON.stringify(profile.id))
+    //usuarioService.salvarUsuario(setUsuario(profile, accessToken, refreshToken))
+    //console.log("Mercado livre - profile " + JSON.stringify(profile))
 
     return done(null, profile);
 
@@ -32,15 +34,17 @@ module.exports = (passport) => {
   ));
 
   const setUsuario = (profile, accessToken, refreshToken) => {
-    let usuarios = {
-      id: profile.id,
-      accessToken: accessToken,
-      refreshToken: refreshToken,
-      nickname: profile.nickname,
-      first_name: profile.first_name,
+   return {
+      contas: [{
+        idConta: profile.id,
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+        nickname: profile.nickname
+      }],
+      nome: profile.first_name,
+      sobrenome: profile.last_name,
       email: profile.email
     }
-    return usuarios
   }
 
   passport.serializeUser((profile, done) => {

@@ -25,6 +25,7 @@ export default class SignUpController extends React.Component {
                 //Localstorage
                 localStorage.setItem('@sigiml/_id-usuario', JSON.stringify(resp.data.usuario._id))
                 localStorage.setItem('@sigiml/nome-usuario', JSON.stringify(resp.data.usuario.nome))
+                localStorage.setItem('@sigiml/sobrenome-usuario', JSON.stringify(resp.data.usuario.sobrenome))
                 localStorage.setItem('@sigiml/email-usuario', JSON.stringify(resp.data.usuario.email))
                 this.setState({ redirect: true })
             } else {

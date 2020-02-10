@@ -29,7 +29,7 @@ export default function EditarVariacao(props) {
     return (
         <>
             <Dialog fullScreen open={props.isShowEditarAnuncio} onClose={() => props.closeModalEditVariacao(false)}>
-                <AppBar className={classes.appBar} style={{ 'backgroundColor': '#1976d2' }}>
+                <AppBar className={classes.appBar} style={{ 'backgroundColor': '#4682B4' }}>
                     <Toolbar>
 
                         <Typography variant="h6" className={classes.title}>

@@ -77,7 +77,7 @@ export default function AnuncioView(props) {
                       if (prop.status === isActive) {
                         return (
                           <div className="panel panel-primary" key={key}>
-                            <div className="panel-heading" style={{backgroundColor: '#1976d2'}}>
+                            <div className="panel-heading" style={{backgroundColor: '#4682B4'}}>
                               <h3 className="panel-title">
                                  #{prop.id} - {prop.titulo}
                               </h3>

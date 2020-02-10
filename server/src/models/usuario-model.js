@@ -18,7 +18,7 @@ const usuarioModel = mongoose.Schema({
     },
     password: {
         type: String,
-        required: true,
+        required: false,
         trim: true
     },
     active: {

@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from 'axios';
 import Navbar from './Navbar';
 
 export default class NavbarController extends React.Component {
@@ -7,16 +6,9 @@ export default class NavbarController extends React.Component {
         super(props);
 
         this.state = {
-            nomeUsuario: ''
+            nomeUsuario: localStorage.getItem('@sigiml/nome-usuario'),
+            sobrenome: localStorage.getItem('@sigiml/sobrenome-usuario')
         }
-    }
-
-    componentDidMount = async () => {
-        await axios.get('http://localhost:5000/usuario/').then(res => {
-            this.setState({
-                nomeUsuario: res.data.first_name
-            })
-        });
     }
 
     render() {
@@ -24,7 +16,8 @@ export default class NavbarController extends React.Component {
             <div>
                 <Navbar nomeUsuario={this.state.nomeUsuario} 
                         brandText={this.props.brandText} 
-                        {...this.props}/>
+                        {...this.props}
+                        {...this.state}/>
             </div>
         );
     }

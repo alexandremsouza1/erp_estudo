@@ -207,3 +207,24 @@
     box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
 }
 
+
+.red {
+    background-image: url(https://http2.mlstatic.com/resources/frontend/statics/reputation-dashboard-frontend/red@2x.png);
+}
+
+.orange {
+    background-image: url(https://http2.mlstatic.com/resources/frontend/statics/reputation-dashboard-frontend/orange@2x.png);
+}
+
+.yellow {
+    background-image: url(https://http2.mlstatic.com/resources/frontend/statics/reputation-dashboard-frontend/yellow@2x.png);
+}
+
+.light_green {
+    background-image: url(https://http2.mlstatic.com/resources/frontend/statics/reputation-dashboard-frontend/green_light@2x.png);
+}
+
+.green {
+    background-image: url(https://http2.mlstatic.com/resources/frontend/statics/reputation-dashboard-frontend/green@2x.png);
+}
+
