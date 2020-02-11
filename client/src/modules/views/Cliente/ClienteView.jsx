@@ -1,24 +1,108 @@
-import React from 'react'
-import { Row, Col } from "react-bootstrap";
-import Carregando from '../../components/Loading/LoadingCarregandoSolicitacao'
-import Grid from '@material-ui/core/Grid';
+import React, { useState } from 'react'
 import imgWhatsapp from '../../../assets/img/WhatsApp-icon.png'
-import userAvatar from '../../../assets/img/useravatar.png'
-import Panel from '../../components/Panel/Panel'
+
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import ButtonBase from '@material-ui/core/ButtonBase';
-import { makeStyles } from '@material-ui/core/styles';
-import { Divider, Accordion, Icon } from 'semantic-ui-react'
+import TextField from '@material-ui/core/TextField';
+import ButtonUI from '@material-ui/core/Button';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 
 export default function ClientView(props) {
+
+    const textStyle = {
+        color: 'black',
+        fontFamily: 'arial',
+        fontSize: '14px'
+    }
+    const textStyle_02 = {
+        fontFamily: 'arial',
+        fontSize: '14px',
+        fontWeight: 'bold'
+    }
+    const alinhamentoTableCell = {
+        padding: '0 15px 35px'
+    }
     return (
-        <div className="content">
-            {props.result.map(resp => {
+        <div>
+
+            <div style={{ margin: '0 0 10px' }}>
+                <TextField label="Buscar por nome" variant="outlined" style={{ width: '100%' }} />
+            </div>
+
+            <TableContainer component={Paper}>
+                <Table>
+                    <TableBody>
+                        {props.result.map((resp, key) => {
+                            if (!props.isLoading) {
+                                return (
+                                    <>
+                                        <TableRow key={key}>
+                                            <TableCell component="th" scope="row">
+                                                <>
+                                                    <div style={{
+                                                        color: 'black',
+                                                        fontFamily: 'arial',
+                                                        fontSize: '19px'
+                                                    }}>{resp.primeiro_nome} {resp.last_name}</div>
+                                                    <div style={textStyle}>{resp.cidade} - {resp.estado}</div>
+                                                    <div>
+                                                        <ButtonUI
+                                                            variant="contained"
+                                                            color="default"
+                                                            startIcon={<VisibilityIcon />}>
+                                                            Ver detalhes das compras realizadas
+                                                        </ButtonUI>
+                                                    </div>
+                                                </>
+                                            </TableCell>
+                                            <TableCell style={alinhamentoTableCell} align="right">
+                                                <>
+                                                    <div style={textStyle}> {resp.nickname} </div>
+                                                    <div style={textStyle_02}>Usuário</div>
+                                                </>
+                                            </TableCell>
+                                            <TableCell style={alinhamentoTableCell} align="right">
+                                                <>
+                                                    <div style={textStyle}><img src={imgWhatsapp}></img>062982380218</div>
+                                                    <div style={textStyle_02}>CPF 75565698756</div>
+                                                </>
+                                            </TableCell>
+                                            <TableCell style={alinhamentoTableCell} align="right">
+                                                <>
+                                                    <div style={textStyle}>1</div>
+                                                    <div style={textStyle_02}>Compras</div>
+                                                </>
+                                            </TableCell>
+                                            <TableCell style={alinhamentoTableCell} align="right">
+                                                <>
+                                                    <div style={textStyle}>R$ 149,99</div>
+                                                    <div style={textStyle_02}>Valor total</div>
+                                                </>
+                                            </TableCell>
+                                        </TableRow>
+
+
+                                    </>
+                                )
+                            }
+                        }
+                        )}
+
+                    </TableBody>
+                </Table>
+            </TableContainer>
+
+
+            {/*props.result.map(resp => {
                 if (!props.isLoading) {
                     return (
                         <>
-                            <Grid container spacing={2}>
+                            {/**
+                             * <Grid container spacing={2}>
 
                                 <Grid item xs>
                                     <Typography variant="body2" color="textSecondary" style={{ 'color': 'black' }}>
@@ -78,6 +162,7 @@ export default function ClientView(props) {
                             </Accordion>
 
                             <Divider />
+                            }
                         </>
                     )
                 } else {
@@ -87,7 +172,7 @@ export default function ClientView(props) {
                         </div>
                     )
                 }
-            })}
+            })*/}
         </div>
     )
 }

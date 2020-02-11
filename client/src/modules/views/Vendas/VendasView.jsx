@@ -308,20 +308,6 @@ export default class VendasView extends React.Component {
                     </div>
                 </div>
 
-                <TableHead>
-                    <TableRow>
-                        <TableCell padding="checkbox">
-                            <Checkbox />
-                        </TableCell>
-                        <TableCell>
-                            <TableSortLabel>
-
-
-                            </TableSortLabel>
-                        </TableCell>
-                    </TableRow>
-                </TableHead>
-
                 {this.state.vendas.length > 0
 
                     ? this.state.vendas.map((venda, key) => {

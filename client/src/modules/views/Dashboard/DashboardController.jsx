@@ -29,7 +29,7 @@ export default function DashboardController() {
         get()
     }, [])
 
-    const data = {
+    const dataFaturamento = {
         labels: ['01/2020','02/2020', '03/2020', '04/2020', '05/2020', '06/2020', '07/2020' , '08/2020' , '09/2020' , '10/2020', '11/2020', '12/2020'],
         datasets: [
             {
@@ -38,6 +38,32 @@ export default function DashboardController() {
                 fill: false,
                 backgroundColor: '#42A5F5',
                 borderColor: '#42A5F5'
+            }
+        ]
+    };
+
+    const dataVendas = {
+        labels: ['01/2020','02/2020', '03/2020', '04/2020', '05/2020', '06/2020', '07/2020' , '08/2020' , '09/2020' , '10/2020', '11/2020', '12/2020'],
+        datasets: [
+            {
+                label: 'Vendas',
+                data: [50, 35, 165, 98, 75, 80, 90, 135, 265, 200, 180, 130, 98, 75],
+                fill: false,
+                backgroundColor: 'green',
+                borderColor: 'green'
+            }
+        ]
+    };
+
+    const dataUnidadesVendidas = {
+        labels: ['01/2020','02/2020', '03/2020', '04/2020', '05/2020', '06/2020', '07/2020' , '08/2020' , '09/2020' , '10/2020', '11/2020', '12/2020'],
+        datasets: [
+            {
+                label: 'Unidades vendidas',
+                data: [10, 20, 15, 9, 8, 1, 5, 9, 10, 15, 20, 13],
+                fill: false,
+                backgroundColor: 'black',
+                borderColor: 'black'
             }
         ]
     };
@@ -98,7 +124,10 @@ export default function DashboardController() {
                 <Dimmer active={state.isLoading} inverted>
                     <Loader>Carregando dados do Mercado Livre, por favor aguarde...</Loader>
                 </Dimmer>
-                <DashboardView {...state} data={data}/>
+                <DashboardView {...state} 
+                                dataVendas={dataVendas} 
+                                dataFaturamento={dataFaturamento}
+                                dataUnidadesVendidas={dataUnidadesVendidas}/>
             </Dimmer.Dimmable>
         </>
     )

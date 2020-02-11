@@ -1,5 +1,5 @@
 import React from 'react'
-import PerguntasView from './PerguntasView'
+import MensagensAutomaticasView from './MensagensAutomaticasView'
 import socketIOClient from 'socket.io-client'
 import {DOMAIN} from '../../constants/constants'
 
@@ -11,6 +11,8 @@ class PerguntasController extends React.Component {
         this.state = {
             endPont: DOMAIN
         }
+
+        document.title = "Mensagens automaticas"
     }
 
     componentDidMount = () => {
@@ -22,7 +24,7 @@ class PerguntasController extends React.Component {
 
     render(){
         return(
-            <PerguntasView/>
+            <MensagensAutomaticasView/>
         )
     }
 }

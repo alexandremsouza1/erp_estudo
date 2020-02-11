@@ -55,18 +55,18 @@ export default function SignIn(props) {
     handleClose()
     props.handleShowMessage()
   }
-  
+
   return (
     <>
-    {props.isShowMessageMain === false && 
-      <Modal
-        open={modalOpen}
-        onClose={() => handleClose()}
-        basic
-        size='small'
-      >
-        <Header icon='browser' content='Informação' />
-        
+      {props.isShowMessageMain === false &&
+        <Modal
+          open={modalOpen}
+          onClose={() => handleClose()}
+          basic
+          size='small'
+        >
+          <Header icon='browser' content='Informação' />
+
           <Modal.Content>
             <Message info>
               <p>O E-mail e senha não são os mesmos dados que você usa para acessar a sua conta do MercadoLivre, caso nunca tenha acessado o sistema com email e senha, você
@@ -81,88 +81,96 @@ export default function SignIn(props) {
               Não mostrar essa mensagem novamente?
             </Message>
           </Modal.Content>
-        
-        <Modal.Actions>
-          <Button color='green' onClick={() => handleShowMessage()} inverted>
-            <Icon name='checkmark' /> Ok, entendi!
+
+          <Modal.Actions>
+            <Button color='green' onClick={() => handleShowMessage()} inverted>
+              <Icon name='checkmark' /> Ok, entendi!
           </Button>
-        </Modal.Actions>
+          </Modal.Actions>
 
-      </Modal>
-    }
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <div className={classes.paper}>
+        </Modal>
+      }
+      
+        <div id='containerLogin' style={{ margin: '0 450px 0', boxShadow: '1px 1px 6px #888888' }}>
 
-          <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
-          </Avatar>
+          <Container component="main" maxWidth="xs">
 
-          <Typography component="h1" variant="h5">
-            Acesso ao sistema
+            <CssBaseline />
+            <div className={classes.paper}>
+
+              <Avatar className={classes.avatar}>
+                <LockOutlinedIcon />
+              </Avatar>
+
+              <Typography component="h1" variant="h5">
+                Acesso ao sistema
         </Typography>
 
 
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="E-mail"
-            name="email"
-            autoComplete="email"
-            autoFocus
-            value={props.email}
-            onChange={(event) => props.changeEmail(event)}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Senha"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            value={props.password}
-            onChange={(event) => props.changePassword(event)}
-          />
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="E-mail"
+                name="email"
+                autoComplete="email"
+                autoFocus
+                value={props.email}
+                onChange={(event) => props.changeEmail(event)}
+              />
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Senha"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+                value={props.password}
+                onChange={(event) => props.changePassword(event)}
+              />
 
 
-          <ButtonUI
-            fullWidth
-            variant="contained"
-            color="primary"
-            onClick={() => props.signinUsuario()}
-            className={classes.submit}>
-            Acessar
+              <ButtonUI
+                fullWidth
+                variant="contained"
+                color="primary"
+                onClick={() => props.signinUsuario()}
+                className={classes.submit}>
+                Acessar
           </ButtonUI>
 
 
 
-          <Grid item xs>
-            <Link href="#" variant="body2">
-              Esqueci minha senha
+              <Grid item xs>
+                <Link href="#" variant="body2">
+                  Esqueci minha senha
               </Link>
-          </Grid>
+              </Grid>
 
-          <Grid item>
-            {'Quer experimentar grátis o SIGIML?'}{' '}
-            <NavLink to='/signup'>
-              
-                Cadastre-se agora!
-              
+              <Grid item>
+                {'Quer experimentar grátis o SIGIML?'}{' '}
+                <NavLink to='/signup'>
+
+                  Cadastre-se agora!
+  
             </NavLink>
-          </Grid>
+              </Grid>
 
 
+            </div>
+
+            <Box mt={8} style={{ padding: '0 0 10px' }}>
+              <Copyright />
+            </Box>
+
+          </Container>
         </div>
-        <Box mt={8}>
-          <Copyright />
-        </Box>
-      </Container>
+      
     </>
   );
 }

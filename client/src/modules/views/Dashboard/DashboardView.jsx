@@ -26,11 +26,11 @@ export default function DashboardView(props) {
   const classes = useStyles();
 
   const panes = [
-    { menuItem: 'Vendas', render: () => <Chart type="line" data={props.data} /> },
-    { menuItem: 'Faturamento', render: () => <Chart type="line" data={props.data} /> },
-    { menuItem: 'Unidades vendidas', render: () => <Chart type="line" data={props.data} /> },
-    { menuItem: 'Perguntas', render: () => <Chart type="line" data={props.data} /> },
-    { menuItem: 'Visitas', render: () => <Chart type="line" data={props.data} /> }
+    { menuItem: 'Vendas', render: () => <Chart type="line" data={props.dataVendas} /> },
+    { menuItem: 'Faturamento', render: () => <Chart  type="line" data={props.dataFaturamento} /> },
+    { menuItem: 'Unidades vendidas', render: () => <Chart  type="line" data={props.dataUnidadesVendidas} /> },
+    { menuItem: 'Perguntas', render: () => <Chart  type="line" data={props.data} /> },
+    { menuItem: 'Visitas', render: () => <Chart  type="line" data={props.data} /> }
   ]
 
   const [state, setState] = useState({
@@ -169,8 +169,8 @@ export default function DashboardView(props) {
       </Grid>
 
       <div style={{ margin: '15px 0 0' }}>
-        
-        <FormControl className={classes.formControl} style={{width: '150px'}}>
+
+        <FormControl className={classes.formControl} style={{ width: '150px' }}>
           <InputLabel>Escolher período.</InputLabel>
           <Select>
             <MenuItem value={7}>Últimos 7 dias</MenuItem>
@@ -185,7 +185,11 @@ export default function DashboardView(props) {
 
       </div>
 
-      <Tab style={{ margin: '15px 0 0' }} panes={panes} renderActiveOnly={true} />
+
+
+      
+      <Tab style={{ margin: '15px 0 0'}} panes={panes} renderActiveOnly={true} />
+      
 
 
     </>

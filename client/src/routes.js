@@ -3,8 +3,8 @@ import DashboardController from "modules/views/Dashboard/DashboardController";
 import ClienteController from "modules/views/Cliente/ClienteController";
 import ControleEstoqueController from 'modules/views/Controle-estoque/ControlleEstoqueController'
 import VendasController from 'modules/views/Vendas/VendasController'
-import PerguntasController from 'modules/views/Perguntas/PerguntasController'
-import SignIn from '../src/modules/views/Login/SignIn'
+import MensagensAutomaticasController from 'modules/views/MensagensAutomaticas/MensagensAutomaticasController'
+import BloqueioController from '../src/modules/views/Bloqueio/BloqueioController'
 
 const dashboardRoutes = [
   {
@@ -17,43 +17,43 @@ const dashboardRoutes = [
   {
     path: "/anuncios",
     name: "Anúncios",
-    icon: "tags icon",
+    icon: "fa fa-pencil-square-o",
     component: AnuncioController,
     layout: "/admin"
   },
   {
     path: '/clientes',
     name: 'Clientes',
-    icon: 'users icon',
+    icon: 'fa fa-users',
     component: ClienteController,
     layout: '/admin'
   },
   {
     path: "/controle_estoque",
     name: "Controle de estoque",
-    icon: "edit icon",
+    icon: "fa fa-book",
     component: ControleEstoqueController,
     layout: "/admin"
   },
   {
     path: "/vendas",
-    name: "Pedidos",
-    icon: "cart icon",
+    name: "Vendas",
+    icon: "fa fa-shopping-cart",
     component: VendasController,
     layout: "/admin"
   },
   {
-    path: "/mensagens",
-    name: "Mensagens de Pos venda",
-    icon: "conversation icon",
-    component: PerguntasController,
+    path: "/mensagens_automaticas",
+    name: "Mensagens automáticas",
+    icon: "fa fa-paper-plane",
+    component: MensagensAutomaticasController,
     layout: "/admin"
   },
   {
-    path: "/maps",
-    name: "Resp. Automáticas",
-    icon: "pencil alternate icon",
-    component: VendasController,
+    path: "/bloqueios",
+    name: "Bloqueios",
+    icon: "fa fa-ban",
+    component: BloqueioController,
     layout: "/admin"
   }
 ];
