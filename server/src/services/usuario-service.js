@@ -7,7 +7,7 @@ const Usuario = require('../models/usuario-model')
 /**
  * @author Felipe Miguel dos Santos
  */
-/*
+
 const salvarUsuario = async (usuario) => {
     await axios.put(constants.urlbase.COLLECTION_USUARIOS, usuario).then(resp => {
         console.log("Usuario salvo com sucesso!");
@@ -15,10 +15,10 @@ const salvarUsuario = async (usuario) => {
         console.log("Houve um erro ao salvar o usuario no firebase: " + err);
     });
 }
-*/
+
 
 const postUsuario = async (req, res) => {
-    console.log("USUARIO: "+JSON.stringify(req.body))
+    //console.log("USUARIO: "+JSON.stringify(req.body))
     let usuario = new Usuario(req.body)
     usuario.save().then(resp => {
         res.status(200).send({
@@ -28,13 +28,13 @@ const postUsuario = async (req, res) => {
     }).catch(error => res.send(error))
 }
 
-const salvarUsuario = async (user) => {
+/*const salvarUsuario = async (user) => {
     console.log("USUARIO: "+JSON.stringify(user))
     let usuario = new Usuario(user)
     usuario.save().then(resp => {
         console.log('Usuario salvo!')
     }).catch(error => console.error(error))
-}
+}*/
 
 const getProcurarUsuarioPorEmail = async (req, res) => {
     Usuario.find({

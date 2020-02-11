@@ -21,6 +21,10 @@ import SignUpController from './modules/views/Login/SignUpController'
 import AcessoMercadoLivre from './modules/views/Login/AcessoMercadoLivre'
 import {DOMAIN} from '../src/modules/constants/constants'
 
+import 'primereact/resources/themes/nova-light/theme.css'
+import 'primereact/resources/primereact.min.css'
+import 'primeicons/primeicons.css'
+
 //<Route path="/admin" render={props => <AdminLayout {...props} />} />
 //<Redirect from="/" to="/login" />
 

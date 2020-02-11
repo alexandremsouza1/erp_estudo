@@ -1,30 +1,50 @@
-import React from "react";
-// import 'date-fns';
-// import DateFnsUtils from '@date-io/date-fns';
-// import {
-//   MuiPickersUtilsProvider,
-//   KeyboardTimePicker,
-//   KeyboardDatePicker,
-// } from '@material-ui/pickers';
+import React, { useState } from "react";
+
 import { Row, Col } from "react-bootstrap";
 import Grid from '@material-ui/core/Grid';
-//import { Card } from "modules/components/Card/Card.jsx";
-//import Carregando from '../../components/Loading/LoadingCarregandoSolicitacao'
 import { Loader, Tab } from 'semantic-ui-react'
 import Paper from '@material-ui/core/Paper';
-
+import { Calendar } from 'primereact/calendar';
 import { Chart } from 'primereact/chart';
+
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+
+import { makeStyles } from '@material-ui/core/styles';
 
 
 export default function DashboardView(props) {
 
+  const useStyles = makeStyles(theme => ({
+    formControl: {
+      minWidth: 120
+    }
+  }));
+
+  const classes = useStyles();
+
   const panes = [
-  {
-    menuItem: 'Tab 1',
-    render: () => <Tab.Pane loading>Tab 1 Content</Tab.Pane>,
-  },
-  { menuItem: 'Tab 2', render: () => <Chart type="line" data={ props.data } />}
-]
+    { menuItem: 'Vendas', render: () => <Chart type="line" data={props.data} /> },
+    { menuItem: 'Faturamento', render: () => <Chart type="line" data={props.data} /> },
+    { menuItem: 'Unidades vendidas', render: () => <Chart type="line" data={props.data} /> },
+    { menuItem: 'Perguntas', render: () => <Chart type="line" data={props.data} /> },
+    { menuItem: 'Visitas', render: () => <Chart type="line" data={props.data} /> }
+  ]
+
+  const [state, setState] = useState({
+    dataGrafico: new Date()
+  })
+
+  const pt_br = {
+    firstDayOfWeek: 1,
+    dayNames: ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"],
+    dayNamesShort: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"],
+    dayNamesMin: ["D", "S", "T", "Q", "Q", "S", "S"],
+    monthNames: ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"],
+    monthNamesShort: ["Jan", "Feb", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"]
+  };
 
   return (
 
@@ -148,7 +168,25 @@ export default function DashboardView(props) {
         </Grid>
       </Grid>
 
-      <Tab panes={panes} renderActiveOnly={false} />
+      <div style={{ margin: '15px 0 0' }}>
+        
+        <FormControl className={classes.formControl} style={{width: '150px'}}>
+          <InputLabel>Escolher período.</InputLabel>
+          <Select>
+            <MenuItem value={7}>Últimos 7 dias</MenuItem>
+            <MenuItem value={14}>Últimos 14 dias</MenuItem>
+            <MenuItem value={30}>Últimos 30 dias</MenuItem>
+            <MenuItem value={0}>Escolher período</MenuItem>
+          </Select>
+        </FormControl>
+
+        <Calendar style={{ width: '200px', margin: '15px 15px 0' }} value={state.dataGrafico} onChange={(e) => setState({ ...state, dataGrafico: e.value })}
+          selectionMode="range" readonlyInput={true} locale={pt_br} dateFormat="dd/mm/yy" numberOfMonths={2} />
+
+      </div>
+
+      <Tab style={{ margin: '15px 0 0' }} panes={panes} renderActiveOnly={true} />
+
 
     </>
   );

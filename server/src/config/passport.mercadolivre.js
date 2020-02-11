@@ -25,7 +25,7 @@ module.exports = (passport) => {
       }
     });
     */
-    //usuarioService.salvarUsuario(setUsuario(profile, accessToken, refreshToken))
+    usuarioService.salvarUsuario(setUsuario(profile, accessToken, refreshToken))
     //console.log("Mercado livre - profile " + JSON.stringify(profile))
 
     return done(null, profile);
@@ -34,15 +34,13 @@ module.exports = (passport) => {
   ));
 
   const setUsuario = (profile, accessToken, refreshToken) => {
-   return {
-      contas: [{
-        idConta: profile.id,
-        accessToken: accessToken,
-        refreshToken: refreshToken,
-        nickname: profile.nickname
-      }],
-      nome: profile.first_name,
-      sobrenome: profile.last_name,
+    return usuario = {
+      id: profile.id,
+      accessToken: accessToken,
+      refreshToken: refreshToken,
+      nickname: profile.nickname,
+      first_name: profile.first_name,
+      last_name: profile.last_name,
       email: profile.email
     }
   }
