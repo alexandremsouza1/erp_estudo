@@ -20,7 +20,7 @@ const flash = require('connect-flash');
 const saldoRoute = require('./src/routes/saldo.route')
 const vendasRoute = require('./src/routes/vendas.router')
 const clienteRoute = require('./src/routes/cliente.route')
-//const notificacoesMercadoLivreRoute = require('./src/routes/notificacoes.mercadolivre')(io)
+const bloqueioRoute = require('./src/routes/bloqueio.route')
 const rastreioRoute = require('./src/routes/rastreio.route')
 
 //  Adicionar e configurar middleware
@@ -55,6 +55,8 @@ app.use('/vendas', vendasRoute);
 app.use('/clientes', clienteRoute);
 
 app.use('/rastreio', rastreioRoute)
+
+app.use('/bloqueio', bloqueioRoute)
 
 
 module.exports = app;
