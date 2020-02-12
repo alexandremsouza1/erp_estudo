@@ -5,6 +5,10 @@ import SearchIcon from '@material-ui/icons/Search';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import InfoIcon from '@material-ui/icons/Info';
+import Checkbox from '@material-ui/core/Checkbox';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import SaveIcon from '@material-ui/icons/Save';
+import LocationOnIcon from '@material-ui/icons/LocationOn';
 
 export default function BloqueioView(props) {
 
@@ -48,14 +52,48 @@ export default function BloqueioView(props) {
                 Bloqueio de usuários
             </div>
             <div>
-                <TextField variant="outlined" placeholder='Buscar por apelido' size="small" />
+                <TextField value={props.nickname} onChange={(event) => props.handleOnChange('nickname', event)} variant="outlined" placeholder='Buscar por apelido' size="small" />
                 <Button
                     variant="contained"
                     color="default"
                     startIcon={<SearchIcon />}
+                    onClick={() => props.buscarUsuarioPorNickname()}
                     style={{ margin: '2px 5px 0' }}>
                     Buscar
                 </Button>
+            </div>
+            <div>
+                {props.isShow &&
+                    <>
+                        <div style={{ color: '#818181', fontFamily: 'arial', margin: '5px 0 0' }}>Encontramos {props.nicknameEncontrado} - Situação: {props.status === 'active' ? 'ATIVO' : 'INATIVO'}</div>
+                        <div>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox value={props.bloquearCompras} onChange={(event) => props.handleOnChecked('bloquearCompras', event)}/>
+                                }
+                                style={{ color: '#818181', fontFamily: 'arial' }}
+                                label="Bloquear permanentemente para não realizar nenhum tipo de compras."
+                            />
+                        </div>
+                        <div>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox value={props.bloquearPerguntas} onChange={(event) => props.handleOnChecked('bloquearPerguntas', event)}/>
+                                }
+                                style={{ color: '#818181', fontFamily: 'arial' }}
+                                label="Bloquear permanentemente para não realizar nenhum tipo de perguntas."
+                            />
+                        </div>
+                        <div>
+                            <Button
+                                variant="contained"
+                                color="default"
+                                onClick={() => props.salvarAlteracao()}
+                                startIcon={<SaveIcon />}>
+                                Salvar
+                            </Button>
+                        </div>
+                    </>}
             </div>
             <div>
                 <Grid container spacing={3} style={{ margin: '30px 0 0' }}>

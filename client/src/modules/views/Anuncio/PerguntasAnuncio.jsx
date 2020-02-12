@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Modal, Header, Icon, Select, Comment, Form, Input } from 'semantic-ui-react'
-import formatarDataHora from '../../../Helpers/util'
+import {formatarDataHora} from '../../../Helpers/util'
 import userAvatar from '../../../assets/img/funcionario-icon.png'
 import Chat from '../../components/Chat/Chat'
 import '../../../assets/css/Global/chat.css'
