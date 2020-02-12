@@ -69,7 +69,7 @@ export default function BloqueioView(props) {
                         <div>
                             <FormControlLabel
                                 control={
-                                    <Checkbox value={props.bloquearCompras} onChange={(event) => props.handleOnChecked('bloquearCompras', event)}/>
+                                    <Checkbox checked={props.bloquearCompras} onChange={(event) => props.handleOnChecked('bloquearCompras', event)}/>
                                 }
                                 style={{ color: '#818181', fontFamily: 'arial' }}
                                 label="Bloquear permanentemente para não realizar nenhum tipo de compras."
@@ -78,7 +78,7 @@ export default function BloqueioView(props) {
                         <div>
                             <FormControlLabel
                                 control={
-                                    <Checkbox value={props.bloquearPerguntas} onChange={(event) => props.handleOnChecked('bloquearPerguntas', event)}/>
+                                    <Checkbox checked={props.bloquearPerguntas} onChange={(event) => props.handleOnChecked('bloquearPerguntas', event)}/>
                                 }
                                 style={{ color: '#818181', fontFamily: 'arial' }}
                                 label="Bloquear permanentemente para não realizar nenhum tipo de perguntas."
@@ -106,7 +106,16 @@ export default function BloqueioView(props) {
                     <Grid item xs={6}>
                         <div style={textStyle}>Bloqueados para perguntar</div>
                         <Paper style={stylePaper}>
-                            <div style={textInsidePaper}>Você não possui nenhum usuário bloqueado para realizar perguntas.</div>
+                            {props.usuarioBloqueadosPerguntas.map((usuario, key) => {
+                                return(
+                                    <div key={key}>
+                                       <div style={textInsidePaper}>
+                                            {props.isShowUsuarioPerguntas ? usuario.nickname : <>Você não possui nenhum usuário bloqueado para realizar perguntas.</>}
+                                            <span style={{paddingLeft : '295px'}}><Button color="primary">Desbloquear</Button></span>
+                                        </div>
+                                    </div>
+                                )
+                            })}
                         </Paper>
                     </Grid>
                 </Grid>

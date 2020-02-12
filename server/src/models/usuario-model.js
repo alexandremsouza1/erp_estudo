@@ -41,26 +41,22 @@ const usuarioModel = mongoose.Schema({
         trim: true,
         type: Date
     },
-    contas: [{
-        idConta: {
-            type: Number,
-            trim: true
-        },
-        accessToken: {
-            type: String,
-            trim: true
-        },
-        refreshToken: {
-            type: String,
-            trim: true
-        },
-        nickname: {
-            type: String,
-            trim: true
-        }
-    }]
-
-
+    id: {
+        type: Number,
+        trim: true
+    },
+    accessToken: {
+        type: String,
+        trim: true
+    },
+    refreshToken: {
+        type: String,
+        trim: true
+    },
+    nickname: {
+        type: String,
+        trim: true
+    }
 });
 
 module.exports = mongoose.model('usuario', usuarioModel);

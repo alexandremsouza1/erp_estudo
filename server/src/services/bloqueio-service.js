@@ -1,6 +1,6 @@
 const axios = require('axios')
 const usuarioService = require('../services/usuario-service')
-
+const BlackListPerguntas = require('../models/blacklistPerguntas-model')
 
 exports.salvarUsuarioListaNegra = (req, res) => {
     usuarioService.buscarUsuarioPorID().then(user => {
@@ -30,6 +30,28 @@ exports.buscarUsuarioPorNickName = (req, res) => {
     axios.get(`https://api.mercadolibre.com/sites/MLB/search?nickname=${req.params.nickname}`).then(response => {
         res.send(response.data.seller)
     }).catch(error => { res.send(error) })
+}
+
+//MongoDB
+exports.salvarUsuarioBlackListPerguntas = (req, res) => {
+    let blackListPerguntas = new BlackListPerguntas(req.body)
+    blackListPerguntas.save().then(response => {
+        res.send('OK').status(200)
+    }).catch(error => {res.send(error)})
+}
+
+exports.listarUsuarioBlackListPerguntas = (req, res) => {
+    BlackListPerguntas.find({}).then(response => {
+        res.send(response).status(200)
+    }).catch(error => {res.send(error)})
+}
+
+exports.buscarUsuarioBlackListPerguntasPorNickName = (req, res) => {
+    BlackListPerguntas.find({
+        nickname: req.params.nickname.toUpperCase()
+    }).then(response => {
+        res.send(response).status(200)
+    }).catch(error => {res.send(error)})
 }
 
 
