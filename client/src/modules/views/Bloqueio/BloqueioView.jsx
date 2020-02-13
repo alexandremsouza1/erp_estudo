@@ -8,7 +8,9 @@ import InfoIcon from '@material-ui/icons/Info';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import SaveIcon from '@material-ui/icons/Save';
-import LocationOnIcon from '@material-ui/icons/LocationOn';
+
+import { Row, Col } from 'react-bootstrap'
+
 
 export default function BloqueioView(props) {
 
@@ -24,7 +26,7 @@ export default function BloqueioView(props) {
     }
 
     const textInsidePaper = {
-        padding: '30px 30px 0',
+        padding: '30px 30px 18px',
         fontSize: '16px',
         color: '#818181'
     }
@@ -69,7 +71,7 @@ export default function BloqueioView(props) {
                         <div>
                             <FormControlLabel
                                 control={
-                                    <Checkbox checked={props.bloquearCompras} onChange={(event) => props.handleOnChecked('bloquearCompras', event)}/>
+                                    <Checkbox checked={props.bloquearCompras} onChange={(event) => props.handleOnChecked('bloquearCompras', event)} />
                                 }
                                 style={{ color: '#818181', fontFamily: 'arial' }}
                                 label="Bloquear permanentemente para não realizar nenhum tipo de compras."
@@ -78,7 +80,7 @@ export default function BloqueioView(props) {
                         <div>
                             <FormControlLabel
                                 control={
-                                    <Checkbox checked={props.bloquearPerguntas} onChange={(event) => props.handleOnChecked('bloquearPerguntas', event)}/>
+                                    <Checkbox checked={props.bloquearPerguntas} onChange={(event) => props.handleOnChecked('bloquearPerguntas', event)} />
                                 }
                                 style={{ color: '#818181', fontFamily: 'arial' }}
                                 label="Bloquear permanentemente para não realizar nenhum tipo de perguntas."
@@ -89,6 +91,7 @@ export default function BloqueioView(props) {
                                 variant="contained"
                                 color="default"
                                 onClick={() => props.salvarAlteracao()}
+                                disabled={props.disabledButtonSalvar()}
                                 startIcon={<SaveIcon />}>
                                 Salvar
                             </Button>
@@ -105,17 +108,31 @@ export default function BloqueioView(props) {
                     </Grid>
                     <Grid item xs={6}>
                         <div style={textStyle}>Bloqueados para perguntar</div>
-                        <Paper style={stylePaper}>
-                            {props.usuarioBloqueadosPerguntas.map((usuario, key) => {
-                                return(
-                                    <div key={key}>
-                                       <div style={textInsidePaper}>
-                                            {props.isShowUsuarioPerguntas ? usuario.nickname : <>Você não possui nenhum usuário bloqueado para realizar perguntas.</>}
-                                            <span style={{paddingLeft : '295px'}}><Button color="primary">Desbloquear</Button></span>
+                        <Paper style={props.usuarioBloqueadosPerguntas.length === 0 ? stylePaper : null}>
+                            <Row>
+                                {props.usuarioBloqueadosPerguntas.length !== 0 ? props.usuarioBloqueadosPerguntas.map((usuario, key) => {
+                                    return (
+
+                                        <div key={key}>
+                                            <div style={textInsidePaper}>
+                                                <Col md={8}>
+                                                    {usuario.nickname}
+                                                </Col>
+                                                <Col md={3}>
+                                                    <Button style={{margin: '-9px 0 0'}} color="primary">Desbloquear</Button>
+                                                </Col>
+                                            </div>
                                         </div>
-                                    </div>
-                                )
-                            })}
+
+                                    )
+                                })
+                                    :
+
+                                    <div style={textInsidePaper}>Você não possui nenhum usuário bloqueado para realizar perguntas.</div>
+
+                                }
+
+                            </Row>
                         </Paper>
                     </Grid>
                 </Grid>
