@@ -102,13 +102,33 @@ export default function BloqueioView(props) {
                 <Grid container spacing={3} style={{ margin: '30px 0 0' }}>
                     <Grid item xs={6}>
                         <div style={textStyle}>Bloqueados para comprar</div>
-                        <Paper style={stylePaper}>
-                            <div style={textInsidePaper}>Você não possui nenhum usuário bloqueado para realizar compras.</div>
+                        <Paper style={(props.usuarioBloqueadosCompras.length === 0 || props.usuarioBloqueadosCompras.length === 1) ? stylePaper : null}>
+                            <Row>
+                                {props.usuarioBloqueadosCompras.length !== 0 ? props.usuarioBloqueadosCompras.map((usuario, key) => {
+                                    return (
+
+                                        <div key={key}>
+                                            <div style={textInsidePaper}>
+                                                <Col md={8}>
+                                                    {usuario.nickname}
+                                                </Col>
+                                                <Col md={3}>
+                                                    <Button style={{ margin: '-9px 0 0' }} color="primary" onClick={() => props.deletarUsuario(usuario)}>Desbloquear</Button>
+                                                </Col>
+                                            </div>
+                                        </div>
+
+                                    )
+                                })
+                                    :
+                                    <div style={textInsidePaper}>Você não possui nenhum usuário bloqueado para realizar compras.</div>
+                                }
+                            </Row>
                         </Paper>
                     </Grid>
                     <Grid item xs={6}>
                         <div style={textStyle}>Bloqueados para perguntar</div>
-                        <Paper style={props.usuarioBloqueadosPerguntas.length === 0 ? stylePaper : null}>
+                        <Paper style={(props.usuarioBloqueadosPerguntas.length === 0 || props.usuarioBloqueadosPerguntas.length === 1) ? stylePaper : null}>
                             <Row>
                                 {props.usuarioBloqueadosPerguntas.length !== 0 ? props.usuarioBloqueadosPerguntas.map((usuario, key) => {
                                     return (
@@ -119,7 +139,7 @@ export default function BloqueioView(props) {
                                                     {usuario.nickname}
                                                 </Col>
                                                 <Col md={3}>
-                                                    <Button style={{margin: '-9px 0 0'}} color="primary" onClick={() => props.deletarUsuarioPerguntas(usuario.nickname)}>Desbloquear</Button>
+                                                    <Button style={{ margin: '-9px 0 0' }} color="primary" onClick={() => props.deletarUsuario(usuario)}>Desbloquear</Button>
                                                 </Col>
                                             </div>
                                         </div>
@@ -127,11 +147,8 @@ export default function BloqueioView(props) {
                                     )
                                 })
                                     :
-
                                     <div style={textInsidePaper}>Você não possui nenhum usuário bloqueado para realizar perguntas.</div>
-
                                 }
-
                             </Row>
                         </Paper>
                     </Grid>

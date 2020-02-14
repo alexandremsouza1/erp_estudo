@@ -74,7 +74,16 @@ exports.salvarUsuarioListaNegraCompras = (req, res) => {
 exports.listarTodosUsuariosListaNegraCompras = (req, res) => {
     usuarioService.buscarUsuarioPorID().then(user => {
         axios.get(`https://api.mercadolibre.com/users/${user.id}/order_blacklist?access_token=${user.accessToken}`).then(response => {
-            res.send(response.data.users)
+            let usuario_blackList = response.data.map(usuario => {
+                let dado = {
+                    id: usuario.user.id,
+                    blocked: usuario.user.blocked
+                }
+                return dado
+            })
+            Promise.all(usuario_blackList).then(order_blackList => {
+                res.send(order_blackList).status(200)
+            })
         }).catch(error => { res.send({ message: "Nenhum usuário encontrado na black list" }) })
     }).catch(error => { res.send(error) })
 }
@@ -110,7 +119,7 @@ exports.buscarUsuarioBlackListComprasPorNickName = (req, res) => {
 }
 
 exports.removerUsuarioBlackListComprasBD = (req, res) => {
-    BlackListPerguntas.findByIdAndDelete({_id: req.params._id_compras}).then(response => {
+    BlackListCompras.findByIdAndDelete({_id: req.params._id_compras}).then(response => {
         res.send(response).status(200)
     }).catch(error => {res.send(error)})
 }
