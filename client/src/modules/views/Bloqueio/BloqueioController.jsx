@@ -85,7 +85,6 @@ export default class BloqueioController extends React.Component {
                 await axios.get(`${DOMAIN}/bloqueio/nickname/${this.state.nickname.trim()}`).then(async user => {
                     await axios.post(`${DOMAIN}/bloqueio`, { "user_id": user.data.id }).then(response => {
                         swal('Sucesso', 'Usuário ' + this.state.nicknameEncontrado + ' bloqueado conforme solicitado!', 'success')
-                        console.log("response: " + JSON.stringify(response.data))
                     })
                 }).catch(error => { swal('Atenteceu algo de errado!', this.mensagemDeFalha, 'error') })
     
@@ -100,6 +99,8 @@ export default class BloqueioController extends React.Component {
                 this.listarTodosUsuarioBloqueadosBlackListPerguntas()
             }
         }).catch(error => { console.log(error) })
+
+        this.setState({nickname: '', isShow: false, bloquearCompras: false, bloquearPerguntas: false}) //Limpar o campo de texto e esconder os checkboxs
     }
 
     obterNicknameESalvarUsuarioBlackListPerguntas = async (blacklist) => {
@@ -108,7 +109,6 @@ export default class BloqueioController extends React.Component {
             await axios.get(`${DOMAIN}/bloqueio/nickname/${this.state.nickname}`).then(async user => {
                 await axios.post(`${DOMAIN}/bloqueio`, { "user_id": user.data.id }).then(response => {
                     swal('Sucesso', 'Usuário ' + this.state.nicknameEncontrado + ' bloqueado conforme solicitado!', 'success')
-                    console.log("response: " + JSON.stringify(response.data))
                 })
             }).catch(error => { swal('Atenteceu algo de errado!', this.mensagemDeFalha, 'error') })
 
@@ -136,6 +136,20 @@ export default class BloqueioController extends React.Component {
         }).catch(() => { console.log('Nenhum usuário encontrado na black list') })
     }
 
+    deletarUsuarioPerguntas = async (nickname) => {
+        await axios.get(`${DOMAIN}/bloqueio/nickname/${nickname}`).then(async user => {
+            await axios.delete(`${DOMAIN}/bloqueio/${user.data.id}`).then(async response => {
+                await axios.get(`${DOMAIN}/bloqueio/buscarUsuarioBlackListPerguntasPorNickNameMongoDB/${nickname}`).then(async resp => {
+                    await axios.delete(`${DOMAIN}/bloqueio/mongo/${resp.data[0]._id}`).then(res => {
+                        swal('Sucesso', 'Usuário ' + nickname + ' desbloqueado conforme solicitado!', 'success')
+                    }).catch(error => { swal('Atenteceu algo de errado!', 'Houve um problema ao tentar desbloquear o usuário! \n Recarregue a página e tente novamente!', 'error')})
+                }).catch(error => { swal('Atenteceu algo de errado!', 'Houve um problema ao tentar desbloquear o usuário! \n Recarregue a página e tente novamente!', 'error')})
+            }).catch(error => { swal('Atenteceu algo de errado!', 'Houve um problema ao tentar desbloquear o usuário! \n Recarregue a página e tente novamente!', 'error')})
+        }).catch(error => { swal('Atenteceu algo de errado!', 'Houve um problema ao tentar desbloquear o usuário! \n Recarregue a página e tente novamente!', 'error') })
+
+        this.listarTodosUsuarioBloqueadosBlackListPerguntas()
+    }
+
     disabledButtonSalvar = () => {
         if(this.state.bloquearPerguntas){
             return false
@@ -156,7 +170,8 @@ export default class BloqueioController extends React.Component {
                     handleOnChange={this.handleOnChange}
                     handleOnChecked={this.handleOnChecked}
                     salvarAlteracao={this.salvarAlteracao} 
-                    disabledButtonSalvar={this.disabledButtonSalvar}/>
+                    disabledButtonSalvar={this.disabledButtonSalvar}
+                    deletarUsuarioPerguntas={this.deletarUsuarioPerguntas}/>
             </>
         )
     }

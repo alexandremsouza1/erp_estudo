@@ -119,7 +119,7 @@ export default function BloqueioView(props) {
                                                     {usuario.nickname}
                                                 </Col>
                                                 <Col md={3}>
-                                                    <Button style={{margin: '-9px 0 0'}} color="primary">Desbloquear</Button>
+                                                    <Button style={{margin: '-9px 0 0'}} color="primary" onClick={() => props.deletarUsuarioPerguntas(usuario.nickname)}>Desbloquear</Button>
                                                 </Col>
                                             </div>
                                         </div>

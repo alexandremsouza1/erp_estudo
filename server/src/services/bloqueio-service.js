@@ -1,8 +1,10 @@
 const axios = require('axios')
 const usuarioService = require('../services/usuario-service')
 const BlackListPerguntas = require('../models/blacklistPerguntas-model')
+const BlackListCompras = require('../models/blacklistCompras-model')
 
-exports.salvarUsuarioListaNegra = (req, res) => {
+//########################################### PERGUNTAS ############################################//
+exports.salvarUsuarioListaNegraPerguntas = (req, res) => {
     usuarioService.buscarUsuarioPorID().then(user => {
         axios.post(`https://api.mercadolibre.com/users/${user.id}/questions_blacklist?access_token=${user.accessToken}`, req.body).then(response => {
             res.send(response.data)
@@ -10,7 +12,7 @@ exports.salvarUsuarioListaNegra = (req, res) => {
     }).catch(error => { res.send(error) })
 }
 
-exports.listarTodosUsuariosListaNegra = (req, res) => {
+exports.listarTodosUsuariosListaNegraPerguntas = (req, res) => {
     usuarioService.buscarUsuarioPorID().then(user => {
         axios.get(`https://api.mercadolibre.com/users/${user.id}/questions_blacklist?access_token=${user.accessToken}`).then(response => {
             res.send(response.data.users)
@@ -18,9 +20,9 @@ exports.listarTodosUsuariosListaNegra = (req, res) => {
     }).catch(error => { res.send(error) })
 }
 
-exports.removerUsuarioListaNegra = (req, res) => {
+exports.removerUsuarioListaNegraPerguntas = (req, res) => {
     usuarioService.buscarUsuarioPorID().then(user => {
-        axios.delete(`https://api.mercadolibre.com/users/${user.id}/questions_blacklist/${req.params.user_id}?access_token=${user.accessToken}`).then(response => {
+        axios.delete(`https://api.mercadolibre.com/users/${user.id}/questions_blacklist/${req.params.user_id_perguntas}?access_token=${user.accessToken}`).then(response => {
             res.send(response.data)
         }).catch(error => { res.send(error) })
     }).catch(error => { res.send(error) })
@@ -54,4 +56,61 @@ exports.buscarUsuarioBlackListPerguntasPorNickName = (req, res) => {
     }).catch(error => {res.send(error)})
 }
 
+exports.removerUsuarioBlackListPerguntasBD = (req, res) => {
+    BlackListPerguntas.findByIdAndDelete({_id: req.params._id_perguntas}).then(response => {
+        res.send(response).status(200)
+    }).catch(error => {res.send(error)})
+}
 
+//########################################### COMPRAS ############################################//
+exports.salvarUsuarioListaNegraCompras = (req, res) => {
+    usuarioService.buscarUsuarioPorID().then(user => {
+        axios.post(`https://api.mercadolibre.com/users/${user.id}/order_blacklist?access_token=${user.accessToken}`, req.body).then(response => {
+            res.send(response.data)
+        }).catch(error => { res.send(error) })
+    }).catch(error => { res.send(error) })
+}
+
+exports.listarTodosUsuariosListaNegraCompras = (req, res) => {
+    usuarioService.buscarUsuarioPorID().then(user => {
+        axios.get(`https://api.mercadolibre.com/users/${user.id}/order_blacklist?access_token=${user.accessToken}`).then(response => {
+            res.send(response.data.users)
+        }).catch(error => { res.send({ message: "Nenhum usuário encontrado na black list" }) })
+    }).catch(error => { res.send(error) })
+}
+
+exports.removerUsuarioListaNegraCompras = (req, res) => {
+    usuarioService.buscarUsuarioPorID().then(user => {
+        axios.delete(`https://api.mercadolibre.com/users/${user.id}/order_blacklist/${req.params.user_id_compras}?access_token=${user.accessToken}`).then(response => {
+            res.send(response.data)
+        }).catch(error => { res.send(error) })
+    }).catch(error => { res.send(error) })
+}
+
+//MongoDB
+exports.salvarUsuarioBlackListCompras = (req, res) => {
+    let blackListCompras = new BlackListCompras(req.body)
+    blackListCompras.save().then(response => {
+        res.send('OK').status(200)
+    }).catch(error => {res.send(error)})
+}
+
+exports.listarUsuarioBlackListCompras = (req, res) => {
+    BlackListCompras.find({}).then(response => {
+        res.send(response).status(200)
+    }).catch(error => {res.send(error)})
+}
+
+exports.buscarUsuarioBlackListComprasPorNickName = (req, res) => {
+    BlackListCompras.find({
+        nickname: req.params.nickname.toUpperCase()
+    }).then(response => {
+        res.send(response).status(200)
+    }).catch(error => {res.send(error)})
+}
+
+exports.removerUsuarioBlackListComprasBD = (req, res) => {
+    BlackListPerguntas.findByIdAndDelete({_id: req.params._id_compras}).then(response => {
+        res.send(response).status(200)
+    }).catch(error => {res.send(error)})
+}

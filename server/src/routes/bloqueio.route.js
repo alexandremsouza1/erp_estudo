@@ -1,14 +1,25 @@
 const express = require('express')
 const router = express.Router()
-
 const bloqueioService = require('../services/bloqueio-service')
 
-router.post('/', bloqueioService.salvarUsuarioListaNegra)
-router.get('/', bloqueioService.listarTodosUsuariosListaNegra)
-router.delete('/:user_id', bloqueioService.removerUsuarioListaNegra)
+//PERGUNTAS
+router.post('/', bloqueioService.salvarUsuarioListaNegraPerguntas)
+router.get('/', bloqueioService.listarTodosUsuariosListaNegraPerguntas)
+router.delete('/:user_id_perguntas', bloqueioService.removerUsuarioListaNegraPerguntas)
+router.delete('/mongo/:_id_perguntas', bloqueioService.removerUsuarioBlackListPerguntasBD)
 router.get('/nickname/:nickname', bloqueioService.buscarUsuarioPorNickName)
 router.post('/salvarUsuarioBlackListPerguntas', bloqueioService.salvarUsuarioBlackListPerguntas)
 router.get("/listarUsuarioBlackListPerguntas", bloqueioService.listarUsuarioBlackListPerguntas)
 router.get("/buscarUsuarioBlackListPerguntasPorNickNameMongoDB/:nickname", bloqueioService.buscarUsuarioBlackListPerguntasPorNickName)
+
+
+//COMPRAS
+router.post('/salvar_user_black_compras', bloqueioService.salvarUsuarioListaNegraCompras)
+router.get('/listar_user_black_compras', bloqueioService.listarTodosUsuariosListaNegraCompras)
+router.delete('/:user_id_compras', bloqueioService.removerUsuarioListaNegraCompras)
+router.delete('/mongo/:_id_compras', bloqueioService.removerUsuarioBlackListComprasBD)
+router.post('/salvarUsuarioBlackListCompras', bloqueioService.salvarUsuarioBlackListCompras)
+router.get("/listarUsuarioBlackListCompras", bloqueioService.listarUsuarioBlackListCompras)
+router.get("/buscarUsuarioBlackListComprasPorNickNameMongoDB/:nickname", bloqueioService.buscarUsuarioBlackListComprasPorNickName)
 
 module.exports = router
