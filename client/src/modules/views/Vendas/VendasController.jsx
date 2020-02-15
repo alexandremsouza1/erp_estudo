@@ -64,7 +64,7 @@ class VendasController extends React.Component {
             && this.props.isLoadingVendasAEnviar
         return (
             <>
-                <Dimmer.Dimmable as={Segment} dimmer={isShowLoading.toString()}>
+                <Dimmer.Dimmable dimmer={isShowLoading.toString()}>
                     
                     <Dimmer active={isShowLoading} inverted>
                         <Loader>Carregando dados do Mercado Livre, por favor aguarde...</Loader>

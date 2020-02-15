@@ -547,13 +547,10 @@ export default class VendasView extends React.Component {
 
                     : <>
                         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', color: '#333' }}>
-                            <img src={iconInterrogation} style={{ width: '90px', height: '90px', margin: '0 0 18px' }}></img>
+                            <img src={iconInterrogation} style={{ width: '50px', height: '50px', margin: '0 0 18px' }}></img>
                         </div>
-                        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', color: '#333', fontSize: '18px', margin: '0 0 18px' }}>
-                            Nada por aqui…
-                        </div>
-
-                        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', color: '#666', 'fontSize': '14px', margin: '0 0 14px' }}>
+                        
+                        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', color: '#818181', 'fontSize': '16px', margin: '0 0 14px' }}>
                             Não há vendas com este filtro ou nenhum filtro foi clicado. Por favor, tente tente novamente nas opções acima.
                         </div>
                     </>

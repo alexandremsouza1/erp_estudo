@@ -19,6 +19,7 @@ import { store } from './store';
 import SignInController from './modules/views/Login/SignInController'
 import SignUpController from './modules/views/Login/SignUpController'
 import AcessoMercadoLivre from './modules/views/Login/AcessoMercadoLivre'
+import Page404 from './modules/views/404/Page404'
 import {DOMAIN} from '../src/modules/constants/constants'
 
 import 'primereact/resources/themes/nova-light/theme.css'
@@ -39,6 +40,7 @@ ReactDOM.render(
           <Route path='/signup' component={SignUpController}/>
           <Route path='/acesso_ml' component={AcessoMercadoLivre}/>
           <Route path="/admin" render={props => <AdminLayout {...props} />} />
+          <Route path="*" component={Page404}/>
           <Redirect from="/admin" to="/admin/dashboard" />
         </Switch>
       </BrowserRouter>
