@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { Row, Col } from "react-bootstrap";
 import Grid from '@material-ui/core/Grid';
@@ -6,6 +6,8 @@ import { Loader, Tab } from 'semantic-ui-react'
 import Paper from '@material-ui/core/Paper';
 import { Calendar } from 'primereact/calendar';
 import { Chart } from 'primereact/chart';
+
+import ChartUI from "react-apexcharts";
 
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -25,14 +27,6 @@ export default function DashboardView(props) {
 
   const classes = useStyles();
 
-  const panes = [
-    { menuItem: 'Vendas', render: () => <Chart type="line" data={props.dataVendas} /> },
-    { menuItem: 'Faturamento', render: () => <Chart  type="line" data={props.dataFaturamento} /> },
-    { menuItem: 'Unidades vendidas', render: () => <Chart  type="line" data={props.dataUnidadesVendidas} /> },
-    { menuItem: 'Perguntas', render: () => <Chart  type="line" data={props.data} /> },
-    { menuItem: 'Visitas', render: () => <Chart  type="line" data={props.data} /> }
-  ]
-
   const [state, setState] = useState({
     dataGrafico: new Date()
   })
@@ -45,6 +39,8 @@ export default function DashboardView(props) {
     monthNames: ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"],
     monthNamesShort: ["Jan", "Feb", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"]
   };
+
+
 
   return (
 
@@ -187,9 +183,6 @@ export default function DashboardView(props) {
 
 
 
-      
-      <Tab style={{ margin: '15px 0 0'}} panes={panes} renderActiveOnly={true} />
-      
 
 
     </>

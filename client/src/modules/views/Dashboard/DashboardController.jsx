@@ -4,6 +4,7 @@ import DashboardView from './DashboardView'
 import { useSelector, useDispatch } from 'react-redux'
 import { Dimmer, Loader, Segment } from 'semantic-ui-react'
 import swal from 'sweetalert'
+
 import {
     OBTER_SALDO_TOTAL,
     OBTER_TOTAL_VENDAS_NO_MES,
@@ -12,7 +13,7 @@ import {
     OBTER_STATUS_ANUNCIOS
 }
     from '../../constants/constants'
-import {DOMAIN} from '../../constants/constants'    
+import { DOMAIN } from '../../constants/constants'
 
 export default function DashboardController() {
 
@@ -25,12 +26,18 @@ export default function DashboardController() {
             get()
         }, 60000)
     */
+
+   //https://apexcharts.com/docs/react-charts/
+
+
+
     useEffect(() => {
         get()
+
     }, [])
 
     const dataFaturamento = {
-        labels: ['01/2020','02/2020', '03/2020', '04/2020', '05/2020', '06/2020', '07/2020' , '08/2020' , '09/2020' , '10/2020', '11/2020', '12/2020'],
+        labels: ['01/2020', '02/2020', '03/2020', '04/2020', '05/2020', '06/2020', '07/2020', '08/2020', '09/2020', '10/2020', '11/2020', '12/2020'],
         datasets: [
             {
                 label: 'Faturamento',
@@ -43,7 +50,7 @@ export default function DashboardController() {
     };
 
     const dataVendas = {
-        labels: ['01/2020','02/2020', '03/2020', '04/2020', '05/2020', '06/2020', '07/2020' , '08/2020' , '09/2020' , '10/2020', '11/2020', '12/2020'],
+        labels: ['01/2020', '02/2020', '03/2020', '04/2020', '05/2020', '06/2020', '07/2020', '08/2020', '09/2020', '10/2020', '11/2020', '12/2020'],
         datasets: [
             {
                 label: 'Vendas',
@@ -56,7 +63,7 @@ export default function DashboardController() {
     };
 
     const dataUnidadesVendidas = {
-        labels: ['01/2020','02/2020', '03/2020', '04/2020', '05/2020', '06/2020', '07/2020' , '08/2020' , '09/2020' , '10/2020', '11/2020', '12/2020'],
+        labels: ['01/2020', '02/2020', '03/2020', '04/2020', '05/2020', '06/2020', '07/2020', '08/2020', '09/2020', '10/2020', '11/2020', '12/2020'],
         datasets: [
             {
                 label: 'Unidades vendidas',
@@ -68,7 +75,7 @@ export default function DashboardController() {
         ]
     };
 
-   
+
     const get = async () => {
         await axios.get(`${DOMAIN}/saldo`).then(res => {
             dispatch({
@@ -124,10 +131,10 @@ export default function DashboardController() {
                 <Dimmer active={state.isLoading} inverted>
                     <Loader>Carregando dados do Mercado Livre, por favor aguarde...</Loader>
                 </Dimmer>
-                <DashboardView {...state} 
-                                dataVendas={dataVendas} 
-                                dataFaturamento={dataFaturamento}
-                                dataUnidadesVendidas={dataUnidadesVendidas}/>
+                <DashboardView {...state}
+                    dataVendas={dataVendas}
+                    dataFaturamento={dataFaturamento}
+                    dataUnidadesVendidas={dataUnidadesVendidas} />
             </Dimmer.Dimmable>
         </>
     )

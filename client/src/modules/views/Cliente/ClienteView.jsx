@@ -40,7 +40,7 @@ export default function ClientView(props) {
                             if (!props.isLoading) {
                                 return (
                                     <>
-                                        <TableRow key={key}>
+                                        <TableRow key={key} id='TableRow'>
                                             <TableCell component="th" scope="row">
                                                 <>
                                                     <div style={{
