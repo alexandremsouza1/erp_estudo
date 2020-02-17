@@ -719,8 +719,31 @@ let obterVendasConcluidas = async () => {
 }
 
 
-Promise.resolve(buscarUsuarioPorID()).then(user => {
-    console.log(user)
-}).catch(error => {
-    console.log(error)
-})
+const obterDadosVendasPorCliente = async (req, res) => {
+    usuarioService.buscarUsuarioPorID().then(async user => {
+        await axios.get(`${constants.API_MERCADO_LIVRE}/orders/search?seller=${user.id}&access_token=${user.accessToken}`).then(orders => {
+            let vendas = orders.data.results.filter(ordersClient => {
+                return ordersClient.buyer.id == req.params.id
+            })
+            let vendasClient = vendas.map(value => {
+                //console.log(value.order_items)
+                return value.order_items.reduce((acumulador, order_item) => {
+                  return order_item
+                })
+            })
+            
+            Promise.all(vendasClient).then(values => {
+                let valor_venda = values.map(valorCorrente =>{return valorCorrente.unit_price})
+                let dados = {
+                    totalCompras : valor_venda.reduce((acumulador, valorCorrent) => {return acumulador + valorCorrent}),
+                    quantidadeCompras: valor_venda.length,
+                    tituloAnuncio: values.reduce((acumulador, valorCorrente) => {return valorCorrente.item.title}),
+                    IDAnuncio: values.reduce((a, valorCorrente) => {return valorCorrente.item.id})
+                }
+              console.log(dados)
+            })
+        }).catch(error =>  console.log(error))
+    }).catch(error =>  console.log(error))
+}
+
+obterDadosVendasPorCliente()

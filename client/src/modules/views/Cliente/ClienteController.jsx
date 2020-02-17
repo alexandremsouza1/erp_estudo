@@ -13,7 +13,6 @@ export default function ClientController() {
 
     document.title = "Clientes"
 
-
     return (
         <Dimmer.Dimmable dimmer={store.isLoading}>
             <Dimmer active={store.isLoading} inverted>

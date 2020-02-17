@@ -47,7 +47,7 @@ export default function ClientView(props) {
                                                         color: 'black',
                                                         fontFamily: 'arial',
                                                         fontSize: '19px'
-                                                    }}>{resp.primeiro_nome} {resp.last_name}</div>
+                                                    }}>{resp.id} - {resp.primeiro_nome} {resp.last_name}</div>
                                                     <div style={textStyle}>{resp.cidade} - {resp.estado}</div>
                                                     <div>
                                                         <ButtonUI
@@ -79,7 +79,7 @@ export default function ClientView(props) {
                                             </TableCell>
                                             <TableCell style={alinhamentoTableCell} align="right">
                                                 <>
-                                                    <div style={textStyle}>R$ 149,99</div>
+                                                    <div style={textStyle}>R$ {resp.valorCompra}</div>
                                                     <div style={textStyle_02}>Valor total</div>
                                                 </>
                                             </TableCell>
