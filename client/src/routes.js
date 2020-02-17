@@ -55,6 +55,13 @@ const dashboardRoutes = [
     icon: "fa fa-ban",
     component: BloqueioController,
     layout: "/admin"
+  },
+  {
+    path: "/chat",
+    name: "Chat",
+    icon: "fa fa-ban",
+    component: BloqueioController,
+    layout: "/admin"
   }
 ];
 

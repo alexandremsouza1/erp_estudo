@@ -158,7 +158,7 @@ export default function Navbar(props) {
           [classes.appBarShift]: sideBarState.isSidebar,
         })}
       >
-        <Toolbar>
+        <Toolbar variant="dense">
           <IconButton
             edge="start"
             className={clsx(classes.menuButton, {

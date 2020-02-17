@@ -5,6 +5,7 @@ import Sidebar from "../modules/components/Sidebar/Sidebar";
 import { makeStyles } from '@material-ui/core/styles';
 import routes from "routes.js";
 import { Widget, addResponseMessage } from 'react-chat-widget';
+//import { Widget, addResponseMessage } from '../modules/components/Chat/lib/';
 import '../../node_modules/react-chat-widget/lib/styles.css';
 import CallApiAnuncio from '../modules/actions/CallApi/CallApiAnuncio'
 import CallApiClient from '../modules/actions/CallApi/CallApiClient'
@@ -124,12 +125,14 @@ export default function Admin(props) {
           <Switch>{getRoutes(routes)}</Switch>
 
 
-          <div style={{ 'textTransform': 'uppercase' }} className="App">
+          <div className="App">
             <Widget
               title="Perguntas"
               subtitle={new Date().toLocaleDateString('pt-BR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
               badge='1'
-              handleNewUserMessage={handleNewUserMessage} />
+              handleNewUserMessage={handleNewUserMessage} 
+              senderPlaceHolder='Digite uma resposta'
+              showCloseButton/>
           </div>
 
           {/**<div>

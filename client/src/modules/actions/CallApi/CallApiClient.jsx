@@ -14,13 +14,7 @@ export default function CallApiClient(prosp) {
 
     useEffect(() => {
         axios.get(`${DOMAIN}/clientes`).then(resp => {
-            
-            resp.data.map(result => {
-                axios.get(`${DOMAIN}/clientes/obterDadosVendasPorCliente/${result.id}`).then(response => {
-                    dispatch({ type: LISTAR_TODOS_CLIENTES, data: resp.data, isLoading: false })
-                    dispatch({ type: CARREGAR_DADOS_COMPRAS_POR_CLIENTE, dados_compras_cliente: response.data })
-                }).catch(err => console.log("ERROR", err))
-            })
+            dispatch({ type: LISTAR_TODOS_CLIENTES, data: resp.data, isLoading: false })
         }).catch(err => console.log("ERROR", err))
     }, [])
 

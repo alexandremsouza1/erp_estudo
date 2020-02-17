@@ -719,11 +719,11 @@ let obterVendasConcluidas = async () => {
 }
 
 
-const obterDadosVendasPorCliente = async (req, res) => {
+const obterDadosVendasPorCliente = async (id) => {
     usuarioService.buscarUsuarioPorID().then(async user => {
         await axios.get(`${constants.API_MERCADO_LIVRE}/orders/search?seller=${user.id}&access_token=${user.accessToken}`).then(orders => {
             let vendas = orders.data.results.filter(ordersClient => {
-                return ordersClient.buyer.id == req.params.id
+                return ordersClient.buyer.id == id
             })
             let vendasClient = vendas.map(value => {
                 //console.log(value.order_items)
@@ -732,18 +732,18 @@ const obterDadosVendasPorCliente = async (req, res) => {
                 })
             })
             
-            Promise.all(vendasClient).then(values => {
-                let valor_venda = values.map(valorCorrente =>{return valorCorrente.unit_price})
+                let valor_venda = vendasClient.map(valorCorrente =>{return valorCorrente.unit_price})
                 let dados = {
                     totalCompras : valor_venda.reduce((acumulador, valorCorrent) => {return acumulador + valorCorrent}),
                     quantidadeCompras: valor_venda.length,
-                    tituloAnuncio: values.reduce((acumulador, valorCorrente) => {return valorCorrente.item.title}),
-                    IDAnuncio: values.reduce((a, valorCorrente) => {return valorCorrente.item.id})
+                    tituloAnuncio: vendasClient.reduce((acumulador, valorCorrente) => {return valorCorrente.item.title}),
+                    IDAnuncio: vendasClient.reduce((a, valorCorrente) => {return valorCorrente.item.id})
                 }
+
               console.log(dados)
-            })
+            
         }).catch(error =>  console.log(error))
     }).catch(error =>  console.log(error))
 }
 
-obterDadosVendasPorCliente()
+obterDadosVendasPorCliente(436599320)

@@ -4,30 +4,29 @@ const constants = require('../constants/constants')
 const { rastro } = require('rastrojs')
 const util = require('../helpers/util')
 
-exports.obterDadosVendasPorCliente = async (req, res) => {
+const obterDadosVendasPorCliente = async (id) => {
     usuarioService.buscarUsuarioPorID().then(async user => {
         await axios.get(`${constants.API_MERCADO_LIVRE}/orders/search?seller=${user.id}&access_token=${user.accessToken}`).then(orders => {
             let vendas = orders.data.results.filter(ordersClient => {
-                return ordersClient.buyer.id == req.params.id
+                return ordersClient.buyer.id == id
             })
             let vendasClient = vendas.map(value => {
                 return value.order_items.reduce((acumulador, order_item) => {
                     return order_item
                 })
             })
-
-            Promise.all(vendasClient).then(values => {
-                let valor_venda = values.map(valorCorrente => { return valorCorrente.unit_price })
+                let valor_venda = vendasClient.map(valorCorrente => { return valorCorrente.unit_price })
                 let dados = {
                     totalCompras: valor_venda.reduce((acumulador, valorCorrent) => { return acumulador + valorCorrent }),
                     quantidadeCompras: valor_venda.length,
-                    tituloAnuncio: values[0].item.title,
-                    IDAnuncio: values[0].item.id
+                    tituloAnuncio: vendasClient[0].item.title,
+                    IDAnuncio: vendasClient[0].item.id
                 }
-                res.send(dados).status(200)
-            })
-        }).catch(error => res.send(error))
-    }).catch(error => res.send(error))
+                axios.put('https://sisiml.firebaseio.com/cliente.json', {dados_cliente: dados}).then(response =>{
+                    //OK
+                }).catch(error =>console.log(error))
+        }).catch(error =>console.log(error))
+    }).catch(error => console.log(error))
 }
 
 exports.obterDadosCliente = async (req, res) => {
@@ -38,15 +37,6 @@ exports.obterDadosCliente = async (req, res) => {
                 return !this[JSON.stringify(a.buyer.id)] && (this[JSON.stringify(a.buyer.id)] = true)
 
             }, Object.create(null)).map(value => {
-
-                let vendas = resp.data.results.filter(ordersClient => {
-                    return ordersClient.buyer.id == 10225194
-                })
-                let vendasClient = vendas.map(value => {
-                    return value.order_items.reduce((acumulador, order_item) => {
-                        return order_item
-                    })
-                })
 
                 return axios.get('https://api.mercadolibre.com/users/' + value.buyer.id).then(resp => {
                     var dadosClient = {
@@ -63,25 +53,14 @@ exports.obterDadosCliente = async (req, res) => {
                         cidade: resp.data.address.city,
                         estado: JSON.parse(JSON.stringify(resp.data.address.state).replace("BR-", "")),
                         valorCompra: value.order_items[0].unit_price.toFixed(2),
-                        vendasClient: vendasClient
+                        vendasClient: obterDadosVendasPorCliente(value.buyer.id)
                     }
                     return dadosClient
                 }).catch(err => res.send(err))
             })
 
-            Promise.all(clientes).then((resultado,key) => {
-                let valor_venda = resultado[key].vendasClient.map(valorCorrente => { return valorCorrente.unit_price })
-                resultado.push({
-                    totalCompras: valor_venda.reduce((acumulador, valorCorrent) => { return acumulador + valorCorrent }),
-                    quantidadeCompras: valor_venda.length,
-                    tituloAnuncio: resultado[key].vendasClient[0].item.title,
-                    IDAnuncio: resultado[key].vendasClient[0].item.id
-                })
-                let dados = {
-                    resultado: resultado,
-                }
+            Promise.all(clientes).then((resultado) => {
                 res.send(resultado).status(200)
-                //res.send((resultado))
             })
 
         }).catch(err => {
