@@ -182,7 +182,12 @@ export default function DashboardView(props) {
       </div>
 
 
-
+      <ChartUI
+              options={props.options}
+              series={props.series}
+              type="line"
+              width="550"
+            />       
 
 
     </>

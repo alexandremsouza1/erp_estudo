@@ -27,9 +27,23 @@ export default function DashboardController() {
         }, 60000)
     */
 
-   //https://apexcharts.com/docs/react-charts/
+    //https://apexcharts.com/docs/react-charts/
 
 
+    let options = {
+        chart: {
+            id: "basic-bar"
+        },
+        xaxis: {
+            categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998]
+        }
+    }
+    let series = [
+        {
+            name: "series-1",
+            data: [30, 40, 45, 50, 49, 60, 70, 91]
+        }
+    ]
 
     useEffect(() => {
         get()
@@ -132,6 +146,8 @@ export default function DashboardController() {
                     <Loader>Carregando dados do Mercado Livre, por favor aguarde...</Loader>
                 </Dimmer>
                 <DashboardView {...state}
+                    options={options}
+                    series={series}
                     dataVendas={dataVendas}
                     dataFaturamento={dataFaturamento}
                     dataUnidadesVendidas={dataUnidadesVendidas} />
