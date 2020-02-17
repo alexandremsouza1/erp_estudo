@@ -84,11 +84,11 @@ export default function AnuncioView(props) {
                               </Select>
                             </FormControlUI>
 
-                            <FormControl type="text" placeholder="Buscar por título" className="mr-sm-2" style={{ 'width': '500px' }} />
+                            <FormControl type="text" placeholder="Buscar por título" className="mr-sm-2" style={{ 'width': '500px', margin: '0 0 -10px' }} />
                            
                             <ButtonUI
                                   variant="contained"
-                                  style={{margin: '0 10px 0', height: '40px'}}
+                                  style={{margin: '0 10px 0', height: '40px', margin: '0 0 -10px' }}
                                   color="default"
                                   startIcon={<SearchIcon />}>
                                   Listar

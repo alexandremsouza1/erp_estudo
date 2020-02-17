@@ -5,6 +5,7 @@ import ControleEstoqueController from 'modules/views/Controle-estoque/ControlleE
 import VendasController from 'modules/views/Vendas/VendasController'
 import MensagensAutomaticasController from 'modules/views/MensagensAutomaticas/MensagensAutomaticasController'
 import BloqueioController from '../src/modules/views/Bloqueio/BloqueioController'
+import ChatController from '../src/modules/views/Chat/ChatController'
 
 const dashboardRoutes = [
   {
@@ -59,8 +60,8 @@ const dashboardRoutes = [
   {
     path: "/chat",
     name: "Chat",
-    icon: "fa fa-ban",
-    component: BloqueioController,
+    icon: "fa fa-comments",
+    component: ChatController,
     layout: "/admin"
   }
 ];
