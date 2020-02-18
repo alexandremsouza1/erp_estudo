@@ -7,6 +7,7 @@ import iconSearch from '../../../assets/img/Zoom-icon24px.png'
 import '../../../assets/css/Global/style.css';
 import EditarAnuncio from './EditarAnuncio'
 import { Button, Dropdown, Icon} from 'semantic-ui-react'
+import ButtonUI from '@material-ui/core/Button';
 import AlterarPreco from '../Anuncio/AlterarPreco'
 import GerenciarVariacoes from '../Anuncio/GerenciarVariacoes'
 import PerguntasAnuncio from '../Anuncio/PerguntasAnuncio'
@@ -17,6 +18,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControlUI from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import SearchIcon from '@material-ui/icons/Search';
 
 export default function AnuncioView(props) {
   document.title = "Anúncios"
@@ -83,7 +85,14 @@ export default function AnuncioView(props) {
                             </FormControlUI>
 
                             <FormControl type="text" placeholder="Buscar por título" className="mr-sm-2" style={{ 'width': '500px' }} />
-                            <ButtonB bsStyle="primary" fill style={{ 'marginTop': "5px" }}><img src={iconSearch} alt='search'></img></ButtonB>
+                           
+                            <ButtonUI
+                                  variant="contained"
+                                  style={{margin: '0 10px 0', height: '40px'}}
+                                  color="default"
+                                  startIcon={<SearchIcon />}>
+                                  Listar
+                          </ButtonUI>
                               <br></br>
                           </div> 
                       </Form>
