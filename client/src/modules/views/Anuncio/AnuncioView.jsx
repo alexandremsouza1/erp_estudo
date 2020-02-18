@@ -12,6 +12,12 @@ import GerenciarVariacoes from '../Anuncio/GerenciarVariacoes'
 import PerguntasAnuncio from '../Anuncio/PerguntasAnuncio'
 import MudarStatus from '../Anuncio/MudarStatus'
 
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControlUI from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+
 export default function AnuncioView(props) {
   document.title = "Anúncios"
 
@@ -47,28 +53,39 @@ export default function AnuncioView(props) {
     { key: 'real', text: 'R$', value: 'real' }
   ]
 
+  /**
+   * <FormControl componentClass="select" onChange={handleChangeIsActive}>
+                                <option value="active">Ativos</option>
+                                <option value="paused">Pausados</option>
+                            </FormControl>
+   */
+
   if (!props.isLoading) {
     return (
       <div className="content">
         <Grid fluid>
           <Row>
             <Col md={12}>
-              <Card
-                ctTableFullWidth
-                ctTableResponsive
-                content={
+              
+               
                   <>
                     <Navbar bg="light" expand="lg">
                       <Form inline>
-                        <FormControl type="text" placeholder="Buscar por título" className="mr-sm-2" style={{ 'width': '500px' }} />
-                        <ButtonB bsStyle="primary" fill style={{ 'marginTop': "5px" }}><img src={iconSearch} alt='search'></img></ButtonB>
-                        <div className="col-sm-12" style={{ "marginLeft": '-15px', 'width': '150px' }}>
-                          <FormControl componentClass="select" onChange={handleChangeIsActive}>
-                            <option value="active">Ativos</option>
-                            <option value="paused">Pausados</option>
-                          </FormControl>
-                          <br></br>
-                        </div> 
+                        <div>
+                            <FormControlUI style={{marginRight: '15px', width: '100px'}}>
+                              <InputLabel>Status</InputLabel>
+                              <Select
+                                value={isActive}
+                                onChange={handleChangeIsActive}>
+                                <MenuItem value="active">Ativos</MenuItem>
+                                <MenuItem value="paused">Pausados</MenuItem>
+                              </Select>
+                            </FormControlUI>
+
+                            <FormControl type="text" placeholder="Buscar por título" className="mr-sm-2" style={{ 'width': '500px' }} />
+                            <ButtonB bsStyle="primary" fill style={{ 'marginTop': "5px" }}><img src={iconSearch} alt='search'></img></ButtonB>
+                              <br></br>
+                          </div> 
                       </Form>
                       <br></br>
                     </Navbar>
@@ -216,8 +233,8 @@ export default function AnuncioView(props) {
                     }
                     )}
                   </>
-                }
-              />
+                
+              
             </Col>
           </Row>
         </Grid>
@@ -284,13 +301,7 @@ export default function AnuncioView(props) {
           <Grid fluid>
             <Row>
               <Col md={12}>
-                <Card
-                  ctTableFullWidth
-                  ctTableResponsive
-                  content={
-                    <LoadingCarregandoSolicitacao width={450} />
-                  }
-                />
+                  <LoadingCarregandoSolicitacao width={450} />
               </Col>
             </Row>
           </Grid>

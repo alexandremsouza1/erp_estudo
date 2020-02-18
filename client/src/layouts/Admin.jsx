@@ -4,7 +4,7 @@ import NavbarController from "../modules/components/Navbars/NavbarController";
 import Sidebar from "../modules/components/Sidebar/Sidebar";
 import { makeStyles } from '@material-ui/core/styles';
 import routes from "routes.js";
-import { Widget, addResponseMessage } from 'react-chat-widget';
+import { Widget, addResponseMessage, addUserMessage } from 'react-chat-widget';
 //import { Widget, addResponseMessage } from '../modules/components/Chat/lib/';
 import '../../node_modules/react-chat-widget/lib/styles.css';
 import CallApiAnuncio from '../modules/actions/CallApi/CallApiAnuncio'
@@ -16,33 +16,29 @@ import { DOMAIN } from '../../src/modules/constants/constants'
 
 export default function Admin(props) {
 
-  const [message, setMessage] = useState([])
-  const [state, setState] = useState(0)
+  const [itemID, setItemID] = useState('')
+  const [ClientID, setClientID] = useState(0)
+  const [contBadge, setContBadge] = useState(0)
 
   const handleNewUserMessage = (newMessage) => {
     console.log(`New message incoming! ${newMessage}`);
+    setContBadge(0)
     //Enviar para o Mercado livre
   }
 
+
   useEffect(() => {
-    addResponseMessage("Ola gostaria de saber se vocês tem tamanho M de manguinhas?")
+    let socket = socketIOClient(DOMAIN)
+    socket.on('notification-ml', (perguntas) => {
+      if (perguntas.status === 'UNANSWERED') {
+        console.log(perguntas)
+        setContBadge(1)
+        setClientID(perguntas.from.id)
+        setItemID(' - ' + perguntas.item_id)
+        addResponseMessage(perguntas.text)
+      }
+    })
   }, [])
-
-  const _onMessageWasSent = (message) => {
-    setMessage(message)
-  }
-
-  const _sendMessage = (text) => {
-    if (text.length > 0) {
-      setMessage({
-        messageList: [{
-          author: 'them',
-          type: 'text',
-          data: { text }
-        }]
-      })
-    }
-  }
 
   const useStyles = makeStyles(theme => (
     {
@@ -128,11 +124,11 @@ export default function Admin(props) {
           <div className="App">
             <Widget
               title="Perguntas"
-              subtitle={new Date().toLocaleDateString('pt-BR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
-              badge='1'
-              handleNewUserMessage={handleNewUserMessage} 
+              subtitle={new Date().toLocaleDateString('pt-BR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) + "\n" + itemID}
+              badge={contBadge}
+              handleNewUserMessage={handleNewUserMessage}
               senderPlaceHolder='Digite uma resposta'
-              showCloseButton/>
+              showCloseButton={true} />
           </div>
 
           {/**<div>

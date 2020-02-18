@@ -17,7 +17,7 @@ class PerguntasController extends React.Component {
 
     componentDidMount = () => {
         let socket = socketIOClient(this.state.endPont)
-        socket.on('notification-ml-perguntas', (perguntas) => {
+        socket.on('notification-ml', (perguntas) => {
             console.log(perguntas)
         })
     }

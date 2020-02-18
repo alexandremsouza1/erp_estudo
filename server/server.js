@@ -22,7 +22,7 @@ app.set('io', io)
 app.use('/notifications', notificacoesMercadoLivreRoute);
 
 io.on('connection', socket => {
-    console.log('Connected')
+    console.log('Socket connected')
 
     socket.on('disconnected', () => {
         console.log('disconnected')
