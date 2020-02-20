@@ -28,7 +28,7 @@ export default function ChatView(props) {
 
     return (
         <>
-            <ChatComponent />
+            <ChatComponent {...props}/>
         </>
     )
 }

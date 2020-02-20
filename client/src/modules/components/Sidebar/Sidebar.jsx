@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from 'react-redux'
 import { NavLink } from "react-router-dom";
 import Drawer from '@material-ui/core/Drawer';
@@ -12,6 +12,11 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import { OPEN_DRAWER_MENU } from '../../constants/constants'
 import Badge from '@material-ui/core/Badge';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+import Collapse from '@material-ui/core/Collapse';
+import ChatIcon from '@material-ui/icons/Chat';
+import ListSubheader from '@material-ui/core/ListSubheader';
 
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -119,6 +124,9 @@ export default function Sidebar(props) {
         duration: theme.transitions.duration.enteringScreen,
       }),
     },
+    nested: {
+      paddingLeft: theme.spacing(4),
+    },
     drawerClose: {
       transition: theme.transitions.create('width', {
         easing: theme.transitions.easing.sharp,
@@ -136,6 +144,7 @@ export default function Sidebar(props) {
   const theme = useTheme();
   const sideBarState = useSelector(store => store.sidebar)
   const dispatch = useDispatch()
+  const [open, setOpen] = useState(false)
 
   const activeRoute = (routeName) => {
     return props.location.pathname.indexOf(routeName) > -1 ? "active" : "";
@@ -143,8 +152,9 @@ export default function Sidebar(props) {
 
   const [selectedIndex, setSelectedIndex] = React.useState(props.location.pathname);
 
-  const handleListItemClick = (path) => {
+  const handleListItemClick = (path, name) => {
     setSelectedIndex(path);
+    setOpen(name === 'Chat' ? !open : open)
   };
 
   const handleClickClose = () => {
@@ -178,20 +188,43 @@ export default function Sidebar(props) {
           if (!prop.redirect) {
             //https://material-ui.com/pt/components/lists/#simple-list
             return (
-              <List key={key}>
+              <List key={key} component="nav">
                 <NavLink
                   to={prop.layout + prop.path}
                   className="nav-link"
                   activeClassName="active"
-                  style={{ 'color': 'black' }}>
+                  style={{ 'color': 'black'}}>
 
-              
-                  <ListItem button key={key} onClick={() => handleListItemClick(prop.layout + prop.path)} selected={selectedIndex === prop.layout + prop.path}>
-                    <Badge anchorOrigin={{vertical: 'top', horizontal: 'left'}} badgeContent={prop.name === 'Chat' ? 1 : 0} color="primary">
+
+                  <ListItem button key={key} onClick={() => handleListItemClick(prop.layout + prop.path, prop.name)} selected={selectedIndex === prop.layout + prop.path}>
+                    <Badge anchorOrigin={{ vertical: 'top', horizontal: 'left' }} badgeContent={prop.name === 'Chat' ? 1 : 0} color="primary">
                       <ListItemIcon style={{ 'marginLeft': '10px' }}><i className={prop.icon} style={{ 'fontSize': '15px' }} /></ListItemIcon>
                     </Badge>
                     <ListItemText primary={prop.name} />
+                    {open ? prop.name === 'Chat' ? <ExpandMore /> : <></> : prop.name === 'Chat' ? <ExpandLess /> : <></>}
                   </ListItem>
+
+                  {prop.name === 'Chat' ?
+                    <Collapse in={open} timeout="auto" unmountOnExit>
+                      <List component="div" disablePadding>
+
+                        <ListItem button className={classes.nested}>
+                          <ListItemIcon>
+                            <ChatIcon />
+                          </ListItemIcon>
+                          <ListItemText primary="Perguntas" />
+                        </ListItem>
+
+                        <ListItem button className={classes.nested}>
+                          <ListItemIcon>
+                            <ChatIcon />
+                          </ListItemIcon>
+                          <ListItemText primary="Mensagens Pós venda" />
+                        </ListItem>
+
+                      </List>
+                    </Collapse>
+                    : <></>}
 
                 </NavLink>
               </List>

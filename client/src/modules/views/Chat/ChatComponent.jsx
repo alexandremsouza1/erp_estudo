@@ -17,7 +17,7 @@ import Button from '@material-ui/core/Button';
 import SendIcon from '@material-ui/icons/Send';
 import { Input } from 'semantic-ui-react'
 
-import { Tab } from 'semantic-ui-react'
+import mensagem_notificationImage from '../../../assets/img/mensagem_notification.svg'
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -36,132 +36,132 @@ export default function ChatComponent(props) {
 
     const classes = useStyles();
 
+    const [prop, setProp] = React.useState({})
+    const [textField, setTextField] = React.useState('')
+    const [showImage, setShowImage] = React.useState(true)
+
+    const handleClickListItem = (prop) => {
+        setProp(prop)
+        setShowImage(false)
+    }
+
     return (
         <Grid columns={2} divided>
             <span style={{ fontWeight: 'bold', fontSize: '18px', color: '#818281' }}>Perguntas</span>
             <Grid.Row>
                 <Grid.Column width={7}>
                     <List component="nav" className={classes.root}>
-                        <ListItem button alignItems="flex-start">
-                            <ListItemAvatar>
-                                <Avatar alt="Felipe Miguel dos Santos" src="/" />
-                            </ListItemAvatar>
-                            <ListItemText
-                                primary="Felipe Miguel dos Santos"
-                                secondary={
-                                    <React.Fragment>
-                                        <Typography
-                                            component="span"
-                                            variant="body2"
-                                            className={classes.inline}
-                                            color="textPrimary"
-                                        >
-                                            Anuncio
-                                            </Typography>
-                                        <span style={{ fontSize: '11px' }}>- Perfume Amakha 15ml Promoção Ótimas Fragrâncias</span>
-                                    </React.Fragment>
-                                }
-                            />
-                            <ListItemSecondaryAction style={{ padding: '0 0 15px' }}>
-                                <span>6 minutos atrás</span>
-                            </ListItemSecondaryAction>
-                        </ListItem>
+                        {props.perguntas.map(prop => {
+                            return (
+                                <>
+                                    <ListItem button alignItems="flex-start" onClick={() => handleClickListItem(prop)}>
 
-                        <Divider variant="inset" component="li" />
+                                        <ListItemAvatar>
+                                            <Avatar alt="" src="/" />
+                                        </ListItemAvatar>
 
-                        <ListItem button alignItems="flex-start">
-                            <ListItemAvatar>
-                                <Avatar alt="Adnair Miguel dos Santos" src="/" />
-                            </ListItemAvatar>
-                            <ListItemText
-                                primary="Adnair Miguel dos Santos"
-                                secondary={
-                                    <React.Fragment>
-                                        <Typography
-                                            component="span"
-                                            variant="body2"
-                                            className={classes.inline}
-                                            color="textPrimary"
-                                        >
-                                            Anuncio
-                                            </Typography>
-                                        <span style={{ fontSize: '11px' }}>- Perfume Amakha 15ml Promoção Ótimas Fragrâncias</span>
-                                    </React.Fragment>
-                                }
-                            />
-                            <ListItemSecondaryAction style={{ padding: '0 0 15px' }}>
-                                <span>12 minutos atrás</span>
-                            </ListItemSecondaryAction>
-                        </ListItem>
+                                        <ListItemText
+                                            primary={prop.status === 'UNANSWERED' ? 'Não respondido' : ''}
+                                            secondary={
+                                                <React.Fragment>
+                                                    <Typography
+                                                        component="span"
+                                                        variant="body2"
+                                                        className={classes.inline}
+                                                        color="textPrimary"
+                                                    >
+                                                        Anuncio
+                                                    </Typography>
+                                                    <span style={{ fontSize: '11px' }}>- {prop.item_id}</span>
+                                                </React.Fragment>
+                                            }
+                                        />
 
-                        <Divider variant="inset" component="li" />
+                                        <ListItemSecondaryAction style={{ padding: '0 0 15px' }}>
+                                            <span>6 minutos atrás</span>
+                                        </ListItemSecondaryAction>
 
-                        <ListItem button alignItems="flex-start">
-                            <ListItemAvatar>
-                                <Avatar alt="Paloma Santos" src="/" />
-                            </ListItemAvatar>
-                            <ListItemText
-                                primary="Paloma Santos"
-                                secondary={
-                                    <React.Fragment>
-                                        <Typography
-                                            component="span"
-                                            variant="body2"
-                                            className={classes.inline}
-                                            color="textPrimary"
-                                        >
-                                            Anuncio
-                                            </Typography>
-                                        <span style={{ fontSize: '11px' }}>- Kit 10 Blusas Feminina Crepe Atacado - Promoção Frete Grátis</span>
-                                    </React.Fragment>
-                                }
-                            />
-                            <ListItemSecondaryAction style={{ padding: '0 0 15px' }}>
-                                <span>28 minutos atrás</span>
-                            </ListItemSecondaryAction>
-                        </ListItem>
-
+                                    </ListItem>
+                                    <Divider variant="inset" component="li" />
+                                </>
+                            )
+                        })}
                     </List>
                 </Grid.Column>
 
                 <Grid.Column>
-                    <AppBar position="static" style={{ backgroundColor: '#4682b4' }}>
-                        <Toolbar variant="dense">
-                            <Grid>
-                                <Grid.Row>
-                                    <Grid.Column style={{ width: '200px' }}>
-                                        <div>Felipe Miguel dos Santos</div>
-                                        <div><a style={{ fontSize: '10px', color: 'white' }} href='#'>#MLB9870987090</a></div>
-                                    </Grid.Column>
-                                </Grid.Row>
-                            </Grid>
-                            <ListItemSecondaryAction>
-                                <span><a style={{ fontSize: '12px', color: 'white' }} href='#'>Perfume Amakha 15ml Promoção Ótimas Fragrâncias</a></span>
-                            </ListItemSecondaryAction>
-                        </Toolbar>
-                    </AppBar>
-                    <Paper elevation={3} style={{ height: '350px' }}>
-                        <div style={{ display: 'flex' }}>
 
-                        </div>
-                        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                            <div style={{backgroundColor: '#3f51b5', color: '#FFFFFF'}}>
-                                Haha thank you Clarke, I'm doing our best
-                            </div>
-                        </div>
+                    {showImage ? <>
+                                    <img style={{width: '600px', paddingLeft: '100px'}} src={mensagem_notificationImage}></img>
+                                    <div style={{fontSize : '20px', color: '#263238', fontWeight: 'bold'}}>Selecione a conversa para exibir</div>
+                                    <div style={{fontSize : '14px', color: '#263238'}}>Para iniciar uma conversa, basta clicar na mensagem do perfil de uma pessoa ao lado </div>
+                                    
+                                </> :
+                        <>
+                            <AppBar position="static" style={{ backgroundColor: '#4682b4' }}>
+                                <Toolbar variant="dense">
+                                    <Grid>
+                                        <Grid.Row>
+                                            <Grid.Column style={{ width: '200px' }}>
+                                                <div>Felipe Miguel dos Santos</div>
+                                                <div><a style={{ fontSize: '10px', color: 'white' }} href='#'>#{prop.item_id}</a></div>
+                                            </Grid.Column>
+                                        </Grid.Row>
+                                    </Grid>
+                                    <ListItemSecondaryAction>
+                                        <span><a style={{ fontSize: '12px', color: 'white' }} href='#'>Perfume Amakha 15ml Promoção Ótimas Fragrâncias</a></span>
+                                    </ListItemSecondaryAction>
+                                </Toolbar>
+                            </AppBar>
+                            <Paper elevation={3} style={{ height: '350px' }}>
 
-                    </Paper>
-                    <Paper component='form'>
-                        <Input type='text' fluid placeholder='Digite uma resposta...' action>
-                            <input />
-                            <Button
-                                variant="contained"
-                                color="default"
-                                startIcon={<SendIcon />}>
-                                Enviar
-                                </Button>
-                        </Input>
-                    </Paper>
+                                {prop.text === undefined ? <></> :
+                                    <div style={{ display: 'flex' }} arial-label='Pergunta'>
+                                        <div style={{
+                                            backgroundColor: '#3f51b5',
+                                            color: '#FFFFFF',
+                                            minHeight: '50px',
+                                            borderRadius: '10px 10px',
+                                            padding: '5px',
+                                            maxWidth: '500px',
+                                            marginTop: '5px',
+                                            marginLeft: '5px'
+                                        }}>
+                                            {prop.text}
+                                        </div>
+
+                                    </div>}
+
+                                {textField === '' ? <></> :
+                                    <div style={{ display: 'flex', justifyContent: 'flex-end' }} arial-label='Resposta'>
+                                        <div style={{
+                                            backgroundColor: '#3f51b5',
+                                            color: '#FFFFFF',
+                                            minHeight: '50px',
+                                            borderRadius: '10px 10px',
+                                            padding: '5px',
+                                            maxWidth: '500px',
+                                            marginTop: '15px',
+                                            marginRight: '5px'
+                                        }}>
+                                            {textField}
+                                        </div>
+                                    </div>}
+
+                            </Paper>
+                            <Paper component='form'>
+                                <Input value={textField} onChange={(event) => setTextField(event.target.value)} type='text' fluid placeholder='Digite uma resposta...' action>
+                                    <input />
+                                    <Button
+                                        variant="contained"
+                                        color="default"
+                                        startIcon={<SendIcon />}>
+                                        Enviar
+                           </Button>
+                                </Input>
+                            </Paper>
+                        </>
+                    }
                 </Grid.Column>
 
             </Grid.Row>

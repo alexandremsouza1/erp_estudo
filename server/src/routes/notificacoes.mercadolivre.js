@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const usuarioService = require("../services/usuario-service")
 const axios = require('axios')
+const FilaNotif = require('../models/filaNotificacoes-model')
 
 module.exports = (io) => {
 
@@ -12,12 +13,18 @@ module.exports = (io) => {
                 await axios.get(`https://api.mercadolibre.com/questions/${resource}?access_token=${user.accessToken}`).then(question => {
                     io.emit('notification-ml', question.data)
                     res.send(question.data)
+                    salvarNotificacaoFilaBD(question.data)
                 })
             }
         }).catch(error => res.send(error))
-       
-       //console.log(req.body)
     })
+
+    const salvarNotificacaoFilaBD = (body) => {
+        filaNotif = new FilaNotif(body)
+        filaNotif.save().then(response => {
+            console.log("Notificacoes salvo no banco de dados!")
+        })
+    }
 
     return router
 }
