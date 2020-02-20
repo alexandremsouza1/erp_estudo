@@ -17,6 +17,7 @@ import Button from '@material-ui/core/Button';
 import SendIcon from '@material-ui/icons/Send';
 import { Input } from 'semantic-ui-react'
 
+
 import mensagem_notificationImage from '../../../assets/img/mensagem_notification.svg'
 
 const useStyles = makeStyles(theme => ({
@@ -52,6 +53,7 @@ export default function ChatComponent(props) {
                 <Grid.Column width={7}>
                     <List component="nav" className={classes.root}>
                         {props.perguntas.map(prop => {
+                            props.showHorasAtras(prop.date_created)
                             return (
                                 <>
                                     <ListItem button alignItems="flex-start" onClick={() => handleClickListItem(prop)}>
@@ -61,7 +63,7 @@ export default function ChatComponent(props) {
                                         </ListItemAvatar>
 
                                         <ListItemText
-                                            primary={prop.status === 'UNANSWERED' ? 'Não respondido' : ''}
+                                            primary={prop.status === 'UNANSWERED' ? prop.nick_name : ''}
                                             secondary={
                                                 <React.Fragment>
                                                     <Typography
@@ -72,13 +74,14 @@ export default function ChatComponent(props) {
                                                     >
                                                         Anuncio
                                                     </Typography>
-                                                    <span style={{ fontSize: '11px' }}>- {prop.item_id}</span>
+                                                    <span style={{ fontSize: '11px' }}>- {prop.title}</span>
                                                 </React.Fragment>
                                             }
                                         />
 
+
                                         <ListItemSecondaryAction style={{ padding: '0 0 15px' }}>
-                                            <span>6 minutos atrás</span>
+                                            <span>{props.horasAtras} atrás</span>
                                         </ListItemSecondaryAction>
 
                                     </ListItem>
@@ -92,24 +95,24 @@ export default function ChatComponent(props) {
                 <Grid.Column>
 
                     {showImage ? <>
-                                    <img style={{width: '600px', paddingLeft: '100px'}} src={mensagem_notificationImage}></img>
-                                    <div style={{fontSize : '20px', color: '#263238', fontWeight: 'bold'}}>Selecione a conversa para exibir</div>
-                                    <div style={{fontSize : '14px', color: '#263238'}}>Para iniciar uma conversa, basta clicar na mensagem do perfil de uma pessoa ao lado </div>
-                                    
-                                </> :
+                        <img style={{ width: '600px', paddingLeft: '100px' }} src={mensagem_notificationImage}></img>
+                        <div style={{ fontSize: '20px', color: '#263238', fontWeight: 'bold' }}>Selecione a conversa para exibir</div>
+                        <div style={{ fontSize: '14px', color: '#263238' }}>Para iniciar uma conversa, basta clicar na mensagem do perfil de uma pessoa ao lado </div>
+
+                    </> :
                         <>
                             <AppBar position="static" style={{ backgroundColor: '#4682b4' }}>
                                 <Toolbar variant="dense">
                                     <Grid>
                                         <Grid.Row>
                                             <Grid.Column style={{ width: '200px' }}>
-                                                <div>Felipe Miguel dos Santos</div>
+                                                <div>{prop.nick_name}</div>
                                                 <div><a style={{ fontSize: '10px', color: 'white' }} href='#'>#{prop.item_id}</a></div>
                                             </Grid.Column>
                                         </Grid.Row>
                                     </Grid>
                                     <ListItemSecondaryAction>
-                                        <span><a style={{ fontSize: '12px', color: 'white' }} href='#'>Perfume Amakha 15ml Promoção Ótimas Fragrâncias</a></span>
+                                        <span><a style={{ fontSize: '12px', color: 'white' }} href='#'>{prop.title}</a></span>
                                     </ListItemSecondaryAction>
                                 </Toolbar>
                             </AppBar>
@@ -120,7 +123,7 @@ export default function ChatComponent(props) {
                                         <div style={{
                                             backgroundColor: '#3f51b5',
                                             color: '#FFFFFF',
-                                            minHeight: '50px',
+                                            minHeight: '25px',
                                             borderRadius: '10px 10px',
                                             padding: '5px',
                                             maxWidth: '500px',
@@ -137,7 +140,7 @@ export default function ChatComponent(props) {
                                         <div style={{
                                             backgroundColor: '#3f51b5',
                                             color: '#FFFFFF',
-                                            minHeight: '50px',
+                                            minHeight: '25px',
                                             borderRadius: '10px 10px',
                                             padding: '5px',
                                             maxWidth: '500px',

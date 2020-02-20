@@ -1,10 +1,10 @@
 const axios = require('axios')
 const usuarioService = require("./usuario-service")
-const FilaNotif = require("../models/filaNotificacoes-model")
+const FilaPerguntas = require("../models/filaPerguntas-model")
 
 exports.obterPerguntasNaoRespondidas = async (req, res) => {
     await usuarioService.buscarUsuarioPorID().then(user => {
-        FilaNotif.find({
+        FilaPerguntas.find({
             seller_id: user.id,
             status: 'UNANSWERED'
         }).then(response => {

@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
-const filaNotifService = require('../services/filaPerguntas-service')
+const filaPerguntas = require('../services/filaPerguntas-service')
 
-router.get('/fila_perguntas', filaNotifService.obterPerguntasNaoRespondidas)
+router.get('/fila_perguntas', filaPerguntas.obterPerguntasNaoRespondidas)
 
 module.exports = router

@@ -1,11 +1,12 @@
 import React from 'react'
 import ChatView from './ChatView'
 import axios from 'axios'
-import {DOMAIN} from '../../constants/constants'
+import { DOMAIN } from '../../constants/constants'
+
 
 export default class ChatController extends React.Component {
 
-    constructor(props){
+    constructor(props) {
         super(props)
 
         this.state = {
@@ -13,13 +14,15 @@ export default class ChatController extends React.Component {
         }
     }
 
-    componentDidMount(){
+    componentDidMount = () => {
         axios.get(`${DOMAIN}/perguntas/fila_perguntas`).then(response => {
             this.setState({
                 perguntas: response.data
             })
         })
     }
+
+    
 
     render() {
         return (

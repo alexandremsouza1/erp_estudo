@@ -1,12 +1,16 @@
 const mongoose = require('mongoose')
 
-const filaNotif = mongoose.Schema({
+const filaPerguntas = mongoose.Schema({
     id: {
         type: Number,
         trim: true
     },
     seller_id: {
         type: Number,
+        trim: true
+    },
+    nick_name: {
+        type: String,
         trim: true
     },
     text: {
@@ -18,6 +22,10 @@ const filaNotif = mongoose.Schema({
         trim: true
     },
     item_id: {
+        type: String,
+        trim: true
+    },
+    title: {
         type: String,
         trim: true
     },
@@ -56,4 +64,4 @@ const filaNotif = mongoose.Schema({
     }
 })
 
-module.exports = mongoose.model('filaNotif', filaNotif)
+module.exports = mongoose.model('filaPerguntas', filaPerguntas)
