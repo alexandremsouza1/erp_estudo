@@ -52,18 +52,18 @@ export default function ChatComponent(props) {
             <Grid.Row>
                 <Grid.Column width={7}>
                     <List component="nav" className={classes.root}>
-                        {props.perguntas.map(prop => {
+                        {props.perguntas.map((prop, key) => {
                             props.showHorasAtras(prop.date_created)
                             return (
                                 <>
-                                    <ListItem button alignItems="flex-start" onClick={() => handleClickListItem(prop)}>
+                                    <ListItem key={key} button alignItems="flex-start" onClick={() => handleClickListItem(prop)}>
 
                                         <ListItemAvatar>
                                             <Avatar alt="" src="/" />
                                         </ListItemAvatar>
 
                                         <ListItemText
-                                            primary={prop.status === 'UNANSWERED' ? prop.nick_name : ''}
+                                            primary={prop.status === 'ANSWERED' ? prop.nick_name : ''}
                                             secondary={
                                                 <React.Fragment>
                                                     <Typography

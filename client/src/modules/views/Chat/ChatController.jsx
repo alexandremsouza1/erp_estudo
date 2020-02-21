@@ -1,32 +1,36 @@
 import React from 'react'
 import ChatView from './ChatView'
-import axios from 'axios'
-import { DOMAIN } from '../../constants/constants'
+import {connect} from 'react-redux'
+import {GET_PERGUNTAS} from '../../constants/constants'
 
-
-export default class ChatController extends React.Component {
+class ChatController extends React.Component {
 
     constructor(props) {
         super(props)
-
-        this.state = {
-            perguntas: []
-        }
     }
 
-    componentDidMount = () => {
-        axios.get(`${DOMAIN}/perguntas/fila_perguntas`).then(response => {
-            this.setState({
-                perguntas: response.data
-            })
-        })
+    componentDidMount = () =>{
+        this.props.listarPerguntas(this.props.perguntas)
     }
-
-    
 
     render() {
         return (
-            <ChatView {...this.state}/>
+            <ChatView {...this.state} perguntas={this.props.perguntas}/>
         )
     }
 }
+
+const mapStateToProps = store => ({
+    perguntas: store.perguntas.question
+})
+
+const mapDispatchToProps = dispatch => {
+    return ({
+        listarPerguntas: (perguntas) => {
+            dispatch({type: GET_PERGUNTAS, question: perguntas})
+        }
+    })
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ChatController)
+

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux'
 import { NavLink } from "react-router-dom";
 import Drawer from '@material-ui/core/Drawer';
@@ -14,9 +14,9 @@ import { OPEN_DRAWER_MENU } from '../../constants/constants'
 import Badge from '@material-ui/core/Badge';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-import Collapse from '@material-ui/core/Collapse';
-import ChatIcon from '@material-ui/icons/Chat';
-import ListSubheader from '@material-ui/core/ListSubheader';
+//import Collapse from '@material-ui/core/Collapse';
+//import ChatIcon from '@material-ui/icons/Chat';
+//import ListSubheader from '@material-ui/core/ListSubheader';
 
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -143,6 +143,7 @@ export default function Sidebar(props) {
   const classes = useStyles();
   const theme = useTheme();
   const sideBarState = useSelector(store => store.sidebar)
+  const perguntas = useSelector(store => store.perguntas)
   const dispatch = useDispatch()
   const [open, setOpen] = useState(false)
 
@@ -197,14 +198,14 @@ export default function Sidebar(props) {
 
 
                   <ListItem button key={key} onClick={() => handleListItemClick(prop.layout + prop.path, prop.name)} selected={selectedIndex === prop.layout + prop.path}>
-                    <Badge anchorOrigin={{ vertical: 'top', horizontal: 'left' }} badgeContent={prop.name === 'Chat' ? 1 : 0} color="primary">
+                    <Badge anchorOrigin={{ vertical: 'top', horizontal: 'left' }} badgeContent={prop.name === 'Chat' ? perguntas.qtdePerguntas : 0} color="primary">
                       <ListItemIcon style={{ 'marginLeft': '10px' }}><i className={prop.icon} style={{ 'fontSize': '15px' }} /></ListItemIcon>
                     </Badge>
                     <ListItemText primary={prop.name} />
                     {open ? prop.name === 'Chat' ? <ExpandMore /> : <></> : prop.name === 'Chat' ? <ExpandLess /> : <></>}
                   </ListItem>
 
-                  {prop.name === 'Chat' ?
+                  {/*prop.name === 'Chat' ?
                     <Collapse in={open} timeout="auto" unmountOnExit>
                       <List component="div" disablePadding>
 
@@ -224,7 +225,7 @@ export default function Sidebar(props) {
 
                       </List>
                     </Collapse>
-                    : <></>}
+            : <></>*/}
 
                 </NavLink>
               </List>

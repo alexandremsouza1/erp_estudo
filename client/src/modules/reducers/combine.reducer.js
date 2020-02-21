@@ -4,6 +4,7 @@ import clienteReducer from './cliente/cliente.reducer';
 import dashboardReducer from './dashboard/dashboard.reducer'
 import sidebarReducer from './Sidebar/sidebar.reducer'
 import vendaReducer from './venda/venda.reducer'
+import perguntasReducer from './perguntas/perguntas.reducer'
 
 /**
  * Created by: 
@@ -16,5 +17,6 @@ export const reducers = combineReducers({
     cliente: clienteReducer,
     dashboard: dashboardReducer,
     sidebar: sidebarReducer,
-    venda: vendaReducer
+    venda: vendaReducer,
+    perguntas: perguntasReducer
 });

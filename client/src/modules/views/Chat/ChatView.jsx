@@ -13,7 +13,7 @@ export default function ChatView(props) {
 
     return (
         <>
-            <ChatComponent {...props} showHorasAtras={showHorasAtras} horasAtras={horasAtras}/>
+            <ChatComponent {...props} showHorasAtras={showHorasAtras} horasAtras={horasAtras} perguntas={props.perguntas}/>
         </>
     )
 }

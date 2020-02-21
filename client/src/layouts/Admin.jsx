@@ -1,24 +1,26 @@
 import React, { useState, useEffect } from "react";
+import {useDispatch} from 'react-redux'
 import { Route, Switch } from "react-router-dom";
 import NavbarController from "../modules/components/Navbars/NavbarController";
 import Sidebar from "../modules/components/Sidebar/Sidebar";
 import { makeStyles } from '@material-ui/core/styles';
 import routes from "routes.js";
 import { Widget, addResponseMessage, addUserMessage } from 'react-chat-widget';
-//import { Widget, addResponseMessage } from '../modules/components/Chat/lib/';
 import '../../node_modules/react-chat-widget/lib/styles.css';
 import CallApiAnuncio from '../modules/actions/CallApi/CallApiAnuncio'
 import CallApiClient from '../modules/actions/CallApi/CallApiClient'
 import CallApiVenda from '../modules/actions/CallApi/CallApiVenda'
-
+import CallApiPerguntas from '../modules/actions/CallApi/CallApiPerguntas'
+import axios from 'axios'
 import socketIOClient from 'socket.io-client'
-import { DOMAIN } from '../../src/modules/constants/constants'
+import { DOMAIN, GET_PERGUNTAS, GET_QTDE_PERGUNTAS } from '../../src/modules/constants/constants'
 
 export default function Admin(props) {
 
   const [itemID, setItemID] = useState('')
   const [ClientID, setClientID] = useState(0)
   const [contBadge, setContBadge] = useState(0)
+  const dispatch = useDispatch()
 
   const handleNewUserMessage = (newMessage) => {
     console.log(`New message incoming! ${newMessage}`);
@@ -30,12 +32,16 @@ export default function Admin(props) {
   useEffect(() => {
     let socket = socketIOClient(DOMAIN)
     socket.on('notification-ml', (perguntas) => {
-      if (perguntas.status === 'UNANSWERED') {
+      if (perguntas.status === 'ANSWERED') {
         console.log(perguntas)
         setContBadge(1)
         setClientID(perguntas.from.id)
         setItemID(' - ' + perguntas.item_id)
         addResponseMessage(perguntas.text)
+        axios.get(`${DOMAIN}/perguntas/fila_perguntas`).then(questions => {
+          dispatch({type: GET_PERGUNTAS, question: questions.data})
+          dispatch({type: GET_QTDE_PERGUNTAS, qtdePerguntas: questions.data.length})
+        }).catch(error => console.log(error))
       }
     })
   }, [])
@@ -104,6 +110,7 @@ export default function Admin(props) {
       <CallApiAnuncio />
       <CallApiClient />
       <CallApiVenda />
+      <CallApiPerguntas/>
 
       <div className={classes.root}>
         <NavbarController

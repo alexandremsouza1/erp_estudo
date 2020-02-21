@@ -6,9 +6,12 @@ exports.obterPerguntasNaoRespondidas = async (req, res) => {
     await usuarioService.buscarUsuarioPorID().then(user => {
         FilaPerguntas.find({
             seller_id: user.id,
-            status: 'UNANSWERED'
+            status: 'ANSWERED'
         }).then(response => {
            res.send(response)
         }).catch(error => res.send(error))
     }).catch(error => res.send(error))
 }
+
+//ANSWERED
+//UNANSWERED

@@ -1,12 +1,16 @@
 
 /**
- * Criado por: Felipe Miguel dos Santos
+ * Criado por: Felipe M. Santos
  */
 
 //Anuncio
 export const SALVAR_ANUNCIO = 'SALVAR_ANUNCIO'
 export const ATUALIZAR_ANUNCIO = 'ATUALIZAR_ANUNCIO'
 export const LISTAR_TODOS_ANUNCIOS = 'LISTAR_TODOS_ANUNCIOS'
+
+//Perguntas
+export const GET_PERGUNTAS = 'GET_PERGUNTAS'
+export const GET_QTDE_PERGUNTAS = 'GET_QTDE_PERGUNTAS'
 
 //Cliente
 export const LISTAR_TODOS_CLIENTES = 'LISTAR_TODOS_CLIENTES'

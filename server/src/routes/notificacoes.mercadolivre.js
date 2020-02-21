@@ -15,9 +15,9 @@ module.exports = (io) => {
                         await axios.get(`https://api.mercadolibre.com/users/${question.data.from.id}`).then(userName => {
                             question.data.title = item.data.title
                             question.data.nick_name = userName.data.nickname
+                            salvarNotificacaoFilaBD(question.data)
                             io.emit('notification-ml', question.data)
                             res.send(question.data)
-                            salvarNotificacaoFilaBD(question.data)
                         })
                     })
                 })
