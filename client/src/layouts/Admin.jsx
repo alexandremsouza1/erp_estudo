@@ -32,7 +32,7 @@ export default function Admin(props) {
   useEffect(() => {
     let socket = socketIOClient(DOMAIN)
     socket.on('notification-ml', (perguntas) => {
-      if (perguntas.status === 'ANSWERED') {
+      if (perguntas.status === 'UNANSWERED') {
         console.log(perguntas)
         setContBadge(1)
         setClientID(perguntas.from.id)

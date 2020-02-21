@@ -18,6 +18,7 @@ module.exports = (io) => {
                             salvarNotificacaoFilaBD(question.data)
                             io.emit('notification-ml', question.data)
                             res.send(question.data)
+                            console.log(req.body)
                         })
                     })
                 })
@@ -31,6 +32,14 @@ module.exports = (io) => {
             console.log("Notificacoes salvo no banco de dados!")
         })
     }
+
+    router.post('/responder/', (req, res) => {
+        usuarioService.buscarUsuarioPorID().then(user => {
+            axios.post(`https://api.mercadolibre.com/answers?access_token=${user.accessToken}`, req.body).then(response => {
+                res.send({isRespondido: true})
+            }).catch(error => res.send(error))
+        }).catch(error => res.send(error))
+    })
 
     return router
 }

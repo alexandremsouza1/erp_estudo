@@ -52,7 +52,7 @@ export default function ChatComponent(props) {
             <Grid.Row>
                 <Grid.Column width={7}>
                     <List component="nav" className={classes.root}>
-                        {props.perguntas.map((prop, key) => {
+                        {props.perguntas.length != 0 ? props.perguntas.map((prop, key) => {
                             props.showHorasAtras(prop.date_created)
                             return (
                                 <>
@@ -63,7 +63,7 @@ export default function ChatComponent(props) {
                                         </ListItemAvatar>
 
                                         <ListItemText
-                                            primary={prop.status === 'ANSWERED' ? prop.nick_name : ''}
+                                            primary={prop.status === 'UNANSWERED' ? prop.nick_name : ''}
                                             secondary={
                                                 <React.Fragment>
                                                     <Typography
@@ -88,7 +88,11 @@ export default function ChatComponent(props) {
                                     <Divider variant="inset" component="li" />
                                 </>
                             )
-                        })}
+                        }) : <>
+                        
+                        <div style={{display: 'flex', justifyContent: 'center', fontSize: '16px', color: '#263238', fontWeight: 'bold' }}>Nenhuma pergunta disponível no momento</div>
+
+                        </>}
                     </List>
                 </Grid.Column>
 
@@ -158,9 +162,10 @@ export default function ChatComponent(props) {
                                     <Button
                                         variant="contained"
                                         color="default"
+                                        onClick={() => {props.responder(prop.id, textField)}}
                                         startIcon={<SendIcon />}>
                                         Enviar
-                           </Button>
+                                    </Button>
                                 </Input>
                             </Paper>
                         </>
