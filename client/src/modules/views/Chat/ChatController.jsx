@@ -3,6 +3,7 @@ import ChatView from './ChatView'
 import {connect} from 'react-redux'
 import {GET_PERGUNTAS, DOMAIN} from '../../constants/constants'
 import axios from 'axios'
+import swal from 'sweetalert'
 
 class ChatController extends React.Component {
 
@@ -22,6 +23,7 @@ class ChatController extends React.Component {
         axios.post(`${DOMAIN}/notifications/responder`, {question_id: question_id, text: text}).then(response => {
             console.log("Pergunta respondida")
             this.mostrarPerguntas()
+            swal('Respondido!', 'Pergunta respondida.', 'success')
         }).catch(error => console.log(error))
     }
 
