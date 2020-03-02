@@ -48,7 +48,6 @@ export default function ChatComponent(props) {
 
     return (
         <Grid columns={2} divided>
-            <span style={{ fontWeight: 'bold', fontSize: '18px', color: '#818281' }}>Perguntas</span>
             <Grid.Row>
                 <Grid.Column width={7}>
                     <List component="nav" className={classes.root}>

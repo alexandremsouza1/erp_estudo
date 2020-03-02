@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {useDispatch} from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { Route, Switch } from "react-router-dom";
 import NavbarController from "../modules/components/Navbars/NavbarController";
 import Sidebar from "../modules/components/Sidebar/Sidebar";
@@ -39,8 +39,8 @@ export default function Admin(props) {
         setItemID(' - ' + perguntas.item_id)
         addResponseMessage(perguntas.text)
         axios.get(`${DOMAIN}/perguntas/fila_perguntas`).then(questions => {
-          dispatch({type: GET_PERGUNTAS, question: questions.data})
-          dispatch({type: GET_QTDE_PERGUNTAS, qtdePerguntas: questions.data.length})
+          dispatch({ type: GET_PERGUNTAS, question: questions.data })
+          dispatch({ type: GET_QTDE_PERGUNTAS, qtdePerguntas: questions.data.length })
         }).catch(error => console.log(error))
       }
     })
@@ -110,7 +110,7 @@ export default function Admin(props) {
       <CallApiAnuncio />
       <CallApiClient />
       <CallApiVenda />
-      <CallApiPerguntas/>
+      <CallApiPerguntas />
 
       <div className={classes.root}>
         <NavbarController
@@ -124,6 +124,10 @@ export default function Admin(props) {
         <main className={classes.content} >
 
           <div className={classes.toolbar} />
+
+          <div>
+            <label style={{ color: '#818281', fontSize: '18px' }}>{getPathName(props.location.pathname) === 'Chat' ? 'Perguntas' : getPathName(props.location.pathname)}</label>
+          </div>
 
           <Switch>{getRoutes(routes)}</Switch>
 
