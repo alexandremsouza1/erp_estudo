@@ -42,9 +42,6 @@ exports.obterDadosCliente = async (req, res) => {
                     var dadosClient = {
                         id: value.buyer.id,
                         nickname: value.buyer.nickname,
-                        numero_contato: util.tratarNumeroCelularComDDD(value.buyer.phone.area_code, value.buyer.phone.number) === null ?
-                            'Não informado' : 'https://api.whatsapp.com/send?phone=55' + util.tratarNumeroCelularComDDD(value.buyer.phone.area_code, value.buyer.phone.number) + '',
-                        ddd: value.buyer.phone.area_code,
                         primeiro_nome: value.buyer.first_name,
                         last_name: value.buyer.last_name,
                         tipo_documento: value.buyer.billing_info.doc_type,

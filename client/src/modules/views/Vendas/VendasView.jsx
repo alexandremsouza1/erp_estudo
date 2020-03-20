@@ -9,7 +9,6 @@ import iconCancelled from '../../../assets/img/cancelled.png'
 
 import { Divider, Icon, Step, Dimmer, Loader, Segment, Message } from 'semantic-ui-react'
 
-import WhatsAppIcon from '@material-ui/icons/WhatsApp';
 import SmsIcon from '@material-ui/icons/Sms';
 import iconInterrogation from '../../../assets/img/interrogation.png'
 import Avatar from '@material-ui/core/Avatar';
@@ -346,14 +345,6 @@ export default class VendasView extends React.Component {
 
                                                                             </> :
                                                                             <>
-                                                                                <Tooltip title="Clique aqui para enviar mensagem para o comprador pelo Whatsapp Web">
-                                                                                    <Button
-                                                                                        variant="contained"
-                                                                                        style={{ 'color': 'white', 'backgroundColor': 'green' }}
-                                                                                        startIcon={<WhatsAppIcon />}>
-                                                                                        <a href={venda.comprador.whatsapp} style={{ 'color': 'white' }} target='_blank' data-toggle="tooltip" title='Enviar mensagem WhatsApp'>Enviar mensagem WhatsApp</a>
-                                                                                    </Button>
-                                                                                </Tooltip>
                                                                                 <Tooltip title="Clique aqui para enviar mensagem para o comprador para ser lido na plataforma do Mercado Livre">
                                                                                     <Badge badgeContent={venda.msg.length} color="primary">
                                                                                         <Button

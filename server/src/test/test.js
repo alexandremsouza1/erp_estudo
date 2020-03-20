@@ -227,30 +227,6 @@ const obterVendasPendentes = async () => {
     })
 }
 
-const obterDadosCliente = async () => {
-    buscarUsuarioPorID().then(resp => {
-        axios.get(`${constants.API_MERCADO_LIVRE}/orders/search?seller=${resp.id}&order.status=paid&access_token=${resp.accessToken}`).then(resp => {
-            /* resp.data.results.filter(function (a) {
-                 //Evita os IDs duplicados
-                 return !this[JSON.stringify(a.buyer.id)] && (this[JSON.stringify(a.buyer.id)] = true)
-             }, Object.create(null)).map(value => {
-                 /*console.log({
-                     id: value.buyer.id,
-                     nickname: value.buyer.nickname,
-                     numero_contato: util.tratarNumeroCelularComDDD(value.buyer.phone.area_code,value.buyer.phone.number),
-                     ddd: value.buyer.phone.area_code,
-                     primeiro_nome: value.buyer.first_name,
-                     last_name: value.buyer.last_name,
-                     tipo_documento: value.buyer.billing_info.doc_type,
-                     documento: value.buyer.billing_info.doc_number		
-                 })
-             })*/
-            console.log(resp.data.results)
-        }).catch(err => {
-            console.log({ mensagem: "Houve um erro ao buscar todas as vendas realizadas: " + err })
-        })
-    })
-}
 
 function tratarNumeroCelularComDDD(ddd, numero) {
     if (ddd != null) ddd = ddd.replace(' ', '')
@@ -641,7 +617,7 @@ let obterVendasConcluidas = async () => {
         await axios.get(`https://api.mercadolibre.com/orders/search?seller=${user.id}&access_token=${user.accessToken}`).then(resp => {
             let vendasConcluidas = resp.data.results.map(async response => {
                 return await axios.get(`https://api.mercadolibre.com/shipments/${response.shipping.id}?access_token=${user.accessToken}`).then(async ship => {
-                    return await axios.get(`https://api.mercadolibre.com/messages/packs/2129650429/sellers/362614126?access_token=APP_USR-8828109757058917-012911-5ba57aca8dc260359006ab3487a498af-362614126`).then(msg => {
+                    return await axios.get(`https://api.mercadolibre.com/messages/packs/${response.pack_id === null ? response.id : response.pack_id}/sellers/${user.id}?access_token=${user.accessToken}`).then(msg => {
                         let json = {
                             id_venda: response.id,
                             status: response.status,
@@ -661,11 +637,11 @@ let obterVendasConcluidas = async () => {
                             },
                             valor_venda: response.total_amount,
                             comprador: {
-                                whatsapp: util.tratarNumeroCelularComDDD(response.buyer.phone.area_code, response.buyer.phone.number) === null ?
-                                    'Não informado' : 'https://api.whatsapp.com/send?phone=55' + util.tratarNumeroCelularComDDD(response.buyer.phone.area_code, response.buyer.phone.number) + '',
-                                numero_contato: util.tratarNumeroCelularComDDD(response.buyer.phone.area_code, response.buyer.phone.number) === null ?
-                                    'Não informado' : util.tratarNumeroCelularComDDD(response.buyer.phone.area_code, response.buyer.phone.number),
-                                ddd: response.buyer.phone.area_code,
+                                //whatsapp: util.tratarNumeroCelularComDDD(response.buyer.phone.area_code, response.buyer.phone.number) === null ?
+                                    //'Não informado' : 'https://api.whatsapp.com/send?phone=55' + util.tratarNumeroCelularComDDD(response.buyer.phone.area_code, response.buyer.phone.number) + '',
+                                //numero_contato: util.tratarNumeroCelularComDDD(response.buyer.phone.area_code, response.buyer.phone.number) === null ?
+                                    //'Não informado' : util.tratarNumeroCelularComDDD(response.buyer.phone.area_code, response.buyer.phone.number),
+                                //ddd: response.buyer.phone.area_code,
                                 nickname_comprador: response.buyer.nickname,
                                 email_comprador: response.buyer.email,
                                 first_name_comprador: response.buyer.first_name,
@@ -746,4 +722,56 @@ const obterDadosVendasPorCliente = async (id) => {
     }).catch(error =>  console.log(error))
 }
 
-obterDadosVendasPorCliente(436599320)
+const obterDadosCliente = async () => {
+    usuarioService.buscarUsuarioPorID().then(resp => {
+        axios.get(`${constants.API_MERCADO_LIVRE}/orders/search?seller=${resp.id}&access_token=${resp.accessToken}`).then(resp => {
+            let clientes = resp.data.results.filter(function (a) {
+                //Evita os IDs duplicados
+                return !this[JSON.stringify(a.buyer.id)] && (this[JSON.stringify(a.buyer.id)] = true)
+
+            }, Object.create(null)).map(value => {
+
+                return axios.get('https://api.mercadolibre.com/users/' + value.buyer.id).then(resp => {
+                    var dadosClient = {
+                        id: value.buyer.id,
+                        nickname: value.buyer.nickname,
+                        primeiro_nome: value.buyer.first_name,
+                        last_name: value.buyer.last_name,
+                        tipo_documento: value.buyer.billing_info.doc_type,
+                        documento: value.buyer.billing_info.doc_number === undefined ||
+                            value.buyer.billing_info.doc_number === null ? 'Não informado' : value.buyer.billing_info.doc_number,
+                        cidade: resp.data.address.city,
+                        estado: JSON.parse(JSON.stringify(resp.data.address.state).replace("BR-", "")),
+                        valorCompra: value.order_items[0].unit_price.toFixed(2),
+                        vendasClient: obterDadosVendasPorCliente(value.buyer.id)
+                    }
+                    return dadosClient
+                }).catch(err => console.log(err))
+            })
+
+            Promise.all(clientes).then((resultado) => {
+                console.log(resultado).status(200)
+            })
+
+        }).catch(err => {
+            console.log({ mensagem: "Houve um erro ao buscar todas as vendas realizadas: " + err })
+        })
+    })
+}
+
+const obterAtributosPorCategoria = async () => {
+    usuarioService.buscarUsuarioPorID().then(async response => {
+        await axios.get(`https://api.mercadolibre.com/categories/MLB3112/attributes`).then(async atrib => {
+            atrib.data.map(value => {
+                /*console.log("NAME: "+value.name)
+                value.values.map(values => {
+                    console.log("ID: "+value.id)
+                    console.log("NAME: "+value.name)
+                })*/
+                console.log(value)
+            })
+        }).catch(error => console.error(error))
+    }).catch(error => console.error(error))
+}
+
+obterAtributosPorCategoria()
