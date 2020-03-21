@@ -53,9 +53,29 @@ const HeaderExpansionPanel = ({title, subtitle, message}) => {
     )
 }
 
-export default function CustomModal(props) {
+export default function EditarAnuncio(props) {
 
     const classes = useStyles();
+
+    const [state, setState] = React.useState({
+        classico: props.tipoAnuncio_id === 'gold_special' ? true : false,
+        premium: props.tipoAnuncio_id === 'gold_pro' ? true : false,
+      });
+
+    const handleChange = (event) => {
+        setState({
+            ...state, 
+            [event.target.name]: event.target.checked
+        })
+    }  
+
+    const setListingType = () => {
+        if(state.classico){
+            return 'gold_special'
+        }else{
+            return 'gold_pro'
+        }
+    }
 
     const mostrarTarifaVendaPremium = () => {
         if (props.json.shipping.free_shipping) {
@@ -205,7 +225,7 @@ export default function CustomModal(props) {
                                                     </CardContent>
                                                     <CardActions>
                                                         <FormControlLabel
-                                                            control={<Switch checked={false} />}
+                                                            control={<Switch checked={state.classico} onChange={(event) => handleChange(event)} name='classico'/>}
                                                             label=""
                                                             color="primary"
                                                         />
@@ -240,7 +260,7 @@ export default function CustomModal(props) {
                                                     </CardContent>
                                                     <CardActions>
                                                         <FormControlLabel
-                                                            control={<Switch checked={true} />}
+                                                            control={<Switch  checked={state.premium} onChange={(event) => handleChange(event)} name='premium' />}
                                                             label="Selecionado"
                                                             color="primary"
                                                         />
@@ -250,7 +270,7 @@ export default function CustomModal(props) {
 
                                             <CardActions>
                                                 <ButtonUI>Cancelar</ButtonUI>
-                                                <ButtonUI variant="contained" color="primary">Confirmar</ButtonUI>
+                                                <ButtonUI onClick={() => props.updateListingType(props.id, setListingType)} variant="contained" color="primary">Confirmar</ButtonUI>
                                             </CardActions>
                                         </Row>
 

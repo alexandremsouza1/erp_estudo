@@ -201,3 +201,14 @@ exports.updateAvailableQuantity = (req, res) => {
         }).catch(error => res.send(error))
     }).catch(error => res.send(error))
 }
+
+exports.updateListingType = (req, res) => {
+    usuarioService.buscarUsuarioPorID().then(user => {
+        axios.post(`https://api.mercadolibre.com/items/${req.body.itemId}/listing_type?access_token=${user.accessToken}`, JSON.stringify({
+            id: req.body.id
+        })).then(response => {
+            res.status(200).send("ListingType atualizado no anúncio "+req.body.itemId)
+        }).catch(error => res.status(200).send(error))
+    }).catch(error => res.status(200).send(error))
+
+}

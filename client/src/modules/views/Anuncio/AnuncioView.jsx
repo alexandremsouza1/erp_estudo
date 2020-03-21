@@ -287,7 +287,8 @@ export default function AnuncioView(props) {
             isSelectedFrete={isSelectedFrete}
             handleChangeSelectedFreteGratis={handleChangeSelectedFreteGratis}
             handleChangeSelectedFretePorContaDoComprador={handleChangeSelectedFretePorContaDoComprador}
-            freteGratis={props.freteGratis} />}
+            freteGratis={props.freteGratis} 
+            updateListingType={props.updateListingType}/>}
 
         {props.isShowConfirmPauseProduct && 
           <MudarStatus 

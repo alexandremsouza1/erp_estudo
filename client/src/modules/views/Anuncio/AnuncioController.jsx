@@ -108,9 +108,16 @@ export default function AnuncioController() {
             swal("Atualizado!", "Status atualizado com sucesso", "success");
 
         }).catch(error => {
-            sendNotification('error', 'Ocorreu um erro ao atualizar o status do anúncio (AnuncioController:80)' + error)
+            sendNotification('error', 'Ocorreu um erro ao atualizar o status do anúncio (AnuncioController:111)' + error)
         })
-        
+    }
+
+    let updateListingType = async (itemId, listingType) => {
+        await axios.post(`${DOMAIN}/anuncio/update_listing_type`, {id: listingType, itemId: itemId}).then(response => {
+            swal("Atualizado!", "Status atualizado com sucesso", "success");
+        }).catch(error => {
+            sendNotification('error', 'Ocorreu um erro ao atualizar o tipo de anúncio (AnuncioController:120)' + error)
+        })
     }
 
     return (
@@ -130,7 +137,8 @@ export default function AnuncioController() {
                 updateStatus={updateStatus}
                 isShowConfirmPauseProduct={isShowConfirmPauseProduct}
                 setIsShowConfirmPauseProduct={setIsShowConfirmPauseProduct}
-                updateAvailableQuantity={updateAvailableQuantity}/>
+                updateAvailableQuantity={updateAvailableQuantity}
+                updateListingType={updateListingType}/>
         </>
     );
 }
