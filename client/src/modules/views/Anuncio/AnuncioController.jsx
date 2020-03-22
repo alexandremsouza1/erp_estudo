@@ -87,8 +87,10 @@ export default function AnuncioController() {
             if(product.id === itemId){
                 if(listingType === 'gold_special'){
                     product.tipoAnuncio = 'Clássico - Exposição alta'
+                    product.tipoAnuncio_id = listingType
                 }else{
                     product.tipoAnuncio = 'Premium - Exposição máxima'
+                    product.tipoAnuncio_id = listingType
                 }
                 temp.push(product)
             }else{
@@ -132,7 +134,12 @@ export default function AnuncioController() {
     let updateListingType = async (itemId, listingType) => {
         await axios.post(`${DOMAIN}/anuncio/update_listing_type`, {id: listingType, itemId: itemId}).then(response => {
             dispatch({type: LISTAR_TODOS_ANUNCIOS, data: updateListingTypeInStore(itemId, listingType), isLoading: false})
-            sendNotification('success', 'Tipo de anúncio atualizado com sucesso!', 10000)
+            if(listingType === 'gold_special'){
+                sendNotification('success', 'Pronto, salvamos suas modificações!', 10000)
+            }else{
+                sendNotification('success', 'Objetivo alcançado! Agora você pode oferecer parcelamento sem juros.', 10000)
+            }
+            
         }).catch(error => {
             sendNotification('error', 'Ocorreu um erro ao atualizar o tipo de anúncio (AnuncioController:120)' + error)
         })
