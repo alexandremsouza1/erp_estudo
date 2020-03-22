@@ -29,13 +29,14 @@ import Switch from '@material-ui/core/Switch';
 import imgAnuncioClassico from '../../../assets/img/anuncio_classico.PNG'
 import imgAnuncioPremium from '../../../assets/img/anuncio_premium.PNG'
 import imgOfereceMercadoEnvios from '../../../assets/img/oferece_mercado_envios.png'
+import imgFormaDeEntrega from '../../../assets/img/forma_de_entrega.PNG'
 import imgInfoComFreteGratis from '../../../assets/img/infoComFreteGratis.png'
 
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
+import Popover from '@material-ui/core/Popover';
 
 const useStyles = makeStyles(theme => ({
     appBar: {
@@ -47,7 +48,13 @@ const useStyles = makeStyles(theme => ({
     },
     displayInline: {
         display: 'grid'
-    }
+    },
+    popover: {
+        pointerEvents: 'none',
+    },
+    paper: {
+        padding: theme.spacing(1),
+    },
 
 }));
 
@@ -58,6 +65,15 @@ const HeaderExpansionPanel = ({ title, subtitle, message }) => {
             <div style={{ fontSize: '16px', color: '#666666' }}>{subtitle}</div>
             <div style={{ fontSize: '14px', color: '#31d086' }}>{message}</div>
         </>
+    )
+}
+
+const Speaker = () => {
+    return (
+        <Popover title="Title">
+            <p>This is a defalut Popover </p>
+            <p>Content</p>
+        </Popover>
     )
 }
 
@@ -183,35 +199,40 @@ export default function EditarAnuncio(props) {
                                         expandIcon={<ExpandMoreIcon />}>
                                         <HeaderExpansionPanel
                                             className={classes.displayInline}
-                                            title='Forma de entrega'/>
+                                            title='Forma de entrega' />
                                     </ExpansionPanelSummary>
                                     <ExpansionPanelDetails>
                                         <Card>
                                             <CardContent>
-                                                <div style={{ color: '#000000', fontSize: '18px' }}>
-                                                    <img src={imgOfereceMercadoEnvios}></img>Faço envios pelo Mercado Envios
-                                                </div>
-                                                <FormControl component="fieldset">
-                                                    <RadioGroup aria-label="gender" name="gender1">
+                                                <Row>
+                                                    <Col md={6}>
+                                                        <div style={{ color: '#000000', fontSize: '18px' }}>
+                                                            <img src={imgOfereceMercadoEnvios}></img>Faço envios pelo Mercado Envios
+                                                        </div>
+                                                        <FormControl component="fieldset">
+                                                            <RadioGroup aria-label="gender" name="gender1">
 
-                                                        <FormControlLabel style={{ paddingTop: '50px' }} value="female" control={<Radio />} label={
-                                                            <span style={{ color: '#000000', fontSize: '18px' }}>
-                                                                Com frete grátis. {' '}
-                                                                <img src={imgInfoComFreteGratis}></img>
-                                                            </span>
-                                                        } />
-                                                        {'https://reactjsexample.com/a-nice-plug-n-go-tooltip-for-react/'}    
-                                                        <div style={{ color: '#666666', fontSize: '16px', paddingLeft: '27px' }}>Você paga R$ 33,90 pelo frete para qualquer destino</div>
+                                                                <FormControlLabel style={{ paddingTop: '50px' }} value="female" control={<Radio />} label={
+                                                                    <span style={{ color: '#000000', fontSize: '18px' }}>
+                                                                        Com frete grátis. {' '}
+                                                                        <img src={imgInfoComFreteGratis}></img>
+                                                                    </span>
+                                                                } />
+                                                                {/**https://api.mercadolibre.com/users/362614126/shipping_options/free?item_id=MLB1461682466 */}
+                                                                <div style={{ color: '#666666', fontSize: '16px', paddingLeft: '27px' }}>Você paga R$ 33,90 pelo frete para qualquer destino</div>
+                                                                <FormControlLabel style={{ paddingTop: '15px' }} value="female" control={<Radio />} label={
+                                                                    <div style={{ color: '#000000', fontSize: '18px' }}>Não oferecer frete grátis</div>
+                                                                } />
 
-                                                        <FormControlLabel style={{ paddingTop: '15px' }} value="female" control={<Radio />} label={
-                                                            <div style={{ color: '#000000', fontSize: '18px' }}>Não oferecer frete grátis</div>
-                                                        } />
-
-                                                    </RadioGroup>
-                                                </FormControl>
-                                                <div style={{ color: '#666666', fontSize: '16px', paddingLeft: '27px' }}>O Comprador paga o frete</div>
+                                                            </RadioGroup>
+                                                        </FormControl>
+                                                        <div style={{ color: '#666666', fontSize: '16px', paddingLeft: '27px' }}>O Comprador paga o frete</div>
+                                                    </Col>
+                                                    <Col md={6}>
+                                                        <img style={{paddingTop : '120px'}} src={imgFormaDeEntrega}></img>
+                                                    </Col>
+                                                </Row>
                                             </CardContent>
-
                                             <div>
                                                 <CardActions>
                                                     <ButtonUI variant="contained" color="primary">Confirmar</ButtonUI>
