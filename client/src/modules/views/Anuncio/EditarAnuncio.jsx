@@ -19,6 +19,7 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import sendNotification from '../../components/Notification/Notification'
 
 import Card from '@material-ui/core/Card';
 import Divider from '@material-ui/core/Divider';
@@ -58,8 +59,9 @@ export default function EditarAnuncio(props) {
     const classes = useStyles();
 
     const [state, setState] = React.useState({
-        classico: props.tipoAnuncio_id === 'gold_special' ? true : false,
-        premium: props.tipoAnuncio_id === 'gold_pro' ? true : false,
+        isClassico: props.tipoAnuncio_id === 'gold_special' ? true : false,
+        isPremium: props.tipoAnuncio_id === 'gold_pro' ? true : false,
+        isExpanded: false
       });
 
     const handleChange = (event) => {
@@ -70,7 +72,7 @@ export default function EditarAnuncio(props) {
     }  
 
     const setListingType = () => {
-        if(state.classico){
+        if(state.isClassico){
             return 'gold_special'
         }else{
             return 'gold_pro'
@@ -91,6 +93,25 @@ export default function EditarAnuncio(props) {
         } else {
             return (((props.preco * 11) / 100) + 5).toFixed(2)
         }
+    }
+
+    const handleExpansionPanel = (isExpanded) => {
+        setState({
+            isExpanded: !isExpanded
+        })
+    }
+
+    const handleConfirmarListingType = () => {
+        if(state.isClassico && state.isPremium){
+            sendNotification('error', 'Você selecionou dois tipos de anúncios: CLÁSSICO e PRÉMIUM, por favor escolha apenas um dos dois e clique em Confirmar', 10000)
+            return
+        }
+        if(!state.isClassico && !state.isPremium){
+            sendNotification('error', 'Você não selecionou nenhum tipo de anúncio, por favor escolha CLÁSSICO OU PRÉMIUM e clique em Confirmar', 10000)
+            return
+        }
+        
+        props.updateListingType(props.id, setListingType())
     }
 
     return (
@@ -194,7 +215,7 @@ export default function EditarAnuncio(props) {
                     <Row>
                         <Col md={12}>
                             <Paper elevation={3}>
-                                <ExpansionPanel>
+                                <ExpansionPanel expanded={state.isExpanded} onChange={() => handleExpansionPanel(state.isExpanded)}>
                                     <ExpansionPanelSummary
                                         expandIcon={<ExpandMoreIcon />}>
                                         <span style={{ fontSize: '18px', color: '#333333' }}>Tipo de anúncio</span>
@@ -225,8 +246,8 @@ export default function EditarAnuncio(props) {
                                                     </CardContent>
                                                     <CardActions>
                                                         <FormControlLabel
-                                                            control={<Switch checked={state.classico} onChange={(event) => handleChange(event)} name='classico'/>}
-                                                            label=""
+                                                            control={<Switch checked={state.isClassico} onChange={(event) => handleChange(event)} name='isClassico'/>}
+                                                            label={state.isClassico ? 'Selecionado' : ''}
                                                             color="primary"
                                                         />
                                                     </CardActions>
@@ -260,8 +281,8 @@ export default function EditarAnuncio(props) {
                                                     </CardContent>
                                                     <CardActions>
                                                         <FormControlLabel
-                                                            control={<Switch  checked={state.premium} onChange={(event) => handleChange(event)} name='premium' />}
-                                                            label="Selecionado"
+                                                            control={<Switch  checked={state.isPremium} onChange={(event) => handleChange(event)} name='isPremium' />}
+                                                            label={state.isPremium ? 'Selecionado' : ''}
                                                             color="primary"
                                                         />
                                                     </CardActions>
@@ -269,8 +290,8 @@ export default function EditarAnuncio(props) {
                                             </Col>
 
                                             <CardActions>
-                                                <ButtonUI>Cancelar</ButtonUI>
-                                                <ButtonUI onClick={() => props.updateListingType(props.id, setListingType)} variant="contained" color="primary">Confirmar</ButtonUI>
+                                                <ButtonUI onClick={() => setState({isExpanded: false})}>Cancelar</ButtonUI>
+                                                <ButtonUI onClick={() => handleConfirmarListingType()} variant="contained" color="primary">Confirmar</ButtonUI>
                                             </CardActions>
                                         </Row>
 
