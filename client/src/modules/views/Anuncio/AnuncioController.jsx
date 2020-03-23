@@ -22,7 +22,12 @@ export default function AnuncioController() {
     let updateShipping = async (itemId, free_shipping) => {
         await axios.put(`${DOMAIN}/anuncio/update_shipping`, {itemId, free_shipping}).then(response => {
             //dispatch({type: LISTAR_TODOS_ANUNCIOS, data: updateStateTitleProduct(itemId, free_shipping), isLoading: false})
-            sendNotification('success', 'Pronto, salvamos suas modificações!', 5000)
+            if(free_shipping){
+                sendNotification('success', 'Objetivo alcançado! Agora você oferece frete grátis.', 5000)
+            }else{
+                sendNotification('success', 'Pronto, salvamos suas modificações!', 5000)
+            }
+            
         }).catch(error => {
             sendNotification('error', 'Ocorreu um problema ao tentar atualizar a forma de entrega (AnuncioController:26)', 5000)
         })
@@ -167,9 +172,9 @@ export default function AnuncioController() {
         await axios.post(`${DOMAIN}/anuncio/update_listing_type`, { id: listingType, itemId: itemId }).then(response => {
             dispatch({ type: LISTAR_TODOS_ANUNCIOS, data: updateListingTypeInStore(itemId, listingType), isLoading: false })
             if (listingType === 'gold_special') {
-                sendNotification('success', 'Pronto, salvamos suas modificações!', 10000)
+                sendNotification('success', 'Pronto, salvamos suas modificações!', 5000)
             } else {
-                sendNotification('success', 'Objetivo alcançado! Agora você pode oferecer parcelamento sem juros.', 10000)
+                sendNotification('success', 'Objetivo alcançado! Agora você pode oferecer parcelamento sem juros.', 5000)
             }
 
         }).catch(error => {

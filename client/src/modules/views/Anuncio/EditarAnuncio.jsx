@@ -31,6 +31,7 @@ import imgAnuncioPremium from '../../../assets/img/anuncio_premium.PNG'
 import imgOfereceMercadoEnvios from '../../../assets/img/oferece_mercado_envios.png'
 import imgFormaDeEntrega from '../../../assets/img/forma_de_entrega.PNG'
 import imgInfoComFreteGratis from '../../../assets/img/infoComFreteGratis.png'
+import imgFormaEntregaAviso from '../../../assets/img/forma_entrega_aviso.PNG'
 
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
@@ -84,29 +85,34 @@ export default function EditarAnuncio(props) {
     const classes = useStyles();
 
     const [state, setState] = React.useState({
-        isClassico: props.tipoAnuncio_id === 'gold_special' ? true : false,
-        isPremium: props.tipoAnuncio_id === 'gold_pro' ? true : false,
         showInfoMercadoLivreEditarTitulo: false,
-        title: props.titulo,
-        freeShipping: props.freeShipping === undefined ? false : true
+        title: props.titulo
     });
 
-    const handleChange = (event) => {
-        setState({
-            ...state,
-            [event.target.name]: event.target.checked
-        })
-    }
+    const [freeShipping, setFreeShipping] = React.useState(props.freeShipping === undefined ? 'false' : 'true')
+    const [isClassico, setIsClassico] = React.useState(props.tipoAnuncio_id === 'gold_special' ? true : false)
+    const [isPremium, setIsPremium] = React.useState(props.tipoAnuncio_id === 'gold_pro' ? true : false)
+    const [showInfoFormaDeEntrega, setShowInfoFormaDeEntrega] = React.useState(false)
 
     const handleFreeShipping = event => {
-        setState({
-            freeShipping: event.target.value
-        })
-        console.log("freeShipping: "+state.freeShipping)
+        setFreeShipping(event.target.value)
+    }
+
+    const verificarFormaEntrega = () => {
+        if (freeShipping === 'false') {
+            setShowInfoFormaDeEntrega(true)
+        } else {
+            props.updateShipping(props.id, freeShipping === 'true' ? true : false)
+        }
+    }
+
+    const confirmarFormaEntrega = () => {
+        props.updateShipping(props.id, freeShipping === 'true' ? true : false)
+        setShowInfoFormaDeEntrega(false)
     }
 
     const setListingType = () => {
-        if (state.isClassico) {
+        if (isClassico) {
             return 'gold_special'
         } else {
             return 'gold_pro'
@@ -130,11 +136,11 @@ export default function EditarAnuncio(props) {
     }
 
     const handleConfirmarListingType = () => {
-        if (state.isClassico && state.isPremium) {
+        if (isClassico && isPremium) {
             sendNotification('error', 'Você selecionou dois tipos de anúncios: CLÁSSICO e PRÉMIUM, por favor escolha apenas um dos dois e clique em Confirmar', 10000)
             return
         }
-        if (!state.isClassico && !state.isPremium) {
+        if (!isClassico && !isPremium) {
             sendNotification('error', 'Você não selecionou nenhum tipo de anúncio, por favor escolha CLÁSSICO OU PRÉMIUM e clique em Confirmar', 10000)
             return
         }
@@ -170,7 +176,7 @@ export default function EditarAnuncio(props) {
                                     <ExpansionPanelDetails>
                                         <Row>
                                             <Col md={12}>
-                                                <FormInput onChange={(event) => {setState({title: event.target.value})}} width='500px' label="Título" value={props.titulo} style={{ "color": "blue" }} disabled={props.quantidadeVendido > 0 ? true : false} />
+                                                <FormInput onChange={(event) => { setState({ title: event.target.value }) }} width='500px' label="Título" value={props.titulo} style={{ "color": "blue" }} disabled={props.quantidadeVendido > 0 ? true : false} />
                                                 {props.quantidadeVendido > 0 &&
                                                     <Message info style={{ width: '500px' }}>
                                                         <Message.Header>De acordo com as políticas do Mercado Livre, só será possível alterar os títulos dos anúncios que NÃO tiverem vendas.</Message.Header>
@@ -182,7 +188,7 @@ export default function EditarAnuncio(props) {
                                     </ExpansionPanelDetails>
                                     <div>
                                         <CardActions>
-                                            <ButtonUI onClick={() => {props.updateTitle(props.id, state.title)}} disabled={props.quantidadeVendido > 0 ? true : false} variant="contained">Confirmar</ButtonUI>
+                                            <ButtonUI startIcon={<CheckCircleIcon />} onClick={() => { props.updateTitle(props.id, state.title) }} disabled={props.quantidadeVendido > 0 ? true : false} variant="contained">Confirmar</ButtonUI>
                                         </CardActions>
                                     </div>
                                 </ExpansionPanel>
@@ -242,17 +248,17 @@ export default function EditarAnuncio(props) {
                                                             <img src={imgOfereceMercadoEnvios}></img>Faço envios pelo Mercado Envios
                                                         </div>
                                                         <FormControl component="fieldset">
-                                                            <RadioGroup value={state.freeShipping} onChange={(event) => handleFreeShipping(event)}>
+                                                            <RadioGroup value={freeShipping} onChange={(event) => handleFreeShipping(event)}>
 
-                                                                <FormControlLabel style={{ paddingTop: '50px' }} value={false} control={<Radio />} label={
+                                                                <FormControlLabel style={{ paddingTop: '50px' }} value='true' control={<Radio />} label={
                                                                     <span style={{ color: '#000000', fontSize: '18px' }}>
                                                                         Com frete grátis. {' '}
                                                                         <img src={imgInfoComFreteGratis}></img>
                                                                     </span>
                                                                 } />
-                                                              
+
                                                                 <div style={{ color: '#666666', fontSize: '16px', paddingLeft: '27px' }}>Você paga R$ {props.custoFrete} pelo frete para qualquer destino</div>
-                                                                <FormControlLabel style={{ paddingTop: '15px' }} value={true} control={<Radio />} label={
+                                                                <FormControlLabel style={{ paddingTop: '15px' }} value='false' control={<Radio />} label={
                                                                     <div style={{ color: '#000000', fontSize: '18px' }}>Não oferecer frete grátis</div>
                                                                 } />
 
@@ -267,7 +273,7 @@ export default function EditarAnuncio(props) {
                                             </CardContent>
                                             <div>
                                                 <CardActions>
-                                                    <ButtonUI variant="contained">Confirmar</ButtonUI>
+                                                    <ButtonUI startIcon={<CheckCircleIcon />} onClick={() => verificarFormaEntrega()} variant="contained">Confirmar</ButtonUI>
                                                 </CardActions>
                                             </div>
                                         </Card>
@@ -286,9 +292,23 @@ export default function EditarAnuncio(props) {
                                         <span style={{ fontSize: '18px', color: '#333333' }}>Retirar pessoalmente</span>
                                     </ExpansionPanelSummary>
                                     <ExpansionPanelDetails>
-
-
-
+                                        <Row>
+                                                <FormControl component="fieldset">
+                                                    <RadioGroup style={{padding: '0 10px 0'}} value={freeShipping} onChange={(event) => handleFreeShipping(event)}>
+                                                        <FormControlLabel value='true' control={<Radio />} label={
+                                                            <span style={{ color: '#000000', fontSize: '18px' }}>Concordo</span>
+                                                        } />
+                                                        <FormControlLabel value='false' control={<Radio />} label={
+                                                            <div style={{ color: '#000000', fontSize: '18px' }}>Não concordo</div>
+                                                        } />
+                                                    </RadioGroup>
+                                                </FormControl>
+                                            <div>
+                                                <CardActions>
+                                                    <ButtonUI startIcon={<CheckCircleIcon />} variant="contained">Confirmar</ButtonUI>
+                                                </CardActions>
+                                            </div>
+                                        </Row>
                                     </ExpansionPanelDetails>
                                 </ExpansionPanel>
                             </Paper>
@@ -329,8 +349,8 @@ export default function EditarAnuncio(props) {
                                                     </CardContent>
                                                     <CardActions>
                                                         <FormControlLabel
-                                                            control={<Switch checked={state.isClassico} onChange={(event) => handleChange(event)} name='isClassico' />}
-                                                            label={state.isClassico ? 'Selecionado' : ''}
+                                                            control={<Switch checked={isClassico} onChange={(event) => setIsClassico(event.target.checked)} />}
+                                                            label={isClassico ? 'Selecionado' : ''}
                                                             color="primary"
                                                         />
                                                     </CardActions>
@@ -364,8 +384,8 @@ export default function EditarAnuncio(props) {
                                                     </CardContent>
                                                     <CardActions>
                                                         <FormControlLabel
-                                                            control={<Switch checked={state.isPremium} onChange={(event) => handleChange(event)} name='isPremium' />}
-                                                            label={state.isPremium ? 'Selecionado' : ''}
+                                                            control={<Switch checked={isPremium} onChange={(event) => setIsPremium(event.target.checked)} />}
+                                                            label={isPremium ? 'Selecionado' : ''}
                                                             color="primary"
                                                         />
                                                     </CardActions>
@@ -373,7 +393,7 @@ export default function EditarAnuncio(props) {
                                             </Col>
 
                                             <CardActions>
-                                                <ButtonUI onClick={() => handleConfirmarListingType()} variant="contained">Confirmar</ButtonUI>
+                                                <ButtonUI startIcon={<CheckCircleIcon />} onClick={() => handleConfirmarListingType()} variant="contained">Confirmar</ButtonUI>
                                             </CardActions>
                                         </Row>
 
@@ -570,6 +590,24 @@ export default function EditarAnuncio(props) {
                             Ok, entendi!
                         </ButtonUI>
                     </Modal.Footer>
+                </Paper>
+            </Dialog>
+
+            <Dialog open={showInfoFormaDeEntrega} onClose={() => { setShowInfoFormaDeEntrega(false) }}>
+                <Paper>
+                    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '0 15px 0' }}>
+                        <div><img src={imgFormaEntregaAviso}></img></div>
+                        <div style={{ color: '#333333', fontSize: '18px', padding: '10px 0 10px' }}><strong>Você não oferecerá mais frete grátis e descontos significativos</strong></div>
+                        <div style={{ color: '#666666', fontSize: '14px', padding: '0 26px 10px' }}>Você perderá oportunidades de vendas, exposição nos resultados de busca e diminuirá o nível de qualidade do seu anúncio.</div>
+                        <CardActions>
+                            <ButtonUI startIcon={<CloseIcon />} onClick={() => { setShowInfoFormaDeEntrega(false) }}>
+                                Cancelar
+                            </ButtonUI>
+                            <ButtonUI startIcon={<CheckCircleIcon />} variant="contained" color="primary" onClick={() => confirmarFormaEntrega()}>
+                                Confirmar
+                            </ButtonUI>
+                        </CardActions>
+                    </div>
                 </Paper>
             </Dialog>
         </>
