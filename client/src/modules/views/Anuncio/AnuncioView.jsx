@@ -281,6 +281,7 @@ export default function AnuncioView(props) {
             {...anuncio}
             setShowModal={setShowModal}
             showModal={showModal}
+            updateTitle={props.updateTitle}
             isSelectedEstadoProduto={isSelectedEstadoProduto}
             handleChangeIsSelectedEstadoProdutoNovo={handleChangeIsSelectedEstadoProdutoNovo}
             handleChangeIsSelectedEstadoProdutoUsado={handleChangeIsSelectedEstadoProdutoUsado}
@@ -288,7 +289,11 @@ export default function AnuncioView(props) {
             handleChangeSelectedFreteGratis={handleChangeSelectedFreteGratis}
             handleChangeSelectedFretePorContaDoComprador={handleChangeSelectedFretePorContaDoComprador}
             freteGratis={props.freteGratis} 
-            updateListingType={props.updateListingType}/>}
+            obterValorDoCustoFreteGratisPorAnuncio={props.obterValorDoCustoFreteGratisPorAnuncio}
+            custoFrete={props.custoFrete}
+            updateAnuncioPrice={props.updateAnuncioPrice}
+            updateListingType={props.updateListingType}/>
+            }
 
         {props.isShowConfirmPauseProduct && 
           <MudarStatus 

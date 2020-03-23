@@ -15,7 +15,8 @@ export class FormInput extends React.Component {
               style={this.props.style}
               disabled={this.props.disabled}
               componentClass={this.props.componentClass}
-              rows={this.props.rows}/>
+              rows={this.props.rows}
+              onChange={this.props.onChange}/>
           </FormGroup>
     )
   }

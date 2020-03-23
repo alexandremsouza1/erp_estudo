@@ -8,8 +8,6 @@ const usuarioService = require('../services/usuario-service')
  * Created by Felipe M. Santos
  */
 
-exports.salvar = async (req, res, next) => { }
-
 exports.obterVisualizacao = (req, res) => {
     axios.get(`${constants.API_MERCADO_LIVRE}/visits/items?ids=${req.params.itemId}`).then(response => {
        res.status(200).send({visualizacao: Object.values(response.data).reduce((accumulador, valorCorrente) => { return valorCorrente })})
@@ -121,8 +119,6 @@ exports.listarTodosAnuncio = async (req, res) => {
     })
 }
 
-const setAnuncio = (resp03, resp04, resp08, resp05) => { }
-
 /** Order by quantity sold*/
 const orderAnunciosPorQuantidadeVendas = (detalhesAnuncio) => {
     return detalhesAnuncio.sort((a, b) => { return b.quantidadeVendido - a.quantidadeVendido })
@@ -203,12 +199,33 @@ exports.updateAvailableQuantity = (req, res) => {
 }
 
 exports.updateListingType = (req, res) => {
-    usuarioService.buscarUsuarioPorID().then(user => {
-        axios.post(`https://api.mercadolibre.com/items/${req.body.itemId}/listing_type?access_token=${user.accessToken}`, JSON.stringify({
-            id: req.body.id
-        })).then(response => {
+    usuarioService.buscarUsuarioPorID().then(async user => {
+        await axios.post(`https://api.mercadolibre.com/items/${req.body.itemId}/listing_type?access_token=${user.accessToken}`, JSON.stringify(
+            {
+                id: req.body.id
+            }
+        )).then(response => {
             res.status(200).send("ListingType atualizado no anúncio "+req.body.itemId)
-        }).catch(error => res.status(200).send(error))
-    }).catch(error => res.status(200).send(error))
+        }).catch(error => res.send(error))
+    }).catch(error => res.send(error))
+}
 
+exports.updateTitle = async (req, res) => {
+    await usuarioService.buscarUsuarioPorID().then(async user => {
+        await axios.put(`https://api.mercadolibre.com/items/${req.body.itemId}?access_token=${user.accessToken}`, JSON.stringify(
+            {
+                title: req.body.title
+            }
+        )).then(response => {
+            res.status(200).send("Título atualizado no anúncio "+req.body.itemId)
+        }).catch(error =>res.send(error))
+    }).catch(error => res.send(error))
+ }
+
+exports.obterValorDoCustoFreteGratisPorAnuncio = async (req, res) => {
+    usuarioService.buscarUsuarioPorID().then(async user => {
+        await axios.get(`https://api.mercadolibre.com/users/${user.id}/shipping_options/free?item_id=${req.params.item_id}`).then(async response => {
+            res.status(200).send({custo: response.data.coverage.all_country.list_cost})
+        }).catch(error => res.send(error))
+    }).catch(error => res.send(error))
 }

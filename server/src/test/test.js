@@ -774,4 +774,12 @@ const obterAtributosPorCategoria = async () => {
     }).catch(error => console.error(error))
 }
 
-obterAtributosPorCategoria()
+const obterValorDoCustoFreteGratisPorAnuncios = async () => {
+    usuarioService.buscarUsuarioPorID().then(async user => {
+        await axios.get(`https://api.mercadolibre.com/users/${user.id}/shipping_options/free?item_id=MLB1461682466`).then(async response => {
+            console.log(response.data.coverage.all_country.list_cost)
+        }).catch(error => console.error(error))
+    }).catch(error => console.error(error))
+}
+
+obterValorDoCustoFreteGratisPorAnuncios()

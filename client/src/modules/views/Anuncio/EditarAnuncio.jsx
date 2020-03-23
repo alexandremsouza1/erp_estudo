@@ -1,7 +1,7 @@
 import React from 'react'
 import { Row, Col, Modal } from "react-bootstrap";
 import FormInput from '../../components/FormInput/FormInput'
-import { Form, Input } from 'semantic-ui-react'
+import { Form, Input, Message } from 'semantic-ui-react'
 
 import { makeStyles } from '@material-ui/core/styles';
 import ButtonUI from '@material-ui/core/Button';
@@ -37,6 +37,8 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Popover from '@material-ui/core/Popover';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 
 const useStyles = makeStyles(theme => ({
     appBar: {
@@ -83,7 +85,9 @@ export default function EditarAnuncio(props) {
 
     const [state, setState] = React.useState({
         isClassico: props.tipoAnuncio_id === 'gold_special' ? true : false,
-        isPremium: props.tipoAnuncio_id === 'gold_pro' ? true : false
+        isPremium: props.tipoAnuncio_id === 'gold_pro' ? true : false,
+        showInfoMercadoLivreEditarTitulo: false,
+        title: props.titulo
     });
 
     const handleChange = (event) => {
@@ -148,13 +152,33 @@ export default function EditarAnuncio(props) {
 
                 <div style={{ margin: '15px 10px 0' }}>
                     <Row>
-                        <Col md={8}>
-
-                            <FormInput label="Título" value={props.titulo} style={{ "color": "blue" }} disabled={false} />
-
-                        </Col>
-                        <Col md={2}>
-                            <FormInput label="Preço" placeholder='R$' value={props.preco.toLocaleString("pt-BR")} style={{ "color": "blue" }} />
+                        <Col md={12}>
+                            <Paper elevation={3}>
+                                <ExpansionPanel expanded>
+                                    <ExpansionPanelSummary
+                                        expandIcon={<ExpandMoreIcon />}>
+                                        <span style={{ fontSize: '14px', color: '#8c8c8c' }}>Total de visitas {props.visualizacao} | Total de vendas {props.quantidadeVendido} vendas</span>
+                                    </ExpansionPanelSummary>
+                                    <ExpansionPanelDetails>
+                                        <Row>
+                                            <Col md={12}>
+                                                <FormInput onChange={(event) => {setState({title: event.target.value})}} width='500px' label="Título" value={props.titulo} style={{ "color": "blue" }} disabled={props.quantidadeVendido > 0 ? true : false} />
+                                                {props.quantidadeVendido > 0 &&
+                                                    <Message info style={{ width: '500px' }}>
+                                                        <Message.Header>De acordo com as políticas do Mercado Livre, só será possível alterar os títulos dos anúncios que NÃO tiverem vendas.</Message.Header>
+                                                        <p style={{ fontSize: '11px' }}>Quer saber como criar um bom título para seus anúncios? <ButtonUI onClick={() => setState({ showInfoMercadoLivreEditarTitulo: true })} style={{ fontSize: '11px' }} size="small">Clique aqui</ButtonUI></p>
+                                                    </Message>
+                                                }
+                                            </Col>
+                                        </Row>
+                                    </ExpansionPanelDetails>
+                                    <div>
+                                        <CardActions>
+                                            <ButtonUI onClick={() => {props.updateTitle(props.id, state.title)}} disabled={props.quantidadeVendido > 0 ? true : false} variant="contained" color="primary">Confirmar</ButtonUI>
+                                        </CardActions>
+                                    </div>
+                                </ExpansionPanel>
+                            </Paper>
                         </Col>
                     </Row>
 
@@ -194,7 +218,7 @@ export default function EditarAnuncio(props) {
                     <Row>
                         <Col md={12}>
                             <Paper elevation={3}>
-                                <ExpansionPanel>
+                                <ExpansionPanel onChange={() => props.obterValorDoCustoFreteGratisPorAnuncio(props.id)}>
                                     <ExpansionPanelSummary
                                         expandIcon={<ExpandMoreIcon />}>
                                         <HeaderExpansionPanel
@@ -219,7 +243,7 @@ export default function EditarAnuncio(props) {
                                                                     </span>
                                                                 } />
                                                                 {/**https://api.mercadolibre.com/users/362614126/shipping_options/free?item_id=MLB1461682466 */}
-                                                                <div style={{ color: '#666666', fontSize: '16px', paddingLeft: '27px' }}>Você paga R$ 33,90 pelo frete para qualquer destino</div>
+                                                                <div style={{ color: '#666666', fontSize: '16px', paddingLeft: '27px' }}>Você paga R$ {props.custoFrete} pelo frete para qualquer destino</div>
                                                                 <FormControlLabel style={{ paddingTop: '15px' }} value="female" control={<Radio />} label={
                                                                     <div style={{ color: '#000000', fontSize: '18px' }}>Não oferecer frete grátis</div>
                                                                 } />
@@ -229,7 +253,7 @@ export default function EditarAnuncio(props) {
                                                         <div style={{ color: '#666666', fontSize: '16px', paddingLeft: '27px' }}>O Comprador paga o frete</div>
                                                     </Col>
                                                     <Col md={6}>
-                                                        <img style={{paddingTop : '120px'}} src={imgFormaDeEntrega}></img>
+                                                        <img style={{ paddingTop: '120px' }} src={imgFormaDeEntrega}></img>
                                                     </Col>
                                                 </Row>
                                             </CardContent>
@@ -513,24 +537,33 @@ export default function EditarAnuncio(props) {
                 </div>
             </Dialog>
 
-            {/**<Modal show={props.showModal} onHide={() => props.setShowModal(false)} dialogClassName="width_modal" >
-            <Modal.Header closeButton style={{ 'backgroundColor': '#467EED', 'color': 'white' }}>
-                <Modal.Title style={{ 'fontSize': '25px' }}>Modificar Anúncio</Modal.Title>
-                <span>#{props.id}</span>
-            </Modal.Header>
-
-            <Modal.Body sytle={{ "width": "100px" }}>
-
-
-
-            </Modal.Body>
-
-            <Modal.Footer>
-                
-            </Modal.Footer>
-
-        </Modal> */
-            }
+            <Dialog open={state.showInfoMercadoLivreEditarTitulo} onClose={() => setState({ showInfoMercadoLivreEditarTitulo: false })} maxWidth='xl'>
+                <DialogTitle>Escrever um bom título</DialogTitle>
+                <Paper style={{ fontSize: '16px', color: '#666666' }}>
+                    <div style={{ margin: '0 23px 0' }}>
+                        <div>O título é fundamental para que os compradores encontrem o seu produto. Por isso, ele deve ser o mais claro possível.</div>
+                        <p></p>
+                        <div>Lembre-se de que você só será possível editar os anúncios sem vendas.</div>
+                        <p></p>
+                        <ul>
+                            <li style={{ padding: '0 0 10px' }}>Crie o título com <strong>Produto + Marca + modelo do produto + algumas especificações que ajudem a identificar o produto.</strong></li>
+                            <li style={{ padding: '0 0 10px' }}><p><strong>Evite colocar no título informações sobre outros serviços</strong>, como devoluções, frete grátis ou parcelamento. Estes dados serão incluídos por nós para que os compradores possam vê-los antes mesmo de entrar no anúncio.</p></li>
+                            <li style={{ padding: '0 0 10px' }}><strong>Caso seu produto seja novo, usado ou recondicionado, não inclua isto no título</strong>, nós informaremos no detalhe do anúncio.</li>
+                            <li style={{ padding: '0 0 10px' }}><p><strong>Se você vende o mesmo produto, porém em várias cores, evite especificar isso no título.</strong>É melhor criar variações, assim tudo ficará em um único anúncio.</p></li>
+                            <li style={{ padding: '0 0 10px' }}><p>Caso você tenha estoque em apenas uma determinada cor, <strong>adicione a quantidade na variação correspondente ao anunciar, ou em Modificar.</strong></p></li>
+                            <li style={{ padding: '0 0 10px' }}><p><strong>Se você oferecer algum desconto, destacaremos isso no seu anúncio,</strong>indicando a porcentagem do desconto.</p></li>
+                            <li style={{ padding: '0 0 10px' }}><p>Separe as palavras com espaço, <strong>não use sinais de pontuação nem símbolos.</strong></p></li>
+                            <li style={{ padding: '0 0 10px' }}><p>Revise para garantir que <strong>não tenha erros de ortografia.</strong></p></li>
+                        </ul>
+                        <div style={{ padding: '20px 0 10px' }}>Por exemplo: Notebook HP Dual Core 425 LED 14 320 GB 4 GB Wifi HDMI</div>
+                    </div>
+                    <Modal.Footer>
+                        <ButtonUI startIcon={<CheckCircleIcon />} variant="contained" color="secondary" onClick={() => setState({ showInfoMercadoLivreEditarTitulo: false })}>
+                            Ok, entendi!
+                        </ButtonUI>
+                    </Modal.Footer>
+                </Paper>
+            </Dialog>
         </>
     )
 }
