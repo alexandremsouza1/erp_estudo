@@ -19,12 +19,21 @@ export default function AnuncioController() {
 
     const dispatch = useDispatch()
 
+    let updateShipping = async (itemId, free_shipping) => {
+        await axios.put(`${DOMAIN}/anuncio/update_shipping`, {itemId, free_shipping}).then(response => {
+            //dispatch({type: LISTAR_TODOS_ANUNCIOS, data: updateStateTitleProduct(itemId, free_shipping), isLoading: false})
+            sendNotification('success', 'Pronto, salvamos suas modificações!', 5000)
+        }).catch(error => {
+            sendNotification('error', 'Ocorreu um problema ao tentar atualizar a forma de entrega (AnuncioController:26)', 5000)
+        })
+    }
+
     let updateTitle = async (itemId, title) => {
         await axios.put(`${DOMAIN}/anuncio/update_title`, {itemId, title}).then(response => {
             dispatch({type: LISTAR_TODOS_ANUNCIOS, data: updateStateTitleProduct(itemId, title), isLoading: false})
             sendNotification('success', 'Pronto, salvamos suas modificações!', 5000)
         }).catch(error => {
-            sendNotification('error', 'Ocorreu um erro ao atualizar o titulo do anuncio (AnuncioController:26)', 5000)
+            sendNotification('error', 'Ocorreu um erro ao atualizar o titulo do anuncio (AnuncioController:35)', 5000)
         })
     }
 
@@ -42,7 +51,7 @@ export default function AnuncioController() {
                 swal("Atualizado!", "Preço do anúncio atualizado com sucesso", "success");
 
             }).catch(error => {
-                sendNotification('error', 'Ocorreu um erro ao buscar o usuário pelo ID (AnuncioController:43)', 5000)
+                sendNotification('error', 'Ocorreu um erro ao buscar o usuário pelo ID (AnuncioController:53)', 5000)
             })
         } else {
             //sendNotification('error', 'Preço inválido, informe um valor maior do que zero! Tente novamente', 5000)
@@ -197,7 +206,8 @@ export default function AnuncioController() {
                 setIsShowConfirmPauseProduct={setIsShowConfirmPauseProduct}
                 updateAvailableQuantity={updateAvailableQuantity}
                 updateListingType={updateListingType}
-                obterValorDoCustoFreteGratisPorAnuncio={obterValorDoCustoFreteGratisPorAnuncio} />
+                obterValorDoCustoFreteGratisPorAnuncio={obterValorDoCustoFreteGratisPorAnuncio}
+                updateShipping={updateShipping} />
         </>
     );
 }

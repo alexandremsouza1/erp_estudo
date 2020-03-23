@@ -12,6 +12,7 @@ router.post('/update_listing_type', anuncioService.updateListingType)
 router.put('/update_price', anuncioService.updatePrice)
 router.put('/update_status', anuncioService.updateStatus)
 router.put('/update_title', anuncioService.updateTitle)
+router.put('/update_shipping', anuncioService.updateShipping)
 router.put('/update_available_quantity', anuncioService.updateAvailableQuantity)
 
 

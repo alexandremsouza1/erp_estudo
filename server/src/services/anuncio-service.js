@@ -70,6 +70,7 @@ exports.listarTodosAnuncio = async (req, res) => {
                                             video_id: resp03.data.video_id === null ? '' : 'https://www.youtube.com/watch?v=' + resp03.data.video_id,
                                             sub_status: resp03.data.sub_status[0] === 'out_of_stock' ? 'Sem estoque' : resp03.data.sub_status,
                                             json: resp03.data,
+                                            freeShipping: resp03.data.shipping.free_shipping === true ? true : false,
                                             question: resp09.data.questions
                                         }
                                         return anuncio;
@@ -229,3 +230,41 @@ exports.obterValorDoCustoFreteGratisPorAnuncio = async (req, res) => {
         }).catch(error => res.send(error))
     }).catch(error => res.send(error))
 }
+
+exports.updateShipping = async (req, res) => {
+    await usuarioService.buscarUsuarioPorID().then(async user => {
+        if(req.body.free_shipping){
+            await axios.put(`https://api.mercadolibre.com/items/${req.body.itemId}?access_token=${user.accessToken}`, JSON.stringify(
+                {
+                    shipping: {
+                        free_methods: [
+                            {
+                                id: 100009,
+                                rule: {
+                                    default: true,
+                                    free_mode: "country",
+                                    free_shipping_flag: true,
+                                    value: null
+                                }
+                            }
+                        ]
+                    }
+                }
+            )).then(response => {
+                res.status(200).send("Shipping atualizado.")
+            }).catch(error =>res.send(error))
+        }else{
+            await axios.put(`https://api.mercadolibre.com/items/${req.body.itemId}?access_token=${user.accessToken}`, JSON.stringify(
+                {
+                    shipping: {
+                        methods: []
+                    },
+                }
+            )).then(response => {
+                res.status(200).send("Shipping atualizado.")
+            }).catch(error =>res.send(error))
+        }
+
+        
+    }).catch(error => res.send(error))
+ }

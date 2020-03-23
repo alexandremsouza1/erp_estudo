@@ -87,7 +87,8 @@ export default function EditarAnuncio(props) {
         isClassico: props.tipoAnuncio_id === 'gold_special' ? true : false,
         isPremium: props.tipoAnuncio_id === 'gold_pro' ? true : false,
         showInfoMercadoLivreEditarTitulo: false,
-        title: props.titulo
+        title: props.titulo,
+        freeShipping: props.freeShipping === undefined ? false : true
     });
 
     const handleChange = (event) => {
@@ -95,6 +96,13 @@ export default function EditarAnuncio(props) {
             ...state,
             [event.target.name]: event.target.checked
         })
+    }
+
+    const handleFreeShipping = event => {
+        setState({
+            freeShipping: event.target.value
+        })
+        console.log("freeShipping: "+state.freeShipping)
     }
 
     const setListingType = () => {
@@ -157,7 +165,7 @@ export default function EditarAnuncio(props) {
                                 <ExpansionPanel expanded>
                                     <ExpansionPanelSummary
                                         expandIcon={<ExpandMoreIcon />}>
-                                        <span style={{ fontSize: '14px', color: '#8c8c8c' }}>Total de visitas {props.visualizacao} | Total de vendas {props.quantidadeVendido} vendas</span>
+                                        <span style={{ fontSize: '14px', color: '#8c8c8c' }}>Total de visitas {props.visualizacao} | Total de vendas {props.quantidadeVendido}</span>
                                     </ExpansionPanelSummary>
                                     <ExpansionPanelDetails>
                                         <Row>
@@ -174,7 +182,7 @@ export default function EditarAnuncio(props) {
                                     </ExpansionPanelDetails>
                                     <div>
                                         <CardActions>
-                                            <ButtonUI onClick={() => {props.updateTitle(props.id, state.title)}} disabled={props.quantidadeVendido > 0 ? true : false} variant="contained" color="primary">Confirmar</ButtonUI>
+                                            <ButtonUI onClick={() => {props.updateTitle(props.id, state.title)}} disabled={props.quantidadeVendido > 0 ? true : false} variant="contained">Confirmar</ButtonUI>
                                         </CardActions>
                                     </div>
                                 </ExpansionPanel>
@@ -234,17 +242,17 @@ export default function EditarAnuncio(props) {
                                                             <img src={imgOfereceMercadoEnvios}></img>Faço envios pelo Mercado Envios
                                                         </div>
                                                         <FormControl component="fieldset">
-                                                            <RadioGroup aria-label="gender" name="gender1">
+                                                            <RadioGroup value={state.freeShipping} onChange={(event) => handleFreeShipping(event)}>
 
-                                                                <FormControlLabel style={{ paddingTop: '50px' }} value="female" control={<Radio />} label={
+                                                                <FormControlLabel style={{ paddingTop: '50px' }} value={false} control={<Radio />} label={
                                                                     <span style={{ color: '#000000', fontSize: '18px' }}>
                                                                         Com frete grátis. {' '}
                                                                         <img src={imgInfoComFreteGratis}></img>
                                                                     </span>
                                                                 } />
-                                                                {/**https://api.mercadolibre.com/users/362614126/shipping_options/free?item_id=MLB1461682466 */}
+                                                              
                                                                 <div style={{ color: '#666666', fontSize: '16px', paddingLeft: '27px' }}>Você paga R$ {props.custoFrete} pelo frete para qualquer destino</div>
-                                                                <FormControlLabel style={{ paddingTop: '15px' }} value="female" control={<Radio />} label={
+                                                                <FormControlLabel style={{ paddingTop: '15px' }} value={true} control={<Radio />} label={
                                                                     <div style={{ color: '#000000', fontSize: '18px' }}>Não oferecer frete grátis</div>
                                                                 } />
 
@@ -259,7 +267,7 @@ export default function EditarAnuncio(props) {
                                             </CardContent>
                                             <div>
                                                 <CardActions>
-                                                    <ButtonUI variant="contained" color="primary">Confirmar</ButtonUI>
+                                                    <ButtonUI variant="contained">Confirmar</ButtonUI>
                                                 </CardActions>
                                             </div>
                                         </Card>
@@ -365,7 +373,7 @@ export default function EditarAnuncio(props) {
                                             </Col>
 
                                             <CardActions>
-                                                <ButtonUI onClick={() => handleConfirmarListingType()} variant="contained" color="primary">Confirmar</ButtonUI>
+                                                <ButtonUI onClick={() => handleConfirmarListingType()} variant="contained">Confirmar</ButtonUI>
                                             </CardActions>
                                         </Row>
 

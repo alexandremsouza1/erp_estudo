@@ -279,6 +279,7 @@ export default function AnuncioView(props) {
         {showModal &&
           <EditarAnuncio
             {...anuncio}
+            updateShipping={props.updateShipping}
             setShowModal={setShowModal}
             showModal={showModal}
             updateTitle={props.updateTitle}
