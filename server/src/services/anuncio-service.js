@@ -10,7 +10,7 @@ const usuarioService = require('../services/usuario-service')
 
 exports.obterVisualizacao = (req, res) => {
     axios.get(`${constants.API_MERCADO_LIVRE}/visits/items?ids=${req.params.itemId}`).then(response => {
-       res.status(200).send({visualizacao: Object.values(response.data).reduce((accumulador, valorCorrente) => { return valorCorrente })})
+        res.status(200).send({ visualizacao: Object.values(response.data).reduce((accumulador, valorCorrente) => { return valorCorrente }) })
     })
 }
 
@@ -18,23 +18,23 @@ exports.totalStatusAnuncios = async (req, res) => {
     usuarioService.buscarUsuarioPorID().then(async user => {
         await axios.get(`${constants.API_MERCADO_LIVRE}/users/${user.id}/items/search?search_type=scan&access_token=${user.accessToken}`).then(anuncioID => {
             let anunciosID = anuncioID.data.results.map(async anuncio => {
-                return await axios.get(`${constants.API_MERCADO_LIVRE}/items/${anuncio}?access_token=${user.accessToken}`).then(detalhe =>{
-                     let statusAnuncio = {
-                         status: detalhe.data.status
-                     } 
-                     return statusAnuncio
+                return await axios.get(`${constants.API_MERCADO_LIVRE}/items/${anuncio}?access_token=${user.accessToken}`).then(detalhe => {
+                    let statusAnuncio = {
+                        status: detalhe.data.status
+                    }
+                    return statusAnuncio
                 }).catch(error => console.error(error))
             })
             Promise.all(anunciosID).then(status => {
                 let data = {
-                    total_ativos: status.filter(s =>  s.status === 'active').length,
+                    total_ativos: status.filter(s => s.status === 'active').length,
                     total_pausados: status.filter(s => s.status !== 'active').length
                 }
                 res.send(data)
             })
         }).catch(error => console.error(error))
     }).catch(error => console.error(error))
-    
+
 }
 
 /** Function responsible for get for all product */
@@ -156,33 +156,33 @@ exports.updatePrice = (req, res) => {
                 }
                 return dados
             })
-            axios.put(`https://api.mercadolibre.com/items/${req.body.itemId}?access_token=${user.accessToken}`, 
-                                JSON.stringify({variations: values})).then(resp => {
+            axios.put(`https://api.mercadolibre.com/items/${req.body.itemId}?access_token=${user.accessToken}`,
+                JSON.stringify({ variations: values })).then(resp => {
                     res.send('Product price updated with success')
                 })
         }).catch(err => {
             console.error('> An error occurred while process a PUT method in line 139')
-            res.send('An error occurred while process a PUT method in line 139',err)
+            res.send('An error occurred while process a PUT method in line 139', err)
         })
     }).catch(err => {
         console.error('> An error occurred to get user ID, line 128')
-        res.send('An error occurred to get user ID, line 128',err)
+        res.send('An error occurred to get user ID, line 128', err)
     })
 }
 
 /** Function responsible for to update status 'paused' or 'active' */
-exports.updateStatus = (req, res) =>{
-    usuarioService.buscarUsuarioPorID().then(user =>{
-        axios.put(`https://api.mercadolibre.com/items/${req.body.itemId}?access_token=${user.accessToken}`, 
-                    JSON.stringify({
-                     status: req.body.status
-                    })).then(response => {
-            res.send('Status updated with success!')
-        }).catch(error => {
-            console.log("An error occurred to updated status Anuncio: "+error)
-        })
+exports.updateStatus = (req, res) => {
+    usuarioService.buscarUsuarioPorID().then(user => {
+        axios.put(`https://api.mercadolibre.com/items/${req.body.itemId}?access_token=${user.accessToken}`,
+            JSON.stringify({
+                status: req.body.status
+            })).then(response => {
+                res.send('Status updated with success!')
+            }).catch(error => {
+                console.log("An error occurred to updated status Anuncio: " + error)
+            })
     }).catch(error => {
-        console.log("An error occurred to get user: "+error)
+        console.log("An error occurred to get user: " + error)
     })
 }
 
@@ -194,7 +194,7 @@ exports.updateAvailableQuantity = (req, res) => {
                 available_quantity: req.body.available_quantity
             }
         })).then(response => {
-                res.status(200).send('Estoque atualizado com sucesso!')
+            res.status(200).send('Estoque atualizado com sucesso!')
         }).catch(error => res.send(error))
     }).catch(error => res.send(error))
 }
@@ -206,7 +206,7 @@ exports.updateListingType = (req, res) => {
                 id: req.body.id
             }
         )).then(response => {
-            res.status(200).send("ListingType atualizado no anúncio "+req.body.itemId)
+            res.status(200).send("ListingType atualizado no anúncio " + req.body.itemId)
         }).catch(error => res.send(error))
     }).catch(error => res.send(error))
 }
@@ -218,22 +218,22 @@ exports.updateTitle = async (req, res) => {
                 title: req.body.title
             }
         )).then(response => {
-            res.status(200).send("Título atualizado no anúncio "+req.body.itemId)
-        }).catch(error =>res.send(error))
+            res.status(200).send("Título atualizado no anúncio " + req.body.itemId)
+        }).catch(error => res.send(error))
     }).catch(error => res.send(error))
- }
+}
 
 exports.obterValorDoCustoFreteGratisPorAnuncio = async (req, res) => {
     usuarioService.buscarUsuarioPorID().then(async user => {
         await axios.get(`https://api.mercadolibre.com/users/${user.id}/shipping_options/free?item_id=${req.params.item_id}`).then(async response => {
-            res.status(200).send({custo: response.data.coverage.all_country.list_cost})
+            res.status(200).send({ custo: response.data.coverage.all_country.list_cost })
         }).catch(error => res.send(error))
     }).catch(error => res.send(error))
 }
 
 exports.updateShipping = async (req, res) => {
     await usuarioService.buscarUsuarioPorID().then(async user => {
-        if(req.body.free_shipping){
+        if (req.body.free_shipping) {
             await axios.put(`https://api.mercadolibre.com/items/${req.body.itemId}?access_token=${user.accessToken}`, JSON.stringify(
                 {
                     shipping: {
@@ -252,8 +252,8 @@ exports.updateShipping = async (req, res) => {
                 }
             )).then(response => {
                 res.status(200).send("Shipping atualizado.")
-            }).catch(error =>res.send(error))
-        }else{
+            }).catch(error => res.send(error))
+        } else {
             await axios.put(`https://api.mercadolibre.com/items/${req.body.itemId}?access_token=${user.accessToken}`, JSON.stringify(
                 {
                     shipping: {
@@ -262,9 +262,36 @@ exports.updateShipping = async (req, res) => {
                 }
             )).then(response => {
                 res.status(200).send("Shipping atualizado.")
-            }).catch(error =>res.send(error))
+            }).catch(error => res.send(error))
         }
 
-        
+
     }).catch(error => res.send(error))
- }
+}
+
+exports.updateRetirarPessoalmente = async (req, res) => {
+    await usuarioService.buscarUsuarioPorID().then(async user => {
+        await axios.put(`https://api.mercadolibre.com/items/${req.body.itemId}?access_token=${user.accessToken}`, JSON.stringify(
+            {
+                shipping: {
+                    local_pick_up: req.body.local_pick_up
+                }
+            }
+        )).then(response => {
+            res.status(200).send("Retirar pessoalmente atualizado.")
+        }).catch(error => res.send(error))
+    }).catch(error => res.send(error))
+}
+
+exports.updateDescription = async (req, res) => {
+    console.log(req.body.plain_text)
+    await usuarioService.buscarUsuarioPorID().then(async user => {
+        await axios.put(`https://api.mercadolibre.com/items/${req.body.itemId}/description?access_token=${user.accessToken}`, JSON.stringify(
+            {
+                plain_text: req.body.plain_text
+            }
+        )).then(response => {
+            res.status(200).send("Descrição atualizada.")
+        }).catch(error => res.send(error))
+    }).catch(error => res.send(error))
+}

@@ -41,6 +41,8 @@ import Popover from '@material-ui/core/Popover';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 
+import TextField from '@material-ui/core/TextField';
+
 const useStyles = makeStyles(theme => ({
     appBar: {
         position: 'relative',
@@ -90,24 +92,37 @@ export default function EditarAnuncio(props) {
     });
 
     const [freeShipping, setFreeShipping] = React.useState(props.freeShipping === undefined ? 'false' : 'true')
+    const [localPickUp, setLocalPickUp] = React.useState(props.json.shipping.local_pick_up === true ? 'true' : 'false')
     const [isClassico, setIsClassico] = React.useState(props.tipoAnuncio_id === 'gold_special' ? true : false)
     const [isPremium, setIsPremium] = React.useState(props.tipoAnuncio_id === 'gold_pro' ? true : false)
     const [showInfoFormaDeEntrega, setShowInfoFormaDeEntrega] = React.useState(false)
+    const [description, setDescription] = React.useState(props.description)
 
     const handleFreeShipping = event => {
         setFreeShipping(event.target.value)
+    }
+
+    const handleLocalPickUp = event => {
+        setLocalPickUp(event.target.value)
     }
 
     const verificarFormaEntrega = () => {
         if (freeShipping === 'false') {
             setShowInfoFormaDeEntrega(true)
         } else {
+            props.setLoadingButtonFormaEntrega(true)
             props.updateShipping(props.id, freeShipping === 'true' ? true : false)
         }
     }
 
+    const confirmarRetirarPessoalmente = () => {
+        props.setLoadingButtonRetirarPessoalmente(true)
+        props.updateRetirarPessoalmente(props.id, localPickUp === 'true' ? true : false)
+    }
+
     const confirmarFormaEntrega = () => {
         props.updateShipping(props.id, freeShipping === 'true' ? true : false)
+        props.setLoadingButtonFormaEntrega(true)
         setShowInfoFormaDeEntrega(false)
     }
 
@@ -137,15 +152,30 @@ export default function EditarAnuncio(props) {
 
     const handleConfirmarListingType = () => {
         if (isClassico && isPremium) {
-            sendNotification('error', 'Você selecionou dois tipos de anúncios: CLÁSSICO e PRÉMIUM, por favor escolha apenas um dos dois e clique em Confirmar', 10000)
+            sendNotification('error', 'Você selecionou dois tipos de anúncios: CLÁSSICO e PRÉMIUM, por favor escolha apenas um dos dois e clique em Confirmar', 5000)
             return
         }
         if (!isClassico && !isPremium) {
-            sendNotification('error', 'Você não selecionou nenhum tipo de anúncio, por favor escolha CLÁSSICO OU PRÉMIUM e clique em Confirmar', 10000)
+            sendNotification('error', 'Você não selecionou nenhum tipo de anúncio, por favor escolha CLÁSSICO OU PRÉMIUM e clique em Confirmar', 5000)
             return
         }
 
+        props.setLoadingButtonTipoAnuncio(true)
         props.updateListingType(props.id, setListingType())
+    }
+
+    const handleConfirmarTitulo = () => {
+        props.setLoadingButtonTitulo(true)
+        props.updateTitle(props.id, state.title)
+    }
+
+    const handleConfirmarDescription = () => {
+        props.setLoadingButtonDescription(true)
+        props.updateDescription(props.id, description)
+    }
+
+    const handleDescription = (event) => {
+        setDescription(event.target.value)
     }
 
     return (
@@ -188,7 +218,7 @@ export default function EditarAnuncio(props) {
                                     </ExpansionPanelDetails>
                                     <div>
                                         <CardActions>
-                                            <ButtonUI startIcon={<CheckCircleIcon />} onClick={() => { props.updateTitle(props.id, state.title) }} disabled={props.quantidadeVendido > 0 ? true : false} variant="contained">Confirmar</ButtonUI>
+                                            <ButtonUI startIcon={<CheckCircleIcon />} onClick={() => handleConfirmarTitulo()} disabled={props.quantidadeVendido > 0 ? true : false} variant="contained">{props.loadingButtonTitulo === true ? 'Processando...' : 'Confirmar'}</ButtonUI>
                                         </CardActions>
                                     </div>
                                 </ExpansionPanel>
@@ -273,7 +303,7 @@ export default function EditarAnuncio(props) {
                                             </CardContent>
                                             <div>
                                                 <CardActions>
-                                                    <ButtonUI startIcon={<CheckCircleIcon />} onClick={() => verificarFormaEntrega()} variant="contained">Confirmar</ButtonUI>
+                                                    <ButtonUI startIcon={<CheckCircleIcon />} onClick={() => verificarFormaEntrega()} variant="contained">{props.loadingButtonFormaEntrega === true ? 'Processando...' : 'Confirmar'}</ButtonUI>
                                                 </CardActions>
                                             </div>
                                         </Card>
@@ -293,19 +323,19 @@ export default function EditarAnuncio(props) {
                                     </ExpansionPanelSummary>
                                     <ExpansionPanelDetails>
                                         <Row>
-                                                <FormControl component="fieldset">
-                                                    <RadioGroup style={{padding: '0 10px 0'}} value={freeShipping} onChange={(event) => handleFreeShipping(event)}>
-                                                        <FormControlLabel value='true' control={<Radio />} label={
-                                                            <span style={{ color: '#000000', fontSize: '18px' }}>Concordo</span>
-                                                        } />
-                                                        <FormControlLabel value='false' control={<Radio />} label={
-                                                            <div style={{ color: '#000000', fontSize: '18px' }}>Não concordo</div>
-                                                        } />
-                                                    </RadioGroup>
-                                                </FormControl>
+                                            <FormControl component="fieldset">
+                                                <RadioGroup style={{ padding: '0 10px 0' }} value={localPickUp} onChange={(event) => handleLocalPickUp(event)}>
+                                                    <FormControlLabel value='true' control={<Radio />} label={
+                                                        <span style={{ color: '#000000', fontSize: '18px' }}>Concordo</span>
+                                                    } />
+                                                    <FormControlLabel value='false' control={<Radio />} label={
+                                                        <div style={{ color: '#000000', fontSize: '18px' }}>Não concordo</div>
+                                                    } />
+                                                </RadioGroup>
+                                            </FormControl>
                                             <div>
                                                 <CardActions>
-                                                    <ButtonUI startIcon={<CheckCircleIcon />} variant="contained">Confirmar</ButtonUI>
+                                                    <ButtonUI onClick={() => confirmarRetirarPessoalmente()} startIcon={<CheckCircleIcon />} variant="contained">{props.loadingButtonRetirarPessoalmente === true ? 'Processando...' : 'Confirmar'}</ButtonUI>
                                                 </CardActions>
                                             </div>
                                         </Row>
@@ -393,7 +423,7 @@ export default function EditarAnuncio(props) {
                                             </Col>
 
                                             <CardActions>
-                                                <ButtonUI startIcon={<CheckCircleIcon />} onClick={() => handleConfirmarListingType()} variant="contained">Confirmar</ButtonUI>
+                                                <ButtonUI startIcon={<CheckCircleIcon />} onClick={() => handleConfirmarListingType()} variant="contained">{props.loadingButtonTipoAnuncio === true ? 'Processando...' : 'Confirmar'}</ButtonUI>
                                             </CardActions>
                                         </Row>
 
@@ -412,12 +442,11 @@ export default function EditarAnuncio(props) {
                                         <span style={{ fontSize: '18px', color: '#333333' }}>Descrição</span> <span style={{ fontSize: '14px', color: '#cccccc', paddingLeft: '5px', paddingTop: '2px' }}>| Opcional</span>
                                     </ExpansionPanelSummary>
                                     <ExpansionPanelDetails>
-
-                                        <FormInput label="Descrição somente texto"
-                                            value={props.description} style={{ "color": "blue", width: '500%' }}
-                                            componentClass="textarea" rows="10" />
-
+                                        <TextField multiline label="Descrição somente texto" value={description} style={{ "color": "blue", width: '500%' }} onChange={handleDescription}/>    
                                     </ExpansionPanelDetails>
+                                    <CardActions>
+                                        <ButtonUI startIcon={<CheckCircleIcon />} onClick={() => handleConfirmarDescription()} variant="contained">{props.loadingButtonDescription === true ? 'Processando...' : 'Confirmar'}</ButtonUI>
+                                    </CardActions>
                                 </ExpansionPanel>
                             </Paper>
                         </Col>
@@ -604,7 +633,7 @@ export default function EditarAnuncio(props) {
                                 Cancelar
                             </ButtonUI>
                             <ButtonUI startIcon={<CheckCircleIcon />} variant="contained" color="primary" onClick={() => confirmarFormaEntrega()}>
-                                Confirmar
+                                {props.loadingButtonFormaEntrega === true ? 'Processando...' : 'Confirmar'}
                             </ButtonUI>
                         </CardActions>
                     </div>

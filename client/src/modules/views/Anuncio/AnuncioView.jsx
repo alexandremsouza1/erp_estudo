@@ -279,6 +279,8 @@ export default function AnuncioView(props) {
         {showModal &&
           <EditarAnuncio
             {...anuncio}
+            updateDescription={props.updateDescription}
+            updateRetirarPessoalmente={props.updateRetirarPessoalmente}
             updateShipping={props.updateShipping}
             setShowModal={setShowModal}
             showModal={showModal}
@@ -293,7 +295,17 @@ export default function AnuncioView(props) {
             obterValorDoCustoFreteGratisPorAnuncio={props.obterValorDoCustoFreteGratisPorAnuncio}
             custoFrete={props.custoFrete}
             updateAnuncioPrice={props.updateAnuncioPrice}
-            updateListingType={props.updateListingType}/>
+            updateListingType={props.updateListingType}
+            loadingButtonTitulo={props.loadingButtonTitulo}
+            setLoadingButtonTitulo={props.setLoadingButtonTitulo}
+            loadingButtonFormaEntrega={props.loadingButtonFormaEntrega}
+            setLoadingButtonFormaEntrega={props.setLoadingButtonFormaEntrega}
+            loadingButtonTipoAnuncio={props.loadingButtonTipoAnuncio}
+            setLoadingButtonTipoAnuncio={props.setLoadingButtonTipoAnuncio}
+            loadingButtonRetirarPessoalmente={props.loadingButtonRetirarPessoalmente}
+            setLoadingButtonRetirarPessoalmente={props.setLoadingButtonRetirarPessoalmente}
+            setLoadingButtonDescription={props.setLoadingButtonDescription}
+            loadingButtonDescription={props.loadingButtonDescription}/>
             }
 
         {props.isShowConfirmPauseProduct && 

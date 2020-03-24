@@ -17,26 +17,35 @@ export default function AnuncioController() {
     const [isShowConfirmPauseProduct, setIsShowConfirmPauseProduct] = useState(false)
     const [custoFrete, setCustoFrete] = useState(0)
 
+    const [loadingButtonTitulo, setLoadingButtonTitulo] = useState(false)
+    const [loadingButtonFormaEntrega, setLoadingButtonFormaEntrega] = useState(false)
+    const [loadingButtonTipoAnuncio, setLoadingButtonTipoAnuncio] = useState(false)
+    const [loadingButtonRetirarPessoalmente, setLoadingButtonRetirarPessoalmente] = useState(false)
+    const [loadingButtonDescription, setLoadingButtonDescription] = useState(false)
+
     const dispatch = useDispatch()
 
     let updateShipping = async (itemId, free_shipping) => {
-        await axios.put(`${DOMAIN}/anuncio/update_shipping`, {itemId, free_shipping}).then(response => {
+        await axios.put(`${DOMAIN}/anuncio/update_shipping`, { itemId, free_shipping }).then(response => {
             //dispatch({type: LISTAR_TODOS_ANUNCIOS, data: updateStateTitleProduct(itemId, free_shipping), isLoading: false})
-            if(free_shipping){
+            if (free_shipping) {
                 sendNotification('success', 'Objetivo alcançado! Agora você oferece frete grátis.', 5000)
-            }else{
+                setLoadingButtonFormaEntrega(false)
+            } else {
                 sendNotification('success', 'Pronto, salvamos suas modificações!', 5000)
+                setLoadingButtonFormaEntrega(false)
             }
-            
+
         }).catch(error => {
             sendNotification('error', 'Ocorreu um problema ao tentar atualizar a forma de entrega (AnuncioController:26)', 5000)
         })
     }
 
     let updateTitle = async (itemId, title) => {
-        await axios.put(`${DOMAIN}/anuncio/update_title`, {itemId, title}).then(response => {
-            dispatch({type: LISTAR_TODOS_ANUNCIOS, data: updateStateTitleProduct(itemId, title), isLoading: false})
+        await axios.put(`${DOMAIN}/anuncio/update_title`, { itemId, title }).then(response => {
+            dispatch({ type: LISTAR_TODOS_ANUNCIOS, data: updateStateTitleProduct(itemId, title), isLoading: false })
             sendNotification('success', 'Pronto, salvamos suas modificações!', 5000)
+            setLoadingButtonTitulo(false)
         }).catch(error => {
             sendNotification('error', 'Ocorreu um erro ao atualizar o titulo do anuncio (AnuncioController:35)', 5000)
         })
@@ -164,7 +173,7 @@ export default function AnuncioController() {
             swal("Atualizado!", "Status atualizado com sucesso", "success");
 
         }).catch(error => {
-            sendNotification('error', 'Ocorreu um erro ao atualizar o status do anúncio (AnuncioController:130)' + error)
+            sendNotification('error', 'Ocorreu um erro ao atualizar o status do anúncio (AnuncioController:167)' + error, 5000)
         })
     }
 
@@ -173,12 +182,14 @@ export default function AnuncioController() {
             dispatch({ type: LISTAR_TODOS_ANUNCIOS, data: updateListingTypeInStore(itemId, listingType), isLoading: false })
             if (listingType === 'gold_special') {
                 sendNotification('success', 'Pronto, salvamos suas modificações!', 5000)
+                setLoadingButtonTipoAnuncio(false)
             } else {
                 sendNotification('success', 'Objetivo alcançado! Agora você pode oferecer parcelamento sem juros.', 5000)
+                setLoadingButtonTipoAnuncio(false)
             }
 
         }).catch(error => {
-            sendNotification('error', 'Ocorreu um erro ao atualizar o tipo de anúncio (AnuncioController:144)' + error)
+            sendNotification('error', 'Ocorreu um erro ao atualizar o tipo de anúncio (AnuncioController:181)' + error, 5000)
         })
     }
 
@@ -186,7 +197,25 @@ export default function AnuncioController() {
         await axios.get(`${DOMAIN}/anuncio/obterValorDoCustoFreteGratisPorAnuncio/${itemID}`).then(response => {
             setCustoFrete(response.data.custo.toFixed(2))
         }).catch(error => {
-            sendNotification('error', 'Ocorreu um erro ao obter o custo do frete (AnuncioController:152)' + error)
+            sendNotification('error', 'Ocorreu um erro ao obter o custo do frete (AnuncioController:189)' + error, 5000)
+        })
+    }
+
+    let updateRetirarPessoalmente = async (itemId, isRetirarPessoalmente) => {
+        await axios.put(`${DOMAIN}/anuncio/update_retirar_pessoalmente`, { itemId: itemId, local_pick_up: isRetirarPessoalmente }).then(response => {
+            sendNotification('success', 'Pronto salvamos suas modificações', 5000)
+            setLoadingButtonRetirarPessoalmente(false)
+        }).catch(error => {
+            sendNotification('error', 'Ocorreu um erro ao atualizar a retirar pessoalmente (AnuncioController:197)' + error, 5000)
+        })
+    }
+
+    let updateDescription = async (itemId, plainText) => {
+        await axios.put(`${DOMAIN}/anuncio/update_description`, {itemId: itemId, plain_text: plainText}).then(response => {
+            sendNotification('success', 'Pronto salvamos suas modificações', 5000)
+            setLoadingButtonDescription(false)
+        }).catch(error => {
+            sendNotification('error', 'Ocorreu um erro ao atualizar a descrição do anuncio (AnuncioController:216)' + error, 5000)
         })
     }
 
@@ -195,6 +224,8 @@ export default function AnuncioController() {
             <AnuncioView
                 state={state}
                 {...state}
+                updateDescription={updateDescription}
+                updateRetirarPessoalmente={updateRetirarPessoalmente}
                 updateTitle={updateTitle}
                 custoFrete={custoFrete}
                 updateAnuncioPrice={updateAnuncioPrice}
@@ -212,7 +243,17 @@ export default function AnuncioController() {
                 updateAvailableQuantity={updateAvailableQuantity}
                 updateListingType={updateListingType}
                 obterValorDoCustoFreteGratisPorAnuncio={obterValorDoCustoFreteGratisPorAnuncio}
-                updateShipping={updateShipping} />
+                updateShipping={updateShipping}
+                loadingButtonTitulo={loadingButtonTitulo}
+                setLoadingButtonTitulo={setLoadingButtonTitulo}
+                loadingButtonFormaEntrega={loadingButtonFormaEntrega}
+                setLoadingButtonFormaEntrega={setLoadingButtonFormaEntrega}
+                loadingButtonTipoAnuncio={loadingButtonTipoAnuncio}
+                setLoadingButtonTipoAnuncio={setLoadingButtonTipoAnuncio}
+                loadingButtonRetirarPessoalmente={loadingButtonRetirarPessoalmente}
+                setLoadingButtonRetirarPessoalmente={setLoadingButtonRetirarPessoalmente} 
+                setLoadingButtonDescription={setLoadingButtonDescription}
+                loadingButtonDescription={loadingButtonDescription}/>
         </>
     );
 }
