@@ -40,7 +40,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Popover from '@material-ui/core/Popover';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-
+import YouTube from 'react-youtube';
 import TextField from '@material-ui/core/TextField';
 
 const useStyles = makeStyles(theme => ({
@@ -90,6 +90,14 @@ export default function EditarAnuncio(props) {
         showInfoMercadoLivreEditarTitulo: false,
         title: props.titulo
     });
+
+    const optsYouTube = {
+        height: '390',
+        width: '640',
+        playerVars: { // https://developers.google.com/youtube/player_parameters
+            autoplay: 1
+        }
+    }
 
     const [freeShipping, setFreeShipping] = React.useState(props.freeShipping === undefined ? 'false' : 'true')
     const [localPickUp, setLocalPickUp] = React.useState(props.json.shipping.local_pick_up === true ? 'true' : 'false')
@@ -193,404 +201,373 @@ export default function EditarAnuncio(props) {
                         </IconButton>
                     </Toolbar>
                 </AppBar>
-
-                <div style={{ margin: '15px 10px 0' }}>
-                    <Row>
-                        <Col md={12}>
-                            <Paper elevation={3}>
-                                <ExpansionPanel expanded>
-                                    <ExpansionPanelSummary
-                                        expandIcon={<ExpandMoreIcon />}>
-                                        <span style={{ fontSize: '14px', color: '#8c8c8c' }}>Total de visitas {props.visualizacao} | Total de vendas {props.quantidadeVendido}</span>
-                                    </ExpansionPanelSummary>
-                                    <ExpansionPanelDetails>
-                                        <Row>
-                                            <Col md={12}>
-                                                <FormInput onChange={(event) => { setState({ title: event.target.value }) }} width='500px' label="Título" value={props.titulo} style={{ "color": "blue" }} disabled={props.quantidadeVendido > 0 ? true : false} />
-                                                {props.quantidadeVendido > 0 &&
-                                                    <Message info style={{ width: '500px' }}>
-                                                        <Message.Header>De acordo com as políticas do Mercado Livre, só será possível alterar os títulos dos anúncios que NÃO tiverem vendas.</Message.Header>
-                                                        <p style={{ fontSize: '11px' }}>Quer saber como criar um bom título para seus anúncios? <ButtonUI onClick={() => setState({ showInfoMercadoLivreEditarTitulo: true })} style={{ fontSize: '11px' }} size="small">Clique aqui</ButtonUI></p>
-                                                    </Message>
-                                                }
-                                            </Col>
-                                        </Row>
-                                    </ExpansionPanelDetails>
-                                    <div>
-                                        <CardActions>
-                                            <ButtonUI startIcon={<CheckCircleIcon />} onClick={() => handleConfirmarTitulo()} disabled={props.quantidadeVendido > 0 ? true : false} variant="contained">{props.loadingButtonTitulo === true ? 'Processando...' : 'Confirmar'}</ButtonUI>
-                                        </CardActions>
-                                    </div>
-                                </ExpansionPanel>
-                            </Paper>
-                        </Col>
-                    </Row>
-
-
-                    <p></p>
-                    <Row>
-                        <Col md={12}>
-                            <Paper elevation={3}>
-                                <ExpansionPanel>
-                                    <ExpansionPanelSummary
-                                        expandIcon={<ExpandMoreIcon />}>
-                                        <span style={{ fontSize: '18px', color: '#333333' }}>Ficha técnica</span>
-                                    </ExpansionPanelSummary>
-                                    <ExpansionPanelDetails>
-                                        <Row>
-                                            <Col md={6}>
-                                                <FormInput width='500px' label="Marca" value={props.titulo} style={{ "color": "blue" }} disabled={false} />
-                                                <FormInput width='500px' label="Gênero" value={props.titulo} style={{ "color": "blue" }} disabled={false} />
-                                                <FormInput width='500px' label="Volume da unidade" value={props.titulo} style={{ "color": "blue" }} disabled={false} />
-                                                <FormInput width='500px' label="Idade" value={props.titulo} style={{ "color": "blue" }} disabled={false} />
-                                                <FormInput width='500px' label="Peças do set" value={props.titulo} style={{ "color": "blue" }} disabled={false} />
-                                            </Col>
-                                            <Col md={6}>
-                                                <FormInput marginLeft='100px' label="Nome do perfume" placeholder='R$' value={props.preco.toLocaleString("pt-BR")} style={{ "color": "blue" }} />
-                                                <FormInput marginLeft='100px' label="Tipo" value={props.titulo} style={{ "color": "blue" }} disabled={false} />
-                                                <FormInput marginLeft='100px' label="Unidade por pacote" value={props.titulo} style={{ "color": "blue" }} disabled={false} />
-                                            </Col>
-                                        </Row>
-
-
-                                    </ExpansionPanelDetails>
-                                </ExpansionPanel>
-                            </Paper>
-                        </Col>
-                    </Row>
-                    <p></p>
-                    <Row>
-                        <Col md={12}>
-                            <Paper elevation={3}>
-                                <ExpansionPanel onChange={() => props.obterValorDoCustoFreteGratisPorAnuncio(props.id)}>
-                                    <ExpansionPanelSummary
-                                        expandIcon={<ExpandMoreIcon />}>
-                                        <HeaderExpansionPanel
-                                            className={classes.displayInline}
-                                            title='Forma de entrega' />
-                                    </ExpansionPanelSummary>
-                                    <ExpansionPanelDetails>
-                                        <Card>
-                                            <CardContent>
-                                                <Row>
-                                                    <Col md={6}>
-                                                        <div style={{ color: '#000000', fontSize: '18px' }}>
-                                                            <img src={imgOfereceMercadoEnvios}></img>Faço envios pelo Mercado Envios
-                                                        </div>
-                                                        <FormControl component="fieldset">
-                                                            <RadioGroup value={freeShipping} onChange={(event) => handleFreeShipping(event)}>
-
-                                                                <FormControlLabel style={{ paddingTop: '50px' }} value='true' control={<Radio />} label={
-                                                                    <span style={{ color: '#000000', fontSize: '18px' }}>
-                                                                        Com frete grátis. {' '}
-                                                                        <img src={imgInfoComFreteGratis}></img>
-                                                                    </span>
-                                                                } />
-
-                                                                <div style={{ color: '#666666', fontSize: '16px', paddingLeft: '27px' }}>Você paga R$ {props.custoFrete} pelo frete para qualquer destino</div>
-                                                                <FormControlLabel style={{ paddingTop: '15px' }} value='false' control={<Radio />} label={
-                                                                    <div style={{ color: '#000000', fontSize: '18px' }}>Não oferecer frete grátis</div>
-                                                                } />
-
-                                                            </RadioGroup>
-                                                        </FormControl>
-                                                        <div style={{ color: '#666666', fontSize: '16px', paddingLeft: '27px' }}>O Comprador paga o frete</div>
-                                                    </Col>
-                                                    <Col md={6}>
-                                                        <img style={{ paddingTop: '120px' }} src={imgFormaDeEntrega}></img>
-                                                    </Col>
-                                                </Row>
-                                            </CardContent>
-                                            <div>
-                                                <CardActions>
-                                                    <ButtonUI startIcon={<CheckCircleIcon />} onClick={() => verificarFormaEntrega()} variant="contained">{props.loadingButtonFormaEntrega === true ? 'Processando...' : 'Confirmar'}</ButtonUI>
-                                                </CardActions>
-                                            </div>
-                                        </Card>
-                                    </ExpansionPanelDetails>
-                                </ExpansionPanel>
-                            </Paper>
-                        </Col>
-                    </Row>
-                    <p></p>
-                    <Row>
-                        <Col md={12}>
-                            <Paper elevation={3}>
-                                <ExpansionPanel>
-                                    <ExpansionPanelSummary
-                                        expandIcon={<ExpandMoreIcon />}>
-                                        <span style={{ fontSize: '18px', color: '#333333' }}>Retirar pessoalmente</span>
-                                    </ExpansionPanelSummary>
-                                    <ExpansionPanelDetails>
-                                        <Row>
-                                            <FormControl component="fieldset">
-                                                <RadioGroup style={{ padding: '0 10px 0' }} value={localPickUp} onChange={(event) => handleLocalPickUp(event)}>
-                                                    <FormControlLabel value='true' control={<Radio />} label={
-                                                        <span style={{ color: '#000000', fontSize: '18px' }}>Concordo</span>
-                                                    } />
-                                                    <FormControlLabel value='false' control={<Radio />} label={
-                                                        <div style={{ color: '#000000', fontSize: '18px' }}>Não concordo</div>
-                                                    } />
-                                                </RadioGroup>
-                                            </FormControl>
-                                            <div>
-                                                <CardActions>
-                                                    <ButtonUI onClick={() => confirmarRetirarPessoalmente()} startIcon={<CheckCircleIcon />} variant="contained">{props.loadingButtonRetirarPessoalmente === true ? 'Processando...' : 'Confirmar'}</ButtonUI>
-                                                </CardActions>
-                                            </div>
-                                        </Row>
-                                    </ExpansionPanelDetails>
-                                </ExpansionPanel>
-                            </Paper>
-                        </Col>
-                    </Row>
-                    <p></p>
-                    <Row>
-                        <Col md={12}>
-                            <Paper elevation={3}>
-                                <ExpansionPanel>
-                                    <ExpansionPanelSummary
-                                        expandIcon={<ExpandMoreIcon />}>
-                                        <span style={{ fontSize: '18px', color: '#333333' }}>Tipo de anúncio</span>
-                                    </ExpansionPanelSummary>
-                                    <ExpansionPanelDetails>
-                                        <Row>
-                                            <Col md={6}>
-                                                <Card style={{ width: '300px' }}>
-                                                    <CardContent>
-                                                        <div>
-                                                            <img src={imgAnuncioClassico}></img>
-                                                        </div>
-                                                        <div style={{ fontSize: '14px', color: '#8c8c8c' }}>
-                                                            <div>Clássico</div>
-                                                        </div>
-                                                        <div style={{ fontSize: '20px', color: '#333333' }}>
-                                                            <div>Exposição alta</div>
-                                                        </div>
-                                                        <div style={{ fontSize: '12px', color: '#000000' }}>
-                                                            <div></div>
-                                                            <div>Duração ilimitada</div>
-                                                        </div>
-
-                                                        <br></br>
-                                                        <Divider style={{ marginTop: '34px' }} />
-                                                        <div style={{ fontSize: '32px', color: '#000000' }}>R$ {mostrarTarifaVendaClassico()}</div>
-                                                        <div style={{ fontSize: '12px', color: '#000000' }}>Tarifa de venda</div>
-                                                    </CardContent>
-                                                    <CardActions>
-                                                        <FormControlLabel
-                                                            control={<Switch checked={isClassico} onChange={(event) => setIsClassico(event.target.checked)} />}
-                                                            label={isClassico ? 'Selecionado' : ''}
-                                                            color="primary"
-                                                        />
-                                                    </CardActions>
-                                                </Card>
-                                            </Col>
-                                            <Col md={6}>
-                                                <Card style={{ width: '300px' }}>
-                                                    <CardContent>
-                                                        <div>
-                                                            <img src={imgAnuncioPremium}></img>
-                                                        </div>
-                                                        <div style={{ fontSize: '14px', color: '#8c8c8c' }}>
-                                                            <div>Premium</div>
-                                                        </div>
-                                                        <div style={{ fontSize: '20px', color: '#333333' }}>
-                                                            <div>Exposição máxima</div>
-                                                        </div>
-                                                        <div style={{ fontSize: '12px', color: '#000000' }}>
-                                                            <div></div>
-                                                            <div>Duração ilimitada</div>
-                                                        </div>
-                                                        <div style={{ fontSize: '12px', color: '#000000' }}>
-                                                            <div></div>
-                                                            <div>Você oferece parcelamento sem acréscimo</div>
-                                                        </div>
-
-                                                        <br></br>
-                                                        <Divider style={{ marginTop: '9px' }} />
-                                                        <div style={{ fontSize: '32px', color: '#000000' }}>R$ {mostrarTarifaVendaPremium()}</div>
-                                                        <div style={{ fontSize: '12px', color: '#000000' }}>Tarifa de venda</div>
-                                                    </CardContent>
-                                                    <CardActions>
-                                                        <FormControlLabel
-                                                            control={<Switch checked={isPremium} onChange={(event) => setIsPremium(event.target.checked)} />}
-                                                            label={isPremium ? 'Selecionado' : ''}
-                                                            color="primary"
-                                                        />
-                                                    </CardActions>
-                                                </Card>
-                                            </Col>
-
-                                            <CardActions>
-                                                <ButtonUI startIcon={<CheckCircleIcon />} onClick={() => handleConfirmarListingType()} variant="contained">{props.loadingButtonTipoAnuncio === true ? 'Processando...' : 'Confirmar'}</ButtonUI>
-                                            </CardActions>
-                                        </Row>
-
-                                    </ExpansionPanelDetails>
-                                </ExpansionPanel>
-                            </Paper>
-                        </Col>
-                    </Row>
-                    <p></p>
-                    <Row>
-                        <Col md={12}>
-                            <Paper elevation={3}>
-                                <ExpansionPanel>
-                                    <ExpansionPanelSummary
-                                        expandIcon={<ExpandMoreIcon />}>
-                                        <span style={{ fontSize: '18px', color: '#333333' }}>Descrição</span> <span style={{ fontSize: '14px', color: '#cccccc', paddingLeft: '5px', paddingTop: '2px' }}>| Opcional</span>
-                                    </ExpansionPanelSummary>
-                                    <ExpansionPanelDetails>
-                                        <TextField multiline label="Descrição somente texto" value={description} style={{ "color": "blue", width: '500%' }} onChange={handleDescription}/>    
-                                    </ExpansionPanelDetails>
-                                    <CardActions>
-                                        <ButtonUI startIcon={<CheckCircleIcon />} onClick={() => handleConfirmarDescription()} variant="contained">{props.loadingButtonDescription === true ? 'Processando...' : 'Confirmar'}</ButtonUI>
-                                    </CardActions>
-                                </ExpansionPanel>
-                            </Paper>
-                        </Col>
-                    </Row>
-                    <p></p>
-                    <Row>
-                        <Col md={12}>
-                            <Paper elevation={3}>
-                                <ExpansionPanel>
-                                    <ExpansionPanelSummary
-                                        expandIcon={<ExpandMoreIcon />}>
-                                        <span style={{ fontSize: '18px', color: '#333333' }}>Vídeo</span> <span style={{ fontSize: '14px', color: '#cccccc', paddingLeft: '5px', paddingTop: '2px' }}>| Opcional</span>
-                                    </ExpansionPanelSummary>
-                                    <ExpansionPanelDetails>
+                <div id='contaner' style={{display: 'flex'}}>
+                    <div style={{ margin: '15px 10px 0', backgroundColor: '#f1f1f1' }}>
+                        <Row>
+                            <Col md={12}>
+                                <Paper elevation={3}>
+                                    <ExpansionPanel expanded>
+                                        <ExpansionPanelSummary
+                                            expandIcon={<ExpandMoreIcon />}>
+                                            <span style={{ fontSize: '14px', color: '#8c8c8c' }}>Total de visitas {props.visualizacao} | Total de vendas {props.quantidadeVendido}</span>
+                                        </ExpansionPanelSummary>
+                                        <ExpansionPanelDetails>
+                                            <Row>
+                                                <Col md={12}>
+                                                    <FormInput onChange={(event) => { setState({ title: event.target.value }) }} width='500px' label="Título" value={props.titulo} style={{ "color": "blue" }} disabled={props.quantidadeVendido > 0 ? true : false} />
+                                                    {props.quantidadeVendido > 0 &&
+                                                        <Message info style={{ width: '500px' }}>
+                                                            <Message.Header>De acordo com as políticas do Mercado Livre, só será possível alterar os títulos dos anúncios que NÃO tiverem vendas.</Message.Header>
+                                                            <p style={{ fontSize: '11px' }}>Quer saber como criar um bom título para seus anúncios? <ButtonUI onClick={() => setState({ showInfoMercadoLivreEditarTitulo: true })} style={{ fontSize: '11px' }} size="small">Clique aqui</ButtonUI></p>
+                                                        </Message>
+                                                    }
+                                                </Col>
+                                            </Row>
+                                        </ExpansionPanelDetails>
                                         <div>
-                                            <div style={{ fontSize: '16px', color: '#666666', fontFamily: 'Helvetica Roboto Arial sans-serif' }}>Você pode adicionar um vídeo do YouTube</div>
-                                            <Input icon='youtube' iconPosition='left' placeholder='Informe aqui o link do YouTube'
-                                                value={props.video_id} style={{ "color": "blue", 'width': '400px' }} />
+                                            <CardActions>
+                                                <ButtonUI startIcon={<CheckCircleIcon />} onClick={() => handleConfirmarTitulo()} disabled={props.quantidadeVendido > 0 ? true : false} variant="contained">{props.loadingButtonTitulo === true ? 'Processando...' : 'Confirmar'}</ButtonUI>
+                                            </CardActions>
                                         </div>
-                                    </ExpansionPanelDetails>
-                                </ExpansionPanel>
-                            </Paper>
-                        </Col>
-                    </Row>
-                    <p></p>
-                    <Row>
-                        <Col md={12}>
-                            <Paper elevation={3}>
-                                <ExpansionPanel>
-                                    <ExpansionPanelSummary
-                                        expandIcon={<ExpandMoreIcon />}>
-                                        <span style={{ fontSize: '18px', color: '#333333' }}>Disponibilidade de estoque</span> <span style={{ fontSize: '14px', color: '#cccccc', paddingLeft: '5px', paddingTop: '2px' }}>| Opcional</span>
-                                    </ExpansionPanelSummary>
-                                    <ExpansionPanelDetails>
-
-                                    </ExpansionPanelDetails>
-                                </ExpansionPanel>
-                            </Paper>
-                        </Col>
-                    </Row>
-                    <p></p>
-                    <Row>
-                        <Col md={12}>
-                            <Paper elevation={3}>
-                                <ExpansionPanel>
-                                    <ExpansionPanelSummary
-                                        expandIcon={<ExpandMoreIcon />}>
-                                        <span style={{ fontSize: '18px', color: '#333333' }}>Garantia</span>
-                                    </ExpansionPanelSummary>
-                                    <ExpansionPanelDetails>
+                                    </ExpansionPanel>
+                                </Paper>
+                            </Col>
+                        </Row>
 
 
-
-                                    </ExpansionPanelDetails>
-                                </ExpansionPanel>
-                            </Paper>
-                        </Col>
-                    </Row>
-                    <p></p>
-                    <Row>
-                        <Col md={12}>
-                            <Paper elevation={3}>
-                                <ExpansionPanel>
-                                    <ExpansionPanelSummary
-                                        expandIcon={<ExpandMoreIcon />}>
-                                        <span style={{ fontSize: '18px', color: '#333333' }}>Condição</span>
-                                    </ExpansionPanelSummary>
-                                    <ExpansionPanelDetails>
-
-
-
-                                    </ExpansionPanelDetails>
-                                </ExpansionPanel>
-                            </Paper>
-                        </Col>
-                    </Row>
-                    <p></p>
-                    <Row>
-                        <Col md={12}>
-                            <Paper elevation={3}>
-                                <ExpansionPanel>
-                                    <ExpansionPanelSummary
-                                        expandIcon={<ExpandMoreIcon />}>
-                                        <span style={{ fontSize: '18px', color: '#333333' }}>Categoria</span>
-                                    </ExpansionPanelSummary>
-                                    <ExpansionPanelDetails>
+                        <p></p>
+                        <Row>
+                            <Col md={12}>
+                                <Paper elevation={3}>
+                                    <ExpansionPanel>
+                                        <ExpansionPanelSummary
+                                            expandIcon={<ExpandMoreIcon />}>
+                                            <span style={{ fontSize: '18px', color: '#333333' }}>Ficha técnica</span>
+                                        </ExpansionPanelSummary>
+                                        <ExpansionPanelDetails>
+                                            <Row>
+                                                <Col md={6}>
+                                                    <FormInput width='500px' label="Marca" value={props.titulo} style={{ "color": "blue" }} disabled={false} />
+                                                    <FormInput width='500px' label="Gênero" value={props.titulo} style={{ "color": "blue" }} disabled={false} />
+                                                    <FormInput width='500px' label="Volume da unidade" value={props.titulo} style={{ "color": "blue" }} disabled={false} />
+                                                    <FormInput width='500px' label="Idade" value={props.titulo} style={{ "color": "blue" }} disabled={false} />
+                                                    <FormInput width='500px' label="Peças do set" value={props.titulo} style={{ "color": "blue" }} disabled={false} />
+                                                </Col>
+                                                <Col md={6}>
+                                                    <FormInput marginLeft='100px' label="Nome do perfume" placeholder='R$' value={props.preco.toLocaleString("pt-BR")} style={{ "color": "blue" }} />
+                                                    <FormInput marginLeft='100px' label="Tipo" value={props.titulo} style={{ "color": "blue" }} disabled={false} />
+                                                    <FormInput marginLeft='100px' label="Unidade por pacote" value={props.titulo} style={{ "color": "blue" }} disabled={false} />
+                                                </Col>
+                                            </Row>
 
 
+                                        </ExpansionPanelDetails>
+                                    </ExpansionPanel>
+                                </Paper>
+                            </Col>
+                        </Row>
+                        <p></p>
+                        <Row>
+                            <Col md={12}>
+                                <Paper elevation={3}>
+                                    <ExpansionPanel onChange={() => props.obterValorDoCustoFreteGratisPorAnuncio(props.id)}>
+                                        <ExpansionPanelSummary
+                                            expandIcon={<ExpandMoreIcon />}>
+                                            <HeaderExpansionPanel
+                                                className={classes.displayInline}
+                                                title='Forma de entrega' />
+                                        </ExpansionPanelSummary>
+                                        <ExpansionPanelDetails>
+                                            <Card>
+                                                <CardContent>
+                                                    <Row>
+                                                        <Col md={6}>
+                                                            <div style={{ color: '#000000', fontSize: '18px' }}>
+                                                                <img src={imgOfereceMercadoEnvios}></img>Faço envios pelo Mercado Envios
+                                                        </div>
+                                                            <FormControl component="fieldset">
+                                                                <RadioGroup value={freeShipping} onChange={(event) => handleFreeShipping(event)}>
 
-                                    </ExpansionPanelDetails>
-                                </ExpansionPanel>
-                            </Paper>
-                        </Col>
-                    </Row>
+                                                                    <FormControlLabel style={{ paddingTop: '50px' }} value='true' control={<Radio />} label={
+                                                                        <span style={{ color: '#000000', fontSize: '18px' }}>
+                                                                            Com frete grátis. {' '}
+                                                                            <img src={imgInfoComFreteGratis}></img>
+                                                                        </span>
+                                                                    } />
+
+                                                                    <div style={{ color: '#666666', fontSize: '16px', paddingLeft: '27px' }}>Você paga R$ {props.custoFrete} pelo frete para qualquer destino</div>
+                                                                    <FormControlLabel style={{ paddingTop: '15px' }} value='false' control={<Radio />} label={
+                                                                        <div style={{ color: '#000000', fontSize: '18px' }}>Não oferecer frete grátis</div>
+                                                                    } />
+
+                                                                </RadioGroup>
+                                                            </FormControl>
+                                                            <div style={{ color: '#666666', fontSize: '16px', paddingLeft: '27px' }}>O Comprador paga o frete</div>
+                                                        </Col>
+                                                        <Col md={6}>
+                                                            <img style={{ paddingTop: '120px' }} src={imgFormaDeEntrega}></img>
+                                                        </Col>
+                                                    </Row>
+                                                </CardContent>
+                                                <div>
+                                                    <CardActions>
+                                                        <ButtonUI startIcon={<CheckCircleIcon />} onClick={() => verificarFormaEntrega()} variant="contained">{props.loadingButtonFormaEntrega === true ? 'Processando...' : 'Confirmar'}</ButtonUI>
+                                                    </CardActions>
+                                                </div>
+                                            </Card>
+                                        </ExpansionPanelDetails>
+                                    </ExpansionPanel>
+                                </Paper>
+                            </Col>
+                        </Row>
+                        <p></p>
+                        <Row>
+                            <Col md={12}>
+                                <Paper elevation={3}>
+                                    <ExpansionPanel>
+                                        <ExpansionPanelSummary
+                                            expandIcon={<ExpandMoreIcon />}>
+                                            <span style={{ fontSize: '18px', color: '#333333' }}>Retirar pessoalmente</span>
+                                        </ExpansionPanelSummary>
+                                        <ExpansionPanelDetails>
+                                            <Row>
+                                                <FormControl component="fieldset">
+                                                    <RadioGroup style={{ padding: '0 10px 0' }} value={localPickUp} onChange={(event) => handleLocalPickUp(event)}>
+                                                        <FormControlLabel value='true' control={<Radio />} label={
+                                                            <span style={{ color: '#000000', fontSize: '18px' }}>Concordo</span>
+                                                        } />
+                                                        <FormControlLabel value='false' control={<Radio />} label={
+                                                            <div style={{ color: '#000000', fontSize: '18px' }}>Não concordo</div>
+                                                        } />
+                                                    </RadioGroup>
+                                                </FormControl>
+                                                <div>
+                                                    <CardActions>
+                                                        <ButtonUI onClick={() => confirmarRetirarPessoalmente()} startIcon={<CheckCircleIcon />} variant="contained">{props.loadingButtonRetirarPessoalmente === true ? 'Processando...' : 'Confirmar'}</ButtonUI>
+                                                    </CardActions>
+                                                </div>
+                                            </Row>
+                                        </ExpansionPanelDetails>
+                                    </ExpansionPanel>
+                                </Paper>
+                            </Col>
+                        </Row>
+                        <p></p>
+                        <Row>
+                            <Col md={12}>
+                                <Paper elevation={3}>
+                                    <ExpansionPanel>
+                                        <ExpansionPanelSummary
+                                            expandIcon={<ExpandMoreIcon />}>
+                                            <span style={{ fontSize: '18px', color: '#333333' }}>Tipo de anúncio</span>
+                                        </ExpansionPanelSummary>
+                                        <ExpansionPanelDetails>
+                                            <Row>
+                                                <Col md={6}>
+                                                    <Card style={{ width: '300px' }}>
+                                                        <CardContent>
+                                                            <div>
+                                                                <img src={imgAnuncioClassico}></img>
+                                                            </div>
+                                                            <div style={{ fontSize: '14px', color: '#8c8c8c' }}>
+                                                                <div>Clássico</div>
+                                                            </div>
+                                                            <div style={{ fontSize: '20px', color: '#333333' }}>
+                                                                <div>Exposição alta</div>
+                                                            </div>
+                                                            <div style={{ fontSize: '12px', color: '#000000' }}>
+                                                                <div></div>
+                                                                <div>Duração ilimitada</div>
+                                                            </div>
+
+                                                            <br></br>
+                                                            <Divider style={{ marginTop: '34px' }} />
+                                                            <div style={{ fontSize: '32px', color: '#000000' }}>R$ {mostrarTarifaVendaClassico()}</div>
+                                                            <div style={{ fontSize: '12px', color: '#000000' }}>Tarifa de venda</div>
+                                                        </CardContent>
+                                                        <CardActions>
+                                                            <FormControlLabel
+                                                                control={<Switch checked={isClassico} onChange={(event) => setIsClassico(event.target.checked)} />}
+                                                                label={isClassico ? 'Selecionado' : ''}
+                                                                color="primary"
+                                                            />
+                                                        </CardActions>
+                                                    </Card>
+                                                </Col>
+                                                <Col md={6}>
+                                                    <Card style={{ width: '300px' }}>
+                                                        <CardContent>
+                                                            <div>
+                                                                <img src={imgAnuncioPremium}></img>
+                                                            </div>
+                                                            <div style={{ fontSize: '14px', color: '#8c8c8c' }}>
+                                                                <div>Premium</div>
+                                                            </div>
+                                                            <div style={{ fontSize: '20px', color: '#333333' }}>
+                                                                <div>Exposição máxima</div>
+                                                            </div>
+                                                            <div style={{ fontSize: '12px', color: '#000000' }}>
+                                                                <div></div>
+                                                                <div>Duração ilimitada</div>
+                                                            </div>
+                                                            <div style={{ fontSize: '12px', color: '#000000' }}>
+                                                                <div></div>
+                                                                <div>Você oferece parcelamento sem acréscimo</div>
+                                                            </div>
+
+                                                            <br></br>
+                                                            <Divider style={{ marginTop: '9px' }} />
+                                                            <div style={{ fontSize: '32px', color: '#000000' }}>R$ {mostrarTarifaVendaPremium()}</div>
+                                                            <div style={{ fontSize: '12px', color: '#000000' }}>Tarifa de venda</div>
+                                                        </CardContent>
+                                                        <CardActions>
+                                                            <FormControlLabel
+                                                                control={<Switch checked={isPremium} onChange={(event) => setIsPremium(event.target.checked)} />}
+                                                                label={isPremium ? 'Selecionado' : ''}
+                                                                color="primary"
+                                                            />
+                                                        </CardActions>
+                                                    </Card>
+                                                </Col>
+
+                                                <CardActions>
+                                                    <ButtonUI startIcon={<CheckCircleIcon />} onClick={() => handleConfirmarListingType()} variant="contained">{props.loadingButtonTipoAnuncio === true ? 'Processando...' : 'Confirmar'}</ButtonUI>
+                                                </CardActions>
+                                            </Row>
+
+                                        </ExpansionPanelDetails>
+                                    </ExpansionPanel>
+                                </Paper>
+                            </Col>
+                        </Row>
+                        <p></p>
+                        <Row>
+                            <Col md={12}>
+                                <Paper elevation={3}>
+                                    <ExpansionPanel>
+                                        <ExpansionPanelSummary
+                                            expandIcon={<ExpandMoreIcon />}>
+                                            <span style={{ fontSize: '18px', color: '#333333' }}>Descrição</span> <span style={{ fontSize: '14px', color: '#cccccc', paddingLeft: '5px', paddingTop: '2px' }}>| Opcional</span>
+                                        </ExpansionPanelSummary>
+                                        <ExpansionPanelDetails>
+                                            <TextField multiline label="Descrição somente texto" value={description} style={{ "color": "blue", width: '500%' }} onChange={handleDescription} />
+                                        </ExpansionPanelDetails>
+                                        <CardActions>
+                                            <ButtonUI startIcon={<CheckCircleIcon />} onClick={() => handleConfirmarDescription()} variant="contained">{props.loadingButtonDescription === true ? 'Processando...' : 'Confirmar'}</ButtonUI>
+                                        </CardActions>
+                                    </ExpansionPanel>
+                                </Paper>
+                            </Col>
+                        </Row>
+                        <p></p>
+                        <Row>
+                            <Col md={12}>
+                                <Paper elevation={3}>
+                                    <ExpansionPanel>
+                                        <ExpansionPanelSummary
+                                            expandIcon={<ExpandMoreIcon />}>
+                                            <span style={{ fontSize: '18px', color: '#333333' }}>Vídeo</span> <span style={{ fontSize: '14px', color: '#cccccc', paddingLeft: '5px', paddingTop: '2px' }}>| Opcional</span>
+                                        </ExpansionPanelSummary>
+                                        <ExpansionPanelDetails>
+                                            <div>
+                                                <div style={{ fontSize: '16px', color: '#666666', fontFamily: 'Helvetica Roboto Arial sans-serif' }}>Você pode adicionar um vídeo do YouTube</div>
+                                                <Input icon='youtube' iconPosition='left' placeholder='Informe aqui o link do YouTube'
+                                                    value={props.video_id} style={{ "color": "blue", 'width': '640px' }} />
+                                                {props.json.video_id !== null &&
+                                                    <YouTube
+                                                        videoId={props.json.video_id}
+                                                        opts={optsYouTube}
+                                                    />
+                                                }
+                                            </div>
+                                        </ExpansionPanelDetails>
+                                    </ExpansionPanel>
+                                </Paper>
+                            </Col>
+                        </Row>
+                        <p></p>
+                        <Row>
+                            <Col md={12}>
+                                <Paper elevation={3}>
+                                    <ExpansionPanel>
+                                        <ExpansionPanelSummary
+                                            expandIcon={<ExpandMoreIcon />}>
+                                            <span style={{ fontSize: '18px', color: '#333333' }}>Disponibilidade de estoque</span> <span style={{ fontSize: '14px', color: '#cccccc', paddingLeft: '5px', paddingTop: '2px' }}>| Opcional</span>
+                                        </ExpansionPanelSummary>
+                                        <ExpansionPanelDetails>
+
+                                        </ExpansionPanelDetails>
+                                    </ExpansionPanel>
+                                </Paper>
+                            </Col>
+                        </Row>
+                        <p></p>
+                        <Row>
+                            <Col md={12}>
+                                <Paper elevation={3}>
+                                    <ExpansionPanel>
+                                        <ExpansionPanelSummary
+                                            expandIcon={<ExpandMoreIcon />}>
+                                            <span style={{ fontSize: '18px', color: '#333333' }}>Garantia</span>
+                                        </ExpansionPanelSummary>
+                                        <ExpansionPanelDetails>
 
 
-                    <label>Estado do produto</label>
-                    <Row>
-                        <Col sm={1}>
-                            <Form.Radio
-                                label='Novo'
-                                value='novo'
-                                checked={props.isSelectedEstadoProduto === 'novo'}
-                                onChange={props.handleChangeIsSelectedEstadoProdutoNovo} />
-                        </Col>
-                        <Col sm={11}>
-                            <Form.Radio
-                                label='Usado'
-                                value='usado'
-                                checked={props.isSelectedEstadoProduto === 'usado'}
-                                onChange={props.handleChangeIsSelectedEstadoProdutoUsado} />
-                        </Col>
-                    </Row>
 
-                    <label>Frete</label>
-                    <Row>
-                        <Col sm={2}>
-                            <Form.Radio
-                                label='Por Conta do Comprador'
-                                checked={props.isSelectedFrete === ''}
-                                onChange={props.handleChangeSelectedFretePorContaDoComprador} />
-                        </Col>
-                        <Col sm={10}>
-                            <Form.Radio
-                                label='Frete Grátis Brasil'
-                                checked={props.isSelectedFrete === props.freteGratis}
-                                onChange={props.handleChangeSelectedFreteGratis} />
-                        </Col>
-                    </Row>
-
-                    <Row>
-                        <Col md={12}>
-                            <FormInput label="Garantia" value={""} style={{ "color": "blue" }} componentClass="textarea" rows="2" />
-                        </Col>
-                    </Row>
+                                        </ExpansionPanelDetails>
+                                    </ExpansionPanel>
+                                </Paper>
+                            </Col>
+                        </Row>
+                        <p></p>
+                        <Row>
+                            <Col md={12}>
+                                <Paper elevation={3}>
+                                    <ExpansionPanel>
+                                        <ExpansionPanelSummary
+                                            expandIcon={<ExpandMoreIcon />}>
+                                            <span style={{ fontSize: '18px', color: '#333333' }}>Condição</span>
+                                        </ExpansionPanelSummary>
+                                        <ExpansionPanelDetails>
 
 
 
-                    <Modal.Footer>
-                        <ButtonUI startIcon={<CloseIcon />} variant="contained" color="secondary" onClick={() => props.setShowModal(false)}>
-                            Fechar
+                                        </ExpansionPanelDetails>
+                                    </ExpansionPanel>
+                                </Paper>
+                            </Col>
+                        </Row>
+                        <p></p>
+                        <Row>
+                            <Col md={12}>
+                                <Paper elevation={3}>
+                                    <ExpansionPanel>
+                                        <ExpansionPanelSummary
+                                            expandIcon={<ExpandMoreIcon />}>
+                                            <span style={{ fontSize: '18px', color: '#333333' }}>Categoria</span>
+                                        </ExpansionPanelSummary>
+                                        <ExpansionPanelDetails>
+
+
+
+                                        </ExpansionPanelDetails>
+                                    </ExpansionPanel>
+                                </Paper>
+                            </Col>
+                        </Row>
+
+                        <Modal.Footer>
+                            <ButtonUI startIcon={<CloseIcon />} variant="contained" color="secondary" onClick={() => props.setShowModal(false)}>
+                                Fechar
                         </ButtonUI>
-                    </Modal.Footer>
+                        </Modal.Footer>
 
+                    </div>
+                    <div id='barralateral' style={{padding: '15px 5px 0'}}>
+                        <Paper elevation={3}>
+                              <div>Barra lateral</div>                  
+                        </Paper>
+                    </div>
                 </div>
             </Dialog>
 

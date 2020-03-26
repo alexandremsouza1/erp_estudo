@@ -782,4 +782,13 @@ const obterValorDoCustoFreteGratisPorAnuncios = async () => {
     }).catch(error => console.error(error))
 }
 
-obterValorDoCustoFreteGratisPorAnuncios()
+const encontrarString = () => {
+    let dado = []
+    let info = "- Material: 92% poliéster e 8% elastano (Sem Transparência)"
+    dado = info.split('').map(caracter => {
+        return caracter.replace("%", "\u0025")
+    }).join('')
+    console.log(dado)
+}
+
+encontrarString()

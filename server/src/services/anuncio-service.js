@@ -3,6 +3,7 @@
 const axios = require('axios');
 const constants = require('../constants/constants');
 const usuarioService = require('../services/usuario-service')
+const jsonEncode = require('json_encode')
 
 /**
  * Created by Felipe M. Santos
@@ -284,14 +285,38 @@ exports.updateRetirarPessoalmente = async (req, res) => {
 }
 
 exports.updateDescription = async (req, res) => {
-    console.log(req.body.plain_text)
+    let text = []
+    text = req.body.plain_text.split('').map(caracter => {
+        return caracter.replace("%", "(porcento)")
+    })
+
     await usuarioService.buscarUsuarioPorID().then(async user => {
         await axios.put(`https://api.mercadolibre.com/items/${req.body.itemId}/description?access_token=${user.accessToken}`, JSON.stringify(
             {
-                plain_text: req.body.plain_text
+                plain_text: text.join('')
             }
         )).then(response => {
             res.status(200).send("Descrição atualizada.")
+        }).catch(error => {
+            console.log(error)
+            res.send(error)
+        })
+    }).catch(error => {
+        console.log(error)
+        res.send(error)
+    })
+}
+
+exports.updateVideoYouTube = async (req, res) => {
+    await usuarioService.buscarUsuarioPorID().then(async user => {
+        await axios.put(`https://api.mercadolibre.com/items/${req.body.itemId}?access_token=${user.accessToken}`, JSON.stringify(
+            {
+                shipping: {
+                    local_pick_up: req.body.local_pick_up
+                }
+            }
+        )).then(response => {
+            res.status(200).send("Retirar pessoalmente atualizado.")
         }).catch(error => res.send(error))
     }).catch(error => res.send(error))
 }
