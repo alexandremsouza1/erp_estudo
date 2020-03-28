@@ -15,6 +15,8 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
 import { makeStyles } from '@material-ui/core/styles';
+import { Message } from 'semantic-ui-react'
+import Button from '@material-ui/core/Button';
 
 
 export default function DashboardView(props) {
@@ -49,6 +51,19 @@ export default function DashboardView(props) {
       <Grid container spacing={3}>
 
         <Grid item xs={12}>
+          <Row style={{padding: '0 0 10px'}}>
+            <Col md={12}>
+              <Message negative style={{ width: '100%' }}>
+                <Message.Header>{props.comunicado.label}</Message.Header>
+                <Message.Content>
+                  <>
+                    <span>{props.comunicado.description}</span>
+                    <div><a href={props.comunicado.link} target='_blank'>{props.comunicado.text}</a></div>
+                  </>
+                </Message.Content>
+              </Message>
+            </Col>
+          </Row>
           <Paper elevation={3} style={{ 'height': '130px' }}>
             <Row>
               <Col md={12}>
@@ -183,11 +198,11 @@ export default function DashboardView(props) {
 
 
       <ChartUI
-              options={props.options}
-              series={props.series}
-              type="line"
-              width="550"
-            />       
+        options={props.options}
+        series={props.series}
+        type="line"
+        width="550"
+      />
 
 
     </>

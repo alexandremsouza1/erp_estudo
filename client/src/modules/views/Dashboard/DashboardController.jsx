@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import DashboardView from './DashboardView'
 import { useSelector, useDispatch } from 'react-redux'
@@ -19,6 +19,7 @@ export default function DashboardController() {
 
     const dispatch = useDispatch()
     const state = useSelector(state => state.dashboard)
+    const [comunicado, setComunicado] = useState({})
 
     document.title = "Dashboard"
     /*
@@ -91,6 +92,13 @@ export default function DashboardController() {
 
 
     const get = async () => {
+
+        await axios.get(`${DOMAIN}/comunicado`).then(comunicado => {
+            setComunicado(comunicado.data[0])
+        }).catch(error => {
+            swal("Error", "Ops, não conseguimos obter as informaçoes do comunicado! :( (Dashboard:98):  \n \n " + error, "error");
+        })
+
         await axios.get(`${DOMAIN}/saldo`).then(res => {
             dispatch({
                 type: OBTER_SALDO_TOTAL,
@@ -150,6 +158,7 @@ export default function DashboardController() {
                     series={series}
                     dataVendas={dataVendas}
                     dataFaturamento={dataFaturamento}
+                    comunicado={comunicado}
                     dataUnidadesVendidas={dataUnidadesVendidas} />
             </Dimmer.Dimmable>
         </>

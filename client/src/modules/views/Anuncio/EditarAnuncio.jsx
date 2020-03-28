@@ -1,7 +1,7 @@
 import React from 'react'
 import { Row, Col, Modal } from "react-bootstrap";
 import FormInput from '../../components/FormInput/FormInput'
-import { Form, Input, Message } from 'semantic-ui-react'
+import { Popup, Input, Message } from 'semantic-ui-react'
 
 import { makeStyles } from '@material-ui/core/styles';
 import ButtonUI from '@material-ui/core/Button';
@@ -42,6 +42,9 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import YouTube from 'react-youtube';
 import TextField from '@material-ui/core/TextField';
+
+
+import Circle from 'react-circle';
 
 const useStyles = makeStyles(theme => ({
     appBar: {
@@ -201,7 +204,7 @@ export default function EditarAnuncio(props) {
                         </IconButton>
                     </Toolbar>
                 </AppBar>
-                <div id='contaner' style={{display: 'flex'}}>
+                <div id='contaner' style={{ display: 'flex' }}>
                     <div style={{ margin: '15px 10px 0', backgroundColor: '#f1f1f1' }}>
                         <Row>
                             <Col md={12}>
@@ -218,6 +221,10 @@ export default function EditarAnuncio(props) {
                                                     {props.quantidadeVendido > 0 &&
                                                         <Message info style={{ width: '500px' }}>
                                                             <Message.Header>De acordo com as políticas do Mercado Livre, só será possível alterar os títulos dos anúncios que NÃO tiverem vendas.</Message.Header>
+                                                        </Message>
+                                                    }
+                                                    {props.quantidadeVendido === 0 &&
+                                                        <Message info style={{ width: '500px' }}>
                                                             <p style={{ fontSize: '11px' }}>Quer saber como criar um bom título para seus anúncios? <ButtonUI onClick={() => setState({ showInfoMercadoLivreEditarTitulo: true })} style={{ fontSize: '11px' }} size="small">Clique aqui</ButtonUI></p>
                                                         </Message>
                                                     }
@@ -291,7 +298,20 @@ export default function EditarAnuncio(props) {
                                                                     <FormControlLabel style={{ paddingTop: '50px' }} value='true' control={<Radio />} label={
                                                                         <span style={{ color: '#000000', fontSize: '18px' }}>
                                                                             Com frete grátis. {' '}
-                                                                            <img src={imgInfoComFreteGratis}></img>
+                                                                            <Popup
+                                                                                wide='very'
+                                                                                content={
+                                                                                    <>
+                                                                                        <div style={{ padding: '10px 0 0' }}><img src={imgOfereceMercadoEnvios}></img>Frete grátis no serviço normal.</div>
+                                                                                        <div><img src={imgOfereceMercadoEnvios}></img>Descontos significativos no serviço expresso.</div>
+                                                                                        <div style={{ padding: '15px 0 5px', color: '#666666' }}>Em alguns casos, no lugar do frete grátis, eles terão descontos nos dois serviços. Isso dependerá do peso, do preço e da distância do envio.</div>
+                                                                                    </>
+                                                                                }
+                                                                                key={props.id}
+                                                                                header='Todos os seus compradores terão:'
+                                                                                trigger={<img src={imgInfoComFreteGratis}></img>}
+                                                                            />
+
                                                                         </span>
                                                                     } />
 
@@ -470,7 +490,7 @@ export default function EditarAnuncio(props) {
                                         </ExpansionPanelSummary>
                                         <ExpansionPanelDetails>
                                             <div>
-                                                <div style={{ fontSize: '16px', color: '#666666', fontFamily: 'Helvetica Roboto Arial sans-serif' }}>Você pode adicionar um vídeo do YouTube</div>
+                                                <div style={{ fontSize: '16px', color: '#666666' }}>Você pode adicionar um vídeo do YouTube</div>
                                                 <Input icon='youtube' iconPosition='left' placeholder='Informe aqui o link do YouTube'
                                                     value={props.video_id} style={{ "color": "blue", 'width': '640px' }} />
                                                 {props.json.video_id !== null &&
@@ -563,9 +583,22 @@ export default function EditarAnuncio(props) {
                         </Modal.Footer>
 
                     </div>
-                    <div id='barralateral' style={{padding: '15px 5px 0'}}>
+                    <div id='barralateral' style={{ padding: '15px 5px 0' }}>
                         <Paper elevation={3}>
-                              <div>Barra lateral</div>                  
+                            <div style={{ display: 'flex' }}>
+                                <Circle progress={props.json.health * 100} />
+                                <div style={{ padding: '15px 10px 0' }}>
+                                    <div><span style={{ color: '#2ec07e', fontSize: '12px' }}>08</span>/<span style={{ color: '#bfbfbf', fontSize: '12px' }}>10</span></div>
+                                    <div style={{ color: '#333333', fontSize: '24px' }}>Qualidade Satisfatória</div>
+                                    <div style={{ color: '#bfbfbf', fontSize: '12px' }}>Alcance os objetivos e consiga um anúncio profissional.</div>
+                                </div>
+                            </div>
+                            <div style={{borderBottom: 'ridge', padding: '30px 0 0'}}></div>
+                            <div style={{color: '#bfbfbf', fontSize: '14px'}}>Objetivos a alcançar</div>
+                            <div style={{display: 'flex'}}>
+                                <div></div>
+                                <div>Ofereça frete grátis</div>
+                            </div>
                         </Paper>
                     </div>
                 </div>

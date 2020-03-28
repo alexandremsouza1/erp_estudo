@@ -23,6 +23,7 @@ const clienteRoute = require('./src/routes/cliente.route')
 const bloqueioRoute = require('./src/routes/bloqueio.route')
 const rastreioRoute = require('./src/routes/rastreio.route')
 const filaPerguntasRoute = require("./src/routes/filaPerguntas.route")
+const comunicadoVendedorRoute = require("./src/routes/comunicadoVendedor.route")
 
 //  Adicionar e configurar middleware
 app.use(session({
@@ -60,6 +61,8 @@ app.use('/rastreio', rastreioRoute)
 app.use('/bloqueio', bloqueioRoute)
 
 app.use('/perguntas', filaPerguntasRoute)
+
+app.use('/comunicado', comunicadoVendedorRoute)
 
 //APP
 
