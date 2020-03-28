@@ -13,7 +13,8 @@ import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import Chip from '@material-ui/core/Chip';
 import EditIcon from '@material-ui/icons/Edit';
-import SaveIcon from '@material-ui/icons/Save';
+import LocalShippingIcon from '@material-ui/icons/LocalShipping';
+import DateRangeIcon from '@material-ui/icons/DateRange';
 import Paper from '@material-ui/core/Paper';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
@@ -584,20 +585,32 @@ export default function EditarAnuncio(props) {
 
                     </div>
                     <div id='barralateral' style={{ padding: '15px 5px 0' }}>
-                        <Paper elevation={3}>
+                        <Paper elevation={3} style={{ position: 'fixed' }}>
                             <div style={{ display: 'flex' }}>
                                 <Circle progress={props.json.health * 100} />
                                 <div style={{ padding: '15px 10px 0' }}>
-                                    <div><span style={{ color: '#2ec07e', fontSize: '12px' }}>08</span>/<span style={{ color: '#bfbfbf', fontSize: '12px' }}>10</span></div>
+                                    <div><span style={{ color: '#2ec07e', fontSize: '12px' }}>{props.json.health}</span>/<span style={{ color: '#bfbfbf', fontSize: '12px' }}>10</span></div>
                                     <div style={{ color: '#333333', fontSize: '24px' }}>Qualidade Satisfatória</div>
                                     <div style={{ color: '#bfbfbf', fontSize: '12px' }}>Alcance os objetivos e consiga um anúncio profissional.</div>
                                 </div>
                             </div>
-                            <div style={{borderBottom: 'ridge', padding: '30px 0 0'}}></div>
-                            <div style={{color: '#bfbfbf', fontSize: '14px'}}>Objetivos a alcançar</div>
-                            <div style={{display: 'flex'}}>
-                                <div></div>
-                                <div>Ofereça frete grátis</div>
+
+                            <div style={{ display: 'flex', flexDirection: 'row', margin: '20px 5px 0' }}>
+                                <div style={{ color: '#bfbfbf', fontSize: '14px' }}>Objetivos a alcançar</div>
+                                <div style={{ borderBottom: '1px solid black', margin: '0 0 8px', borderColor: '#bfbfbf', marginLeft: '20px', width: '50%' }}></div>
+                            </div>
+
+                            <div style={{ display: 'flex'}}>
+                                <IconButton color="primary" style={{fontSize: '12px'}}>
+                                    <LocalShippingIcon/>
+                                    Ofereça frete grátis
+                                </IconButton>
+                            </div>
+                            <div style={{ display: 'flex'}}>
+                                <IconButton color="primary" style={{fontSize: '12px'}}>
+                                    <DateRangeIcon/>
+                                    Ofereça parcelamento sem juros
+                                </IconButton>
                             </div>
                         </Paper>
                     </div>
