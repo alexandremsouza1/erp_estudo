@@ -45,6 +45,7 @@ import YouTube from 'react-youtube';
 import TextField from '@material-ui/core/TextField';
 
 
+
 import Circle from 'react-circle';
 
 const useStyles = makeStyles(theme => ({
@@ -190,6 +191,19 @@ export default function EditarAnuncio(props) {
         setDescription(event.target.value)
     }
 
+    const verificarQualidade = () => {
+        let health = props.json.health * 100
+        if (health < 75) {
+            return 'Qualidade básica'
+        }
+        if (health >= 75 && health < 100) {
+            return 'Qualidade Satisfatória'
+        }
+        if (health === 100) {
+            return 'Qualidade Profissional'
+        }
+    }
+
     return (
         <>
             <Dialog fullScreen open={props.showModal} onClose={() => props.setShowModal(false)}>
@@ -213,7 +227,10 @@ export default function EditarAnuncio(props) {
                                     <ExpansionPanel expanded>
                                         <ExpansionPanelSummary
                                             expandIcon={<ExpandMoreIcon />}>
-                                            <span style={{ fontSize: '14px', color: '#8c8c8c' }}>Total de visitas {props.visualizacao} | Total de vendas {props.quantidadeVendido}</span>
+                                            <span style={{ fontSize: '14px', color: '#8c8c8c' }}>
+                                                <Chip label={<> Total de visitas: {props.visualizacao}</>} />
+                                                <Chip label={<> Total de vendas: {props.quantidadeVendido}</>} />
+                                            </span>
                                         </ExpansionPanelSummary>
                                         <ExpansionPanelDetails>
                                             <Row>
@@ -286,57 +303,53 @@ export default function EditarAnuncio(props) {
                                                 title='Forma de entrega' />
                                         </ExpansionPanelSummary>
                                         <ExpansionPanelDetails>
-                                            <Card>
-                                                <CardContent>
-                                                    <Row>
-                                                        <Col md={6}>
-                                                            <div style={{ color: '#000000', fontSize: '18px' }}>
-                                                                <img src={imgOfereceMercadoEnvios}></img>Faço envios pelo Mercado Envios
+                                            <Row>
+                                                <Col md={6}>
+                                                    <div style={{ color: '#000000', fontSize: '18px' }}>
+                                                        <img src={imgOfereceMercadoEnvios}></img>Faço envios pelo Mercado Envios
                                                         </div>
-                                                            <FormControl component="fieldset">
-                                                                <RadioGroup value={freeShipping} onChange={(event) => handleFreeShipping(event)}>
+                                                    <FormControl component="fieldset">
+                                                        <RadioGroup value={freeShipping} onChange={(event) => handleFreeShipping(event)}>
 
-                                                                    <FormControlLabel style={{ paddingTop: '50px' }} value='true' control={<Radio />} label={
-                                                                        <span style={{ color: '#000000', fontSize: '18px' }}>
-                                                                            Com frete grátis. {' '}
-                                                                            <Popup
-                                                                                wide='very'
-                                                                                content={
-                                                                                    <>
-                                                                                        <div style={{ padding: '10px 0 0' }}><img src={imgOfereceMercadoEnvios}></img>Frete grátis no serviço normal.</div>
-                                                                                        <div><img src={imgOfereceMercadoEnvios}></img>Descontos significativos no serviço expresso.</div>
-                                                                                        <div style={{ padding: '15px 0 5px', color: '#666666' }}>Em alguns casos, no lugar do frete grátis, eles terão descontos nos dois serviços. Isso dependerá do peso, do preço e da distância do envio.</div>
-                                                                                    </>
-                                                                                }
-                                                                                key={props.id}
-                                                                                header='Todos os seus compradores terão:'
-                                                                                trigger={<img src={imgInfoComFreteGratis}></img>}
-                                                                            />
+                                                            <FormControlLabel style={{ paddingTop: '50px' }} value='true' control={<Radio />} label={
+                                                                <span style={{ color: '#000000', fontSize: '18px' }}>
+                                                                    Com frete grátis. {' '}
+                                                                    <Popup
+                                                                        wide='very'
+                                                                        content={
+                                                                            <>
+                                                                                <div style={{ padding: '10px 0 0' }}><img src={imgOfereceMercadoEnvios}></img>Frete grátis no serviço normal.</div>
+                                                                                <div><img src={imgOfereceMercadoEnvios}></img>Descontos significativos no serviço expresso.</div>
+                                                                                <div style={{ padding: '15px 0 5px', color: '#666666' }}>Em alguns casos, no lugar do frete grátis, eles terão descontos nos dois serviços. Isso dependerá do peso, do preço e da distância do envio.</div>
+                                                                            </>
+                                                                        }
+                                                                        key={props.id}
+                                                                        header='Todos os seus compradores terão:'
+                                                                        trigger={<img src={imgInfoComFreteGratis}></img>}
+                                                                    />
 
-                                                                        </span>
-                                                                    } />
+                                                                </span>
+                                                            } />
 
-                                                                    <div style={{ color: '#666666', fontSize: '16px', paddingLeft: '27px' }}>Você paga R$ {props.custoFrete} pelo frete para qualquer destino</div>
-                                                                    <FormControlLabel style={{ paddingTop: '15px' }} value='false' control={<Radio />} label={
-                                                                        <div style={{ color: '#000000', fontSize: '18px' }}>Não oferecer frete grátis</div>
-                                                                    } />
+                                                            <div style={{ color: '#666666', fontSize: '16px', paddingLeft: '27px' }}>Você paga R$ {props.custoFrete} pelo frete para qualquer destino</div>
+                                                            <FormControlLabel style={{ paddingTop: '15px' }} value='false' control={<Radio />} label={
+                                                                <div style={{ color: '#000000', fontSize: '18px' }}>Não oferecer frete grátis</div>
+                                                            } />
 
-                                                                </RadioGroup>
-                                                            </FormControl>
-                                                            <div style={{ color: '#666666', fontSize: '16px', paddingLeft: '27px' }}>O Comprador paga o frete</div>
-                                                        </Col>
-                                                        <Col md={6}>
-                                                            <img style={{ paddingTop: '120px' }} src={imgFormaDeEntrega}></img>
-                                                        </Col>
-                                                    </Row>
-                                                </CardContent>
-                                                <div>
-                                                    <CardActions>
-                                                        <ButtonUI startIcon={<CheckCircleIcon />} onClick={() => verificarFormaEntrega()} variant="contained">{props.loadingButtonFormaEntrega === true ? 'Processando...' : 'Confirmar'}</ButtonUI>
-                                                    </CardActions>
-                                                </div>
-                                            </Card>
+                                                        </RadioGroup>
+                                                    </FormControl>
+                                                    <div style={{ color: '#666666', fontSize: '16px', paddingLeft: '27px' }}>O Comprador paga o frete</div>
+                                                </Col>
+                                                <Col md={6}>
+                                                    <img style={{ paddingTop: '120px' }} src={imgFormaDeEntrega}></img>
+                                                </Col>
+                                            </Row>
                                         </ExpansionPanelDetails>
+                                        <div>
+                                            <CardActions>
+                                                <ButtonUI startIcon={<CheckCircleIcon />} onClick={() => verificarFormaEntrega()} variant="contained">{props.loadingButtonFormaEntrega === true ? 'Processando...' : 'Confirmar'}</ButtonUI>
+                                            </CardActions>
+                                        </div>
                                     </ExpansionPanel>
                                 </Paper>
                             </Col>
@@ -516,7 +529,25 @@ export default function EditarAnuncio(props) {
                                             <span style={{ fontSize: '18px', color: '#333333' }}>Disponibilidade de estoque</span> <span style={{ fontSize: '14px', color: '#cccccc', paddingLeft: '5px', paddingTop: '2px' }}>| Opcional</span>
                                         </ExpansionPanelSummary>
                                         <ExpansionPanelDetails>
-
+                                            <Row>
+                                                <Col>
+                                                    <Message style={{width: '500px'}}>
+                                                        <Message.Header>Indique quantos dias corridos você demora para disponibilizar o produto. Isso será mostrado no seu anúncio e ajudará na decisão dos seus compradores.</Message.Header>
+                                                    </Message>
+                                                    <Message info style={{width: '500px'}}>
+                                                        <Message.Header>Quanto mais tempo adicionar, menos exposição você terá. Sempre o Mercado Livre irá mostrar primeiro os anúncios com estoque disponível.</Message.Header>
+                                                    </Message>
+                                                    <TextField
+                                                        label="Dias"
+                                                        style={{ margin: 8 }}
+                                                        placeholder="Ex.: 2"
+                                                        InputLabelProps={{
+                                                            shrink: true,
+                                                        }}
+                                                    />
+                                                    <div style={{padding: '0 6px 0'}}>Este prazo é fixo, exclua-o quando ele não for mais necessário.</div>
+                                                </Col>
+                                            </Row>
                                         </ExpansionPanelDetails>
                                     </ExpansionPanel>
                                 </Paper>
@@ -590,7 +621,7 @@ export default function EditarAnuncio(props) {
                                 <Circle progress={props.json.health * 100} />
                                 <div style={{ padding: '15px 10px 0' }}>
                                     <div><span style={{ color: '#2ec07e', fontSize: '12px' }}>{props.json.health}</span>/<span style={{ color: '#bfbfbf', fontSize: '12px' }}>10</span></div>
-                                    <div style={{ color: '#333333', fontSize: '24px' }}>Qualidade Satisfatória</div>
+                                    <div style={{ color: '#333333', fontSize: '24px' }}>{verificarQualidade()}</div>
                                     <div style={{ color: '#bfbfbf', fontSize: '12px' }}>Alcance os objetivos e consiga um anúncio profissional.</div>
                                 </div>
                             </div>
@@ -600,16 +631,16 @@ export default function EditarAnuncio(props) {
                                 <div style={{ borderBottom: '1px solid black', margin: '0 0 8px', borderColor: '#bfbfbf', marginLeft: '20px', width: '50%' }}></div>
                             </div>
 
-                            <div style={{ display: 'flex'}}>
-                                <IconButton color="primary" style={{fontSize: '12px'}}>
-                                    <LocalShippingIcon/>
-                                    Ofereça frete grátis
+                            <div style={{ display: 'flex' }}>
+                                <IconButton color="primary" style={{ fontSize: '12px' }}>
+                                    <LocalShippingIcon />
+                                    <span style={{ padding: '0 5px 0' }}>Ofereça frete grátis</span>
                                 </IconButton>
                             </div>
-                            <div style={{ display: 'flex'}}>
-                                <IconButton color="primary" style={{fontSize: '12px'}}>
-                                    <DateRangeIcon/>
-                                    Ofereça parcelamento sem juros
+                            <div style={{ display: 'flex' }}>
+                                <IconButton color="primary" style={{ fontSize: '12px' }}>
+                                    <DateRangeIcon />
+                                    <span style={{ padding: '0 5px 0' }}>Ofereça parcelamento sem juros</span>
                                 </IconButton>
                             </div>
                         </Paper>

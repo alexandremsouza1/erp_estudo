@@ -320,3 +320,18 @@ exports.updateVideoYouTube = async (req, res) => {
         }).catch(error => res.send(error))
     }).catch(error => res.send(error))
 }
+
+exports.updateDisponibilidadeEstoque = async(req, res) => {
+    await usuarioService.buscarUsuarioPorID().then(async user => {
+        await axios.put(`https://api.mercadolibre.com/items/${req.body.itemId}?access_token=${user.accessToken}`, JSON.stringify(
+            {
+                sale_terms: [{
+                    id: "MANUFACTURING_TIME",
+                    value_name: `${req.body.value_name} días`
+                }]
+             }
+        )).then(response => {
+            res.status(200).send("Disponibilidade de estoque atualizado!")
+        }).catch(error => res.send(error))
+    }).catch(error => res.send(error))
+}
