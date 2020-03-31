@@ -279,6 +279,12 @@ export default function AnuncioView(props) {
         {showModal &&
           <EditarAnuncio
             {...anuncio}
+            updateCondicao={props.updateCondicao}
+            loadingButtonCondicao={props.loadingButtonCondicao}
+            setLoadingButtonCondicao={props.setLoadingButtonCondicao}
+            updateDisponibilidadeEstoque={props.updateDisponibilidadeEstoque}
+            setLoadingButtonDisponibilidadeEstoque={props.setLoadingButtonDisponibilidadeEstoque}
+            loadingButtonDisponibilidadeEstoque={props.loadingButtonDisponibilidadeEstoque}
             updateDescription={props.updateDescription}
             updateRetirarPessoalmente={props.updateRetirarPessoalmente}
             updateShipping={props.updateShipping}
@@ -305,7 +311,10 @@ export default function AnuncioView(props) {
             loadingButtonRetirarPessoalmente={props.loadingButtonRetirarPessoalmente}
             setLoadingButtonRetirarPessoalmente={props.setLoadingButtonRetirarPessoalmente}
             setLoadingButtonDescription={props.setLoadingButtonDescription}
-            loadingButtonDescription={props.loadingButtonDescription}/>
+            loadingButtonDescription={props.loadingButtonDescription}
+            loadingButtonGarantia={props.loadingButtonGarantia}
+            setLoadingButtonGarantia={props.setLoadingButtonGarantia}
+            updateGarantia={props.updateGarantia}/>
             }
 
         {props.isShowConfirmPauseProduct && 

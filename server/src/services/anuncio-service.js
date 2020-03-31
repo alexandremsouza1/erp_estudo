@@ -335,3 +335,56 @@ exports.updateDisponibilidadeEstoque = async(req, res) => {
         }).catch(error => res.send(error))
     }).catch(error => res.send(error))
 }
+
+exports.updateGarantia = async(req, res) => {
+    await usuarioService.buscarUsuarioPorID().then(async user => {
+        if(req.body.tipo_garantia === 'Sem garantia'){
+            await axios.put(`https://api.mercadolibre.com/items/${req.body.itemId}?access_token=${user.accessToken}`, JSON.stringify(
+                {
+                    sale_terms: [
+                        {
+                            id: "WARRANTY_TYPE",
+                            name: "Tipo de garantia",
+                            value_id: "6150835",
+                            value_name: `${req.body.tipo_garantia}`
+                        }
+                    ]
+                 }
+            )).then(response => {
+                res.status(200).send(response)
+            }).catch(error => res.send(error))
+        }else{
+            await axios.put(`https://api.mercadolibre.com/items/${req.body.itemId}?access_token=${user.accessToken}`, JSON.stringify(
+                {
+                    sale_terms: [
+                        {
+                            id: "WARRANTY_TYPE",
+                            name: "Tipo de garantia",
+                            value_id: `${req.body.tipo_garantia === 'Garantia do fabrica' ? 2230279 : 2230280}`,
+                            value_name: `${req.body.tipo_garantia}`
+                        },
+                        {
+                            id: "WARRANTY_TIME",
+                            name: "Tempo de garantia",
+                            value_name: `${req.body.value_name} ${req.body.tempo}`
+                        }
+                    ]
+                 }
+            )).then(response => {
+                res.status(200).send(response)
+            }).catch(error => res.send(error))
+        }
+    }).catch(error => res.send(error))
+}
+
+exports.updateCondicao = async(req, res) => {
+    await usuarioService.buscarUsuarioPorID().then(async user => {
+        await axios.put(`https://api.mercadolibre.com/items/${req.body.itemId}?access_token=${user.accessToken}`, JSON.stringify(
+            {
+                condition: `${req.body.condicao}`
+            }
+        )).then(response => {
+            res.status(200).send("Condição atualizado!")
+        }).catch(error => res.send(error))
+    }).catch(error => res.send(error))
+}

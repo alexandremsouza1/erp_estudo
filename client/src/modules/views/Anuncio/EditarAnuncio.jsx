@@ -43,6 +43,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import YouTube from 'react-youtube';
 import TextField from '@material-ui/core/TextField';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 
 
 
@@ -110,13 +112,73 @@ export default function EditarAnuncio(props) {
     const [isPremium, setIsPremium] = React.useState(props.tipoAnuncio_id === 'gold_pro' ? true : false)
     const [showInfoFormaDeEntrega, setShowInfoFormaDeEntrega] = React.useState(false)
     const [description, setDescription] = React.useState(props.description)
+    const [condicao, setCondicao] = React.useState(props.json.condition)
+    
+    const inicializarGarantia = () => {
+        let dados = props.json.sale_terms.map(json => {
+            if (json.value_id !== null) {
+                if (json.value_id === '2230280') {
+                    return 'gv'
+                } else if (json.value_id === '2230279') {
+                    return 'gf'
+                } else {
+                    return 'sg'
+                }
+            }
+        })
+        return String(dados).replace(',', '').replace(',', '')
+    }
+
+    const inicializarTempoGarantia = () => {
+        let dados = props.json.sale_terms.map(json => {
+            if (json.id === 'WARRANTY_TIME') {
+                return json.value_struct.unit
+            }
+        })
+        return String(dados).replace(',', '').replace(',', '')
+    }
+
+    const inicializarValueNameGarantia = () => {
+        let dados = props.json.sale_terms.map(json => {
+            if (json.id === 'WARRANTY_TIME') {
+                return json.value_struct.number
+            }
+        })
+        return String(dados).replace(',', '').replace(',', '')
+    }
+
+    const inicializarDisponibilidadeEstoque = () => {
+        let dados = props.json.sale_terms.map(json => {
+            if (json.id === 'MANUFACTURING_TIME') {
+                return json.value_struct.number
+            }
+        })
+        return String(dados).replace(',', '').replace(',', '')
+    }
+
+    const [garantia, setGarantia] = React.useState(inicializarGarantia())
+    const [tempoGarantia, setTempoGarantia] = React.useState(inicializarTempoGarantia())
+    const [valueNameGarantia, setValueNameGarantia] = React.useState(inicializarValueNameGarantia())
+    const [qtdeDisponibilidadeEstoque, setQtdeDisponibilidadeEstoque] = React.useState(inicializarDisponibilidadeEstoque())
 
     const handleFreeShipping = event => {
         setFreeShipping(event.target.value)
     }
 
+    const handleGarantia = event => {
+        setGarantia(event.target.value)
+    }
+
     const handleLocalPickUp = event => {
         setLocalPickUp(event.target.value)
+    }
+
+    const handleTempoGarantia = event => {
+        setTempoGarantia(event.target.value)
+    }
+
+    const handleValueNameGarantia = event => {
+        setValueNameGarantia(event.target.value)
     }
 
     const verificarFormaEntrega = () => {
@@ -128,6 +190,22 @@ export default function EditarAnuncio(props) {
         }
     }
 
+    const verificarGarantia = () => {
+        if (garantia === 'gv') {
+            return 'Garantia do vendedor'
+        } else if (garantia === 'gf') {
+            return 'Garantia do fabrica'
+        } else {
+            return 'Sem garantia'
+        }
+    }
+
+    const confirmarGarantia = () => {
+         //Depois precisar validar somente números no valueNameGarantia
+        props.updateGarantia(props.id, verificarGarantia(), valueNameGarantia, tempoGarantia)
+        props.setLoadingButtonGarantia(true)
+    }
+
     const confirmarRetirarPessoalmente = () => {
         props.setLoadingButtonRetirarPessoalmente(true)
         props.updateRetirarPessoalmente(props.id, localPickUp === 'true' ? true : false)
@@ -137,6 +215,16 @@ export default function EditarAnuncio(props) {
         props.updateShipping(props.id, freeShipping === 'true' ? true : false)
         props.setLoadingButtonFormaEntrega(true)
         setShowInfoFormaDeEntrega(false)
+    }
+
+    const confirmarDisponibilidadeEstoque = () => {
+        props.updateDisponibilidadeEstoque(props.id, qtdeDisponibilidadeEstoque)
+        props.setLoadingButtonDisponibilidadeEstoque(true)
+    }
+
+    const confirmarCondicao = () => {
+        props.updateCondicao(props.id, condicao)
+        props.setLoadingButtonCondicao(true)
     }
 
     const setListingType = () => {
@@ -189,6 +277,11 @@ export default function EditarAnuncio(props) {
 
     const handleDescription = (event) => {
         setDescription(event.target.value)
+    }
+
+    const handleDisponibilidadeEstoque = event => {
+        //Depois precisar validar somente números
+        setQtdeDisponibilidadeEstoque(event.target.value)
     }
 
     const verificarQualidade = () => {
@@ -504,7 +597,7 @@ export default function EditarAnuncio(props) {
                                         </ExpansionPanelSummary>
                                         <ExpansionPanelDetails>
                                             <div>
-                                                <div style={{ fontSize: '16px', color: '#666666' }}>Você pode adicionar um vídeo do YouTube</div>
+                                                <div style={{ fontSize: '16px', color: '#666666' }}>Adicione o link do vídeo do YouTube</div>
                                                 <Input icon='youtube' iconPosition='left' placeholder='Informe aqui o link do YouTube'
                                                     value={props.video_id} style={{ "color": "blue", 'width': '640px' }} />
                                                 {props.json.video_id !== null &&
@@ -531,22 +624,29 @@ export default function EditarAnuncio(props) {
                                         <ExpansionPanelDetails>
                                             <Row>
                                                 <Col>
-                                                    <Message style={{width: '500px'}}>
+                                                    <Message style={{ width: '650px' }}>
                                                         <Message.Header>Indique quantos dias corridos você demora para disponibilizar o produto. Isso será mostrado no seu anúncio e ajudará na decisão dos seus compradores.</Message.Header>
                                                     </Message>
-                                                    <Message info style={{width: '500px'}}>
+                                                    <Message info style={{ width: '650px' }}>
                                                         <Message.Header>Quanto mais tempo adicionar, menos exposição você terá. Sempre o Mercado Livre irá mostrar primeiro os anúncios com estoque disponível.</Message.Header>
                                                     </Message>
                                                     <TextField
                                                         label="Dias"
                                                         style={{ margin: 8 }}
+                                                        value={qtdeDisponibilidadeEstoque}
+                                                        onChange={(event) => handleDisponibilidadeEstoque(event)}
                                                         placeholder="Ex.: 2"
                                                         InputLabelProps={{
                                                             shrink: true,
                                                         }}
                                                     />
-                                                    <div style={{padding: '0 6px 0'}}>Este prazo é fixo, exclua-o quando ele não for mais necessário.</div>
+                                                    <div style={{ padding: '0 6px 0' }}>Este prazo é fixo, exclua-o quando ele não for mais necessário.</div>
                                                 </Col>
+                                                <div>
+                                                    <CardActions>
+                                                        <ButtonUI onClick={() => confirmarDisponibilidadeEstoque()} startIcon={<CheckCircleIcon />} variant="contained">{props.loadingButtonDisponibilidadeEstoque === true ? 'Processando...' : 'Confirmar'}</ButtonUI>
+                                                    </CardActions>
+                                                </div>
                                             </Row>
                                         </ExpansionPanelDetails>
                                     </ExpansionPanel>
@@ -563,9 +663,50 @@ export default function EditarAnuncio(props) {
                                             <span style={{ fontSize: '18px', color: '#333333' }}>Garantia</span>
                                         </ExpansionPanelSummary>
                                         <ExpansionPanelDetails>
+                                            <Row>
+                                                <FormControl component="fieldset">
+                                                    <RadioGroup style={{ padding: '0 10px 0' }} value={garantia} onChange={(event) => handleGarantia(event)}>
+                                                        <FormControlLabel value='gv' control={<Radio />} label={
+                                                            <span style={{ color: '#000000', fontSize: '18px' }}>Garantia do vendedor</span>
+                                                        } />
+                                                        {garantia === 'gv' &&
 
+                                                            <div style={{ display: 'flex' }}>
+                                                                <TextField value={valueNameGarantia} style={{ padding: '0 10px 0' }} placeholder='Ex: 2' onChange={(event) => handleValueNameGarantia(event)} />
+                                                                <Select value={tempoGarantia} onChange={(event) => handleTempoGarantia(event)}>
+                                                                    <MenuItem value='dias'>dias</MenuItem>
+                                                                    <MenuItem value='meses'>meses</MenuItem>
+                                                                    <MenuItem value='anos'>anos</MenuItem>
+                                                                </Select>
+                                                            </div>
 
+                                                        }
+                                                        <FormControlLabel value='gf' control={<Radio />} label={
+                                                            <div style={{ color: '#000000', fontSize: '18px' }}>Garantia de fábrica</div>
+                                                        } />
+                                                        {garantia === 'gf' &&
 
+                                                            <div style={{ display: 'flex' }}>
+                                                                <TextField value={valueNameGarantia} style={{ padding: '0 10px 0' }} placeholder='Ex: 2' onChange={(event) => handleValueNameGarantia(event)} />
+                                                                <Select value={tempoGarantia} onChange={(event) => handleTempoGarantia(event)}>
+                                                                    <MenuItem value='dias'>dias</MenuItem>
+                                                                    <MenuItem value='meses'>meses</MenuItem>
+                                                                    <MenuItem value='anos'>anos</MenuItem>
+                                                                </Select>
+                                                            </div>
+
+                                                        }
+                                                        <FormControlLabel value='sg' control={<Radio />} label={
+                                                            <div style={{ color: '#000000', fontSize: '18px' }}>Sem garantia</div>
+                                                        } />
+                                                    </RadioGroup>
+                                                </FormControl>
+                                                <div>
+                                                    <CardActions>
+                                                        <ButtonUI onClick={() => confirmarGarantia()} startIcon={<CheckCircleIcon />} variant="contained">{props.loadingButtonGarantia === true ? 'Processando...' : 'Confirmar'}</ButtonUI>
+                                                    </CardActions>
+                                                </div>
+                                            </Row>
                                         </ExpansionPanelDetails>
                                     </ExpansionPanel>
                                 </Paper>
@@ -581,9 +722,23 @@ export default function EditarAnuncio(props) {
                                             <span style={{ fontSize: '18px', color: '#333333' }}>Condição</span>
                                         </ExpansionPanelSummary>
                                         <ExpansionPanelDetails>
-
-
-
+                                            <Row>
+                                                <FormControl component="fieldset">
+                                                    <RadioGroup style={{ padding: '0 10px 0' }} value={condicao} onChange={(event) => setCondicao(event.target.value)}>
+                                                        <FormControlLabel value='new' control={<Radio />} label={
+                                                            <span style={{ color: '#000000', fontSize: '18px' }}>Novo</span>
+                                                        } />
+                                                        <FormControlLabel value='used' control={<Radio />} label={
+                                                            <div style={{ color: '#000000', fontSize: '18px' }}>Usado</div>
+                                                        } />
+                                                    </RadioGroup>
+                                                </FormControl>
+                                                <div>
+                                                    <CardActions>
+                                                        <ButtonUI onClick={() => confirmarCondicao()} startIcon={<CheckCircleIcon />} variant="contained">{props.loadingButtonCondicao === true ? 'Processando...' : 'Confirmar'}</ButtonUI>
+                                                    </CardActions>
+                                                </div>
+                                            </Row>
                                         </ExpansionPanelDetails>
                                     </ExpansionPanel>
                                 </Paper>

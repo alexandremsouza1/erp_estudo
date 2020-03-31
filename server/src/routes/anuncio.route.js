@@ -17,6 +17,8 @@ router.put('/update_available_quantity', anuncioService.updateAvailableQuantity)
 router.put('/update_retirar_pessoalmente', anuncioService.updateRetirarPessoalmente)
 router.put('/update_description', anuncioService.updateDescription)
 router.put('/update_disponibilidade_estoque', anuncioService.updateDisponibilidadeEstoque)
+router.put('/update_garantia', anuncioService.updateGarantia)
+router.put('/update_condicao', anuncioService.updateCondicao)
 
 
 

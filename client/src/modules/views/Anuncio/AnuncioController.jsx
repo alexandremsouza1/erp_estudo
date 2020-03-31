@@ -22,6 +22,9 @@ export default function AnuncioController() {
     const [loadingButtonTipoAnuncio, setLoadingButtonTipoAnuncio] = useState(false)
     const [loadingButtonRetirarPessoalmente, setLoadingButtonRetirarPessoalmente] = useState(false)
     const [loadingButtonDescription, setLoadingButtonDescription] = useState(false)
+    const [loadingButtonGarantia, setLoadingButtonGarantia] = useState(false)
+    const [loadingButtonDisponibilidadeEstoque, setLoadingButtonDisponibilidadeEstoque] = useState(false)
+    const [loadingButtonCondicao, setLoadingButtonCondicao] = useState(false)
 
     const dispatch = useDispatch()
 
@@ -219,11 +222,44 @@ export default function AnuncioController() {
         })
     }
 
+    let updateGarantia = async (itemId, tipoGarantia, valueName, tempo) => {
+        await axios.put(`${DOMAIN}/anuncio/update_garantia`, {itemId: itemId, tipo_garantia: tipoGarantia, value_name: valueName, tempo: tempo}).then(response => {
+            sendNotification('success', 'Pronto salvamos suas modificações', 5000)
+            setLoadingButtonGarantia(false)
+        }).catch(error => {
+            sendNotification('error', 'Ocorreu um erro ao atualizar a garantia do anuncio (AnuncioController:226)' + error, 5000)
+        })
+    }
+
+    let updateDisponibilidadeEstoque = async (itemId, valueName ) => {
+        await axios.put(`${DOMAIN}/anuncio/update_disponibilidade_estoque`, {itemId: itemId, value_name: valueName}).then(response => {
+            sendNotification('success', 'Pronto salvamos suas modificações', 5000)
+            setLoadingButtonDisponibilidadeEstoque(false)
+        }).catch(error => {
+            sendNotification('error', 'Ocorreu um erro ao atualizar a disponibilidade de estoque (AnuncioController:238)' + error, 5000)
+        })
+    }
+
+    let updateCondicao = async (itemId, condicao ) => {
+        await axios.put(`${DOMAIN}/anuncio/update_condicao`, {itemId: itemId, condicao: condicao}).then(response => {
+            sendNotification('success', 'Pronto salvamos suas modificações', 5000)
+            setLoadingButtonCondicao(false)
+        }).catch(error => {
+            sendNotification('error', 'Ocorreu um erro ao atualizar a condição do anuncio (AnuncioController:226)' + error, 5000)
+        })
+    }
+
     return (
         <>
             <AnuncioView
                 state={state}
                 {...state}
+                updateCondicao={updateCondicao}
+                loadingButtonCondicao={loadingButtonCondicao}
+                setLoadingButtonCondicao={setLoadingButtonCondicao}
+                updateDisponibilidadeEstoque={updateDisponibilidadeEstoque}
+                setLoadingButtonDisponibilidadeEstoque={setLoadingButtonDisponibilidadeEstoque}
+                loadingButtonDisponibilidadeEstoque={loadingButtonDisponibilidadeEstoque}
                 updateDescription={updateDescription}
                 updateRetirarPessoalmente={updateRetirarPessoalmente}
                 updateTitle={updateTitle}
@@ -253,7 +289,10 @@ export default function AnuncioController() {
                 loadingButtonRetirarPessoalmente={loadingButtonRetirarPessoalmente}
                 setLoadingButtonRetirarPessoalmente={setLoadingButtonRetirarPessoalmente} 
                 setLoadingButtonDescription={setLoadingButtonDescription}
-                loadingButtonDescription={loadingButtonDescription}/>
+                loadingButtonDescription={loadingButtonDescription}
+                loadingButtonGarantia={loadingButtonGarantia}
+                setLoadingButtonGarantia={setLoadingButtonGarantia}
+                updateGarantia={updateGarantia}/>
         </>
     );
 }
