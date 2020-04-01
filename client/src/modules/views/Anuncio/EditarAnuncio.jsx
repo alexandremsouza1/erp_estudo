@@ -202,8 +202,12 @@ export default function EditarAnuncio(props) {
 
     const confirmarGarantia = () => {
          //Depois precisar validar somente números no valueNameGarantia
-        props.updateGarantia(props.id, verificarGarantia(), valueNameGarantia, tempoGarantia)
-        props.setLoadingButtonGarantia(true)
+         if(valueNameGarantia === "" && garantia !== 'sg'){
+            sendNotification('error', 'Ops.. Não foi possível confirmar os dados da garantia, por favor digite um número inteiro.', 5000)
+         }else{
+            props.updateGarantia(props.id, verificarGarantia(), valueNameGarantia, tempoGarantia)
+            props.setLoadingButtonGarantia(true)
+         }
     }
 
     const confirmarRetirarPessoalmente = () => {
@@ -218,8 +222,13 @@ export default function EditarAnuncio(props) {
     }
 
     const confirmarDisponibilidadeEstoque = () => {
-        props.updateDisponibilidadeEstoque(props.id, qtdeDisponibilidadeEstoque)
-        props.setLoadingButtonDisponibilidadeEstoque(true)
+        if(qtdeDisponibilidadeEstoque === ""){
+            props.updateDisponibilidadeEstoque(props.id, 0)
+            props.setLoadingButtonDisponibilidadeEstoque(true)
+        }else{
+            props.updateDisponibilidadeEstoque(props.id, qtdeDisponibilidadeEstoque)
+            props.setLoadingButtonDisponibilidadeEstoque(true)
+        }
     }
 
     const confirmarCondicao = () => {
