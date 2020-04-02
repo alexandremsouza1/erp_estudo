@@ -388,3 +388,13 @@ exports.updateCondicao = async(req, res) => {
         }).catch(error => res.send(error))
     }).catch(error => res.send(error))
 }
+
+exports.getCategoria = async (req, res) => {
+    await usuarioService.buscarUsuarioPorID().then(async user => {
+        await axios.get(`https://api.mercadolibre.com/items/${req.params.itemId}?access_token=${user.accessToken}`).then(async response => {
+            await axios.get(`https://api.mercadolibre.com/categories/${response.data.category_id}`).then(categoria => {
+                res.send(categoria.data.path_from_root)
+            }).catch(error => res.send(error))
+        }).catch(error => res.send(error))
+    })
+}

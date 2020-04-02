@@ -321,6 +321,9 @@ export default function AnuncioView(props) {
         {showModal &&
           <EditarAnuncio
             {...anuncio}
+            loadingCategoria={props.loadingCategoria}
+            categoria={props.categoria}
+            obterCategoria={props.obterCategoria}
             updateCondicao={props.updateCondicao}
             loadingButtonCondicao={props.loadingButtonCondicao}
             setLoadingButtonCondicao={props.setLoadingButtonCondicao}

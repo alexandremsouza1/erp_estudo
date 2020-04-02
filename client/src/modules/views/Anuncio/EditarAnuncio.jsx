@@ -113,7 +113,8 @@ export default function EditarAnuncio(props) {
     const [showInfoFormaDeEntrega, setShowInfoFormaDeEntrega] = React.useState(false)
     const [description, setDescription] = React.useState(props.description)
     const [condicao, setCondicao] = React.useState(props.json.condition)
-    
+    const [showPopupGarantia, setShowPopupGarantia] = React.useState(false)
+
     const inicializarGarantia = () => {
         let dados = props.json.sale_terms.map(json => {
             if (json.value_id !== null) {
@@ -201,13 +202,13 @@ export default function EditarAnuncio(props) {
     }
 
     const confirmarGarantia = () => {
-         //Depois precisar validar somente números no valueNameGarantia
-         if(valueNameGarantia === "" && garantia !== 'sg'){
+        //Depois precisar validar somente números no valueNameGarantia
+        if (valueNameGarantia === "" && garantia !== 'sg') {
             sendNotification('error', 'Ops.. Não foi possível confirmar os dados da garantia, por favor digite um número inteiro.', 5000)
-         }else{
+        } else {
             props.updateGarantia(props.id, verificarGarantia(), valueNameGarantia, tempoGarantia)
             props.setLoadingButtonGarantia(true)
-         }
+        }
     }
 
     const confirmarRetirarPessoalmente = () => {
@@ -222,10 +223,10 @@ export default function EditarAnuncio(props) {
     }
 
     const confirmarDisponibilidadeEstoque = () => {
-        if(qtdeDisponibilidadeEstoque === ""){
+        if (qtdeDisponibilidadeEstoque === "") {
             props.updateDisponibilidadeEstoque(props.id, 0)
             props.setLoadingButtonDisponibilidadeEstoque(true)
-        }else{
+        } else {
             props.updateDisponibilidadeEstoque(props.id, qtdeDisponibilidadeEstoque)
             props.setLoadingButtonDisponibilidadeEstoque(true)
         }
@@ -757,13 +758,33 @@ export default function EditarAnuncio(props) {
                         <Row>
                             <Col md={12}>
                                 <Paper elevation={3}>
-                                    <ExpansionPanel>
+                                    <ExpansionPanel onChange={() => props.obterCategoria(props.id)}>
                                         <ExpansionPanelSummary
                                             expandIcon={<ExpandMoreIcon />}>
                                             <span style={{ fontSize: '18px', color: '#333333' }}>Categoria</span>
                                         </ExpansionPanelSummary>
-                                        <ExpansionPanelDetails>
+                                        <ExpansionPanelDetails style={{ display: 'flex', justifyContent: 'space-between' }}>
 
+
+                                            <div style={{ color: '#333333', fontSize: '14px' }}>
+                                                {props.loadingCategoria ? 'Carregando, aguarde...' : props.categoria}
+                                            </div>
+
+                                            <div>
+                                                <ButtonUI onClick={() => setShowPopupGarantia(props.quantidadeVendido > 0 ? true : false)} size='small' style={{ color: '#333333' }}>Editar</ButtonUI>
+                                                <Popup
+                                                    wide='very'
+                                                    onOpen={showPopupGarantia}
+                                                    content={
+                                                        <>
+                                                            <div style={{ padding: '15px 0 5px', color: '#666666' }}>De acordo com o Mercado Livre, como o anúncio teve vendas, você não pode mais mudar a categoria.</div>
+                                                        </>
+                                                    }
+                                                    key={props.id}
+                                                />
+                                            </div>
+
+                                            {/**Como o anúncio teve vendas, você não pode mais mudar a categoria.*/}
 
 
                                         </ExpansionPanelDetails>

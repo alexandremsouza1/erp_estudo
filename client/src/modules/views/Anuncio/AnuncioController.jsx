@@ -16,6 +16,7 @@ export default function AnuncioController() {
     const [isStatusUpdated, setIsStatusUpdated] = useState(false)
     const [isShowConfirmPauseProduct, setIsShowConfirmPauseProduct] = useState(false)
     const [custoFrete, setCustoFrete] = useState(0)
+    const [categoria, setCategoria] = useState('')
 
     const [loadingButtonTitulo, setLoadingButtonTitulo] = useState(false)
     const [loadingButtonFormaEntrega, setLoadingButtonFormaEntrega] = useState(false)
@@ -25,6 +26,7 @@ export default function AnuncioController() {
     const [loadingButtonGarantia, setLoadingButtonGarantia] = useState(false)
     const [loadingButtonDisponibilidadeEstoque, setLoadingButtonDisponibilidadeEstoque] = useState(false)
     const [loadingButtonCondicao, setLoadingButtonCondicao] = useState(false)
+    const [loadingCategoria, setLoadingCategoria] = useState(true)
 
     const dispatch = useDispatch()
 
@@ -249,11 +251,28 @@ export default function AnuncioController() {
         })
     }
 
+    let obterCategoria = async (itemId) => {
+        setCategoria(categoria !== '' ? 'Carregando, aguarde...' : categoria)
+        await axios.get(`${DOMAIN}/anuncio/obter_categoria/${itemId}`).then(response => {
+            let dados = []
+            response.data.map(cat => {
+               dados.push(cat.name)
+            })
+            setCategoria(dados.join(' > '))
+            setLoadingCategoria(false)
+        }).catch(error => {
+            sendNotification('error', 'Ocorreu um erro ao obter a categoria do anuncio (AnuncioController:261)' + error, 5000)
+        })
+    }
+
     return (
         <>
             <AnuncioView
                 state={state}
                 {...state}
+                loadingCategoria={loadingCategoria}
+                categoria={categoria}
+                obterCategoria={obterCategoria}
                 updateCondicao={updateCondicao}
                 loadingButtonCondicao={loadingButtonCondicao}
                 setLoadingButtonCondicao={setLoadingButtonCondicao}

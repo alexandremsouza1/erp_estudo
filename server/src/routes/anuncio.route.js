@@ -8,6 +8,7 @@ router.get('/total_status', anuncioService.totalStatusAnuncios)
 router.get('/', anuncioService.listarTodosAnuncio);
 router.get('/:titulo', anuncioService.listarTodosAnuncio)
 router.get('/obterValorDoCustoFreteGratisPorAnuncio/:item_id', anuncioService.obterValorDoCustoFreteGratisPorAnuncio)
+router.get('/obter_categoria/:itemId', anuncioService.getCategoria)
 router.post('/update_listing_type', anuncioService.updateListingType)
 router.put('/update_price', anuncioService.updatePrice)
 router.put('/update_status', anuncioService.updateStatus)
@@ -19,6 +20,7 @@ router.put('/update_description', anuncioService.updateDescription)
 router.put('/update_disponibilidade_estoque', anuncioService.updateDisponibilidadeEstoque)
 router.put('/update_garantia', anuncioService.updateGarantia)
 router.put('/update_condicao', anuncioService.updateCondicao)
+
 
 
 
