@@ -15,10 +15,15 @@ import MudarStatus from '../Anuncio/MudarStatus'
 
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
+import TextField from '@material-ui/core/TextField';
 import FormControlUI from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import SearchIcon from '@material-ui/icons/Search';
+import TuneIcon from '@material-ui/icons/Tune';
+import IconButton from '@material-ui/core/IconButton';
+import Menu from '@material-ui/core/Menu';
+import Badge from '@material-ui/core/Badge';
+
 
 export default function AnuncioView(props) {
   document.title = "Anúncios"
@@ -30,6 +35,15 @@ export default function AnuncioView(props) {
   const [isSelectedFrete, setIsSelectedFrete] = useState(props.freteGratis)
   const [isShowVariationManager, setIsShowVariationManager] = useState(false)
   const [isShowPerguntas, setIsShowPerguntas] = useState(false)
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClickNovoAnuncio = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   const handleChangeIsActive = (e) => {
     setIsActive(e.target.value)
@@ -83,20 +97,48 @@ export default function AnuncioView(props) {
                                 <MenuItem value="paused">Pausados</MenuItem>
                               </Select>
                             </FormControlUI>
-
-                            <FormControl type="text" placeholder="Buscar por título" className="mr-sm-2" style={{ 'width': '500px', margin: '0 0 -10px' }} />
-                           
-                            <ButtonUI
-                                  variant="contained"
-                                  style={{margin: '0 10px 0', height: '40px', margin: '0 0 -10px' }}
-                                  color="default"
-                                  startIcon={<SearchIcon />}>
-                                  Listar
-                          </ButtonUI>
-                              <br></br>
                           </div> 
-                      </Form>
+                      
                       <br></br>
+
+                      <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                          <div>
+                            <span>
+                              <Badge badgeContent={4} 
+                                    color="primary" 
+                                    anchorOrigin={{
+                                      vertical: 'top',
+                                      horizontal: 'left',
+                                    }}>
+                                  <ButtonUI size="small" startIcon={<TuneIcon/>}>Filtrar e Ordenar</ButtonUI>
+                              </Badge>
+                            </span>
+                            <span style={{padding: '0 15px 0'}}>
+                              <TextField style={{width: '300px'}} placeholder="Buscar por título" />
+                            </span>
+                            <span>
+                              <IconButton>
+                                  <SearchIcon/>
+                              </IconButton>
+                            </span>
+                          </div>
+                          <div>
+                            <span style={{color: '#999999', fontSize: '14px', paddingRight: '5px'}}>{props.result.length} anúncios</span>
+                            <span style={{paddingLeft: '5px'}}>
+                                <ButtonUI color="primary" size="small" variant="contained" onClick={handleClickNovoAnuncio}>Novo anúncio</ButtonUI>
+                                <Menu
+                                  anchorEl={anchorEl}
+                                  keepMounted
+                                  open={Boolean(anchorEl)}
+                                  onClose={handleClose}>
+                                    <MenuItem onClick={handleClose}>Cadastrar anúncio individual</MenuItem>
+                                    <MenuItem onClick={handleClose}>Cadastrar anúncios em massa</MenuItem>
+                                </Menu>
+                            </span>
+                            <span style={{paddingLeft: '5px'}}><ButtonUI size="small" variant="contained">Modificar em massa</ButtonUI></span>
+                          </div>
+                      </div>
+                      </Form>
                     </Navbar>
 
                     {props.result.map((prop, key) => {
@@ -166,7 +208,7 @@ export default function AnuncioView(props) {
                                 {/* Botão para editar pequenas alterações*/}
                                 <Dropdown
                                   text='Ajuste'
-                                  icon='bars'
+                                  icon='cog'
                                   floating
                                   labeled
                                   button
@@ -215,7 +257,7 @@ export default function AnuncioView(props) {
                                               </Dropdown.Item>
                                           </a>
                                     </Dropdown.Item>
-
+                                    <Dropdown.Item>Msg automática pós venda</Dropdown.Item>
                                     <Dropdown.Item>Finalizar</Dropdown.Item>
                                     <Dropdown.Item>Replicar anúncio</Dropdown.Item>
 
