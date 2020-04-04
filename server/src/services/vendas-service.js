@@ -473,7 +473,7 @@ exports.obterVendasConcluidas = async (req, res) => {
                         }
                         return json
                     }).catch(error => res.send(error))
-                })
+                }).catch(error => res.send(error))
             })
 
             Promise.all(vendasConcluidas).then(vendas => {

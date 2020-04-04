@@ -157,7 +157,7 @@ export default function EditarAnuncio(props) {
         return String(dados).replace(',', '').replace(',', '')
     }
 
-    const [garantia, setGarantia] = React.useState(inicializarGarantia())
+    const [garantia, setGarantia] = React.useState(props.garantia === undefined ? inicializarGarantia() : props.garantia)
     const [tempoGarantia, setTempoGarantia] = React.useState(inicializarTempoGarantia())
     const [valueNameGarantia, setValueNameGarantia] = React.useState(inicializarValueNameGarantia())
     const [qtdeDisponibilidadeEstoque, setQtdeDisponibilidadeEstoque] = React.useState(inicializarDisponibilidadeEstoque())
@@ -206,7 +206,7 @@ export default function EditarAnuncio(props) {
         if (valueNameGarantia === "" && garantia !== 'sg') {
             sendNotification('error', 'Ops.. Não foi possível confirmar os dados da garantia, por favor digite um número inteiro.', 5000)
         } else {
-            props.updateGarantia(props.id, verificarGarantia(), valueNameGarantia, tempoGarantia)
+            props.updateGarantia(props.id, verificarGarantia(), valueNameGarantia, tempoGarantia, garantia)
             props.setLoadingButtonGarantia(true)
         }
     }
@@ -374,21 +374,14 @@ export default function EditarAnuncio(props) {
                                         </ExpansionPanelSummary>
                                         <ExpansionPanelDetails>
                                             <Row>
-                                                <Col md={6}>
-                                                    <FormInput width='500px' label="Marca" value={props.titulo} style={{ "color": "blue" }} disabled={false} />
-                                                    <FormInput width='500px' label="Gênero" value={props.titulo} style={{ "color": "blue" }} disabled={false} />
-                                                    <FormInput width='500px' label="Volume da unidade" value={props.titulo} style={{ "color": "blue" }} disabled={false} />
-                                                    <FormInput width='500px' label="Idade" value={props.titulo} style={{ "color": "blue" }} disabled={false} />
-                                                    <FormInput width='500px' label="Peças do set" value={props.titulo} style={{ "color": "blue" }} disabled={false} />
-                                                </Col>
-                                                <Col md={6}>
-                                                    <FormInput marginLeft='100px' label="Nome do perfume" placeholder='R$' value={props.preco.toLocaleString("pt-BR")} style={{ "color": "blue" }} />
-                                                    <FormInput marginLeft='100px' label="Tipo" value={props.titulo} style={{ "color": "blue" }} disabled={false} />
-                                                    <FormInput marginLeft='100px' label="Unidade por pacote" value={props.titulo} style={{ "color": "blue" }} disabled={false} />
+                                                <Col md={12}>
+                                                    <FormInput width='500px' label="Marca" style={{ "color": "blue" }} disabled={false} />
+                                                    <FormInput width='500px' label="Gênero" style={{ "color": "blue" }} disabled={false} />
+                                                    <FormInput width='500px' label="Volume da unidade" style={{ "color": "blue" }} disabled={false} />
+                                                    <FormInput width='500px' label="Idade" style={{ "color": "blue" }} disabled={false} />
+                                                    <FormInput width='500px' label="Peças do set" style={{ "color": "blue" }} disabled={false} />
                                                 </Col>
                                             </Row>
-
-
                                         </ExpansionPanelDetails>
                                     </ExpansionPanel>
                                 </Paper>
@@ -771,23 +764,15 @@ export default function EditarAnuncio(props) {
                                             </div>
 
                                             <div>
-                                                <ButtonUI onClick={() => setShowPopupGarantia(props.quantidadeVendido > 0 ? true : false)} size='small' style={{ color: '#333333' }}>Editar</ButtonUI>
-                                                <Popup
-                                                    wide='very'
-                                                    onOpen={showPopupGarantia}
-                                                    content={
-                                                        <>
-                                                            <div style={{ padding: '15px 0 5px', color: '#666666' }}>De acordo com o Mercado Livre, como o anúncio teve vendas, você não pode mais mudar a categoria.</div>
-                                                        </>
-                                                    }
-                                                    key={props.id}
-                                                />
+                                                <ButtonUI disabled={props.quantidadeVendido > 0 ? true : false} size='small' style={{ color: '#333333' }}>Editar</ButtonUI>
                                             </div>
 
-                                            {/**Como o anúncio teve vendas, você não pode mais mudar a categoria.*/}
-
-
                                         </ExpansionPanelDetails>
+                                        {props.quantidadeVendido > 0 &&
+                                            <Message warning>
+                                                <Message.Header>De acordo com o Mercado Livre, como o anúncio teve vendas, você não pode mais mudar a categoria.</Message.Header>
+                                            </Message>
+                                        }
                                     </ExpansionPanel>
                                 </Paper>
                             </Col>
@@ -816,18 +801,23 @@ export default function EditarAnuncio(props) {
                                 <div style={{ borderBottom: '1px solid black', margin: '0 0 8px', borderColor: '#bfbfbf', marginLeft: '20px', width: '50%' }}></div>
                             </div>
 
-                            <div style={{ display: 'flex' }}>
-                                <IconButton color="primary" style={{ fontSize: '12px' }}>
-                                    <LocalShippingIcon />
-                                    <span style={{ padding: '0 5px 0' }}>Ofereça frete grátis</span>
-                                </IconButton>
-                            </div>
-                            <div style={{ display: 'flex' }}>
-                                <IconButton color="primary" style={{ fontSize: '12px' }}>
-                                    <DateRangeIcon />
-                                    <span style={{ padding: '0 5px 0' }}>Ofereça parcelamento sem juros</span>
-                                </IconButton>
-                            </div>
+                            {freeShipping === 'false' &&
+                                <div style={{ display: 'flex' }}>
+                                    <IconButton color="primary" style={{ fontSize: '12px' }}>
+                                        <LocalShippingIcon />
+                                        <span style={{ padding: '0 5px 0' }}>Ofereça frete grátis</span>
+                                    </IconButton>
+                                </div>
+                            }
+                            {isClassico &&
+                                <div style={{ display: 'flex' }}>
+                                    <IconButton color="primary" style={{ fontSize: '12px' }}>
+                                        <DateRangeIcon />
+                                        <span style={{ padding: '0 5px 0' }}>Ofereça parcelamento sem juros</span>
+                                    </IconButton>
+                                </div>
+                            }
+
                         </Paper>
                     </div>
                 </div>

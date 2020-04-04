@@ -31,19 +31,35 @@ export default function AnuncioController() {
     const dispatch = useDispatch()
 
     let updateShipping = async (itemId, free_shipping) => {
-        await axios.put(`${DOMAIN}/anuncio/update_shipping`, { itemId, free_shipping }).then(response => {
-            //dispatch({type: LISTAR_TODOS_ANUNCIOS, data: updateStateTitleProduct(itemId, free_shipping), isLoading: false})
-            if (free_shipping) {
-                sendNotification('success', 'Objetivo alcançado! Agora você oferece frete grátis.', 5000)
-                setLoadingButtonFormaEntrega(false)
-            } else {
-                sendNotification('success', 'Pronto, salvamos suas modificações!', 5000)
-                setLoadingButtonFormaEntrega(false)
-            }
+        sendNotification('success', 'Processando sua solicitação, por favor aguarde...', 8950)
+        setTimeout(async () => {
+            await axios.put(`${DOMAIN}/anuncio/update_shipping`, { itemId, free_shipping }).then(response => {
+                dispatch({type: LISTAR_TODOS_ANUNCIOS, data: updateStateShipping(itemId, free_shipping), isLoading: false})
+                if (free_shipping) {
+                    sendNotification('success', 'Objetivo alcançado! Agora você oferece frete grátis.', 5000)
+                    setLoadingButtonFormaEntrega(false)
+                } else {
+                    sendNotification('success', 'Pronto, salvamos suas modificações!', 5000)
+                    setLoadingButtonFormaEntrega(false)
+                }
+    
+            }).catch(error => {
+                sendNotification('error', 'Ocorreu um problema ao tentar atualizar a forma de entrega (AnuncioController)', 5000)
+            })
+        }, 9000)
+    }
 
-        }).catch(error => {
-            sendNotification('error', 'Ocorreu um problema ao tentar atualizar a forma de entrega (AnuncioController:26)', 5000)
+    let updateStateShipping = (itemId, free_shipping) => {
+        let temp = [] 
+        state.result.map(product => {
+            if (product.id === itemId) {
+                product.freeShipping = free_shipping
+                temp.push(product)
+            } else {
+                temp.push(product)
+            }
         })
+        return temp
     }
 
     let updateTitle = async (itemId, title) => {
@@ -210,27 +226,71 @@ export default function AnuncioController() {
         await axios.put(`${DOMAIN}/anuncio/update_retirar_pessoalmente`, { itemId: itemId, local_pick_up: isRetirarPessoalmente }).then(response => {
             sendNotification('success', 'Pronto salvamos suas modificações', 5000)
             setLoadingButtonRetirarPessoalmente(false)
+            dispatch({type: LISTAR_TODOS_ANUNCIOS, data: updateStateRetirarPessoalmente(itemId, isRetirarPessoalmente)})
         }).catch(error => {
             sendNotification('error', 'Ocorreu um erro ao atualizar a retirar pessoalmente (AnuncioController:197)' + error, 5000)
         })
+    }
+
+    let updateStateRetirarPessoalmente = (itemId, isRetirarPessoalmente) => {
+        let temp = [] // The temp variable must be created because the map is returned undefined in another object
+        state.result.map(product => {
+            if (product.id === itemId) {
+                product.json.shipping.local_pick_up = isRetirarPessoalmente
+                temp.push(product)
+            } else {
+                temp.push(product)
+            }
+        })
+        return temp
     }
 
     let updateDescription = async (itemId, plainText) => {
         await axios.put(`${DOMAIN}/anuncio/update_description`, {itemId: itemId, plain_text: plainText}).then(response => {
             sendNotification('success', 'Pronto salvamos suas modificações', 5000)
             setLoadingButtonDescription(false)
+            dispatch({type: LISTAR_TODOS_ANUNCIOS, data: updateStateDescription(itemId, plainText)})
         }).catch(error => {
             sendNotification('error', 'Ocorreu um erro ao atualizar a descrição do anuncio (AnuncioController:216)' + error, 5000)
         })
     }
 
-    let updateGarantia = async (itemId, tipoGarantia, valueName, tempo) => {
+    let updateStateDescription = (itemId, description) => {
+        let temp = [] // The temp variable must be created because the map is returned undefined in another object
+        state.result.map(product => {
+            if (product.id === itemId) {
+                product.description = description
+                temp.push(product)
+            } else {
+                temp.push(product)
+            }
+        })
+        return temp
+    }
+
+    let updateGarantia = async (itemId, tipoGarantia, valueName, tempo, garantia) => {
         await axios.put(`${DOMAIN}/anuncio/update_garantia`, {itemId: itemId, tipo_garantia: tipoGarantia, value_name: valueName, tempo: tempo}).then(response => {
             sendNotification('success', 'Pronto salvamos suas modificações', 5000)
             setLoadingButtonGarantia(false)
+            dispatch({type: LISTAR_TODOS_ANUNCIOS, data: updateStateGarantia(itemId, garantia, valueName, tempo)})
         }).catch(error => {
             sendNotification('error', 'Ocorreu um erro ao atualizar a garantia do anuncio (AnuncioController:226)' + error, 5000)
         })
+    }
+
+    let updateStateGarantia = (itemId, garantia, valueName, tempo) => {
+        let temp = [] // The temp variable must be created because the map is returned undefined in another object
+        state.result.map(product => {
+            if (product.id === itemId) {
+                product.garantia = garantia
+                product.valueName = valueName
+                product.tempo = tempo
+                temp.push(product)
+            } else {
+                temp.push(product)
+            }
+        })
+        return temp
     }
 
     let updateDisponibilidadeEstoque = async (itemId, valueName ) => {
