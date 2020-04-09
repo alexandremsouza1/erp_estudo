@@ -764,12 +764,12 @@ const obterAtributosPorCategoria = async () => {
     usuarioService.buscarUsuarioPorID().then(async response => {
         await axios.get(`https://api.mercadolibre.com/categories/MLB3112/attributes`).then(async atrib => {
             atrib.data.map(value => {
-                /*console.log("NAME: "+value.name)
-                value.values.map(values => {
-                    console.log("ID: "+value.id)
-                    console.log("NAME: "+value.name)
-                })*/
-                console.log(value)
+                console.log("\n")
+                console.log("Id: "+ value.id)
+                console.log("Name: "+ value.name)
+                console.log("Type: "+value.value_type)
+                console.log("Values: "+ JSON.stringify(value.values))
+                console.log("\n")
             })
         }).catch(error => console.error(error))
     }).catch(error => console.error(error))
@@ -792,4 +792,4 @@ const encontrarString = () => {
     console.log(dado)
 }
 
-getDataSite()
+obterAtributosPorCategoria()

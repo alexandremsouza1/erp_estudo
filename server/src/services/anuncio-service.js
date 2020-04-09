@@ -398,3 +398,21 @@ exports.getCategoria = async (req, res) => {
         }).catch(error => res.send(error))
     })
 }
+
+
+exports.obterAtributosPorCategoria = async (req, res) => {
+    await axios.get(`https://api.mercadolibre.com/categories/${req.params.categoria}/attributes`).then(async atrib => {
+           let dados = atrib.data.map(value => {
+                let obj = {
+                    id: value.id,
+                    name: value.name,
+                    type: value.value_type,
+                    values: value.values
+                }
+                return obj
+            })
+            Promise.all(dados).then(attr => {
+                res.send(attr)
+            })
+    }).catch(error => console.error(error))
+}
