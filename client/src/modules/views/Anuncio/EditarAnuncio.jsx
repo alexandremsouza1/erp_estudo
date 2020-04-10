@@ -45,6 +45,7 @@ import YouTube from 'react-youtube';
 import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+import InputLabel from '@material-ui/core/InputLabel';
 
 
 
@@ -113,7 +114,12 @@ export default function EditarAnuncio(props) {
     const [showInfoFormaDeEntrega, setShowInfoFormaDeEntrega] = React.useState(false)
     const [description, setDescription] = React.useState(props.description)
     const [condicao, setCondicao] = React.useState(props.json.condition)
-    const [showPopupGarantia, setShowPopupGarantia] = React.useState(false)
+
+    const handleAtributos = () => {
+        props.obterAtributosPorCategoria(props.json.category_id)
+    }
+
+    const [atributoValue, setAtributoValue] = React.useState(props.atributo)
 
     const inicializarGarantia = () => {
         let dados = props.json.sale_terms.map(json => {
@@ -367,21 +373,37 @@ export default function EditarAnuncio(props) {
                         <Row>
                             <Col md={12}>
                                 <Paper elevation={3}>
-                                    <ExpansionPanel>
+                                    <ExpansionPanel onChange={() => handleAtributos()}>
                                         <ExpansionPanelSummary
                                             expandIcon={<ExpandMoreIcon />}>
                                             <span style={{ fontSize: '18px', color: '#333333' }}>Ficha técnica</span>
                                         </ExpansionPanelSummary>
-                                        <ExpansionPanelDetails>
-                                            <Row>
-                                                <Col md={12}>
-                                                    <FormInput width='500px' label="Marca" style={{ "color": "blue" }} disabled={false} />
-                                                    <FormInput width='500px' label="Gênero" style={{ "color": "blue" }} disabled={false} />
-                                                    <FormInput width='500px' label="Volume da unidade" style={{ "color": "blue" }} disabled={false} />
-                                                    <FormInput width='500px' label="Idade" style={{ "color": "blue" }} disabled={false} />
-                                                    <FormInput width='500px' label="Peças do set" style={{ "color": "blue" }} disabled={false} />
-                                                </Col>
-                                            </Row>
+                                        <ExpansionPanelDetails style={{ display: 'flex', flexDirection: 'column' }}>
+                                            {console.log("atributoValue: "+JSON.stringify(atributoValue))}
+                                            {props.atributo.map(att => {
+                                                if (att.values === undefined) {
+                                                    return (
+                                                        <div>
+                                                            <TextField value={atributoValue} onChange={(event => setAtributoValue(event.target.value))} label={att.name} style={{width: '100%', padding: '5px 0 5px' }} variant="filled" />
+                                                        </div>
+                                                    )
+                                                } else {
+                                                    return (
+                                                        <div>
+                                                            <FormControl variant="filled" style={{width: '100%', padding: '5px 0 5px' }}>
+                                                                <InputLabel>{att.name}</InputLabel>
+                                                                <Select value={atributoValue} onChange={(event => setAtributoValue(event.target.value))}>
+                                                                    {att.values.map(value => {
+                                                                        return (
+                                                                            <MenuItem value={value.name} key={value.id}>{value.name}</MenuItem>
+                                                                        )
+                                                                    })}
+                                                                </Select>
+                                                            </FormControl>
+                                                        </div>
+                                                    )
+                                                }
+                                            })}
                                         </ExpansionPanelDetails>
                                     </ExpansionPanel>
                                 </Paper>

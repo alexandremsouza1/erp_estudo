@@ -17,6 +17,7 @@ export default function AnuncioController() {
     const [isShowConfirmPauseProduct, setIsShowConfirmPauseProduct] = useState(false)
     const [custoFrete, setCustoFrete] = useState(0)
     const [categoria, setCategoria] = useState('')
+    const [atributo, setAtributo] = useState([])
 
     const [loadingButtonTitulo, setLoadingButtonTitulo] = useState(false)
     const [loadingButtonFormaEntrega, setLoadingButtonFormaEntrega] = useState(false)
@@ -325,11 +326,21 @@ export default function AnuncioController() {
         })
     }
 
+    let obterAtributosPorCategoria = async (categoria) => {
+        await axios.get(`${DOMAIN}/anuncio/obter_atributos_por_categoria/${categoria}`).then(async response => {
+            setAtributo(response.data)
+        }).catch(error => {
+            sendNotification('error', 'Ocorreu um erro ao obter os atributos do anuncio' + error, 5000)
+        })
+    }
+
     return (
         <>
             <AnuncioView
                 state={state}
                 {...state}
+                atributo={atributo}
+                obterAtributosPorCategoria={obterAtributosPorCategoria}
                 loadingCategoria={loadingCategoria}
                 categoria={categoria}
                 obterCategoria={obterCategoria}
