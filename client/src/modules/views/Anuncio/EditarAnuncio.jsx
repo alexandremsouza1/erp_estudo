@@ -406,7 +406,7 @@ export default function EditarAnuncio(props) {
                                                 if (att.values === undefined) {
                                                     return (
                                                         <div>
-                                                            <TextField key={att.id} value={handleSetValueAtributo(att.id)} onChange={(event => handleSetAtributos(event, att.id))} label={att.name} style={{ width: '100%', padding: '5px 0 5px' }} variant="filled" />
+                                                            <TextField key={att.id} defaultValue={handleSetValueAtributo(att.id)}  value={handleSetValueAtributo(att.id)} onChange={(event => handleSetAtributos(event, att.id))} label={att.name} style={{ width: '100%', padding: '5px 0 5px' }} variant="filled" />
                                                         </div>
                                                     )
                                                 } else {

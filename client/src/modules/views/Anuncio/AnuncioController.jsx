@@ -328,7 +328,10 @@ export default function AnuncioController() {
         })
     }
 
-    let obterAtributosPorCategoria = async (categoria) => {
+    let obterAtributosPorCategoria = async (categoria, itemId) => {
+
+        let newArray = []
+        
         await axios.get(`${DOMAIN}/anuncio/obter_atributos_por_categoria/${categoria}`).then(async response => {
             let valorVerificado = response.data.reduce((valorAcumulado, valorCorrente) => {
                 if (valorCorrente.value_name === "") {
@@ -338,10 +341,33 @@ export default function AnuncioController() {
             if(valorVerificado){
                 setValidationAttribute(true)
             }
-            setAtributo(response.data)
+
+            response.data.map(att => {
+                state.result.map(stateAtt => {
+                    if(stateAtt.json.id === itemId){
+                        stateAtt.json.attributes.map(jsonAtt => {
+                            if(att.id === jsonAtt.id){
+                                newArray.push(
+                                    {
+                                        id: att.id,
+                                        name: att.name,
+                                        type: att.type,
+                                        value_name: jsonAtt.value_name,
+                                        isNaoPreenchido: att.isNaoPreenchido,
+                                        values: att.values
+                                    }
+                                )
+                            }
+                        })
+                    }
+                })
+            })
+
+            setAtributo(newArray)
         }).catch(error => {
             sendNotification('error', 'Ocorreu um erro ao obter os atributos do anuncio' + error, 5000)
         })
+
     }
 
     let updateAtributos = async (attributes, itemId) => {

@@ -200,7 +200,7 @@ export default function AnuncioView(props) {
                                   onClick={() => {
                                   setShowModal(true)
                                   setAnuncio(prop)
-                                  props.obterAtributosPorCategoria(prop.json.category_id)
+                                  props.obterAtributosPorCategoria(prop.json.category_id, prop.id)
                                 }}> Modificar
   
                                 <Icon name='edit' />
