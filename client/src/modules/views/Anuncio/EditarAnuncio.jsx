@@ -115,11 +115,26 @@ export default function EditarAnuncio(props) {
     const [description, setDescription] = React.useState(props.description)
     const [condicao, setCondicao] = React.useState(props.json.condition)
 
-    const handleAtributos = () => {
-        props.obterAtributosPorCategoria(props.json.category_id)
+    const handleSetAtributos = (event, id) => {
+        props.atributo.map(dado => {
+            if (dado.id === id) {
+                dado.value_name = event.target.value
+            }
+        })
     }
 
-    const [atributoValue, setAtributoValue] = React.useState(props.atributo)
+    const handleSetValueAtributo = id => {
+        props.atributo.map(dado => {
+            if (dado.id === id) {
+                return dado.value_name
+            }
+        })
+    }
+
+    const confirmarAtributos = () => {
+        props.setLoadingButtonAtributos(true)
+        props.updateAtributos(props.atributo, props.id)
+    }
 
     const inicializarGarantia = () => {
         let dados = props.json.sale_terms.map(json => {
@@ -300,6 +315,8 @@ export default function EditarAnuncio(props) {
         setQtdeDisponibilidadeEstoque(event.target.value)
     }
 
+
+
     const verificarQualidade = () => {
         let health = props.json.health * 100
         if (health < 75) {
@@ -373,26 +390,31 @@ export default function EditarAnuncio(props) {
                         <Row>
                             <Col md={12}>
                                 <Paper elevation={3}>
-                                    <ExpansionPanel onChange={() => handleAtributos()}>
+                                    <ExpansionPanel>
                                         <ExpansionPanelSummary
                                             expandIcon={<ExpandMoreIcon />}>
                                             <span style={{ fontSize: '18px', color: '#333333' }}>Ficha técnica</span>
                                         </ExpansionPanelSummary>
                                         <ExpansionPanelDetails style={{ display: 'flex', flexDirection: 'column' }}>
-                                            {console.log("atributoValue: "+JSON.stringify(atributoValue))}
+                                            {props.validationAttribute &&
+                                                < Message warning style={{ width: '500px' }}>
+                                                    <Message.Header>Para recuperar sua exposição, por favor, corrija sua ficha técnica</Message.Header>
+                                                    <p style={{ fontSize: '11px' }}>Por favor, adicione mais dados, porque faltam informações</p>
+                                                </Message>
+                                            }
                                             {props.atributo.map(att => {
                                                 if (att.values === undefined) {
                                                     return (
                                                         <div>
-                                                            <TextField value={atributoValue} onChange={(event => setAtributoValue(event.target.value))} label={att.name} style={{width: '100%', padding: '5px 0 5px' }} variant="filled" />
+                                                            <TextField key={att.id} value={handleSetValueAtributo(att.id)} onChange={(event => handleSetAtributos(event, att.id))} label={att.name} style={{ width: '100%', padding: '5px 0 5px' }} variant="filled" />
                                                         </div>
                                                     )
                                                 } else {
                                                     return (
                                                         <div>
-                                                            <FormControl variant="filled" style={{width: '100%', padding: '5px 0 5px' }}>
+                                                            <FormControl variant="filled" style={{ width: '100%', padding: '5px 0 5px' }}>
                                                                 <InputLabel>{att.name}</InputLabel>
-                                                                <Select value={atributoValue} onChange={(event => setAtributoValue(event.target.value))}>
+                                                                <Select value={handleSetValueAtributo(att.id)} onChange={(event => handleSetAtributos(event, att.id))}>
                                                                     {att.values.map(value => {
                                                                         return (
                                                                             <MenuItem value={value.name} key={value.id}>{value.name}</MenuItem>
@@ -405,6 +427,11 @@ export default function EditarAnuncio(props) {
                                                 }
                                             })}
                                         </ExpansionPanelDetails>
+                                        <div>
+                                            <CardActions>
+                                                <ButtonUI startIcon={<CheckCircleIcon />} onClick={() => confirmarAtributos()} variant="contained">{props.loadingButtonAtributos === true ? 'Processando...' : 'Confirmar'}</ButtonUI>
+                                            </CardActions>
+                                        </div>
                                     </ExpansionPanel>
                                 </Paper>
                             </Col>

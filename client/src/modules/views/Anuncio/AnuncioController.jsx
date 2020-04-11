@@ -18,6 +18,7 @@ export default function AnuncioController() {
     const [custoFrete, setCustoFrete] = useState(0)
     const [categoria, setCategoria] = useState('')
     const [atributo, setAtributo] = useState([])
+    const [validationAttribute, setValidationAttribute] = useState(false)
 
     const [loadingButtonTitulo, setLoadingButtonTitulo] = useState(false)
     const [loadingButtonFormaEntrega, setLoadingButtonFormaEntrega] = useState(false)
@@ -28,6 +29,7 @@ export default function AnuncioController() {
     const [loadingButtonDisponibilidadeEstoque, setLoadingButtonDisponibilidadeEstoque] = useState(false)
     const [loadingButtonCondicao, setLoadingButtonCondicao] = useState(false)
     const [loadingCategoria, setLoadingCategoria] = useState(true)
+    const [loadingButtonAtributos, setLoadingButtonAtributos] = useState(false)
 
     const dispatch = useDispatch()
 
@@ -35,7 +37,7 @@ export default function AnuncioController() {
         sendNotification('success', 'Processando sua solicitação, por favor aguarde...', 8950)
         setTimeout(async () => {
             await axios.put(`${DOMAIN}/anuncio/update_shipping`, { itemId, free_shipping }).then(response => {
-                dispatch({type: LISTAR_TODOS_ANUNCIOS, data: updateStateShipping(itemId, free_shipping), isLoading: false})
+                dispatch({ type: LISTAR_TODOS_ANUNCIOS, data: updateStateShipping(itemId, free_shipping), isLoading: false })
                 if (free_shipping) {
                     sendNotification('success', 'Objetivo alcançado! Agora você oferece frete grátis.', 5000)
                     setLoadingButtonFormaEntrega(false)
@@ -43,7 +45,7 @@ export default function AnuncioController() {
                     sendNotification('success', 'Pronto, salvamos suas modificações!', 5000)
                     setLoadingButtonFormaEntrega(false)
                 }
-    
+
             }).catch(error => {
                 sendNotification('error', 'Ocorreu um problema ao tentar atualizar a forma de entrega (AnuncioController)', 5000)
             })
@@ -51,7 +53,7 @@ export default function AnuncioController() {
     }
 
     let updateStateShipping = (itemId, free_shipping) => {
-        let temp = [] 
+        let temp = []
         state.result.map(product => {
             if (product.id === itemId) {
                 product.freeShipping = free_shipping
@@ -227,7 +229,7 @@ export default function AnuncioController() {
         await axios.put(`${DOMAIN}/anuncio/update_retirar_pessoalmente`, { itemId: itemId, local_pick_up: isRetirarPessoalmente }).then(response => {
             sendNotification('success', 'Pronto salvamos suas modificações', 5000)
             setLoadingButtonRetirarPessoalmente(false)
-            dispatch({type: LISTAR_TODOS_ANUNCIOS, data: updateStateRetirarPessoalmente(itemId, isRetirarPessoalmente)})
+            dispatch({ type: LISTAR_TODOS_ANUNCIOS, data: updateStateRetirarPessoalmente(itemId, isRetirarPessoalmente) })
         }).catch(error => {
             sendNotification('error', 'Ocorreu um erro ao atualizar a retirar pessoalmente (AnuncioController:197)' + error, 5000)
         })
@@ -247,10 +249,10 @@ export default function AnuncioController() {
     }
 
     let updateDescription = async (itemId, plainText) => {
-        await axios.put(`${DOMAIN}/anuncio/update_description`, {itemId: itemId, plain_text: plainText}).then(response => {
+        await axios.put(`${DOMAIN}/anuncio/update_description`, { itemId: itemId, plain_text: plainText }).then(response => {
             sendNotification('success', 'Pronto salvamos suas modificações', 5000)
             setLoadingButtonDescription(false)
-            dispatch({type: LISTAR_TODOS_ANUNCIOS, data: updateStateDescription(itemId, plainText)})
+            dispatch({ type: LISTAR_TODOS_ANUNCIOS, data: updateStateDescription(itemId, plainText) })
         }).catch(error => {
             sendNotification('error', 'Ocorreu um erro ao atualizar a descrição do anuncio (AnuncioController:216)' + error, 5000)
         })
@@ -270,12 +272,12 @@ export default function AnuncioController() {
     }
 
     let updateGarantia = async (itemId, tipoGarantia, valueName, tempo, garantia) => {
-        await axios.put(`${DOMAIN}/anuncio/update_garantia`, {itemId: itemId, tipo_garantia: tipoGarantia, value_name: valueName, tempo: tempo}).then(response => {
+        await axios.put(`${DOMAIN}/anuncio/update_garantia`, { itemId: itemId, tipo_garantia: tipoGarantia, value_name: valueName, tempo: tempo }).then(response => {
             sendNotification('success', 'Pronto salvamos suas modificações', 5000)
             setLoadingButtonGarantia(false)
-            dispatch({type: LISTAR_TODOS_ANUNCIOS, data: updateStateGarantia(itemId, garantia, valueName, tempo)})
+            dispatch({ type: LISTAR_TODOS_ANUNCIOS, data: updateStateGarantia(itemId, garantia, valueName, tempo) })
         }).catch(error => {
-            sendNotification('error', 'Ocorreu um erro ao atualizar a garantia do anuncio (AnuncioController:226)' + error, 5000)
+            sendNotification('error', 'Ocorreu um erro ao atualizar a garantia do anuncio' + error, 5000)
         })
     }
 
@@ -294,21 +296,21 @@ export default function AnuncioController() {
         return temp
     }
 
-    let updateDisponibilidadeEstoque = async (itemId, valueName ) => {
-        await axios.put(`${DOMAIN}/anuncio/update_disponibilidade_estoque`, {itemId: itemId, value_name: valueName}).then(response => {
+    let updateDisponibilidadeEstoque = async (itemId, valueName) => {
+        await axios.put(`${DOMAIN}/anuncio/update_disponibilidade_estoque`, { itemId: itemId, value_name: valueName }).then(response => {
             sendNotification('success', 'Pronto salvamos suas modificações', 5000)
             setLoadingButtonDisponibilidadeEstoque(false)
         }).catch(error => {
-            sendNotification('error', 'Ocorreu um erro ao atualizar a disponibilidade de estoque (AnuncioController:238)' + error, 5000)
+            sendNotification('error', 'Ocorreu um erro ao atualizar a disponibilidade de estoque' + error, 5000)
         })
     }
 
-    let updateCondicao = async (itemId, condicao ) => {
-        await axios.put(`${DOMAIN}/anuncio/update_condicao`, {itemId: itemId, condicao: condicao}).then(response => {
+    let updateCondicao = async (itemId, condicao) => {
+        await axios.put(`${DOMAIN}/anuncio/update_condicao`, { itemId: itemId, condicao: condicao }).then(response => {
             sendNotification('success', 'Pronto salvamos suas modificações', 5000)
             setLoadingButtonCondicao(false)
         }).catch(error => {
-            sendNotification('error', 'Ocorreu um erro ao atualizar a condição do anuncio (AnuncioController:226)' + error, 5000)
+            sendNotification('error', 'Ocorreu um erro ao atualizar a condição do anuncio' + error, 5000)
         })
     }
 
@@ -317,21 +319,55 @@ export default function AnuncioController() {
         await axios.get(`${DOMAIN}/anuncio/obter_categoria/${itemId}`).then(response => {
             let dados = []
             response.data.map(cat => {
-               dados.push(cat.name)
+                dados.push(cat.name)
             })
             setCategoria(dados.join(' > '))
             setLoadingCategoria(false)
         }).catch(error => {
-            sendNotification('error', 'Ocorreu um erro ao obter a categoria do anuncio (AnuncioController:261)' + error, 5000)
+            sendNotification('error', 'Ocorreu um erro ao obter a categoria do anuncio' + error, 5000)
         })
     }
 
     let obterAtributosPorCategoria = async (categoria) => {
         await axios.get(`${DOMAIN}/anuncio/obter_atributos_por_categoria/${categoria}`).then(async response => {
+            let valorVerificado = response.data.reduce((valorAcumulado, valorCorrente) => {
+                if (valorCorrente.value_name === "") {
+                    return true
+                }
+            })
+            if(valorVerificado){
+                setValidationAttribute(true)
+            }
             setAtributo(response.data)
         }).catch(error => {
             sendNotification('error', 'Ocorreu um erro ao obter os atributos do anuncio' + error, 5000)
         })
+    }
+
+    let updateAtributos = async (attributes, itemId) => {
+        let newArray = []
+        attributes.map(att => {
+            newArray.push({ id: att.id, value_name: att.value_name })
+        })
+        let valorVerificado = newArray.reduce((valorAcumulado, valorCorrente) => {
+            if (valorCorrente.value_name === "") {
+                return true
+            }
+        })
+        if (valorVerificado) {
+            setValidationAttribute(true)
+            sendNotification('error', 'Ficha técnica incompleta, preencha todas as informações para que seu anúncio tenha mais destaque no Mercado Livre.', 5000)
+            setLoadingButtonAtributos(false)
+        } else {
+            setValidationAttribute(false)
+            await axios.put(`${DOMAIN}/anuncio/update_atributos`, { attributes: newArray, itemId: itemId }).then(response => {
+                sendNotification('success', 'Pronto salvamos suas modificações', 5000)
+                setLoadingButtonAtributos(false)
+            }).catch(error => {
+                sendNotification('error', 'Ocorreu um erro ao atualizar os atributos do anuncio' + error, 5000)
+            })
+        }
+
     }
 
     return (
@@ -339,6 +375,10 @@ export default function AnuncioController() {
             <AnuncioView
                 state={state}
                 {...state}
+                validationAttribute={validationAttribute}
+                setLoadingButtonAtributos={setLoadingButtonAtributos}
+                loadingButtonAtributos={loadingButtonAtributos}
+                updateAtributos={updateAtributos}
                 atributo={atributo}
                 obterAtributosPorCategoria={obterAtributosPorCategoria}
                 loadingCategoria={loadingCategoria}
@@ -377,12 +417,12 @@ export default function AnuncioController() {
                 loadingButtonTipoAnuncio={loadingButtonTipoAnuncio}
                 setLoadingButtonTipoAnuncio={setLoadingButtonTipoAnuncio}
                 loadingButtonRetirarPessoalmente={loadingButtonRetirarPessoalmente}
-                setLoadingButtonRetirarPessoalmente={setLoadingButtonRetirarPessoalmente} 
+                setLoadingButtonRetirarPessoalmente={setLoadingButtonRetirarPessoalmente}
                 setLoadingButtonDescription={setLoadingButtonDescription}
                 loadingButtonDescription={loadingButtonDescription}
                 loadingButtonGarantia={loadingButtonGarantia}
                 setLoadingButtonGarantia={setLoadingButtonGarantia}
-                updateGarantia={updateGarantia}/>
+                updateGarantia={updateGarantia} />
         </>
     );
 }

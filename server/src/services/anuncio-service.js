@@ -321,7 +321,7 @@ exports.updateVideoYouTube = async (req, res) => {
     }).catch(error => res.send(error))
 }
 
-exports.updateDisponibilidadeEstoque = async(req, res) => {
+exports.updateDisponibilidadeEstoque = async (req, res) => {
     await usuarioService.buscarUsuarioPorID().then(async user => {
         await axios.put(`https://api.mercadolibre.com/items/${req.body.itemId}?access_token=${user.accessToken}`, JSON.stringify(
             {
@@ -329,16 +329,16 @@ exports.updateDisponibilidadeEstoque = async(req, res) => {
                     id: "MANUFACTURING_TIME",
                     value_name: `${req.body.value_name} días`
                 }]
-             }
+            }
         )).then(response => {
             res.status(200).send("Disponibilidade de estoque atualizado!")
         }).catch(error => res.send(error))
     }).catch(error => res.send(error))
 }
 
-exports.updateGarantia = async(req, res) => {
+exports.updateGarantia = async (req, res) => {
     await usuarioService.buscarUsuarioPorID().then(async user => {
-        if(req.body.tipo_garantia === 'Sem garantia'){
+        if (req.body.tipo_garantia === 'Sem garantia') {
             await axios.put(`https://api.mercadolibre.com/items/${req.body.itemId}?access_token=${user.accessToken}`, JSON.stringify(
                 {
                     sale_terms: [
@@ -349,11 +349,11 @@ exports.updateGarantia = async(req, res) => {
                             value_name: `${req.body.tipo_garantia}`
                         }
                     ]
-                 }
+                }
             )).then(response => {
                 res.status(200).send(response)
             }).catch(error => res.send(error))
-        }else{
+        } else {
             await axios.put(`https://api.mercadolibre.com/items/${req.body.itemId}?access_token=${user.accessToken}`, JSON.stringify(
                 {
                     sale_terms: [
@@ -369,7 +369,7 @@ exports.updateGarantia = async(req, res) => {
                             value_name: `${req.body.value_name} ${req.body.tempo}`
                         }
                     ]
-                 }
+                }
             )).then(response => {
                 res.status(200).send(response)
             }).catch(error => res.send(error))
@@ -377,7 +377,7 @@ exports.updateGarantia = async(req, res) => {
     }).catch(error => res.send(error))
 }
 
-exports.updateCondicao = async(req, res) => {
+exports.updateCondicao = async (req, res) => {
     await usuarioService.buscarUsuarioPorID().then(async user => {
         await axios.put(`https://api.mercadolibre.com/items/${req.body.itemId}?access_token=${user.accessToken}`, JSON.stringify(
             {
@@ -402,17 +402,37 @@ exports.getCategoria = async (req, res) => {
 
 exports.obterAtributosPorCategoria = async (req, res) => {
     await axios.get(`https://api.mercadolibre.com/categories/${req.params.categoria}/attributes`).then(async atrib => {
-           let dados = atrib.data.map(value => {
-                let obj = {
-                    id: value.id,
-                    name: value.name,
-                    type: value.value_type,
-                    values: value.values
-                }
-                return obj
-            })
-            Promise.all(dados).then(attr => {
-                res.send(attr)
-            })
+        let dados = atrib.data.map(value => {
+            let obj = {
+                id: value.id,
+                name: value.name,
+                type: value.value_type,
+                value_name: '',
+                isNaoPreenchido: '',
+                values: value.values
+            }
+            return obj
+        })
+        Promise.all(dados).then(attr => {
+            res.send(attr)
+        })
     }).catch(error => console.error(error))
+}
+
+exports.updateAtributos = async (req, res) => {
+    await usuarioService.buscarUsuarioPorID().then(async user => {
+        await axios.put(`https://api.mercadolibre.com/items/${req.body.itemId}?access_token=${user.accessToken}`,
+            {
+                attributes: req.body.attributes
+            }
+        ).then(response => {
+            res.status(200).send(response)
+        }).catch(error => {
+            console.log(error)
+            res.send(error)
+        })
+    }).catch(error => {
+        console.log(error)
+        res.send(error)
+    })
 }
