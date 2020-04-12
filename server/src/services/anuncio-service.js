@@ -71,7 +71,7 @@ exports.listarTodosAnuncio = async (req, res) => {
                                             video_id: resp03.data.video_id === null ? '' : 'https://www.youtube.com/watch?v=' + resp03.data.video_id,
                                             sub_status: resp03.data.sub_status[0] === 'out_of_stock' ? 'Sem estoque' : resp03.data.sub_status,
                                             json: resp03.data,
-                                            freeShipping: resp03.data.shipping.free_shipping === true ? true : false,
+                                            freeShipping: resp03.data.shipping.free_shipping,
                                             question: resp09.data.questions
                                         }
                                         return anuncio;
@@ -98,6 +98,7 @@ exports.listarTodosAnuncio = async (req, res) => {
                                         video_id: resp03.data.video_id === null ? '' : 'https://www.youtube.com/watch?v=' + resp03.data.video_id,
                                         sub_status: resp03.data.sub_status[0] === 'out_of_stock' ? 'Sem estoque' : resp03.data.sub_status,
                                         json: resp03.data,
+                                        freeShipping: false,
                                         question: resp09.data.questions
                                     }
                                     return anuncio;
@@ -311,14 +312,18 @@ exports.updateVideoYouTube = async (req, res) => {
     await usuarioService.buscarUsuarioPorID().then(async user => {
         await axios.put(`https://api.mercadolibre.com/items/${req.body.itemId}?access_token=${user.accessToken}`, JSON.stringify(
             {
-                shipping: {
-                    local_pick_up: req.body.local_pick_up
-                }
+                video_id: req.body.videoId
             }
         )).then(response => {
-            res.status(200).send("Retirar pessoalmente atualizado.")
-        }).catch(error => res.send(error))
-    }).catch(error => res.send(error))
+            res.status(200).send("Vídeo atualizado.")
+        }).catch(error => {
+            console.log(error)
+            res.send(error)
+        })
+    }).catch(error => {
+        console.log(error)
+        res.send(error)
+    })
 }
 
 exports.updateDisponibilidadeEstoque = async (req, res) => {

@@ -163,8 +163,10 @@ export default function AnuncioView(props) {
                                 <font size="4pt">
                                   <a href={prop.link_anuncio} rel="noopener noreferrer" target='_blank'>{prop.titulo}</a>
                                 </font>
-
-                                <p style={{ "fontSize": "15px" }}>Mercado Envios {prop.freteGratis} - R$ {prop.custoFreteGratis.toLocaleString("pt-BR")} por envio</p>
+                                {prop.freteGratis !== '' ?
+                                    <p style={{ "fontSize": "15px" }}>Mercado Envios {prop.freteGratis} - R$ {prop.custoFreteGratis.toLocaleString("pt-BR")} por envio</p>
+                                    : <p style={{ "fontSize": "15px" }}>Mercado Envios - R$ {prop.custoFreteGratis.toLocaleString("pt-BR")} de tarifa</p>
+                                } 
                                 <p>
                                   <span style={{ "fontSize": "12px" }} className="badge">{prop.quantidadeVendido} Vendidos</span>
                                   <span style={{ "fontSize": "12px" }} className="badge badge-success">{prop.visualizacao} visitas</span>
@@ -322,6 +324,9 @@ export default function AnuncioView(props) {
         {showModal &&
           <EditarAnuncio
             {...anuncio}
+            loadingButtonVideoYoutube={props.loadingButtonVideoYoutube}
+            setLoadingButtonVideoYoutube={props.setLoadingButtonVideoYoutube}
+            updateVideoYoutube={props.updateVideoYoutube}
             validationAttribute={props.validationAttribute}
             setLoadingButtonAtributos={props.setLoadingButtonAtributos}
             loadingButtonAtributos={props.loadingButtonAtributos}

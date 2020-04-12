@@ -30,14 +30,15 @@ export default function AnuncioController() {
     const [loadingButtonCondicao, setLoadingButtonCondicao] = useState(false)
     const [loadingCategoria, setLoadingCategoria] = useState(true)
     const [loadingButtonAtributos, setLoadingButtonAtributos] = useState(false)
+    const [loadingButtonVideoYoutube, setLoadingButtonVideoYoutube] = useState(false)
 
     const dispatch = useDispatch()
 
-    let updateShipping = async (itemId, free_shipping) => {
-        sendNotification('success', 'Processando sua solicitação, por favor aguarde...', 8950)
+    let updateShipping = async (itemId, free_shipping, custoFrete) => {
+        sendNotification('success', 'Processando sua solicitação, por favor aguarde...', 8999)
         setTimeout(async () => {
             await axios.put(`${DOMAIN}/anuncio/update_shipping`, { itemId, free_shipping }).then(response => {
-                dispatch({ type: LISTAR_TODOS_ANUNCIOS, data: updateStateShipping(itemId, free_shipping), isLoading: false })
+                dispatch({ type: LISTAR_TODOS_ANUNCIOS, data: updateStateShipping(itemId, free_shipping, custoFrete), isLoading: false })
                 if (free_shipping) {
                     sendNotification('success', 'Objetivo alcançado! Agora você oferece frete grátis.', 5000)
                     setLoadingButtonFormaEntrega(false)
@@ -52,11 +53,19 @@ export default function AnuncioController() {
         }, 9000)
     }
 
-    let updateStateShipping = (itemId, free_shipping) => {
+    let updateStateShipping = (itemId, free_shipping, custoFrete) => {
         let temp = []
         state.result.map(product => {
             if (product.id === itemId) {
                 product.freeShipping = free_shipping
+                if(free_shipping){
+                    product.freteGratis = 'Grátis Brasil'
+                    product.custoFreteGratis = custoFrete
+                }else{
+                    product.freteGratis = ''
+                    product.custoFreteGratis = 5.00
+                }
+                product.liquido = calcValorLiquido(product.preco, calcTarifa(product.preco, product), free_shipping === true ? custoFrete : 5.00)
                 temp.push(product)
             } else {
                 temp.push(product)
@@ -116,6 +125,19 @@ export default function AnuncioController() {
         return temp
     }
 
+    let calcTarifa = (price, anuncio) => {
+        if (anuncio.tipoAnuncio_id === 'gold_special') {
+            return price * (11 / 100)
+        } else {
+            return price * (16 / 100)
+        }
+
+    }
+
+    let calcValorLiquido = (price, tarifa, custoFixo) => {
+        return price - (tarifa + custoFixo)
+    }
+
     let updateStateTitleProduct = (itemId, title) => {
         let temp = [] // The temp variable must be created because the map is returned undefined in another object
         state.result.map(product => {
@@ -170,18 +192,6 @@ export default function AnuncioController() {
         return temp
     }
 
-    let calcTarifa = (price, anuncio) => {
-        if (anuncio.tipoAnuncio_id === 'gold_special') {
-            return price * (11 / 100)
-        } else {
-            return price * (16 / 100)
-        }
-
-    }
-
-    let calcValorLiquido = (price, tarifa, custoFixo) => {
-        return price - (tarifa + custoFixo)
-    }
 
     let updateStatus = async (itemId, status) => {
         await axios.put(`${DOMAIN}/anuncio/update_status`, { itemId, status }).then(response => {
@@ -393,7 +403,30 @@ export default function AnuncioController() {
                 sendNotification('error', 'Ocorreu um erro ao atualizar os atributos do anuncio' + error, 5000)
             })
         }
+    }
 
+    const updateVideoYoutube = async (itemId, linkVideo) => {
+        let videoId = linkVideo.replace("https://www.youtube.com/watch?v=", "")
+        await axios.put(`${DOMAIN}/anuncio/update_video_youtube`, {itemId, videoId}).then(response => {
+            sendNotification('success', 'Pronto salvamos suas modificações', 5000)
+            setLoadingButtonVideoYoutube(false)
+            updateStateVideoYoutube(itemId, linkVideo)
+        }).catch(error => {
+                sendNotification('error', 'Ocorreu um erro ao atualizar o vídeo do anuncio' + error, 5000)
+            })
+    }
+
+    let updateStateVideoYoutube = (itemId, linkVideo) => {
+        let temp = [] // The temp variable must be created because the map is returned undefined in another object
+        state.result.map(product => {
+            if (product.id === itemId) {
+                product.video_id = linkVideo
+                temp.push(product)
+            } else {
+                temp.push(product)
+            }
+        })
+        return temp
     }
 
     return (
@@ -401,6 +434,9 @@ export default function AnuncioController() {
             <AnuncioView
                 state={state}
                 {...state}
+                loadingButtonVideoYoutube={loadingButtonVideoYoutube}
+                setLoadingButtonVideoYoutube={setLoadingButtonVideoYoutube}
+                updateVideoYoutube={updateVideoYoutube}
                 validationAttribute={validationAttribute}
                 setLoadingButtonAtributos={setLoadingButtonAtributos}
                 loadingButtonAtributos={loadingButtonAtributos}

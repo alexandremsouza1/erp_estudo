@@ -107,15 +107,16 @@ export default function EditarAnuncio(props) {
         }
     }
 
-    const [freeShipping, setFreeShipping] = React.useState(props.freeShipping === undefined ? 'false' : 'true')
+    const [freeShipping, setFreeShipping] = React.useState(props.freeShipping === false ? 'false' : 'true')
     const [localPickUp, setLocalPickUp] = React.useState(props.json.shipping.local_pick_up === true ? 'true' : 'false')
     const [isClassico, setIsClassico] = React.useState(props.tipoAnuncio_id === 'gold_special' ? true : false)
     const [isPremium, setIsPremium] = React.useState(props.tipoAnuncio_id === 'gold_pro' ? true : false)
     const [showInfoFormaDeEntrega, setShowInfoFormaDeEntrega] = React.useState(false)
     const [description, setDescription] = React.useState(props.description)
     const [condicao, setCondicao] = React.useState(props.json.condition)
+    const [atributoValue, setAtributoValue] = React.useState(props.video_id)
 
-    const handleSetAtributos = (event, id) => {
+    const onChangeSetAtributos = (event, id) => {
         props.atributo.map(dado => {
             if (dado.id === id) {
                 dado.value_name = event.target.value
@@ -123,10 +124,22 @@ export default function EditarAnuncio(props) {
         })
     }
 
-    const handleSetValueAtributo = id => {
-        props.atributo.map(dado => {
+    const handleSetAtributo = id => {
+        return props.atributo.map(dado => {
             if (dado.id === id) {
                 return dado.value_name
+            }
+        })
+    }
+
+    const handleSetValue = id => {
+        return props.atributo.map(dado => {
+            if (dado.id === id) {
+                return dado.values.map(value => {
+                    if (dado.value_name === value.name) {
+                        return dado.value_name
+                    }
+                })
             }
         })
     }
@@ -182,6 +195,7 @@ export default function EditarAnuncio(props) {
     const [tempoGarantia, setTempoGarantia] = React.useState(inicializarTempoGarantia())
     const [valueNameGarantia, setValueNameGarantia] = React.useState(inicializarValueNameGarantia())
     const [qtdeDisponibilidadeEstoque, setQtdeDisponibilidadeEstoque] = React.useState(inicializarDisponibilidadeEstoque())
+    const [linkVideo, setLinkVideo] = React.useState(props.video_id)
 
     const handleFreeShipping = event => {
         setFreeShipping(event.target.value)
@@ -203,13 +217,19 @@ export default function EditarAnuncio(props) {
         setValueNameGarantia(event.target.value)
     }
 
-    const verificarFormaEntrega = () => {
+    const verificarFormaEntrega = (custoFrete) => {
         if (freeShipping === 'false') {
             setShowInfoFormaDeEntrega(true)
         } else {
             props.setLoadingButtonFormaEntrega(true)
-            props.updateShipping(props.id, freeShipping === 'true' ? true : false)
+            props.updateShipping(props.id, freeShipping === 'true' ? true : false, Number(custoFrete))
         }
+    }
+
+    const confirmarFormaEntrega = () => {
+        props.updateShipping(props.id, freeShipping === 'true' ? true : false)
+        props.setLoadingButtonFormaEntrega(true)
+        setShowInfoFormaDeEntrega(false)
     }
 
     const verificarGarantia = () => {
@@ -237,11 +257,7 @@ export default function EditarAnuncio(props) {
         props.updateRetirarPessoalmente(props.id, localPickUp === 'true' ? true : false)
     }
 
-    const confirmarFormaEntrega = () => {
-        props.updateShipping(props.id, freeShipping === 'true' ? true : false)
-        props.setLoadingButtonFormaEntrega(true)
-        setShowInfoFormaDeEntrega(false)
-    }
+
 
     const confirmarDisponibilidadeEstoque = () => {
         if (qtdeDisponibilidadeEstoque === "") {
@@ -330,6 +346,11 @@ export default function EditarAnuncio(props) {
         }
     }
 
+    const confirmarVideoYoutube = () => {
+        props.setLoadingButtonVideoYoutube(true)
+        props.updateVideoYoutube(props.id, linkVideo)
+    }
+
     return (
         <>
             <Dialog fullScreen open={props.showModal} onClose={() => props.setShowModal(false)}>
@@ -387,6 +408,25 @@ export default function EditarAnuncio(props) {
 
 
                         <p></p>
+
+                        <Row>
+                            <Col md={12}>
+                                <Paper elevation={3}>
+                                    <ExpansionPanel>
+                                        <ExpansionPanelSummary
+                                            expandIcon={<ExpandMoreIcon />}>
+                                            <span style={{ fontSize: '18px', color: '#333333' }}>Variações</span>
+                                        </ExpansionPanelSummary>
+                                        <ExpansionPanelDetails>
+
+                                        </ExpansionPanelDetails>
+                                    </ExpansionPanel>
+                                </Paper>
+                            </Col>
+                        </Row>
+
+                        <p></p>
+
                         <Row>
                             <Col md={12}>
                                 <Paper elevation={3}>
@@ -406,7 +446,7 @@ export default function EditarAnuncio(props) {
                                                 if (att.values === undefined) {
                                                     return (
                                                         <div>
-                                                            <TextField key={att.id} defaultValue={handleSetValueAtributo(att.id)}  value={handleSetValueAtributo(att.id)} onChange={(event => handleSetAtributos(event, att.id))} label={att.name} style={{ width: '100%', padding: '5px 0 5px' }} variant="filled" />
+                                                            <TextField key={att.id} value={handleSetAtributo(att.id)} onChange={(event => onChangeSetAtributos(event, att.id))} label={att.name} style={{ width: '100%', padding: '5px 0 5px' }} variant="filled" />
                                                         </div>
                                                     )
                                                 } else {
@@ -414,7 +454,7 @@ export default function EditarAnuncio(props) {
                                                         <div>
                                                             <FormControl variant="filled" style={{ width: '100%', padding: '5px 0 5px' }}>
                                                                 <InputLabel>{att.name}</InputLabel>
-                                                                <Select value={handleSetValueAtributo(att.id)} onChange={(event => handleSetAtributos(event, att.id))}>
+                                                                <Select value={handleSetAtributo(att.id)} onChange={(event => onChangeSetAtributos(event, att.id))}>
                                                                     {att.values.map(value => {
                                                                         return (
                                                                             <MenuItem value={value.name} key={value.id}>{value.name}</MenuItem>
@@ -492,7 +532,7 @@ export default function EditarAnuncio(props) {
                                         </ExpansionPanelDetails>
                                         <div>
                                             <CardActions>
-                                                <ButtonUI startIcon={<CheckCircleIcon />} onClick={() => verificarFormaEntrega()} variant="contained">{props.loadingButtonFormaEntrega === true ? 'Processando...' : 'Confirmar'}</ButtonUI>
+                                                <ButtonUI startIcon={<CheckCircleIcon />} onClick={() => verificarFormaEntrega(props.custoFrete)} variant="contained">{props.loadingButtonFormaEntrega === true ? 'Processando...' : 'Confirmar'}</ButtonUI>
                                             </CardActions>
                                         </div>
                                     </ExpansionPanel>
@@ -651,15 +691,20 @@ export default function EditarAnuncio(props) {
                                             <div>
                                                 <div style={{ fontSize: '16px', color: '#666666' }}>Adicione o link do vídeo do YouTube</div>
                                                 <Input icon='youtube' iconPosition='left' placeholder='Informe aqui o link do YouTube'
-                                                    value={props.video_id} style={{ "color": "blue", 'width': '640px' }} />
-                                                {props.json.video_id !== null &&
+                                                    value={linkVideo} onChange={(event) => setLinkVideo(event.target.value)} style={{ "color": "blue", 'width': '640px' }} />
+                                                {linkVideo !== '' &&
                                                     <YouTube
-                                                        videoId={props.json.video_id}
+                                                        videoId={linkVideo.replace("https://www.youtube.com/watch?v=", "")}
                                                         opts={optsYouTube}
                                                     />
                                                 }
                                             </div>
                                         </ExpansionPanelDetails>
+                                        <div>
+                                            <CardActions>
+                                                <ButtonUI onClick={() => confirmarVideoYoutube()} startIcon={<CheckCircleIcon />} variant="contained">{props.loadingButtonVideoYoutube === true ? 'Processando...' : 'Confirmar'}</ButtonUI>
+                                            </CardActions>
+                                        </div>
                                     </ExpansionPanel>
                                 </Paper>
                             </Col>

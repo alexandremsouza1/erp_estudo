@@ -10,6 +10,10 @@ import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+import ButtonUI from '@material-ui/core/Button';
+import Paper from '@material-ui/core/Paper';
 
 export default function EditarVariacao(props) {
     const useStyles = makeStyles(theme => ({
@@ -59,29 +63,46 @@ export default function EditarVariacao(props) {
                     </Row>
                     <br></br>
                     <Segment raised color='grey'>
-                        <Row>
-                            {props.urlImage.map((url, key) => {
-                                return (
-                                    <>
-                                        <Col md={1}>
-                                            <img src={url} alt='imageVariation' height='100' width='80' />
-                                            <Dropdown floating labeled button text='' icon='image outline' className='icon'>
-                                                <Dropdown.Menu>
-                                                    <Dropdown.Header content='Selecione uma imagem!' />
-                                                    {props.urlImage.map((image, key) => {
-                                                        return (
-                                                            <Dropdown.Item key={key}>
-                                                                <img src={image} alt='image' height='100' width='80' />
-                                                            </Dropdown.Item>
-                                                        )
-                                                    })}
-                                                </Dropdown.Menu>
-                                            </Dropdown>
-                                        </Col> 
-                                    </>
-                                )
-                            })}
-                        </Row>
+                        <div style={{ display: 'flex' }}>
+                            <div>
+                                <Paper elevation={2}>
+                                    <input style={{ display: 'none' }} accept="image/*" id="icon-button-file" type="file" multiple />
+                                    <label htmlFor="icon-button-file">
+                                        <ButtonUI color="primary" aria-label="upload picture" component="span" startIcon={<AddCircleIcon />}>
+                                            Adicionar
+                                </ButtonUI>
+                                    </label>
+                                </Paper>
+                            </div>
+                            <div>
+                                <div style={{ display: 'flex' }}>
+                                    {props.urlImage.map((url, key) => {
+                                        return (
+                                            <>
+                                                <div>
+                                                    <IconButton style={{ left: '-15px' }}><DeleteForeverIcon /></IconButton>
+                                                </div>
+                                                <div>
+                                                    <img src={url} alt='imageVariation' height='100' width='80' />
+                                                    <Dropdown floating labeled button text='' icon='image outline' className='icon'>
+                                                        <Dropdown.Menu>
+                                                            <Dropdown.Header content='Selecione uma imagem!' />
+                                                            {props.urlImage.map((image, key) => {
+                                                                return (
+                                                                    <Dropdown.Item key={key}>
+                                                                        <img src={image} alt='image' height='100' width='80' />
+                                                                    </Dropdown.Item>
+                                                                )
+                                                            })}
+                                                        </Dropdown.Menu>
+                                                    </Dropdown>
+                                                </div>
+                                            </>
+                                        )
+                                    })}
+                                </div>
+                            </div>
+                        </div>
                     </Segment>
 
                     <Modal.Actions>
