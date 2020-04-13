@@ -64,13 +64,13 @@ export default function EditarVariacao(props) {
                     <br></br>
                     <Segment raised color='grey'>
                         <div style={{ display: 'flex' }}>
-                            <div>
-                                <Paper elevation={2}>
+                            <div style={{padding: '10px 5px 0'}}>
+                                <Paper style={{height: '170px', display: 'flex', alignItems: 'center'}} elevation={2}>
                                     <input style={{ display: 'none' }} accept="image/*" id="icon-button-file" type="file" multiple />
                                     <label htmlFor="icon-button-file">
                                         <ButtonUI color="primary" aria-label="upload picture" component="span" startIcon={<AddCircleIcon />}>
                                             Adicionar
-                                </ButtonUI>
+                                        </ButtonUI>
                                     </label>
                                 </Paper>
                             </div>
@@ -78,7 +78,7 @@ export default function EditarVariacao(props) {
                                 <div style={{ display: 'flex' }}>
                                     {props.urlImage.map((url, key) => {
                                         return (
-                                            <>
+                                            <div style={{ display: 'flex', flexDirection: 'column' }}>
                                                 <div>
                                                     <IconButton style={{ left: '-15px' }}><DeleteForeverIcon /></IconButton>
                                                 </div>
@@ -97,7 +97,7 @@ export default function EditarVariacao(props) {
                                                         </Dropdown.Menu>
                                                     </Dropdown>
                                                 </div>
-                                            </>
+                                            </div>
                                         )
                                     })}
                                 </div>
