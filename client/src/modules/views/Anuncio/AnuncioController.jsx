@@ -373,6 +373,7 @@ export default function AnuncioController() {
                 })
             })
 
+            console.log(newArray)
             setAtributo(newArray)
         }).catch(error => {
             sendNotification('error', 'Ocorreu um erro ao obter os atributos do anuncio' + error, 5000)
@@ -442,6 +443,7 @@ export default function AnuncioController() {
                 loadingButtonAtributos={loadingButtonAtributos}
                 updateAtributos={updateAtributos}
                 atributo={atributo}
+                setAtributo={setAtributo}
                 obterAtributosPorCategoria={obterAtributosPorCategoria}
                 loadingCategoria={loadingCategoria}
                 categoria={categoria}

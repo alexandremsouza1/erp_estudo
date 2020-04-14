@@ -114,7 +114,6 @@ export default function EditarAnuncio(props) {
     const [showInfoFormaDeEntrega, setShowInfoFormaDeEntrega] = React.useState(false)
     const [description, setDescription] = React.useState(props.description)
     const [condicao, setCondicao] = React.useState(props.json.condition)
-    const [atributoValue, setAtributoValue] = React.useState(props.video_id)
 
     const onChangeSetAtributos = (event, id) => {
         props.atributo.map(dado => {
@@ -122,14 +121,15 @@ export default function EditarAnuncio(props) {
                 dado.value_name = event.target.value
             }
         })
+        props.setAtributo(props.atributo)
     }
 
     const handleSetAtributo = id => {
-        return props.atributo.map(dado => {
-            if (dado.id === id) {
-                return dado.value_name
-            }
-        })
+            return props.atributo.reduce((valorAc, valorCr) => {
+                if(valorCr.id === id) {
+                    return valorCr.value_name
+                }
+            })
     }
 
     const handleSetValue = id => {
@@ -415,24 +415,6 @@ export default function EditarAnuncio(props) {
                                     <ExpansionPanel>
                                         <ExpansionPanelSummary
                                             expandIcon={<ExpandMoreIcon />}>
-                                            <span style={{ fontSize: '18px', color: '#333333' }}>Variações</span>
-                                        </ExpansionPanelSummary>
-                                        <ExpansionPanelDetails>
-
-                                        </ExpansionPanelDetails>
-                                    </ExpansionPanel>
-                                </Paper>
-                            </Col>
-                        </Row>
-
-                        <p></p>
-
-                        <Row>
-                            <Col md={12}>
-                                <Paper elevation={3}>
-                                    <ExpansionPanel>
-                                        <ExpansionPanelSummary
-                                            expandIcon={<ExpandMoreIcon />}>
                                             <span style={{ fontSize: '18px', color: '#333333' }}>Ficha técnica</span>
                                         </ExpansionPanelSummary>
                                         <ExpansionPanelDetails style={{ display: 'flex', flexDirection: 'column' }}>
@@ -445,13 +427,14 @@ export default function EditarAnuncio(props) {
                                             {props.atributo.map(att => {
                                                 if (att.values === undefined) {
                                                     return (
-                                                        <div>
+                                                        <div key={att.id}>
+                                                            {console.log("Atributo: "+ handleSetAtributo(att.id))}
                                                             <TextField key={att.id} value={handleSetAtributo(att.id)} onChange={(event => onChangeSetAtributos(event, att.id))} label={att.name} style={{ width: '100%', padding: '5px 0 5px' }} variant="filled" />
                                                         </div>
                                                     )
                                                 } else {
                                                     return (
-                                                        <div>
+                                                        <div key={att.id}>
                                                             <FormControl variant="filled" style={{ width: '100%', padding: '5px 0 5px' }}>
                                                                 <InputLabel>{att.name}</InputLabel>
                                                                 <Select value={handleSetAtributo(att.id)} onChange={(event => onChangeSetAtributos(event, att.id))}>

@@ -332,6 +332,7 @@ export default function AnuncioView(props) {
             loadingButtonAtributos={props.loadingButtonAtributos}
             updateAtributos={props.updateAtributos}
             atributo={props.atributo}
+            setAtributo={props.setAtributo}
             loadingCategoria={props.loadingCategoria}
             categoria={props.categoria}
             obterCategoria={props.obterCategoria}
