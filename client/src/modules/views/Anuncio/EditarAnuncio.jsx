@@ -1,7 +1,7 @@
 import React from 'react'
 import { Row, Col, Modal } from "react-bootstrap";
 import FormInput from '../../components/FormInput/FormInput'
-import { Popup, Input, Message } from 'semantic-ui-react'
+import { Popup, Input, Message, MessageHeader, MessageContent } from 'semantic-ui-react'
 
 import { makeStyles } from '@material-ui/core/styles';
 import ButtonUI from '@material-ui/core/Button';
@@ -125,11 +125,11 @@ export default function EditarAnuncio(props) {
     }
 
     const handleSetAtributo = id => {
-            return props.atributo.reduce((valorAc, valorCr) => {
-                if(valorCr.id === id) {
-                    return valorCr.value_name
-                }
-            })
+        return props.atributo.reduce((valorAc, valorCr) => {
+            if (valorCr.id === id) {
+                return valorCr.value_name
+            }
+        })
     }
 
     const handleSetValue = id => {
@@ -351,6 +351,13 @@ export default function EditarAnuncio(props) {
         props.updateVideoYoutube(props.id, linkVideo)
     }
 
+    const handleAtivarAnuncio = () => {
+        props.updateStatus(props.id, props.status === 'paused' ? 'active' : 'paused')
+        props.setLoadingButton(true)
+        props.setDisabledButton(true)
+        sendNotification('success', 'Estamos ativando seu anúncio! Por favor aguarde...', 5000)
+    }
+
     return (
         <>
             <Dialog fullScreen open={props.showModal} onClose={() => props.setShowModal(false)}>
@@ -370,6 +377,13 @@ export default function EditarAnuncio(props) {
                     <div style={{ margin: '15px 10px 0', backgroundColor: '#f1f1f1' }}>
                         <Row>
                             <Col md={12}>
+                                {props.status !== "active" &&
+                                    <Message warning>
+                                        <MessageHeader>Inativo</MessageHeader>
+                                        <MessageContent>O anúncio está pausado.</MessageContent>
+                                        <ButtonUI onClick={() => handleAtivarAnuncio()} size="small" variant="contained">Reativar</ButtonUI>
+                                    </Message>
+                                }
                                 <Paper elevation={3}>
                                     <ExpansionPanel expanded>
                                         <ExpansionPanelSummary
@@ -428,7 +442,7 @@ export default function EditarAnuncio(props) {
                                                 if (att.values === undefined) {
                                                     return (
                                                         <div key={att.id}>
-                                                            {console.log("Atributo: "+ handleSetAtributo(att.id))}
+                                                            {console.log("Atributo: " + handleSetAtributo(att.id))}
                                                             <TextField key={att.id} value={handleSetAtributo(att.id)} onChange={(event => onChangeSetAtributos(event, att.id))} label={att.name} style={{ width: '100%', padding: '5px 0 5px' }} variant="filled" />
                                                         </div>
                                                     )

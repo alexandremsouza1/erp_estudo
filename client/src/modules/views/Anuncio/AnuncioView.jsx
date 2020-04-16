@@ -297,7 +297,6 @@ export default function AnuncioView(props) {
         {isShowVariationManager && 
           <GerenciarVariacoes  
             {...anuncio} 
-            url={props.url}
             getImageSite={props.getImageSite}
             isShowVariationManager={isShowVariationManager} 
             setIsShowVariationManager={setIsShowVariationManager}
@@ -326,6 +325,9 @@ export default function AnuncioView(props) {
         {showModal &&
           <EditarAnuncio
             {...anuncio}
+            updateStatus={props.updateStatus}
+            setDisabledButton={props.setDisabledButton}
+            setLoadingButton={props.setLoadingButton}
             loadingButtonVideoYoutube={props.loadingButtonVideoYoutube}
             setLoadingButtonVideoYoutube={props.setLoadingButtonVideoYoutube}
             updateVideoYoutube={props.updateVideoYoutube}

@@ -46,7 +46,7 @@ export default class MudarStatus extends React.Component {
                     </Modal.Content>
 
                     <Modal.Actions>
-                    <Button loading={this.props.loadingButton} disabled={this.props.disabledButton} color='green' onClick={this.handleButtonConfirm}>
+                    <Button loading={this.props.loadingButton} disabled={this.props.disabledButton} color='green' onClick={() => this.handleButtonConfirm()}>
                             <Icon name='checkmark' /> Confirmar
                     </Button>
 

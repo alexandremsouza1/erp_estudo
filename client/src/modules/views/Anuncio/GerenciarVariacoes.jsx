@@ -3,6 +3,7 @@ import { Button, Modal, Header, Icon, Table } from 'semantic-ui-react'
 import EditarVariacao from './EditarVariacao'
 import IconButton from '@material-ui/core/IconButton';
 import CancelIcon from '@material-ui/icons/Cancel';
+import Tooltip from '@material-ui/core/Tooltip';
 
 
 export default class GerenciarVariacoes extends React.Component {
@@ -26,9 +27,9 @@ export default class GerenciarVariacoes extends React.Component {
   }
 
   setImageVariation = (imageVariation) => {
-      this.setState({
-        imageVariation: imageVariation
-      })
+    this.setState({
+      imageVariation: imageVariation
+    })
   }
 
   getImageVariation = (json, variation) => {
@@ -125,11 +126,14 @@ export default class GerenciarVariacoes extends React.Component {
                               <Table.Cell>{variation.available_quantity}</Table.Cell>
                               <Table.Cell>{variation.sold_quantity}</Table.Cell>
                               <Table.Cell>
-                                <Button icon color='red' style={{ 'fontSize': '12px' }}> <Icon name='remove' /> </Button>
-                                <Button icon color='blue' style={{ 'fontSize': '12px' }} onClick={() => this.setPropsEditAnuncio(variation, attr, this.props.json)}> <Icon name='edit' /> </Button>
+                                <Tooltip title="Remover variação">
+                                  <Button icon color='red' style={{ 'fontSize': '12px' }}> <Icon name='remove' /> </Button>
+                                </Tooltip>
+                                <Tooltip title="Editar variação">
+                                  <Button icon color='blue' style={{ 'fontSize': '12px' }} onClick={() => this.setPropsEditAnuncio(variation, attr, this.props.json)}> <Icon name='edit' /> </Button>
+                                </Tooltip>
                               </Table.Cell>
                               <EditarVariacao
-                                url={this.props.url}
                                 getImageSite={this.props.getImageSite}
                                 setImageVariation={this.setImageVariation}
                                 urlImage={this.state.imageVariation}

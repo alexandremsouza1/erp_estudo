@@ -18,6 +18,9 @@ import Paper from '@material-ui/core/Paper';
 import { DialogContent, DialogActions } from '@material-ui/core';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
+import Tooltip from '@material-ui/core/Tooltip';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import sendNotification from '../../components/Notification/Notification'
 
 export default function EditarVariacao(props) {
     const useStyles = makeStyles(theme => ({
@@ -38,53 +41,55 @@ export default function EditarVariacao(props) {
         url: '',
         key: 0
     })
-    const [urlMain, setUrlMain] = React.useState('') 
+    const [urlMain, setUrlMain] = React.useState('')
 
     const handleOnClickButtonImage = (url, key) => {
         setUrlTemp({
             url,
             key
         })
+        setUrlMain("")
         setOpenDialogImage(true)
     }
 
-    const confirmarImagem = () => {
-        props.getImageSite(urlMain)
-        setOpenDialogImage(false)
-        atualizarImagem()
+    const confirmarImagem = async () => {
+        if(urlMain !== ''){
+            await props.getImageSite(urlMain)
+            setOpenDialogImage(false)
+            await props.setImageVariation(await atualizarImagem())
+        }else{
+            sendNotification('error', 'Ops. Você esqueceu de informar a URL, digite novamente e clique em CONFIRMAR!', 5000)
+        }
     }
 
     const atualizarImagem = () => {
         let temp = []
         temp = props.urlImage.map((url, key) => {
-            if(urlTemp.key === key){
-                console.log(props.url)
-                return props.url
-            }else{
+            if (urlTemp.key === key) {
+                return localStorage.getItem("@sisiml/url_image")
+            } else {
                 return url
             }
         })
-        console.log(temp)
         return temp
     }
 
     return (
         <>
 
-            <Dialog fullWidth maxWidth='md' open={openDialogImage} onClose={() => {setOpenDialogImage(false)}}>
+            <Dialog fullWidth maxWidth='md' open={openDialogImage} onClose={() => { setOpenDialogImage(false) }}>
                 <DialogTitle>Informe a URL da imagem</DialogTitle>
                 <DialogContent>
-                    <TextField value={urlMain} onChange={(event) => setUrlMain(event.target.value)} style={{width: '100%'}} label="URL" variant="outlined" />
+                    <TextField error={urlMain === '' ? true : false} value={urlMain} onChange={(event) => setUrlMain(event.target.value)} style={{ width: '100%' }} label="URL" variant="outlined" />
                     <Message>
-                        <MessageHeader>DICA</MessageHeader>
-                        <MessageContent>
+                        <MessageHeader>
                             Utilize o site <a href='https://uploaddeimagens.com.br/' target='_blank'>https://uploaddeimagens.com.br/</a> pra realizar o upload da imagem, logo após informe a URL no campo acima.
-                        </MessageContent>
+                        </MessageHeader>
                     </Message>
                 </DialogContent>
                 <DialogActions>
-                    <ButtonUI onClick={() => confirmarImagem()} startIcon={<SaveAltIcon/>}>Confirmar</ButtonUI>
-                    <ButtonUI onClick={() => setOpenDialogImage(false)} startIcon={<CloseIcon/>}>Fechar</ButtonUI>
+                    <ButtonUI onClick={() => confirmarImagem()} startIcon={<SaveAltIcon />}>Confirmar</ButtonUI>
+                    <ButtonUI onClick={() => setOpenDialogImage(false)} startIcon={<CloseIcon />}>Fechar</ButtonUI>
                 </DialogActions>
             </Dialog>
 
@@ -120,14 +125,11 @@ export default function EditarVariacao(props) {
                     <br></br>
                     <Segment raised color='grey'>
                         <div style={{ display: 'flex' }}>
-                            <div style={{padding: '10px 5px 0', paddingRight: '20px'}}>
-                                <Paper style={{height: '170px', display: 'flex', alignItems: 'center'}} elevation={2}>
-                                    <input style={{ display: 'none' }} accept="image/*" id="icon-button-file" type="file" multiple />
-                                    <label htmlFor="icon-button-file">
-                                        <ButtonUI onClick={() => {setOpenDialogImage(true)}} color="primary" aria-label="upload picture" component="span" startIcon={<AddCircleIcon />}>
-                                            Adicionar
+                            <div style={{ padding: '10px 5px 0', paddingRight: '20px' }}>
+                                <Paper style={{ height: '100px', display: 'flex', alignItems: 'center' }} elevation={2}>
+                                    <ButtonUI onClick={() => { setOpenDialogImage(true) }} color="primary" aria-label="upload picture" component="span" startIcon={<AddCircleIcon />}>
+                                        Adicionar
                                         </ButtonUI>
-                                    </label>
                                 </Paper>
                             </div>
                             <div>
@@ -135,12 +137,21 @@ export default function EditarVariacao(props) {
                                     {props.urlImage.map((url, key) => {
                                         return (
                                             <div key={key} style={{ display: 'flex', flexDirection: 'column' }}>
-                                                <div style={{padding : '0 10px 0'}}>
-                                                    <IconButton onClick={() => {handleOnClickButtonImage(url, key)}}  style={{ left: '-15px' }}><AddPhotoAlternateIcon /></IconButton>
-                                                </div>
-                                                <Paper elevation={3} style={{margin: '0 10px 0'}}>
+                                                <Paper elevation={3} style={{ margin: '0 10px 0', marginTop: '10px' }}>
                                                     <img src={url} alt='imageVariation' height='100' width='80' />
                                                 </Paper>
+                                                <div style={{ padding: '0 10px 0', display: 'flex'}}>
+                                                    <div>
+                                                        <Tooltip title="Clique aqui para alterar a imagem!">
+                                                            <IconButton onClick={() => { handleOnClickButtonImage(url, key) }} style={{ left: '-15px' }}><AddPhotoAlternateIcon /></IconButton>
+                                                        </Tooltip>
+                                                    </div>
+                                                    <div>
+                                                        <Tooltip title="Clique aqui para remover a imagem!">
+                                                            <IconButton onClick={() => { handleOnClickButtonImage(url, key) }} style={{ left: '-35px' }}><DeleteForeverIcon /></IconButton>
+                                                        </Tooltip>
+                                                    </div>
+                                                </div>
                                             </div>
                                         )
                                     })}
