@@ -530,6 +530,14 @@ let obterVendasEmTransito = () => {
     })
 }
 
+let obterImagemSite = async (url) => {
+    await axios.get('https://uploaddeimagens.com.br/imagens/unNVwzQ').then(async response =>{
+        let $ = cheerio.load(response.data)
+        let imagem = $('.fancybox').find('img').attr('src')
+        console.log('https://uploaddeimagens.com.br/'+imagem)
+    })
+}
+
 
 let getDataSite = async () => {
     await axios.get('https://www.mercadolivre.com.br/perfil/comproline').then(async response => {
@@ -792,4 +800,4 @@ const encontrarString = () => {
     console.log(dado)
 }
 
-obterAtributosPorCategoria()
+obterImagemSite()

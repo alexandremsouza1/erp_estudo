@@ -297,6 +297,8 @@ export default function AnuncioView(props) {
         {isShowVariationManager && 
           <GerenciarVariacoes  
             {...anuncio} 
+            url={props.url}
+            getImageSite={props.getImageSite}
             isShowVariationManager={isShowVariationManager} 
             setIsShowVariationManager={setIsShowVariationManager}
             updateAvailableQuantity={props.updateAvailableQuantity}

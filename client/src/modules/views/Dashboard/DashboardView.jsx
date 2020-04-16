@@ -51,17 +51,31 @@ export default function DashboardView(props) {
       <Grid container spacing={3}>
 
         <Grid item xs={12}>
-          <Row style={{padding: '0 0 10px'}}>
+          <Row style={{ padding: '0 0 10px' }}>
             <Col md={12}>
-              <Message negative style={{ width: '100%' }}>
-                <Message.Header>{props.comunicado.label}</Message.Header>
-                <Message.Content>
-                  <>
-                    <span>{props.comunicado.description}</span>
-                    <div><a href={props.comunicado.link} target='_blank'>{props.comunicado.text}</a></div>
-                  </>
-                </Message.Content>
-              </Message>
+              {localStorage.getItem('@sigiml/expiration_day') <= 15 &&
+                <Message warning>
+                  <Message.Header>
+                    Restam {localStorage.getItem('@sigiml/expiration_day')} dias para finalizar seu período de teste.
+                  </Message.Header>
+                  <Message.Content>
+                    <div>
+                      Caso queira continuar usando o sistema após esse período, clique aqui para efetuar a compra.
+                    </div>
+                  </Message.Content>
+                </Message>
+              }
+              {props.comunicado.label !== '' &&
+                <Message negative style={{ width: '100%' }}>
+                  <Message.Header>{props.comunicado.label}</Message.Header>
+                  <Message.Content>
+                    <>
+                      <span>{props.comunicado.description}</span>
+                      <div><a href={props.comunicado.link} target='_blank'>{props.comunicado.text}</a></div>
+                    </>
+                  </Message.Content>
+                </Message>
+              }
             </Col>
           </Row>
           <Paper elevation={3} style={{ 'height': '130px' }}>

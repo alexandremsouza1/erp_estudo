@@ -19,6 +19,7 @@ export default function AnuncioController() {
     const [categoria, setCategoria] = useState('')
     const [atributo, setAtributo] = useState([])
     const [validationAttribute, setValidationAttribute] = useState(false)
+    const [url, setUrl] = useState("")
 
     const [loadingButtonTitulo, setLoadingButtonTitulo] = useState(false)
     const [loadingButtonFormaEntrega, setLoadingButtonFormaEntrega] = useState(false)
@@ -430,11 +431,19 @@ export default function AnuncioController() {
         return temp
     }
 
+    let getImageSite = async (url) => {
+        await axios.post(`${DOMAIN}/anuncio/obter_imagem_site`, {url}).then(response => {
+            setUrl(response.data)
+        })
+    }
+
     return (
         <>
             <AnuncioView
                 state={state}
                 {...state}
+                url={url}
+                getImageSite={getImageSite}
                 loadingButtonVideoYoutube={loadingButtonVideoYoutube}
                 setLoadingButtonVideoYoutube={setLoadingButtonVideoYoutube}
                 updateVideoYoutube={updateVideoYoutube}

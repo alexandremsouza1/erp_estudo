@@ -4,6 +4,7 @@ const axios = require('axios');
 const constants = require('../constants/constants');
 const usuarioService = require('../services/usuario-service')
 const jsonEncode = require('json_encode')
+const cheerio = require('cheerio');
 
 /**
  * Created by Felipe M. Santos
@@ -439,5 +440,13 @@ exports.updateAtributos = async (req, res) => {
     }).catch(error => {
         console.log(error)
         res.send(error)
+    })
+}
+
+exports.obterImagemSite = async (req, res) => {
+    await axios.get(req.body.url).then(async response => {
+        let $ = cheerio.load(response.data)
+        let imagem = $('.fancybox').find('img').attr('src')
+        res.send('https://uploaddeimagens.com.br/'+imagem)
     })
 }

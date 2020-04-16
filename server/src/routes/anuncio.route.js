@@ -10,6 +10,7 @@ router.get('/', anuncioService.listarTodosAnuncio);
 router.get('/:titulo', anuncioService.listarTodosAnuncio)
 router.get('/obterValorDoCustoFreteGratisPorAnuncio/:item_id', anuncioService.obterValorDoCustoFreteGratisPorAnuncio)
 router.get('/obter_categoria/:itemId', anuncioService.getCategoria)
+router.post('/obter_imagem_site', anuncioService.obterImagemSite)
 router.post('/update_listing_type', anuncioService.updateListingType)
 router.put('/update_price', anuncioService.updatePrice)
 router.put('/update_status', anuncioService.updateStatus)
