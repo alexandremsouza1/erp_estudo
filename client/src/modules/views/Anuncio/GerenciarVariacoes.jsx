@@ -4,6 +4,10 @@ import EditarVariacao from './EditarVariacao'
 import IconButton from '@material-ui/core/IconButton';
 import CancelIcon from '@material-ui/icons/Cancel';
 import Tooltip from '@material-ui/core/Tooltip';
+import CloseIcon from '@material-ui/icons/Close';
+import ButtonUI from '@material-ui/core/Button';
+import SaveAltIcon from '@material-ui/icons/SaveAlt';
+import { DialogActions } from '@material-ui/core';
 
 
 export default class GerenciarVariacoes extends React.Component {
@@ -15,7 +19,9 @@ export default class GerenciarVariacoes extends React.Component {
       isShowEditarAnuncio: false,
       attributeCombinations: {},
       imageVariation: [],
-      imagesAnuncio: []
+      imagesAnuncio: [],
+      vart : '',
+      json: {}
     }
   }
 
@@ -51,6 +57,10 @@ export default class GerenciarVariacoes extends React.Component {
   setPropsEditAnuncio = (variation, attr, json) => {
     this.setProps(attr)
     this.getImageVariation(json, variation)
+    this.setState({
+      vart : variation,
+      json: json
+    })
   }
 
   handleChangeInputAvailableQuantity = (event) => {
@@ -136,11 +146,15 @@ export default class GerenciarVariacoes extends React.Component {
                               <EditarVariacao
                                 getImageSite={this.props.getImageSite}
                                 setImageVariation={this.setImageVariation}
+                                updateImagemVariation={this.props.updateImagemVariation}
                                 urlImage={this.state.imageVariation}
                                 imagesAnuncio={this.state.imagesAnuncio}
                                 attributeCombinations={this.state.attributeCombinations}
                                 isShowEditarAnuncio={this.state.isShowEditarAnuncio}
                                 variation={variation}
+                                vart={this.state.vart}
+                                {...this.props}
+                                {...this.state}
                                 closeModalEditVariacao={this.closeModalEditVariacao}
                               />
                             </>
@@ -155,16 +169,10 @@ export default class GerenciarVariacoes extends React.Component {
               </Table.Body>
             </Table>
           </Modal.Content>
-
-          <Modal.Actions>
-            <Button color='green'>
-              <Icon name='checkmark' /> Confirmar
-        </Button>
-
-            <Button color='red' onClick={() => this.props.setIsShowVariationManager(false)}>
-              <Icon name='remove' /> Fechar
-        </Button>
-          </Modal.Actions>
+          <DialogActions>
+            <ButtonUI variant="contained" color="primary" startIcon={<SaveAltIcon />}>Confirmar</ButtonUI>
+            <ButtonUI variant="contained" color="secondary" onClick={() => this.props.setIsShowVariationManager(false)} startIcon={<CloseIcon />}>  Fechar   </ButtonUI>
+          </DialogActions>
         </Modal>
       </div>
     )

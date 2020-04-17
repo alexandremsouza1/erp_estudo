@@ -447,6 +447,25 @@ exports.obterImagemSite = async (req, res) => {
     await axios.get(req.body.url).then(async response => {
         let $ = cheerio.load(response.data)
         let imagem = $('.fancybox').find('img').attr('src')
-        res.send('https://uploaddeimagens.com.br/'+imagem)
+        res.send('https://uploaddeimagens.com.br/' + imagem)
+    })
+}
+
+exports.updateImagemVariation = async (req, res) => {
+    await usuarioService.buscarUsuarioPorID().then(async user => {
+        await axios.put(`https://api.mercadolibre.com/items/${req.body.itemId}?access_token=${user.accessToken}`,
+            {
+                pictures: req.body.pictures,
+                variations: req.body.variations
+            }
+        ).then(response => {
+            res.status(200).send("Imagens atualizada na variação do anuncio")
+        }).catch(error => {
+            console.log(error)
+            res.send(error)
+        })
+    }).catch(error => {
+        console.log(error)
+        res.send(error)
     })
 }

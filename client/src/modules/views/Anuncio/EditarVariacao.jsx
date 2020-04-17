@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Dropdown, Modal, Header, Icon, Segment, Message, MessageHeader, MessageContent } from 'semantic-ui-react'
+import { Divider, Segment, Message, MessageHeader, MessageContent } from 'semantic-ui-react'
 import { Row, Col } from 'react-bootstrap'
 import FormInput from '../../components/FormInput/FormInput'
 
@@ -21,8 +21,18 @@ import TextField from '@material-ui/core/TextField';
 import Tooltip from '@material-ui/core/Tooltip';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import sendNotification from '../../components/Notification/Notification'
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
 
 export default function EditarVariacao(props) {
+
+
+    const MENSAGEM_USUARIO = "Ops. Você esqueceu de informar a URL, digite novamente e clique em CONFIRMAR!"
+    const MENSAGEM_USUARIO_02 = "Não é possível adicionar mais imagens, o limite permitido pelo Mercado Livre é de 10 imagem por variação"
+
     const useStyles = makeStyles(theme => ({
 
         appBar: {
@@ -42,6 +52,14 @@ export default function EditarVariacao(props) {
         key: 0
     })
     const [urlMain, setUrlMain] = React.useState('')
+    const [isNovaImagem, setIsNovaImagem] = React.useState(false)
+
+    const handleOnClickNovaImagem = () => {
+        setUrlMain("")
+        setIsNovaImagem(true)
+        setOpenDialogImage(true)
+
+    }
 
     const handleOnClickButtonImage = (url, key) => {
         setUrlTemp({
@@ -49,23 +67,97 @@ export default function EditarVariacao(props) {
             key
         })
         setUrlMain("")
+        setIsNovaImagem(false)
         setOpenDialogImage(true)
     }
 
     const confirmarImagem = async () => {
-        if(urlMain !== ''){
-            await props.getImageSite(urlMain)
-            setOpenDialogImage(false)
-            await props.setImageVariation(await atualizarImagem())
-        }else{
-            sendNotification('error', 'Ops. Você esqueceu de informar a URL, digite novamente e clique em CONFIRMAR!', 5000)
+        if (isNovaImagem) {
+            if (urlMain !== '') {
+                await sendNotification('success', 'Adicionando a imagem, por favor aguarde...', 2000)
+                await props.getImageSite(urlMain)
+                setOpenDialogImage(false)
+                await props.setImageVariation(await adicionarImagem())
+            } else {
+                sendNotification('error', MENSAGEM_USUARIO, 5000)
+            }
+        } else {
+            if (urlMain !== '') {
+                await sendNotification('success', 'Atualizando a imagem, por favor aguarde...', 2000)
+                await props.getImageSite(urlMain)
+                setOpenDialogImage(false)
+                await props.setImageVariation(await atualizarImagem())
+            } else {
+                sendNotification('error', MENSAGEM_USUARIO, 5000)
+            }
         }
+    }
+
+    const adicionarImagem = async () => {
+        if (props.urlImage.length < 10) {
+            await props.urlImage.push(localStorage.getItem("@sisiml/url_image"))
+            setTimeout(() => {
+                sendNotification('success', 'Imagem adicionada.', 3000)
+            }, 2002);
+            return props.urlImage
+        } else {
+            sendNotification('error', MENSAGEM_USUARIO_02, 5000)
+            return props.urlImage
+        }
+    }
+
+    const atualizarImagemAPIMercadoLivre = () => {
+        let pictures = []
+        props.urlImage.map(url => {
+            pictures.push({ source: url })
+        })
+        let variations = []
+        variations.push({
+            id: props.vart.id,
+            picture_ids: props.urlImage
+        })
+
+        variations.map(vart => {
+                props.json.variations.map(value => {
+                    if(vart.id !== value.id){
+                        variations.push({
+                            id: value.id,
+                            picture_ids: variacaoAtual(vart.id, pictures)
+                        })
+                    }
+                })
+        })
+        console.log(variations)
+        console.log(pictures)
+        //props.updateImagemVariation(props.id, variations, pictures)
+        props.closeModalEditVariacao(false)
+    }
+
+    const variacaoAtual = (id, pictures) =>{
+        let variationSemModification = []
+        props.json.variations.map(value =>{
+            if(value.id != id){
+                value.picture_ids.map(picture => {
+                    pictures.push({ id: picture })
+                    pictures.map(pic =>{
+                        if(pic.id != picture.id){
+                            variationSemModification.push(picture)
+                            pictures.push({ id: picture })
+                        }
+                    })
+                })
+            }
+        })
+        return variationSemModification
     }
 
     const atualizarImagem = () => {
         let temp = []
         temp = props.urlImage.map((url, key) => {
             if (urlTemp.key === key) {
+                setTimeout(() => {
+                    sendNotification('success', 'Imagem atualizada.', 3000)
+                }, 2002);
                 return localStorage.getItem("@sisiml/url_image")
             } else {
                 return url
@@ -78,8 +170,37 @@ export default function EditarVariacao(props) {
         <>
 
             <Dialog fullWidth maxWidth='md' open={openDialogImage} onClose={() => { setOpenDialogImage(false) }}>
-                <DialogTitle>Informe a URL da imagem</DialogTitle>
+                {isNovaImagem ?
+                    <DialogTitle>Informe a URL para adicionar a imagem</DialogTitle>
+                    : <DialogTitle>Informe a URL para atualizar a imagem</DialogTitle>
+                }
                 <DialogContent>
+                    <Message>
+                        <MessageHeader>Considerações e práticas recomendadas</MessageHeader>
+                        <MessageContent>
+                            As imagens RGB são muito mais recomendáveis do que as CMYK. Recomendamos que você envie imagens de 1200 x 1200 px. Se estas forem maiores, o Mercado Livre irá editar para ter 1200 px. Além disso, você pode publicar uma quantidade máxima imagens por anúncio, dependendo da categoria que deseja fazer. Você pode carregar imagens de até 10 MB nos seguintes formatos:
+                        <ul>
+                                <li>JPG</li>
+                                <li>JPEG</li>
+                                <li>JPEG</li>
+                            </ul>
+                        </MessageContent>
+                    </Message>
+
+                    {/*<FormControl variant="outlined" className={classes.formControl}>
+                        <InputLabel id="labelBdImage">Utilizar banco de imagens</InputLabel>
+                        <Select
+                            labelId="labelBdImage"
+                        >
+                            <MenuItem value={10}>
+                                <img alt='bdImage' height='100' width='80' src="https://uploaddeimagens.com.br/images/002/596/357/full/imagem_teste.jpg?1587135791"></img>
+                            </MenuItem>
+                        </Select>
+                    </FormControl>
+
+                    <Divider horizontal>Ou</Divider>
+            */  }
+
                     <TextField error={urlMain === '' ? true : false} value={urlMain} onChange={(event) => setUrlMain(event.target.value)} style={{ width: '100%' }} label="URL" variant="outlined" />
                     <Message>
                         <MessageHeader>
@@ -110,7 +231,7 @@ export default function EditarVariacao(props) {
                 <div style={{ margin: '15px 10px 0' }}>
                     <Row>
                         <Col md={5}>
-                            <FormInput label="Variação" placeholder='Variação' value={props.attributeCombinations.value_name} style={{ "color": "blue" }} />
+                            <FormInput label={<>Variação ({props.attributeCombinations.name})</>} placeholder='Variação' value={props.attributeCombinations.value_name} style={{ "color": "blue" }} />
                         </Col>
                         <Col md={2}>
                             <FormInput label="SKU" placeholder='SKU' style={{ "color": "blue" }} />
@@ -127,9 +248,9 @@ export default function EditarVariacao(props) {
                         <div style={{ display: 'flex' }}>
                             <div style={{ padding: '10px 5px 0', paddingRight: '20px' }}>
                                 <Paper style={{ height: '100px', display: 'flex', alignItems: 'center' }} elevation={2}>
-                                    <ButtonUI onClick={() => { setOpenDialogImage(true) }} color="primary" aria-label="upload picture" component="span" startIcon={<AddCircleIcon />}>
+                                    <ButtonUI onClick={() => { handleOnClickNovaImagem() }} color="primary" aria-label="upload picture" component="span" startIcon={<AddCircleIcon />}>
                                         Adicionar
-                                        </ButtonUI>
+                                    </ButtonUI>
                                 </Paper>
                             </div>
                             <div>
@@ -140,7 +261,7 @@ export default function EditarVariacao(props) {
                                                 <Paper elevation={3} style={{ margin: '0 10px 0', marginTop: '10px' }}>
                                                     <img src={url} alt='imageVariation' height='100' width='80' />
                                                 </Paper>
-                                                <div style={{ padding: '0 10px 0', display: 'flex'}}>
+                                                <div style={{ padding: '0 10px 0', display: 'flex' }}>
                                                     <div>
                                                         <Tooltip title="Clique aqui para alterar a imagem!">
                                                             <IconButton onClick={() => { handleOnClickButtonImage(url, key) }} style={{ left: '-15px' }}><AddPhotoAlternateIcon /></IconButton>
@@ -160,14 +281,10 @@ export default function EditarVariacao(props) {
                         </div>
                     </Segment>
 
-                    <Modal.Actions>
-                        <Button color='green' onClick={() => props.closeModalEditVariacao(false)}>
-                            <Icon name='checkmark' /> Alterar
-                    </Button>
-                        <Button color='red' onClick={() => props.closeModalEditVariacao(false)}>
-                            <Icon name='remove' /> Fechar
-                    </Button>
-                    </Modal.Actions>
+                    <DialogActions>
+                        <ButtonUI variant="contained" color="primary" onClick={() => atualizarImagemAPIMercadoLivre()} startIcon={<SaveAltIcon />}>Confirmar</ButtonUI>
+                        <ButtonUI variant="contained" color="secondary" onClick={() => props.closeModalEditVariacao(false)} startIcon={<CloseIcon />}>  Fechar   </ButtonUI>
+                    </DialogActions>
 
                 </div>
             </Dialog>

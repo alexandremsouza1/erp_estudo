@@ -301,6 +301,7 @@ export default function AnuncioView(props) {
             isShowVariationManager={isShowVariationManager} 
             setIsShowVariationManager={setIsShowVariationManager}
             updateAvailableQuantity={props.updateAvailableQuantity}
+            updateImagemVariation={props.updateImagemVariation}
           />}
 
         {isShowPerguntas &&

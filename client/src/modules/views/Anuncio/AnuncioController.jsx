@@ -58,10 +58,10 @@ export default function AnuncioController() {
         state.result.map(product => {
             if (product.id === itemId) {
                 product.freeShipping = free_shipping
-                if(free_shipping){
+                if (free_shipping) {
                     product.freteGratis = 'Grátis Brasil'
                     product.custoFreteGratis = custoFrete
-                }else{
+                } else {
                     product.freteGratis = ''
                     product.custoFreteGratis = 5.00
                 }
@@ -341,22 +341,22 @@ export default function AnuncioController() {
     let obterAtributosPorCategoria = async (categoria, itemId) => {
 
         let newArray = []
-        
+
         await axios.get(`${DOMAIN}/anuncio/obter_atributos_por_categoria/${categoria}`).then(async response => {
             let valorVerificado = response.data.reduce((valorAcumulado, valorCorrente) => {
                 if (valorCorrente.value_name === "") {
                     return true
                 }
             })
-            if(valorVerificado){
+            if (valorVerificado) {
                 setValidationAttribute(true)
             }
 
             response.data.map(att => {
                 state.result.map(stateAtt => {
-                    if(stateAtt.json.id === itemId){
+                    if (stateAtt.json.id === itemId) {
                         stateAtt.json.attributes.map(jsonAtt => {
-                            if(att.id === jsonAtt.id){
+                            if (att.id === jsonAtt.id) {
                                 newArray.push(
                                     {
                                         id: att.id,
@@ -408,13 +408,13 @@ export default function AnuncioController() {
 
     const updateVideoYoutube = async (itemId, linkVideo) => {
         let videoId = linkVideo.replace("https://www.youtube.com/watch?v=", "")
-        await axios.put(`${DOMAIN}/anuncio/update_video_youtube`, {itemId, videoId}).then(response => {
+        await axios.put(`${DOMAIN}/anuncio/update_video_youtube`, { itemId, videoId }).then(response => {
             sendNotification('success', 'Pronto salvamos suas modificações', 5000)
             setLoadingButtonVideoYoutube(false)
             updateStateVideoYoutube(itemId, linkVideo)
         }).catch(error => {
-                sendNotification('error', 'Ocorreu um erro ao atualizar o vídeo do anuncio' + error, 5000)
-            })
+            sendNotification('error', 'Ocorreu um erro ao atualizar o vídeo do anuncio' + error, 5000)
+        })
     }
 
     let updateStateVideoYoutube = (itemId, linkVideo) => {
@@ -431,8 +431,16 @@ export default function AnuncioController() {
     }
 
     let getImageSite = async (url) => {
-        await axios.post(`${DOMAIN}/anuncio/obter_imagem_site`, {url}).then(response => {
+        await axios.post(`${DOMAIN}/anuncio/obter_imagem_site`, { url }).then(response => {
             localStorage.setItem("@sisiml/url_image", response.data)
+        })
+    }
+
+    let updateImagemVariation = async (itemId, variations, pictures) => {
+        await axios.put(`${DOMAIN}/anuncio/update_imagem_variation`, { itemId, variations, pictures }).then(response => {
+            sendNotification('success', 'Pronto salvamos suas modificações', 5000)
+        }).catch(error => {
+            sendNotification('error', 'Ocorreu um erro ao atualizar as imagens da variação do anuncio' + error, 5000)
         })
     }
 
@@ -441,6 +449,7 @@ export default function AnuncioController() {
             <AnuncioView
                 state={state}
                 {...state}
+                updateImagemVariation={updateImagemVariation}
                 getImageSite={getImageSite}
                 loadingButtonVideoYoutube={loadingButtonVideoYoutube}
                 setLoadingButtonVideoYoutube={setLoadingButtonVideoYoutube}
