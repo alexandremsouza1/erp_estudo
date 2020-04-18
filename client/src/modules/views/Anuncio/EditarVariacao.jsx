@@ -21,11 +21,7 @@ import TextField from '@material-ui/core/TextField';
 import Tooltip from '@material-ui/core/Tooltip';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import sendNotification from '../../components/Notification/Notification'
-import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
+import _ from 'lodash'
 
 export default function EditarVariacao(props) {
 
@@ -53,6 +49,7 @@ export default function EditarVariacao(props) {
     })
     const [urlMain, setUrlMain] = React.useState('')
     const [isNovaImagem, setIsNovaImagem] = React.useState(false)
+    const [sources, setSources] = React.useState([])
 
     const handleOnClickNovaImagem = () => {
         setUrlMain("")
@@ -99,6 +96,8 @@ export default function EditarVariacao(props) {
             setTimeout(() => {
                 sendNotification('success', 'Imagem adicionada.', 3000)
             }, 2002);
+            sources.push(localStorage.getItem("@sisiml/url_image"))
+            setSources(sources)
             return props.urlImage
         } else {
             sendNotification('error', MENSAGEM_USUARIO_02, 5000)
@@ -108,47 +107,49 @@ export default function EditarVariacao(props) {
 
     const atualizarImagemAPIMercadoLivre = () => {
         let pictures = []
-        props.urlImage.map(url => {
+        sources.map(url => {
             pictures.push({ source: url })
         })
+
+        pictures.push(getIDsImagensExistente(props.urlImage))
+
         let variations = []
         variations.push({
             id: props.vart.id,
             picture_ids: props.urlImage
         })
 
-        variations.map(vart => {
-                props.json.variations.map(value => {
-                    if(vart.id !== value.id){
-                        variations.push({
-                            id: value.id,
-                            picture_ids: variacaoAtual(vart.id, pictures)
-                        })
-                    }
-                })
-        })
+        /* variations.map(vart => {
+                 props.json.variations.map(value => {
+                     if(vart.id !== value.id){
+                         variations.push({
+                             id: value.id,
+                             picture_ids: variacaoAtual(vart.id, pictures)
+                         })
+                     }
+                 })
+         })*/
         console.log(variations)
         console.log(pictures)
+        console.log(getIDsImagensExistente(props.urlImage))
         //props.updateImagemVariation(props.id, variations, pictures)
         props.closeModalEditVariacao(false)
     }
 
-    const variacaoAtual = (id, pictures) =>{
-        let variationSemModification = []
-        props.json.variations.map(value =>{
-            if(value.id != id){
-                value.picture_ids.map(picture => {
-                    pictures.push({ id: picture })
-                    pictures.map(pic =>{
-                        if(pic.id != picture.id){
-                            variationSemModification.push(picture)
-                            pictures.push({ id: picture })
-                        }
-                    })
-                })
-            }
+    const getIDsImagensExistente = (pictures) => {
+        let temp = []
+        pictures.map(pic => {
+            let replaceString = pic.replace("http://mlb-s1-p.mlstatic.com/", "")
+            replaceString = replaceString.replace("-O.jpg", "")
+            temp.push({
+                id: replaceString
+            })
+            temp = _.remove(temp, (str) => {
+                if (!str.id.includes("https://uploaddeimagens.com.br")) { return str }
+            })
         })
-        return variationSemModification
+       
+        return temp
     }
 
     const atualizarImagem = () => {
@@ -158,6 +159,8 @@ export default function EditarVariacao(props) {
                 setTimeout(() => {
                     sendNotification('success', 'Imagem atualizada.', 3000)
                 }, 2002);
+                sources.push(localStorage.getItem("@sisiml/url_image"))
+                setSources(sources)
                 return localStorage.getItem("@sisiml/url_image")
             } else {
                 return url
