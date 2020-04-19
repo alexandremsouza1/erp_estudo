@@ -43,7 +43,10 @@ export default class GerenciarVariacoes extends React.Component {
     json.pictures.map(image => {
       variation.picture_ids.map(picture_ids => {
         if (picture_ids === image.id) {
-          urls.push(image.url)
+          urls.push({
+            url: image.url,
+            id: image.id
+          })
         }
       })
     })

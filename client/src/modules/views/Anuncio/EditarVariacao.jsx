@@ -50,6 +50,7 @@ export default function EditarVariacao(props) {
     const [urlMain, setUrlMain] = React.useState('')
     const [isNovaImagem, setIsNovaImagem] = React.useState(false)
     const [sources, setSources] = React.useState([])
+    const [idRemovidos, setIdRemovidos] = React.useState([])
 
     const handleOnClickNovaImagem = () => {
         setUrlMain("")
@@ -92,11 +93,11 @@ export default function EditarVariacao(props) {
 
     const adicionarImagem = async () => {
         if (props.urlImage.length < 10) {
-            await props.urlImage.push(localStorage.getItem("@sisiml/url_image"))
+            await props.urlImage.push({url: localStorage.getItem("@sisiml/url_image")})
             setTimeout(() => {
-                sendNotification('success', 'Imagem adicionada.', 3000)
+                sendNotification('success', 'Imagem adicionada.', 1000)
             }, 2002);
-            sources.push(localStorage.getItem("@sisiml/url_image"))
+            sources.push({source: localStorage.getItem("@sisiml/url_image")})
             setSources(sources)
             return props.urlImage
         } else {
@@ -107,11 +108,9 @@ export default function EditarVariacao(props) {
 
     const atualizarImagemAPIMercadoLivre = () => {
         let pictures = []
-        sources.map(url => {
-            pictures.push({ source: url })
-        })
-
-        pictures.push(getIDsImagensExistente(props.urlImage))
+        sources.push(getIDsImagensExistente(props.urlImage))
+        setSources(sources)
+        pictures.push(sources.map(image => (image)))
 
         let variations = []
         variations.push({
@@ -139,13 +138,21 @@ export default function EditarVariacao(props) {
     const getIDsImagensExistente = (pictures) => {
         let temp = []
         pictures.map(pic => {
-            let replaceString = pic.replace("http://mlb-s1-p.mlstatic.com/", "")
-            replaceString = replaceString.replace("-O.jpg", "")
-            temp.push({
-                id: replaceString
-            })
+            if(pic.id !== undefined){
+                temp.push({
+                    id: pic.id
+                })
+            }
             temp = _.remove(temp, (str) => {
                 if (!str.id.includes("https://uploaddeimagens.com.br")) { return str }
+            })
+
+            temp = _.remove(temp, (str) => {
+                return idRemovidos.map(result => {
+                    if(result.id === str.id){
+                        return str
+                    }
+                })
             })
         })
        
@@ -154,16 +161,24 @@ export default function EditarVariacao(props) {
 
     const atualizarImagem = () => {
         let temp = []
-        temp = props.urlImage.map((url, key) => {
+        props.urlImage.map((image, key) => {
             if (urlTemp.key === key) {
                 setTimeout(() => {
-                    sendNotification('success', 'Imagem atualizada.', 3000)
+                    sendNotification('success', 'Imagem atualizada.', 1000)
                 }, 2002);
-                sources.push(localStorage.getItem("@sisiml/url_image"))
+                sources.push({source: localStorage.getItem("@sisiml/url_image")})
+                idRemovidos.push({id: image.id})
+                setIdRemovidos(idRemovidos)
                 setSources(sources)
-                return localStorage.getItem("@sisiml/url_image")
+                temp.push({
+                    url: localStorage.getItem("@sisiml/url_image"),
+                    id: image.id
+                })
             } else {
-                return url
+                temp.push({
+                    url: image.url,
+                    id: image.id
+                })
             }
         })
         return temp
@@ -258,21 +273,21 @@ export default function EditarVariacao(props) {
                             </div>
                             <div>
                                 <div style={{ display: 'flex' }}>
-                                    {props.urlImage.map((url, key) => {
+                                    {props.urlImage.map((imagem, key) => {
                                         return (
                                             <div key={key} style={{ display: 'flex', flexDirection: 'column' }}>
                                                 <Paper elevation={3} style={{ margin: '0 10px 0', marginTop: '10px' }}>
-                                                    <img src={url} alt='imageVariation' height='100' width='80' />
+                                                    <img src={imagem.url} alt='imageVariation' height='100' width='80' />
                                                 </Paper>
                                                 <div style={{ padding: '0 10px 0', display: 'flex' }}>
                                                     <div>
                                                         <Tooltip title="Clique aqui para alterar a imagem!">
-                                                            <IconButton onClick={() => { handleOnClickButtonImage(url, key) }} style={{ left: '-15px' }}><AddPhotoAlternateIcon /></IconButton>
+                                                            <IconButton onClick={() => { handleOnClickButtonImage(imagem.url, key) }} style={{ left: '-15px' }}><AddPhotoAlternateIcon /></IconButton>
                                                         </Tooltip>
                                                     </div>
                                                     <div>
                                                         <Tooltip title="Clique aqui para remover a imagem!">
-                                                            <IconButton onClick={() => { handleOnClickButtonImage(url, key) }} style={{ left: '-35px' }}><DeleteForeverIcon /></IconButton>
+                                                            <IconButton onClick={() => { handleOnClickButtonImage(imagem.url, key) }} style={{ left: '-35px' }}><DeleteForeverIcon /></IconButton>
                                                         </Tooltip>
                                                     </div>
                                                 </div>
