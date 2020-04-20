@@ -93,11 +93,11 @@ export default function EditarVariacao(props) {
 
     const adicionarImagem = async () => {
         if (props.urlImage.length < 10) {
-            await props.urlImage.push({url: localStorage.getItem("@sisiml/url_image")})
+            await props.urlImage.push({ url: localStorage.getItem("@sisiml/url_image") })
             setTimeout(() => {
                 sendNotification('success', 'Imagem adicionada.', 1000)
             }, 2002);
-            sources.push({source: localStorage.getItem("@sisiml/url_image")})
+            sources.push({ source: localStorage.getItem("@sisiml/url_image") })
             setSources(sources)
             return props.urlImage
         } else {
@@ -108,37 +108,50 @@ export default function EditarVariacao(props) {
 
     const atualizarImagemAPIMercadoLivre = () => {
         let pictures = []
-        sources.push(getIDsImagensExistente(props.urlImage))
-        setSources(sources)
-        pictures.push(sources.map(image => (image)))
+        getIDsImagensExistente(props.urlImage).map(image => (sources.push({ id: image.id })))
 
+        let imageTemp = []
+        props.urlImage.map(image => {
+            idRemovidos.map(imageRID => {
+                if(imageRID.id === image.id){
+                    imageTemp.push(image.url)
+                }
+                if(imageRID.id !== image.id){
+                    imageTemp.push(image.id)
+                }
+            })
+        })
         let variations = []
         variations.push({
             id: props.vart.id,
-            picture_ids: props.urlImage
+            picture_ids: imageTemp
         })
 
-        /* variations.map(vart => {
-                 props.json.variations.map(value => {
-                     if(vart.id !== value.id){
-                         variations.push({
-                             id: value.id,
-                             picture_ids: variacaoAtual(vart.id, pictures)
-                         })
-                     }
-                 })
-         })*/
+        variations.map(vart => {
+            props.json.variations.map(value => {
+                if (vart.id !== value.id) {
+                    value.picture_ids.map(id => (sources.push({ id })))
+                    variations.push({
+                        id: value.id,
+                        picture_ids: value.picture_ids
+                    })
+                }
+            })
+        })
+
+        setSources(sources)
+        pictures = sources
         console.log(variations)
         console.log(pictures)
-        console.log(getIDsImagensExistente(props.urlImage))
-        //props.updateImagemVariation(props.id, variations, pictures)
+        console.log(idRemovidos)
+        props.updateImagemVariation(props.id, variations, pictures)
         props.closeModalEditVariacao(false)
     }
 
     const getIDsImagensExistente = (pictures) => {
         let temp = []
         pictures.map(pic => {
-            if(pic.id !== undefined){
+            if (pic.id !== undefined) {
                 temp.push({
                     id: pic.id
                 })
@@ -147,15 +160,15 @@ export default function EditarVariacao(props) {
                 if (!str.id.includes("https://uploaddeimagens.com.br")) { return str }
             })
 
-            temp = _.remove(temp, (str) => {
-                return idRemovidos.map(result => {
-                    if(result.id === str.id){
-                        return str
+            temp.map((value, indiceTemp) => {
+                idRemovidos.map((result) => {
+                    if (value.id === result.id) {
+                        temp.splice(indiceTemp, 1)
                     }
                 })
             })
         })
-       
+
         return temp
     }
 
@@ -166,8 +179,8 @@ export default function EditarVariacao(props) {
                 setTimeout(() => {
                     sendNotification('success', 'Imagem atualizada.', 1000)
                 }, 2002);
-                sources.push({source: localStorage.getItem("@sisiml/url_image")})
-                idRemovidos.push({id: image.id})
+                sources.push({ source: localStorage.getItem("@sisiml/url_image") })
+                idRemovidos.push({ id: image.id })
                 setIdRemovidos(idRemovidos)
                 setSources(sources)
                 temp.push({
