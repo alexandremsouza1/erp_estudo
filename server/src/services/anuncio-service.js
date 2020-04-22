@@ -48,7 +48,7 @@ exports.listarTodosAnuncio = async (req, res) => {
                     return axios.get(`${constants.API_MERCADO_LIVRE}/visits/items?ids=${resp02}`).then(resp04 => {
                         return axios.get(`https://api.mercadolibre.com/items/${resp02}/description?access_token=${resp01.accessToken}`).then(resp08 => {
                             return axios.get(`https://api.mercadolibre.com/questions/search?item=${resp02}&access_token=${resp01.accessToken}`).then(resp09 => {
-                                if (resp03.data.shipping.free_shipping) {
+                                if (resp03.data.shipping.free_shipping && resp03.data.shipping.mode !== "not_specified") {
                                     return axios.get(`${constants.API_MERCADO_LIVRE}/items/${resp02}/shipping_options/free`).then(resp05 => {
                                         var anuncio = {
                                             id: resp03.data.id,
@@ -77,6 +77,32 @@ exports.listarTodosAnuncio = async (req, res) => {
                                         }
                                         return anuncio;
                                     }).catch(err => res.send(err))
+                                } else if (resp03.data.shipping.mode === "not_specified"){
+                                    var anuncio = {
+                                        id: resp03.data.id,
+                                        titulo: resp03.data.title,
+                                        preco: resp03.data.price,
+                                        estoque_total: resp03.data.available_quantity,
+                                        foto_principal: resp03.data.pictures[0].url,
+                                        link_anuncio: resp03.data.permalink,
+                                        status: resp03.data.status,
+                                        visualizacao: Object.values(resp04.data).reduce((accumulador, valorCorrente) => { return valorCorrente }),
+                                        totalVariacoes: resp03.data.variations.length,
+                                        custoFreteGratis: 5.00 + ",00",
+                                        freteGratis: "",
+                                        tarifa: Number(((resp03.data.price) * (11 / 100)).toFixed(2)),
+                                        liquido: Number((resp03.data.price - 5.00 - ((resp03.data.price) * (11 / 100))).toFixed(2)),
+                                        tipoAnuncio: resp03.data.listing_type_id === "gold_pro" ? "Premium - Exposição máxima" : "Clássico - Exposição alta",
+                                        tipoAnuncio_id: resp03.data.listing_type_id,
+                                        quantidadeVendido: resp03.data.sold_quantity,
+                                        description: resp08.data.plain_text,
+                                        video_id: resp03.data.video_id === null ? '' : 'https://www.youtube.com/watch?v=' + resp03.data.video_id,
+                                        sub_status: resp03.data.sub_status[0] === 'out_of_stock' ? 'Sem estoque' : resp03.data.sub_status,
+                                        json: resp03.data,
+                                        freeShipping: false,
+                                        question: resp09.data.questions
+                                    }
+                                    return anuncio;
                                 } else {
                                     var anuncio = {
                                         id: resp03.data.id,
@@ -152,24 +178,35 @@ exports.buscarAnuncioPorTitulo = async (req, res) => {
 exports.updatePrice = (req, res) => {
     usuarioService.buscarUsuarioPorID().then(user => {
         axios.get(`https://api.mercadolibre.com/items/${req.body.itemId}?access_token=${user.accessToken}`).then(response => {
-            let values = response.data.variations.map((variat) => {
-                let dados = {
-                    id: variat.id,
-                    price: Number(req.body.price)
-                }
-                return dados
-            })
-            axios.put(`https://api.mercadolibre.com/items/${req.body.itemId}?access_token=${user.accessToken}`,
-                JSON.stringify({ variations: values })).then(resp => {
-                    res.send('Product price updated with success')
+            if (response.data.variations.length === 0) {
+                axios.put(`https://api.mercadolibre.com/items/${req.body.itemId}?access_token=${user.accessToken}`, JSON.stringify(
+                    {
+                        price: req.body.price
+                    })).then(resp => {
+                        res.send("Preço do anúncio atualizado!")
+                    })
+            } else {
+                let values = response.data.variations.map((variat) => {
+                    let dados = {
+                        id: variat.id,
+                        price: Number(req.body.price)
+                    }
+                    return dados
                 })
+                axios.put(`https://api.mercadolibre.com/items/${req.body.itemId}?access_token=${user.accessToken}`, JSON.stringify(
+                    {
+                        variations: values
+                    })).then(resp => {
+                        res.send("Preço das variações atualizado!")
+                    })
+            }
         }).catch(err => {
-            console.error('> An error occurred while process a PUT method in line 139')
-            res.send('An error occurred while process a PUT method in line 139', err)
+            console.error('> An error occurred while process a PUT method in line 177')
+            res.send('An error occurred while process a PUT method in line 177', err)
         })
     }).catch(err => {
-        console.error('> An error occurred to get user ID, line 128')
-        res.send('An error occurred to get user ID, line 128', err)
+        console.error('> An error occurred to get user ID, line 182')
+        res.send('An error occurred to get user ID, line 182', err)
     })
 }
 

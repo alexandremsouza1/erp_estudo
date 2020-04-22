@@ -46,6 +46,7 @@ import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 
 
 
@@ -407,6 +408,44 @@ export default function EditarAnuncio(props) {
                                                             <p style={{ fontSize: '11px' }}>Quer saber como criar um bom título para seus anúncios? <ButtonUI onClick={() => setState({ showInfoMercadoLivreEditarTitulo: true })} style={{ fontSize: '11px' }} size="small">Clique aqui</ButtonUI></p>
                                                         </Message>
                                                     }
+
+                                                    <Divider />
+
+                                                    <div style={{display: 'flex', justifyContent: 'space-between', paddingTop: '15px'}}>
+                                                        <div style={{color: '#333333', fontSize: '16px'}}>Características</div>
+                                                        <ButtonUI color="primary" startIcon={<CloseIcon/>}>Adicionar variações</ButtonUI>
+                                                    </div>
+                                                    <div style={{display: 'flex'}}>
+                                                        <div style={{color: '#999999', fontSize: '13px', paddingRight: '5px'}}>Fotos</div>
+                                                        <Popup
+                                                           wide='very'
+                                                           content={
+                                                                <>
+                                                                    <div style={{ padding: '15px 0 5px', color: '#666666' }}>Mostre o produto em detalhes, com fundo branco e bem iluminado. Não inclua bordas, logotipos ou marcas d'água..</div>
+                                                                </>
+                                                                }
+                                                           key={props.id}
+                                                           header='Como tirar boas fotos?'
+                                                           trigger={<img src={imgInfoComFreteGratis}></img>}
+                                                        />
+                                                    </div>
+                                                    <div style={{paddingTop: '20px'}}>
+                                                        <TextField style={{paddingRight: '15px'}} label="Quantidade *"/>
+                                                        <TextField style={{width: '200px'}} label="Código universal de produto" helperText="Pode ser um EAN, UPC ou outro GTIN"/>
+                                                        <Popup
+                                                           wide='very'
+                                                           content={
+                                                                <>
+                                                                    <div style={{ padding: '15px 0 5px', color: '#666666' }}>
+                                                                        É um número que tem entre 8 e 14 dígitos e está perto do código de barras, na caixa do produto ou na etiqueta.
+                                                                    </div>
+                                                                </>
+                                                                }
+                                                           key={props.id}
+                                                           header='Como eu identifico?'
+                                                           trigger={<img src={imgInfoComFreteGratis}></img>}
+                                                        />
+                                                    </div>        
                                                 </Col>
                                             </Row>
                                         </ExpansionPanelDetails>
@@ -442,8 +481,7 @@ export default function EditarAnuncio(props) {
                                                 if (att.values === undefined) {
                                                     return (
                                                         <div key={att.id}>
-                                                            {console.log("Atributo: " + handleSetAtributo(att.id))}
-                                                            <TextField key={att.id} value={handleSetAtributo(att.id)} onChange={(event => onChangeSetAtributos(event, att.id))} label={att.name} style={{ width: '100%', padding: '5px 0 5px' }} variant="filled" />
+                                                            {att.id !== 'GTIN' && <TextField key={att.id} value={handleSetAtributo(att.id)} onChange={(event => onChangeSetAtributos(event, att.id))} label={att.name} style={{ width: '100%', padding: '5px 0 5px' }} variant="filled" />}
                                                         </div>
                                                     )
                                                 } else {
@@ -485,47 +523,77 @@ export default function EditarAnuncio(props) {
                                                 title='Forma de entrega' />
                                         </ExpansionPanelSummary>
                                         <ExpansionPanelDetails>
-                                            <Row>
-                                                <Col md={6}>
-                                                    <div style={{ color: '#000000', fontSize: '18px' }}>
-                                                        <img src={imgOfereceMercadoEnvios}></img>Faço envios pelo Mercado Envios
+                                            {props.json.shipping.mode === 'not_specified' || props.json.shipping.mode === 'custom'
+                                                ? <div>
+                                                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                                        <FormControlLabel
+                                                            control={<Checkbox checked={true} />}
+                                                            label="Faço envio por conta própria!"
+                                                        />
+                                                        <FormControl component="fieldset">
+                                                            <RadioGroup value={localPickUp} onChange={(event) => handleLocalPickUp(event)}>
+                                                                <FormControlLabel value='true' control={<Radio />} label={
+                                                                    <span style={{ color: '#000000', fontSize: '18px' }}>Com frete grátis para todo o país</span>
+                                                                } />
+                                                                <FormControlLabel value='false' control={<Radio />} label={
+                                                                    <div style={{ color: '#000000', fontSize: '18px' }}>Por conta do comprador</div>
+                                                                } />
+                                                            </RadioGroup>
+                                                        </FormControl>
+                                                        <div>
+                                                            <TextField style={{width: '400px', paddingRight: '15px'}} label="Exemplo: SEDEX, SP, RJ, SC, MS..."/>
+                                                            <TextField label="R$" />
+                                                            <IconButton><CloseIcon/></IconButton>
                                                         </div>
-                                                    <FormControl component="fieldset">
-                                                        <RadioGroup value={freeShipping} onChange={(event) => handleFreeShipping(event)}>
+                                                        <div>
+                                                            <TextField style={{width: '400px', paddingRight: '15px'}} label="Exemplo: Terminal de retirada, Expresso..."/>
+                                                            <TextField label="R$" />
+                                                            <IconButton><CloseIcon/></IconButton>
+                                                        </div>
+                                                        <ButtonUI color="primary" style={{paddingTop: '20px'}} startIcon={<CloseIcon/>}>Adicionar outro</ButtonUI>
+                                                    </div>
+                                                </div>
+                                                : <Row>
+                                                    <Col md={6}>
+                                                        <div style={{ color: '#000000', fontSize: '18px' }}>
+                                                            <img src={imgOfereceMercadoEnvios}></img>Faço envios pelo Mercado Envios
+                                                        </div>
+                                                        <FormControl component="fieldset">
+                                                            <RadioGroup value={freeShipping} onChange={(event) => handleFreeShipping(event)}>
 
-                                                            <FormControlLabel style={{ paddingTop: '50px' }} value='true' control={<Radio />} label={
-                                                                <span style={{ color: '#000000', fontSize: '18px' }}>
-                                                                    Com frete grátis. {' '}
-                                                                    <Popup
-                                                                        wide='very'
-                                                                        content={
-                                                                            <>
-                                                                                <div style={{ padding: '10px 0 0' }}><img src={imgOfereceMercadoEnvios}></img>Frete grátis no serviço normal.</div>
-                                                                                <div><img src={imgOfereceMercadoEnvios}></img>Descontos significativos no serviço expresso.</div>
-                                                                                <div style={{ padding: '15px 0 5px', color: '#666666' }}>Em alguns casos, no lugar do frete grátis, eles terão descontos nos dois serviços. Isso dependerá do peso, do preço e da distância do envio.</div>
-                                                                            </>
-                                                                        }
-                                                                        key={props.id}
-                                                                        header='Todos os seus compradores terão:'
-                                                                        trigger={<img src={imgInfoComFreteGratis}></img>}
-                                                                    />
+                                                                <FormControlLabel style={{ paddingTop: '50px' }} value='true' control={<Radio />} label={
+                                                                    <span style={{ color: '#000000', fontSize: '18px' }}>
+                                                                        Com frete grátis. {' '}
+                                                                        <Popup
+                                                                            wide='very'
+                                                                            content={
+                                                                                <>
+                                                                                    <div style={{ padding: '10px 0 0' }}><img src={imgOfereceMercadoEnvios}></img>Frete grátis no serviço normal.</div>
+                                                                                    <div><img src={imgOfereceMercadoEnvios}></img>Descontos significativos no serviço expresso.</div>
+                                                                                    <div style={{ padding: '15px 0 5px', color: '#666666' }}>Em alguns casos, no lugar do frete grátis, eles terão descontos nos dois serviços. Isso dependerá do peso, do preço e da distância do envio.</div>
+                                                                                </>
+                                                                            }
+                                                                            key={props.id}
+                                                                            header='Todos os seus compradores terão:'
+                                                                            trigger={<img src={imgInfoComFreteGratis}></img>}
+                                                                        />
 
-                                                                </span>
-                                                            } />
+                                                                    </span>
+                                                                } />
 
-                                                            <div style={{ color: '#666666', fontSize: '16px', paddingLeft: '27px' }}>Você paga R$ {props.custoFrete} pelo frete para qualquer destino</div>
-                                                            <FormControlLabel style={{ paddingTop: '15px' }} value='false' control={<Radio />} label={
-                                                                <div style={{ color: '#000000', fontSize: '18px' }}>Não oferecer frete grátis</div>
-                                                            } />
+                                                                <div style={{ color: '#666666', fontSize: '16px', paddingLeft: '27px' }}>Você paga R$ {props.custoFrete} pelo frete para qualquer destino</div>
+                                                                <FormControlLabel style={{ paddingTop: '15px' }} value='false' control={<Radio />} label={
+                                                                    <div style={{ color: '#000000', fontSize: '18px' }}>Não oferecer frete grátis</div>
+                                                                } />
 
-                                                        </RadioGroup>
-                                                    </FormControl>
-                                                    <div style={{ color: '#666666', fontSize: '16px', paddingLeft: '27px' }}>O Comprador paga o frete</div>
-                                                </Col>
-                                                <Col md={6}>
-                                                    <img style={{ paddingTop: '120px' }} src={imgFormaDeEntrega}></img>
-                                                </Col>
-                                            </Row>
+                                                            </RadioGroup>
+                                                        </FormControl>
+                                                        <div style={{ color: '#666666', fontSize: '16px', paddingLeft: '27px' }}>O Comprador paga o frete</div>
+                                                    </Col>
+                                                    <Col md={6}>
+                                                        <img style={{ paddingTop: '120px' }} src={imgFormaDeEntrega}></img>
+                                                    </Col>
+                                                </Row>}
                                         </ExpansionPanelDetails>
                                         <div>
                                             <CardActions>
@@ -553,7 +621,7 @@ export default function EditarAnuncio(props) {
                                                             <span style={{ color: '#000000', fontSize: '18px' }}>Concordo</span>
                                                         } />
                                                         <FormControlLabel value='false' control={<Radio />} label={
-                                                            <div style={{ color: '#000000', fontSize: '18px' }}>Não concordo</div>
+                                                            <div style={{ color: '#000000', fontSize: '18px' }}>Não aceito</div>
                                                         } />
                                                     </RadioGroup>
                                                 </FormControl>

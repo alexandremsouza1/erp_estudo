@@ -233,6 +233,8 @@ export default function AnuncioView(props) {
                                           </Dropdown.Item>
                                       </a>
                                     </Dropdown.Item>
+
+                                    {prop.json.variations.length !== 0 && 
                                     <Dropdown.Item>
                                       <a onClick={() => {
                                         setIsShowVariationManager(true) 
@@ -241,7 +243,8 @@ export default function AnuncioView(props) {
                                               Gerenciar variações
                                           </Dropdown.Item>
                                       </a>
-                                    </Dropdown.Item>
+                                    </Dropdown.Item>}
+
                                     <Dropdown.Item>
                                       <a onClick={() => {
                                         setIsShowPerguntas(true)

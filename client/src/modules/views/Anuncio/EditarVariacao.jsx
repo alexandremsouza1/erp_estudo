@@ -73,7 +73,7 @@ export default function EditarVariacao(props) {
         if (isNovaImagem) {
             if (urlMain !== '') {
                 await sendNotification('success', 'Adicionando a imagem, por favor aguarde...', 2000)
-                await props.getImageSite(urlMain)
+                await props.getImageSite(urlMain.replace("/mostrar-codigo", ""))
                 setOpenDialogImage(false)
                 await props.setImageVariation(await adicionarImagem())
             } else {
@@ -82,7 +82,7 @@ export default function EditarVariacao(props) {
         } else {
             if (urlMain !== '') {
                 await sendNotification('success', 'Atualizando a imagem, por favor aguarde...', 2000)
-                await props.getImageSite(urlMain)
+                await props.getImageSite(urlMain.replace("/mostrar-codigo", ""))
                 setOpenDialogImage(false)
                 await props.setImageVariation(await atualizarImagem())
             } else {

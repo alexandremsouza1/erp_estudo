@@ -132,7 +132,6 @@ export default class GerenciarVariacoes extends React.Component {
                   return (
                     <Table.Row key={key}>
                       {variation.attribute_combinations.map(attr => {
-                        if (attr.id === 'SIZE' || attr.id === null) {
                           return (
                             <>
                               <Table.Cell>{attr.value_name}</Table.Cell>
@@ -162,7 +161,6 @@ export default class GerenciarVariacoes extends React.Component {
                               />
                             </>
                           )
-                        }
                       })}
 
                     </Table.Row>
