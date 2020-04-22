@@ -1,7 +1,7 @@
 import React from 'react'
 import { Row, Col, Modal } from "react-bootstrap";
 import FormInput from '../../components/FormInput/FormInput'
-import { Popup, Input, Message, MessageHeader, MessageContent } from 'semantic-ui-react'
+import { Popup, Segment, Input, Message, MessageHeader, MessageContent } from 'semantic-ui-react'
 
 import { makeStyles } from '@material-ui/core/styles';
 import ButtonUI from '@material-ui/core/Button';
@@ -47,6 +47,10 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
 import Checkbox from '@material-ui/core/Checkbox';
+import Tooltip from '@material-ui/core/Tooltip';
+import AddPhotoAlternateIcon from '@material-ui/icons/AddPhotoAlternate';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 
 
@@ -409,43 +413,86 @@ export default function EditarAnuncio(props) {
                                                         </Message>
                                                     }
 
-                                                    <Divider />
-
-                                                    <div style={{display: 'flex', justifyContent: 'space-between', paddingTop: '15px'}}>
-                                                        <div style={{color: '#333333', fontSize: '16px'}}>Características</div>
-                                                        <ButtonUI color="primary" startIcon={<CloseIcon/>}>Adicionar variações</ButtonUI>
-                                                    </div>
-                                                    <div style={{display: 'flex'}}>
-                                                        <div style={{color: '#999999', fontSize: '13px', paddingRight: '5px'}}>Fotos</div>
-                                                        <Popup
-                                                           wide='very'
-                                                           content={
-                                                                <>
-                                                                    <div style={{ padding: '15px 0 5px', color: '#666666' }}>Mostre o produto em detalhes, com fundo branco e bem iluminado. Não inclua bordas, logotipos ou marcas d'água..</div>
-                                                                </>
+                                                    {props.json.variations.length === 0 && <> <Divider />
+                                                        <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '15px' }}>
+                                                            <div style={{ color: '#333333', fontSize: '16px' }}>Características</div>
+                                                            <ButtonUI color="primary" startIcon={<CloseIcon />}>Adicionar variações</ButtonUI>
+                                                        </div>
+                                                        <div style={{ display: 'flex' }}>
+                                                            <div style={{ color: '#999999', fontSize: '13px', paddingRight: '5px' }}>Fotos</div>
+                                                            <Popup
+                                                                wide='very'
+                                                                content={
+                                                                    <>
+                                                                        <div style={{ padding: '15px 0 5px', color: '#666666' }}>Mostre o produto em detalhes, com fundo branco e bem iluminado. Não inclua bordas, logotipos ou marcas d'água..</div>
+                                                                    </>
                                                                 }
-                                                           key={props.id}
-                                                           header='Como tirar boas fotos?'
-                                                           trigger={<img src={imgInfoComFreteGratis}></img>}
-                                                        />
-                                                    </div>
-                                                    <div style={{paddingTop: '20px'}}>
-                                                        <TextField style={{paddingRight: '15px'}} label="Quantidade *"/>
-                                                        <TextField style={{width: '200px'}} label="Código universal de produto" helperText="Pode ser um EAN, UPC ou outro GTIN"/>
-                                                        <Popup
-                                                           wide='very'
-                                                           content={
-                                                                <>
-                                                                    <div style={{ padding: '15px 0 5px', color: '#666666' }}>
-                                                                        É um número que tem entre 8 e 14 dígitos e está perto do código de barras, na caixa do produto ou na etiqueta.
+                                                                key={props.id}
+                                                                header='Como tirar boas fotos?'
+                                                                trigger={<img src={imgInfoComFreteGratis}></img>}
+                                                            />
+                                                        </div>
+                                                        <div>
+                                                            <Segment raised color='grey' style={{ width: '750px' }}>
+                                                                <div style={{ display: 'flex' }}>
+                                                                    <div style={{ padding: '10px 5px 0', paddingRight: '20px' }}>
+                                                                        <Paper style={{ height: '100px', display: 'flex', alignItems: 'center' }} elevation={2}>
+                                                                            <ButtonUI color="primary" aria-label="upload picture" component="span" startIcon={<AddCircleIcon />}>
+                                                                                Adicionar
+                                                                            </ButtonUI>
+                                                                        </Paper>
                                                                     </div>
-                                                                </>
+                                                                    <div style={{ overflowX: props.json.pictures.length >= 6 ? 'scroll' : '' }} id='imagens'>
+                                                                        <div style={{ display: 'flex' }}>
+                                                                            {props.json.pictures.map((imagem, key) => {
+                                                                                return (
+                                                                                    <div key={key} style={{ display: 'flex', flexDirection: 'column' }}>
+                                                                                        <Paper elevation={3} style={{ margin: '0 10px 0', marginTop: '10px' }}>
+                                                                                            <img src={imagem.url} alt='imageVariation' height='100' width='80' />
+                                                                                        </Paper>
+                                                                                        <div style={{ padding: '0 10px 0', display: 'flex' }}>
+                                                                                            <div>
+                                                                                                <Tooltip title="Clique aqui para alterar a imagem!">
+                                                                                                    <IconButton style={{ left: '-15px' }}><AddPhotoAlternateIcon /></IconButton>
+                                                                                                </Tooltip>
+                                                                                            </div>
+                                                                                            <div>
+                                                                                                <Tooltip title="Clique aqui para remover a imagem!">
+                                                                                                    <IconButton style={{ left: '-35px' }}><DeleteForeverIcon /></IconButton>
+                                                                                                </Tooltip>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                )
+                                                                            })}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </Segment>
+                                                        </div>
+                                                        <div style={{ paddingTop: '20px' }}>
+                                                            <TextField style={{ paddingRight: '15px' }} label="Quantidade *" value={props.estoque_total} />
+                                                            {props.json.attributes.map(att => {
+                                                                if (att.id === 'GTIN') {
+                                                                    return (
+                                                                        <TextField style={{ width: '200px' }} label={att.name} value={att.value_name} helperText="Pode ser um EAN, UPC ou outro GTIN" />
+                                                                    )
                                                                 }
-                                                           key={props.id}
-                                                           header='Como eu identifico?'
-                                                           trigger={<img src={imgInfoComFreteGratis}></img>}
-                                                        />
-                                                    </div>        
+                                                            })}
+                                                            <Popup
+                                                                wide='very'
+                                                                content={
+                                                                    <>
+                                                                        <div style={{ padding: '15px 0 5px', color: '#666666' }}>
+                                                                            É um número que tem entre 8 e 14 dígitos e está perto do código de barras, na caixa do produto ou na etiqueta.
+                                                                    </div>
+                                                                    </>
+                                                                }
+                                                                key={props.id}
+                                                                header='Como eu identifico?'
+                                                                trigger={<img style={{ paddingTop: '20px' }} src={imgInfoComFreteGratis}></img>}
+                                                            />
+                                                        </div></>}
                                                 </Col>
                                             </Row>
                                         </ExpansionPanelDetails>
@@ -526,6 +573,9 @@ export default function EditarAnuncio(props) {
                                             {props.json.shipping.mode === 'not_specified' || props.json.shipping.mode === 'custom'
                                                 ? <div>
                                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                                        <div style={{ color: '#000000', fontSize: '18px' }}>
+                                                            <img src={imgOfereceMercadoEnvios}></img>Mercado Envios não habilitado para essa categoria.
+                                                        </div>
                                                         <FormControlLabel
                                                             control={<Checkbox checked={true} />}
                                                             label="Faço envio por conta própria!"
@@ -541,16 +591,16 @@ export default function EditarAnuncio(props) {
                                                             </RadioGroup>
                                                         </FormControl>
                                                         <div>
-                                                            <TextField style={{width: '400px', paddingRight: '15px'}} label="Exemplo: SEDEX, SP, RJ, SC, MS..."/>
+                                                            <TextField style={{ width: '400px', paddingRight: '15px' }} label="Exemplo: SEDEX, SP, RJ, SC, MS..." />
                                                             <TextField label="R$" />
-                                                            <IconButton><CloseIcon/></IconButton>
+                                                            <IconButton><CloseIcon /></IconButton>
                                                         </div>
                                                         <div>
-                                                            <TextField style={{width: '400px', paddingRight: '15px'}} label="Exemplo: Terminal de retirada, Expresso..."/>
+                                                            <TextField style={{ width: '400px', paddingRight: '15px' }} label="Exemplo: Terminal de retirada, Expresso..." />
                                                             <TextField label="R$" />
-                                                            <IconButton><CloseIcon/></IconButton>
+                                                            <IconButton><CloseIcon /></IconButton>
                                                         </div>
-                                                        <ButtonUI color="primary" style={{paddingTop: '20px'}} startIcon={<CloseIcon/>}>Adicionar outro</ButtonUI>
+                                                        <ButtonUI color="primary" style={{ paddingTop: '20px' }} startIcon={<CloseIcon />}>Adicionar outro</ButtonUI>
                                                     </div>
                                                 </div>
                                                 : <Row>
