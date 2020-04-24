@@ -436,9 +436,12 @@ export default function EditarAnuncio(props) {
                                                             <Segment raised color='grey' style={{ width: '750px' }}>
                                                                 <div style={{ display: 'flex' }}>
                                                                     <div style={{ padding: '10px 5px 0', paddingRight: '20px' }}>
-                                                                        <Paper style={{ height: '100px', display: 'flex', alignItems: 'center' }} elevation={2}>
+                                                                        <Paper style={{ height: '100px', display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center' }} elevation={2}>
                                                                             <ButtonUI color="primary" aria-label="upload picture" component="span" startIcon={<AddCircleIcon />}>
                                                                                 Adicionar
+                                                                            </ButtonUI>
+                                                                            <ButtonUI style={{ left: '-4px' }} color="primary" aria-label="upload picture" component="span" startIcon={<DeleteForeverIcon />}>
+                                                                                Remover
                                                                             </ButtonUI>
                                                                         </Paper>
                                                                     </div>
@@ -458,7 +461,11 @@ export default function EditarAnuncio(props) {
                                                                                             </div>
                                                                                             <div>
                                                                                                 <Tooltip title="Clique aqui para remover a imagem!">
-                                                                                                    <IconButton style={{ left: '-35px' }}><DeleteForeverIcon /></IconButton>
+                                                                                                    <Checkbox
+                                                                                                        defaultChecked={false}
+                                                                                                        color="primary"
+                                                                                                        style={{ left: '-30px', top: '3px' }}
+                                                                                                    />
                                                                                                 </Tooltip>
                                                                                             </div>
                                                                                         </div>

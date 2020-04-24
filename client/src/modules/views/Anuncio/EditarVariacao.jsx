@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Divider, Segment, Message, MessageHeader, MessageContent } from 'semantic-ui-react'
 import { Row, Col } from 'react-bootstrap'
 import FormInput from '../../components/FormInput/FormInput'
-
+import { LISTAR_TODOS_ANUNCIOS, IDS_REMOVIDOS_IMAGENS_VARIACAO_ANUNCIO, SOURCES, DOMAIN } from '../../constants/constants'
 import { makeStyles } from '@material-ui/core/styles';
+import axios from 'axios'
 import Dialog from '@material-ui/core/Dialog';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -22,12 +23,17 @@ import Tooltip from '@material-ui/core/Tooltip';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import sendNotification from '../../components/Notification/Notification'
 import _ from 'lodash'
+import { useSelector, useDispatch } from 'react-redux'
+import CallApiAnuncio from '../../../modules/actions/CallApi/CallApiAnuncio'
 
 export default function EditarVariacao(props) {
 
-
+    const state = useSelector(store => store.anuncio)
+    const dispatch = useDispatch()
     const MENSAGEM_USUARIO = "Ops. Você esqueceu de informar a URL, digite novamente e clique em CONFIRMAR!"
     const MENSAGEM_USUARIO_02 = "Não é possível adicionar mais imagens, o limite permitido pelo Mercado Livre é de 10 imagem por variação"
+
+
 
     const useStyles = makeStyles(theme => ({
 
@@ -49,8 +55,7 @@ export default function EditarVariacao(props) {
     })
     const [urlMain, setUrlMain] = React.useState('')
     const [isNovaImagem, setIsNovaImagem] = React.useState(false)
-    const [sources, setSources] = React.useState([])
-    const [idRemovidos, setIdRemovidos] = React.useState([])
+    //const [sources, setSources] = React.useState([])
 
     const handleOnClickNovaImagem = () => {
         setUrlMain("")
@@ -97,8 +102,10 @@ export default function EditarVariacao(props) {
             setTimeout(() => {
                 sendNotification('success', 'Imagem adicionada.', 1000)
             }, 2002);
-            sources.push({ source: localStorage.getItem("@sisiml/url_image") })
-            setSources(sources)
+            state.sources.push({ source: localStorage.getItem("@sisiml/url_image") })
+            console.log("Dentro da function adicionarImagem do loop urlImage, dentro da condicional props.urlImage.length < 10 - state.sources: " + JSON.stringify(state.sources))
+            dispatch({ type: SOURCES, data: state.sources })
+            //setSources(state.sources)
             return props.urlImage
         } else {
             sendNotification('error', MENSAGEM_USUARIO_02, 5000)
@@ -108,19 +115,32 @@ export default function EditarVariacao(props) {
 
     const atualizarImagemAPIMercadoLivre = () => {
         let pictures = []
-        getIDsImagensExistente(props.urlImage).map(image => (sources.push({ id: image.id })))
-
+        getIDsImagensExistente(props.urlImage).map(image => {
+            state.sources.push({ id: image.id })
+            dispatch({ type: SOURCES, data: state.sources })
+        })
+        console.log("Dentro da function atualizarImagemAPIMercadoLivre, abaixo da chamada da function getIDsImagensExistente - state.sources: " + JSON.stringify(state.sources))
         let imageTemp = []
         props.urlImage.map(image => {
-            idRemovidos.map(imageRID => {
-                if(imageRID.id === image.id){
+            state.idsRemovidos.map(imageRID => {
+                if (imageRID.id === image.id) {
                     imageTemp.push(image.url)
-                }
-                if(imageRID.id !== image.id){
-                    imageTemp.push(image.id)
                 }
             })
         })
+
+        state.idsRemovidos.map(imageRID => {
+            props.json.variations.map(variat => {
+                variat.picture_ids.map(pictureId => {
+                    if (props.vart.id === variat.id) {
+                        if (imageRID.id !== pictureId) {
+                            imageTemp.push(pictureId)
+                        }
+                    }
+                })
+            })
+        })
+
         let variations = []
         variations.push({
             id: props.vart.id,
@@ -130,7 +150,11 @@ export default function EditarVariacao(props) {
         variations.map(vart => {
             props.json.variations.map(value => {
                 if (vart.id !== value.id) {
-                    value.picture_ids.map(id => (sources.push({ id })))
+                    value.picture_ids.map(id => {
+                        state.sources.push({ id })
+                        dispatch({ type: SOURCES, data: state.sources })
+                    })
+                    console.log("Dentro da atualizarImagemAPIMercadoLivre do loop props.json.variations, dentro da condicional vart.id !== value.id - state.sources: " + JSON.stringify(state.sources))
                     variations.push({
                         id: value.id,
                         picture_ids: value.picture_ids
@@ -139,13 +163,20 @@ export default function EditarVariacao(props) {
             })
         })
 
-        setSources(sources)
-        pictures = sources
+        //setSources(state.sources)
+        pictures = state.sources
         console.log(variations)
         console.log(pictures)
-        console.log(idRemovidos)
+        console.log("state.idsRemovidos: " + JSON.stringify(state.idsRemovidos))
         props.updateImagemVariation(props.id, variations, pictures)
+        dispatch({ type: LISTAR_TODOS_ANUNCIOS, data: atualizarDadosStore() })
         props.closeModalEditVariacao(false)
+
+        //Atualizando os dados no store
+        axios.get(`${DOMAIN}/anuncio`).then(resp => {
+            this.props.listarTodosAnuncios(LISTAR_TODOS_ANUNCIOS, resp.data, false)
+        }).catch(err => { console.log(err) })
+        
     }
 
     const getIDsImagensExistente = (pictures) => {
@@ -161,7 +192,7 @@ export default function EditarVariacao(props) {
             })
 
             temp.map((value, indiceTemp) => {
-                idRemovidos.map((result) => {
+                state.idsRemovidos.map((result) => {
                     if (value.id === result.id) {
                         temp.splice(indiceTemp, 1)
                     }
@@ -179,20 +210,54 @@ export default function EditarVariacao(props) {
                 setTimeout(() => {
                     sendNotification('success', 'Imagem atualizada.', 1000)
                 }, 2002);
-                sources.push({ source: localStorage.getItem("@sisiml/url_image") })
-                idRemovidos.push({ id: image.id })
-                setIdRemovidos(idRemovidos)
-                setSources(sources)
+
+                state.sources.push({ source: localStorage.getItem("@sisiml/url_image") })
+                console.log("Dentro da function atualizarImagem do loop urlImage, dentro da condicional urlTemp.key === key - state.sources: " + JSON.stringify(state.sources))
+                dispatch({ type: SOURCES, data: state.sources })
+
+                if (state.idsRemovidos.length === 0) {
+                    state.idsRemovidos.push({ id: image.id })
+                    dispatch({ type: IDS_REMOVIDOS_IMAGENS_VARIACAO_ANUNCIO, data: state.idsRemovidos })
+                } else {
+                    state.idsRemovidos.map(ird => {
+                        if (ird.id !== image.id) {
+                            state.idsRemovidos.push({ id: image.id })
+                            dispatch({ type: IDS_REMOVIDOS_IMAGENS_VARIACAO_ANUNCIO, data: state.idsRemovidos })
+                        }
+                    })
+                }
+
+                //setIdRemovidos(state.idsRemovidos)
+                //setSources(state.sources)
+
                 temp.push({
                     url: localStorage.getItem("@sisiml/url_image"),
                     id: image.id
                 })
+
             } else {
                 temp.push({
                     url: image.url,
                     id: image.id
                 })
             }
+        })
+        return temp
+    }
+
+    const atualizarDadosStore = () => {
+        let temp = []
+        state.result.map(result => {
+            result.json.pictures.map(picture => {
+                props.urlImage.map(image => {
+                    if (picture.id === image.id) {
+                        picture.url = image.url
+                        temp.push(result)
+                    } else {
+                        temp.push(result)
+                    }
+                })
+            })
         })
         return temp
     }
@@ -300,7 +365,7 @@ export default function EditarVariacao(props) {
                                                     </div>
                                                     <div>
                                                         <Tooltip title="Clique aqui para remover a imagem!">
-                                                            <IconButton onClick={() => { handleOnClickButtonImage(imagem.url, key) }} style={{ left: '-35px' }}><DeleteForeverIcon /></IconButton>
+                                                            <IconButton style={{ left: '-35px' }}><DeleteForeverIcon /></IconButton>
                                                         </Tooltip>
                                                     </div>
                                                 </div>

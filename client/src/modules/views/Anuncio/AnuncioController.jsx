@@ -444,11 +444,22 @@ export default function AnuncioController() {
         })
     }
 
+    let duplicarAnuncioPorID = async (itemId, qtdeX) =>{
+        for (let index = 0; index < qtdeX; index++) {
+            await axios.get(`${DOMAIN}/anuncio/copiar_anuncio_por_id/${itemId}`).then(response => {
+                sendNotification('success', (index+1)+' anúncio duplicado!', 5000)
+            }).catch(error => {
+                sendNotification('error', 'Ocorreu um erro ao atualizar as imagens da variação do anuncio' + error, 5000)
+            })
+        }
+    }
+
     return (
         <>
             <AnuncioView
                 state={state}
                 {...state}
+                duplicarAnuncioPorID={duplicarAnuncioPorID}
                 updateImagemVariation={updateImagemVariation}
                 getImageSite={getImageSite}
                 loadingButtonVideoYoutube={loadingButtonVideoYoutube}

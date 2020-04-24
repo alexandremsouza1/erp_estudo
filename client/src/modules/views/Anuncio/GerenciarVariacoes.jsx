@@ -8,9 +8,17 @@ import CloseIcon from '@material-ui/icons/Close';
 import ButtonUI from '@material-ui/core/Button';
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
 import { DialogActions } from '@material-ui/core';
+import { connect } from 'react-redux';
+import axios from 'axios'
+import {
+  IDS_REMOVIDOS_IMAGENS_VARIACAO_ANUNCIO,
+  SOURCES,
+  LISTAR_TODOS_ANUNCIOS,
+  DOMAIN
+} from '../../constants/constants'
 
 
-export default class GerenciarVariacoes extends React.Component {
+class GerenciarVariacoes extends React.Component {
 
   constructor(props) {
     super(props)
@@ -20,7 +28,7 @@ export default class GerenciarVariacoes extends React.Component {
       attributeCombinations: {},
       imageVariation: [],
       imagesAnuncio: [],
-      vart : '',
+      vart: '',
       json: {}
     }
   }
@@ -58,10 +66,12 @@ export default class GerenciarVariacoes extends React.Component {
   }
 
   setPropsEditAnuncio = (variation, attr, json) => {
+    this.props.limparArrayIdsRemovidos([])
+    this.props.limparArraySources([])
     this.setProps(attr)
     this.getImageVariation(json, variation)
     this.setState({
-      vart : variation,
+      vart: variation,
       json: json
     })
   }
@@ -104,17 +114,25 @@ export default class GerenciarVariacoes extends React.Component {
             style={{ 'backgroundColor': '#467EED', 'color': 'white' }} />
 
           <Modal.Content>
-            <p>
-              {this.props.titulo}{' | '}
-              <font size="3">
-                <b>
-                  <a style={{ "color": "blue" }}>
-                    R$ {this.props.preco.toLocaleString("pt-BR")}{' '}
-                  </a>
-                </b>
-              </font>
-              <font size="3"> x {this.props.estoque_total} disponíveis</font>
-            </p>
+            <div style={{display: 'flex', justifyContent: 'space-between'}}>
+              <div>
+                <p>
+                  {this.props.titulo}{' | '}
+                  <font size="3">
+                    <b>
+                      <a style={{ "color": "blue" }}>
+                        R$ {this.props.preco.toLocaleString("pt-BR")}{' '}
+                      </a>
+                    </b>
+                  </font>
+                  <font size="3"> x {this.props.estoque_total} disponíveis</font>
+                </p>
+              </div>
+              <div>
+                <ButtonUI color="primary" startIcon={<CloseIcon />}>Adicionar variações</ButtonUI>
+              </div>
+            </div>
+
 
             <Table basic>
               <Table.Header>
@@ -132,35 +150,35 @@ export default class GerenciarVariacoes extends React.Component {
                   return (
                     <Table.Row key={key}>
                       {variation.attribute_combinations.map(attr => {
-                          return (
-                            <>
-                              <Table.Cell>{attr.value_name}</Table.Cell>
-                              <Table.Cell>{variation.available_quantity}</Table.Cell>
-                              <Table.Cell>{variation.sold_quantity}</Table.Cell>
-                              <Table.Cell>
-                                <Tooltip title="Remover variação">
-                                  <Button icon color='red' style={{ 'fontSize': '12px' }}> <Icon name='remove' /> </Button>
-                                </Tooltip>
-                                <Tooltip title="Editar variação">
-                                  <Button icon color='blue' style={{ 'fontSize': '12px' }} onClick={() => this.setPropsEditAnuncio(variation, attr, this.props.json)}> <Icon name='edit' /> </Button>
-                                </Tooltip>
-                              </Table.Cell>
-                              <EditarVariacao
-                                getImageSite={this.props.getImageSite}
-                                setImageVariation={this.setImageVariation}
-                                updateImagemVariation={this.props.updateImagemVariation}
-                                urlImage={this.state.imageVariation}
-                                imagesAnuncio={this.state.imagesAnuncio}
-                                attributeCombinations={this.state.attributeCombinations}
-                                isShowEditarAnuncio={this.state.isShowEditarAnuncio}
-                                variation={variation}
-                                vart={this.state.vart}
-                                {...this.props}
-                                {...this.state}
-                                closeModalEditVariacao={this.closeModalEditVariacao}
-                              />
-                            </>
-                          )
+                        return (
+                          <>
+                            <Table.Cell>{attr.value_name}</Table.Cell>
+                            <Table.Cell>{variation.available_quantity}</Table.Cell>
+                            <Table.Cell>{variation.sold_quantity}</Table.Cell>
+                            <Table.Cell>
+                              <Tooltip title="Remover variação">
+                                <Button icon color='red' style={{ 'fontSize': '12px' }}> <Icon name='remove' /> </Button>
+                              </Tooltip>
+                              <Tooltip title="Editar variação">
+                                <Button icon color='blue' style={{ 'fontSize': '12px' }} onClick={() => this.setPropsEditAnuncio(variation, attr, this.props.json)}> <Icon name='edit' /> </Button>
+                              </Tooltip>
+                            </Table.Cell>
+                            <EditarVariacao
+                              getImageSite={this.props.getImageSite}
+                              setImageVariation={this.setImageVariation}
+                              updateImagemVariation={this.props.updateImagemVariation}
+                              urlImage={this.state.imageVariation}
+                              imagesAnuncio={this.state.imagesAnuncio}
+                              attributeCombinations={this.state.attributeCombinations}
+                              isShowEditarAnuncio={this.state.isShowEditarAnuncio}
+                              variation={variation}
+                              vart={this.state.vart}
+                              {...this.props}
+                              {...this.state}
+                              closeModalEditVariacao={this.closeModalEditVariacao}
+                            />
+                          </>
+                        )
                       })}
 
                     </Table.Row>
@@ -179,3 +197,24 @@ export default class GerenciarVariacoes extends React.Component {
     )
   }
 }
+
+const mapStateToProps = (store) => {
+  return {
+    idRemovidos: store.anuncio.idRemovidos,
+    sources: store.anuncio.sources
+  }
+}
+
+const mapDispatchToProps = (dispatch) => ({
+  limparArrayIdsRemovidos: (idRemovidos) => {
+    dispatch({ type: IDS_REMOVIDOS_IMAGENS_VARIACAO_ANUNCIO, data: idRemovidos })
+  },
+  limparArraySources: (sources) => {
+    dispatch({ type: SOURCES, data: sources })
+  },
+  listarTodosAnuncios: (type, data, isLoading) => {
+    dispatch({ type, data, isLoading })
+  }
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(GerenciarVariacoes)

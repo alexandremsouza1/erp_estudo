@@ -23,6 +23,7 @@ import TuneIcon from '@material-ui/icons/Tune';
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import Badge from '@material-ui/core/Badge';
+import DuplicaAnuncio from './DuplicaAnuncio'
 
 
 export default function AnuncioView(props) {
@@ -35,6 +36,7 @@ export default function AnuncioView(props) {
   const [isSelectedFrete, setIsSelectedFrete] = useState(props.freteGratis)
   const [isShowVariationManager, setIsShowVariationManager] = useState(false)
   const [isShowPerguntas, setIsShowPerguntas] = useState(false)
+  const [isShowDuplicarAnuncio, setIsShowDuplicarAnuncio] = useState(false)
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClickNovoAnuncio = (event) => {
@@ -263,6 +265,15 @@ export default function AnuncioView(props) {
                                               </Dropdown.Item>
                                           </a>
                                     </Dropdown.Item>
+                                    <Dropdown.Item>
+                                          <a onClick={() => {
+                                            setIsShowDuplicarAnuncio(true)
+                                            setAnuncio(prop)}}>
+                                              <Dropdown.Item>
+                                                  Duplicar anúncio
+                                              </Dropdown.Item>
+                                          </a>
+                                    </Dropdown.Item>
                                     <Dropdown.Item>Msg automática pós venda</Dropdown.Item>
                                     <Dropdown.Item>Finalizar</Dropdown.Item>
                                     <Dropdown.Item>Replicar anúncio</Dropdown.Item>
@@ -324,6 +335,14 @@ export default function AnuncioView(props) {
                         setLoadingButton={props.setLoadingButton}
                         disabledButton={props.disabledButton}
                         setDisabledButton={props.setDisabledButton}/>
+        }
+
+        {isShowDuplicarAnuncio &&
+          <DuplicaAnuncio
+           {...anuncio}
+           duplicarAnuncioPorID={props.duplicarAnuncioPorID}
+           setIsShowDuplicarAnuncio={setIsShowDuplicarAnuncio}
+           isShowDuplicarAnuncio={isShowDuplicarAnuncio}/>
         }
               
         {showModal &&

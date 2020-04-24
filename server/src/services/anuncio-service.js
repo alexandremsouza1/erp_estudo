@@ -77,7 +77,7 @@ exports.listarTodosAnuncio = async (req, res) => {
                                         }
                                         return anuncio;
                                     }).catch(err => res.send(err))
-                                } else if (resp03.data.shipping.mode === "not_specified"){
+                                } else if (resp03.data.shipping.mode === "not_specified") {
                                     var anuncio = {
                                         id: resp03.data.id,
                                         titulo: resp03.data.title,
@@ -505,4 +505,77 @@ exports.updateImagemVariation = async (req, res) => {
         console.log(error)
         res.send(error)
     })
+}
+
+exports.copiarAnuncioPorID = async (req, res) => {
+    await usuarioService.buscarUsuarioPorID().then(async user => {
+        await axios.get(`https://api.mercadolibre.com/items/${req.params.itemId}?access_token=${user.accessToken}`).then(async anuncio => {
+                await axios.get(`https://api.mercadolibre.com/items/${req.params.itemId}/description?access_token=${user.accessToken}`).then(async description => {
+                    await axios.post(`https://api.mercadolibre.com/items?access_token=${user.accessToken}`, JSON.stringify(
+                        {
+                            "site_id": "MLB",
+                            "title": anuncio.data.title,
+                            "category_id": anuncio.data.category_id,
+                            "official_store_id": anuncio.data.official_store_id,
+                            "price": anuncio.data.price,
+                            "currency_id": anuncio.data.currency_id,
+                            "available_quantity": anuncio.data.available_quantity,
+                            "sale_terms": anuncio.data.sale_terms,
+                            "buying_mode": anuncio.data.buying_mode,
+                            "listing_type_id": anuncio.data.listing_type_id,
+                            "condition": anuncio.data.condition,
+                            "pictures": anuncio.data.pictures,
+                            "video_id": anuncio.data.video_id,
+                            "description":
+                            {
+                                "plain_text": description.data.plain_text
+                            },
+                            "accepts_mercadopago": anuncio.data.accepts_mercadopago,
+                            "non_mercado_pago_payment_methods": anuncio.data.non_mercado_pago_payment_methods,
+                            "shipping": anuncio.data.shipping,
+                            "seller_address": anuncio.data.seller_address,
+                            "location": {},
+                            "coverage_areas": [],
+                            "attributes": anuncio.data.attributes,
+                            "variations": getVariations(anuncio.data.variations),
+                            "status": anuncio.data.status,
+                            "tags": anuncio.data.tags,
+                            "warranty": anuncio.data.warranty,
+                            "domain_id": anuncio.data.domain_id,
+                            "seller_custom_field": anuncio.data.seller_custom_field,
+                            "automatic_relist": anuncio.data.automatic_relist,
+                            "catalog_listing": anuncio.data.catalog_listing
+                        })
+                    ).then(response => {
+                        res.send("Anuncio copiado.")
+                    }).catch(error => {
+                        console.log(error)
+                        res.send(error)
+                    })
+                }).catch(error => {
+                    console.log(error)
+                    res.send(error)
+                })
+        }).catch(error => {
+            console.log(error)
+            res.send(error)
+        })
+    })
+}
+
+const getVariations = (variations) => {
+    if (variations.length !== 0) {
+        return variations.map(variat => {
+            return {
+                "id": variat.id,
+                "price": variat.price,
+                "attribute_combinations": variat.attribute_combinations,
+                "available_quantity": variat.available_quantity,
+                "sold_quantity": variat.sold_quantity,
+                "sale_terms": variat.sale_terms,
+                "picture_ids": variat.picture_ids,
+                "seller_custom_field": variat.seller_custom_field
+            }
+        })
+    }
 }

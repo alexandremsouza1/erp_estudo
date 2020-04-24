@@ -1,6 +1,7 @@
 import {
     LISTAR_TODOS_ANUNCIOS,
-    ATUALIZAR_ANUNCIO
+    IDS_REMOVIDOS_IMAGENS_VARIACAO_ANUNCIO,
+    SOURCES
 } from '../../constants/constants'
 
 /**
@@ -12,13 +13,24 @@ import {
  * @version 0.0.1
  */
 
+ const INIT_STATE = {
+    result: [{}],
+    idsRemovidos: [{}],
+    sources: [{}],
+    isLoading: true
+ }
 
-function anuncioReducer(state = {result: [{}], isLoading: true}, action){
+
+function anuncioReducer(state = INIT_STATE, action){
     switch(action.type){
         case LISTAR_TODOS_ANUNCIOS:
-            return {...state, result: action.data, isLoading: action.isLoading}   
+            return {...state, result: action.data, isLoading: action.isLoading}
+        case IDS_REMOVIDOS_IMAGENS_VARIACAO_ANUNCIO: 
+            return {...state, idsRemovidos: action.data}
+        case SOURCES:
+            return {...state, sources: action.data}           
          default:
-             return state;   
+             return {...state};   
     }
 }
 
