@@ -800,4 +800,12 @@ const encontrarString = () => {
     console.log(dado)
 }
 
-obterImagemSite()
+const obterTotalAnuncios = async () => {
+    usuarioService.buscarUsuarioPorID().then(async user => {
+        await axios.get(`https://api.mercadolibre.com/users/${user.id}/items/search?access_token=${user.accessToken}&status=paused`).then(response => {
+            console.log(response.data.paging.total)
+        })
+    }).catch(error => console.log(error))
+}
+
+obterTotalAnuncios()

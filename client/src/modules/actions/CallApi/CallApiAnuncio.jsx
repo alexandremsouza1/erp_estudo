@@ -12,7 +12,7 @@ export default function CallApiAnuncio(props) {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        axios.get(`${DOMAIN}/anuncio`).then(resp => {
+        axios.get(`${DOMAIN}/anuncio/0`).then(resp => {
             dispatch({ type: LISTAR_TODOS_ANUNCIOS, data: resp.data, isLoading: false })
         }).catch(err => { console.log(err) })
     }, [])

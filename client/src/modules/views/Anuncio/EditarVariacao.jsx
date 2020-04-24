@@ -173,7 +173,7 @@ export default function EditarVariacao(props) {
         props.closeModalEditVariacao(false)
 
         //Atualizando os dados no store
-        axios.get(`${DOMAIN}/anuncio`).then(resp => {
+        axios.get(`${DOMAIN}/anuncio/0`).then(resp => {
             this.props.listarTodosAnuncios(LISTAR_TODOS_ANUNCIOS, resp.data, false)
         }).catch(err => { console.log(err) })
         

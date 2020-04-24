@@ -17,32 +17,32 @@ exports.obterVisualizacao = (req, res) => {
 }
 
 exports.totalStatusAnuncios = async (req, res) => {
-    usuarioService.buscarUsuarioPorID().then(async user => {
-        await axios.get(`${constants.API_MERCADO_LIVRE}/users/${user.id}/items/search?search_type=scan&access_token=${user.accessToken}`).then(anuncioID => {
-            let anunciosID = anuncioID.data.results.map(async anuncio => {
-                return await axios.get(`${constants.API_MERCADO_LIVRE}/items/${anuncio}?access_token=${user.accessToken}`).then(detalhe => {
-                    let statusAnuncio = {
-                        status: detalhe.data.status
-                    }
-                    return statusAnuncio
-                }).catch(error => console.error(error))
-            })
-            Promise.all(anunciosID).then(status => {
+    await usuarioService.buscarUsuarioPorID().then(async user => {
+        await axios.get(`https://api.mercadolibre.com/users/${user.id}/items/search?access_token=${user.accessToken}&status=active`).then(async totalAtivos => {
+            await axios.get(`https://api.mercadolibre.com/users/${user.id}/items/search?access_token=${user.accessToken}&status=paused`).then(async totalPausados => {
                 let data = {
-                    total_ativos: status.filter(s => s.status === 'active').length,
-                    total_pausados: status.filter(s => s.status !== 'active').length
+                    total_ativos: totalAtivos.data.paging.total,
+                    total_pausados: totalPausados.data.paging.total
                 }
                 res.send(data)
+            }).catch(error => {
+                console.log(error)
+                res.send(error)
             })
-        }).catch(error => console.error(error))
-    }).catch(error => console.error(error))
-
+        }).catch(error => {
+            console.log(error)
+            res.send(error)
+        })
+    }).catch(error => {
+        console.log(error)
+        res.send(error)
+    })
 }
 
 /** Function responsible for get for all product */
 exports.listarTodosAnuncio = async (req, res) => {
     usuarioService.buscarUsuarioPorID().then(resp01 => {
-        axios.get(`${constants.API_MERCADO_LIVRE}/users/${resp01.id}/items/search?search_type=scan&access_token=${resp01.accessToken}`).then(resp07 => {
+        axios.get(`${constants.API_MERCADO_LIVRE}/users/${resp01.id}/items/search?access_token=${resp01.accessToken}&limit=100&offset=${req.params.offset}`).then(resp07 => {
             var detalhesAnuncio = resp07.data.results.map(resp02 => {
                 return axios.get(`${constants.API_MERCADO_LIVRE}/items/${resp02}?access_token=${resp01.accessToken}`).then(resp03 => {
                     return axios.get(`${constants.API_MERCADO_LIVRE}/visits/items?ids=${resp02}`).then(resp04 => {
@@ -510,52 +510,52 @@ exports.updateImagemVariation = async (req, res) => {
 exports.copiarAnuncioPorID = async (req, res) => {
     await usuarioService.buscarUsuarioPorID().then(async user => {
         await axios.get(`https://api.mercadolibre.com/items/${req.params.itemId}?access_token=${user.accessToken}`).then(async anuncio => {
-                await axios.get(`https://api.mercadolibre.com/items/${req.params.itemId}/description?access_token=${user.accessToken}`).then(async description => {
-                    await axios.post(`https://api.mercadolibre.com/items?access_token=${user.accessToken}`, JSON.stringify(
+            await axios.get(`https://api.mercadolibre.com/items/${req.params.itemId}/description?access_token=${user.accessToken}`).then(async description => {
+                await axios.post(`https://api.mercadolibre.com/items?access_token=${user.accessToken}`, JSON.stringify(
+                    {
+                        "site_id": "MLB",
+                        "title": anuncio.data.title,
+                        "category_id": anuncio.data.category_id,
+                        "official_store_id": anuncio.data.official_store_id,
+                        "price": anuncio.data.price,
+                        "currency_id": anuncio.data.currency_id,
+                        "available_quantity": anuncio.data.available_quantity,
+                        "sale_terms": anuncio.data.sale_terms,
+                        "buying_mode": anuncio.data.buying_mode,
+                        "listing_type_id": anuncio.data.listing_type_id,
+                        "condition": anuncio.data.condition,
+                        "pictures": anuncio.data.pictures,
+                        "video_id": anuncio.data.video_id,
+                        "description":
                         {
-                            "site_id": "MLB",
-                            "title": anuncio.data.title,
-                            "category_id": anuncio.data.category_id,
-                            "official_store_id": anuncio.data.official_store_id,
-                            "price": anuncio.data.price,
-                            "currency_id": anuncio.data.currency_id,
-                            "available_quantity": anuncio.data.available_quantity,
-                            "sale_terms": anuncio.data.sale_terms,
-                            "buying_mode": anuncio.data.buying_mode,
-                            "listing_type_id": anuncio.data.listing_type_id,
-                            "condition": anuncio.data.condition,
-                            "pictures": anuncio.data.pictures,
-                            "video_id": anuncio.data.video_id,
-                            "description":
-                            {
-                                "plain_text": description.data.plain_text
-                            },
-                            "accepts_mercadopago": anuncio.data.accepts_mercadopago,
-                            "non_mercado_pago_payment_methods": anuncio.data.non_mercado_pago_payment_methods,
-                            "shipping": anuncio.data.shipping,
-                            "seller_address": anuncio.data.seller_address,
-                            "location": {},
-                            "coverage_areas": [],
-                            "attributes": anuncio.data.attributes,
-                            "variations": getVariations(anuncio.data.variations),
-                            "status": anuncio.data.status,
-                            "tags": anuncio.data.tags,
-                            "warranty": anuncio.data.warranty,
-                            "domain_id": anuncio.data.domain_id,
-                            "seller_custom_field": anuncio.data.seller_custom_field,
-                            "automatic_relist": anuncio.data.automatic_relist,
-                            "catalog_listing": anuncio.data.catalog_listing
-                        })
-                    ).then(response => {
-                        res.send("Anuncio copiado.")
-                    }).catch(error => {
-                        console.log(error)
-                        res.send(error)
+                            "plain_text": description.data.plain_text
+                        },
+                        "accepts_mercadopago": anuncio.data.accepts_mercadopago,
+                        "non_mercado_pago_payment_methods": anuncio.data.non_mercado_pago_payment_methods,
+                        "shipping": anuncio.data.shipping,
+                        "seller_address": anuncio.data.seller_address,
+                        "location": {},
+                        "coverage_areas": [],
+                        "attributes": anuncio.data.attributes,
+                        "variations": getVariations(anuncio.data.variations),
+                        "status": anuncio.data.status,
+                        "tags": anuncio.data.tags,
+                        "warranty": anuncio.data.warranty,
+                        "domain_id": anuncio.data.domain_id,
+                        "seller_custom_field": anuncio.data.seller_custom_field,
+                        "automatic_relist": anuncio.data.automatic_relist,
+                        "catalog_listing": anuncio.data.catalog_listing
                     })
+                ).then(response => {
+                    res.send("Anuncio copiado.")
                 }).catch(error => {
                     console.log(error)
                     res.send(error)
                 })
+            }).catch(error => {
+                console.log(error)
+                res.send(error)
+            })
         }).catch(error => {
             console.log(error)
             res.send(error)
@@ -579,3 +579,5 @@ const getVariations = (variations) => {
         })
     }
 }
+
+

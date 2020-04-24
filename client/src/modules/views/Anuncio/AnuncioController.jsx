@@ -19,6 +19,7 @@ export default function AnuncioController() {
     const [categoria, setCategoria] = useState('')
     const [atributo, setAtributo] = useState([])
     const [validationAttribute, setValidationAttribute] = useState(false)
+    const [openBackdrop, setOpenBackdrop] = React.useState(false)
 
     const [loadingButtonTitulo, setLoadingButtonTitulo] = useState(false)
     const [loadingButtonFormaEntrega, setLoadingButtonFormaEntrega] = useState(false)
@@ -31,6 +32,7 @@ export default function AnuncioController() {
     const [loadingCategoria, setLoadingCategoria] = useState(true)
     const [loadingButtonAtributos, setLoadingButtonAtributos] = useState(false)
     const [loadingButtonVideoYoutube, setLoadingButtonVideoYoutube] = useState(false)
+    
 
     const dispatch = useDispatch()
 
@@ -452,13 +454,28 @@ export default function AnuncioController() {
                 sendNotification('error', 'Ocorreu um erro ao atualizar as imagens da variação do anuncio' + error, 5000)
             })
         }
+        swal("Concluído!", `${qtdeX} anúncios duplicados com sucesso!`, "success");
     }
+
+    let getAnuncioByOffset = async (offset) => {
+        await axios.get(`${DOMAIN}/anuncio/${offset}`).then(response => {
+            dispatch({ type: LISTAR_TODOS_ANUNCIOS, data: response.data })
+            setOpenBackdrop(false)
+        }).catch(error => {
+            sendNotification('error', 'Ocorreu um erro ao realizar a paginação do anuncio' + error, 5000)
+        })
+    }
+
+
 
     return (
         <>
             <AnuncioView
                 state={state}
                 {...state}
+                openBackdrop={openBackdrop}
+                setOpenBackdrop={setOpenBackdrop}
+                getAnuncioByOffset={getAnuncioByOffset}
                 duplicarAnuncioPorID={duplicarAnuncioPorID}
                 updateImagemVariation={updateImagemVariation}
                 getImageSite={getImageSite}

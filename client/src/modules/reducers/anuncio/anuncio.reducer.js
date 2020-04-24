@@ -1,7 +1,8 @@
 import {
     LISTAR_TODOS_ANUNCIOS,
     IDS_REMOVIDOS_IMAGENS_VARIACAO_ANUNCIO,
-    SOURCES
+    SOURCES,
+    PAGE_OFFSET
 } from '../../constants/constants'
 
 /**
@@ -17,7 +18,8 @@ import {
     result: [{}],
     idsRemovidos: [{}],
     sources: [{}],
-    isLoading: true
+    isLoading: true,
+    page: 0
  }
 
 
@@ -28,7 +30,9 @@ function anuncioReducer(state = INIT_STATE, action){
         case IDS_REMOVIDOS_IMAGENS_VARIACAO_ANUNCIO: 
             return {...state, idsRemovidos: action.data}
         case SOURCES:
-            return {...state, sources: action.data}           
+            return {...state, sources: action.data}
+        case PAGE_OFFSET:
+            return {...state, page: action.data}               
          default:
              return {...state};   
     }

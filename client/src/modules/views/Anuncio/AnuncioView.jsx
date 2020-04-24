@@ -1,9 +1,7 @@
 import React, { useState } from "react";
-import { Grid, Row, Col, Navbar, Form, FormControl} from "react-bootstrap";
-import Card from "modules/components/Card/Card.jsx";
-import ButtonB from "modules/components/CustomButton/CustomButton.jsx";
+import { Grid, Row, Col, Navbar, Form} from "react-bootstrap";
+import {useDispatch, useSelector} from 'react-redux'
 import LoadingCarregandoSolicitacao from "modules/components/Loading/LoadingCarregandoSolicitacao"
-import iconSearch from '../../../assets/img/Zoom-icon24px.png'
 import '../../../assets/css/Global/style.css';
 import EditarAnuncio from './EditarAnuncio'
 import { Button, Dropdown, Icon} from 'semantic-ui-react'
@@ -24,10 +22,17 @@ import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import Badge from '@material-ui/core/Badge';
 import DuplicaAnuncio from './DuplicaAnuncio'
+import Pagination from '@material-ui/lab/Pagination';
+import {Dimmer, Segment} from 'semantic-ui-react'
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { PAGE_OFFSET } from '../../constants/constants'
 
 
 export default function AnuncioView(props) {
   document.title = "Anúncios"
+
+  const state = useSelector(store => store.anuncio)
+  const dispatch = useDispatch()
 
   const [showModal, setShowModal] = useState(false)
   const [anuncio, setAnuncio] = useState({})
@@ -38,6 +43,8 @@ export default function AnuncioView(props) {
   const [isShowPerguntas, setIsShowPerguntas] = useState(false)
   const [isShowDuplicarAnuncio, setIsShowDuplicarAnuncio] = useState(false)
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [page, setPage] = React.useState(0)
+  
 
   const handleClickNovoAnuncio = (event) => {
     setAnchorEl(event.currentTarget);
@@ -78,9 +85,16 @@ export default function AnuncioView(props) {
                             </FormControl>
    */
 
+   const onChangeHandlePage = (event, page) => {
+        props.setOpenBackdrop(true)
+        //setPage(page)
+        dispatch({type: 'PAGE_OFFSET', data: page})
+        props.getAnuncioByOffset(page === 1 ? 0 : (page * 100) - 100)
+   }
+
   if (!props.isLoading) {
     return (
-      <div className="content">
+      <div>
         <Grid fluid>
           <Row>
             <Col md={12}>
@@ -125,7 +139,6 @@ export default function AnuncioView(props) {
                             </span>
                           </div>
                           <div>
-                            <span style={{color: '#999999', fontSize: '14px', paddingRight: '5px'}}>{props.result.length} anúncios</span>
                             <span style={{paddingLeft: '5px'}}>
                                 <ButtonUI color="primary" size="small" variant="contained" onClick={handleClickNovoAnuncio}>Novo anúncio</ButtonUI>
                                 <Menu
@@ -143,10 +156,17 @@ export default function AnuncioView(props) {
                       </Form>
                     </Navbar>
 
+                    {/*PAGINAÇÃO*/}                
+                    <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', paddingBottom: '10px'}}>
+                        <Pagination page={state.page} onChange={onChangeHandlePage} count={56} color="primary" showFirstButton showLastButton />
+                    </div>
+
                     {props.result.map((prop, key) => {
                       if (prop.status === isActive) {
                         return (
                           <div className="panel panel-primary" key={key}>
+                            <Dimmer.Dimmable dimmed={props.openBackdrop}>
+
                             <div className="panel-heading" style={{backgroundColor: '#4682B4'}}>
                               <h3 className="panel-title">
                                  #{prop.id} - {prop.titulo}
@@ -295,14 +315,23 @@ export default function AnuncioView(props) {
 
                               </div>
                             </div>
+                            <Dimmer active={props.openBackdrop} onClickOutside={() => props.setOpenBackdrop(false)}>
+                                <CircularProgress color="inherit" />
+                              </Dimmer>
+
+                            </Dimmer.Dimmable>
                           </div>
                         )
                       }
                     }
                     )}
+                    
                   </>
-                
-              
+                 {/*PAGINAÇÃO*/}                
+                 <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', paddingBottom: '10px'}}>
+                        <Pagination page={state.page} onChange={onChangeHandlePage} count={56} color="primary" showFirstButton showLastButton />
+                 </div>
+                  
             </Col>
           </Row>
         </Grid>
