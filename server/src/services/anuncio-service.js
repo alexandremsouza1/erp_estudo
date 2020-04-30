@@ -42,7 +42,7 @@ exports.totalStatusAnuncios = async (req, res) => {
 /** Function responsible for get for all product */
 exports.listarTodosAnuncio = async (req, res) => {
     usuarioService.buscarUsuarioPorID().then(resp01 => {
-        axios.get(`${constants.API_MERCADO_LIVRE}/users/${resp01.id}/items/search?access_token=${resp01.accessToken}&limit=100&offset=${req.params.offset}`).then(resp07 => {
+        axios.get(`${constants.API_MERCADO_LIVRE}/users/${resp01.id}/items/search?access_token=${resp01.accessToken}&limit=100&offset=${req.params.offset}&status=${req.params.status}`).then(resp07 => {
             var detalhesAnuncio = resp07.data.results.map(resp02 => {
                 return axios.get(`${constants.API_MERCADO_LIVRE}/items/${resp02}?access_token=${resp01.accessToken}`).then(resp03 => {
                     return axios.get(`${constants.API_MERCADO_LIVRE}/visits/items?ids=${resp02}`).then(resp04 => {

@@ -17,7 +17,9 @@ const INITIAL_STATE = {
     nomeMes: '',
     saldoALiberar: Number(),
     saldoBloqueado: Number(),
-    totalVendasPendentes: Number()
+    totalVendasPendentes: Number(),
+    totalAtivos: Number(),
+    totalPausados: Number()
 }
 
 export default function dashboardReducer(state = INITIAL_STATE, action) {

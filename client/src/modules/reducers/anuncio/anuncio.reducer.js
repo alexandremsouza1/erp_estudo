@@ -19,7 +19,7 @@ import {
     idsRemovidos: [{}],
     sources: [{}],
     isLoading: true,
-    page: 0
+    page: 1
  }
 
 

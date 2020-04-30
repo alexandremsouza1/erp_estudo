@@ -17,61 +17,15 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 //import Collapse from '@material-ui/core/Collapse';
 //import ChatIcon from '@material-ui/icons/Chat';
 //import ListSubheader from '@material-ui/core/ListSubheader';
+import TouchRipple from "@material-ui/core/ButtonBase";
+import { Icon } from "@material-ui/core";
 
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 
-
 export default function Sidebar(props) {
 
-
   const drawerWidth = 250;
-
-  /**
-   * <div
-          id="sidebar"
-          className="sidebar"
-        >
-  
-          <div className="logo">
-  
-            <a href="/" className="simple-text logo-mini">
-              <div className="logo-img">
-                <img src={logo} alt="logo_image" />
-              </div>
-            </a>
-  
-            <a href="/" className="simple-text logo-normal">
-              #Sistema#
-            </a>
-  
-          </div>
-  
-          <div className="sidebar-wrapper">
-            <ul className="nav">
-  
-              {this.props.routes.map((prop, key) => {
-                if (!prop.redirect) {
-                  return (
-                    <li className={this.activeRoute(prop.layout + prop.path)} key={key}>
-                      <NavLink
-                        to={prop.layout + prop.path}
-                        className="nav-link"
-                        activeClassName="active">
-  
-                        <i className={prop.icon} style={{'fontSize': '15px'}}/>
-                        <p>{prop.name}</p>
-                      </NavLink>
-                    </li>
-                  );
-                }
-                return null;
-              })}
-  
-            </ul>
-          </div>
-        </div>
-   */
 
   const useStyles = makeStyles(theme => ({
     root: {
@@ -104,7 +58,7 @@ export default function Sidebar(props) {
     drawer: {
       width: drawerWidth,
       flexShrink: 0,
-      whiteSpace: 'nowrap',
+      whiteSpace: 'nowrap'
     },
     toolbar: {
       display: 'flex',
@@ -163,81 +117,54 @@ export default function Sidebar(props) {
   }
 
   return (
-    <>
- 
-      <Drawer
-        variant="permanent"
-        className={clsx(classes.drawer, {
-          [classes.drawerOpen]: sideBarState.isSidebar,
-          [classes.drawerClose]: !sideBarState.isSidebar,
-        })}
-        classes={{
-          paper: clsx({
+        <Drawer
+          variant="permanent"
+          className={clsx(classes.drawer, {
             [classes.drawerOpen]: sideBarState.isSidebar,
             [classes.drawerClose]: !sideBarState.isSidebar,
-          }),
-        }}
-      >
-        <div className={classes.toolbar}>
-          <IconButton onClick={handleClickClose}>
-            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-          </IconButton>
-        </div>
+          })}
+          classes={{
+            paper: clsx({
+              [classes.drawerOpen]: sideBarState.isSidebar,
+              [classes.drawerClose]: !sideBarState.isSidebar,
+            }),
+          }}
+        >
+          <div className={classes.toolbar}>
+            <IconButton onClick={handleClickClose}>
+              {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+            </IconButton>
+          </div>
 
-        <Divider />
+          <Divider />
 
-        {props.routes.map((prop, key) => {
-          if (!prop.redirect) {
-            //https://material-ui.com/pt/components/lists/#simple-list
-            return (
-              <List key={key} component="nav">
-                <NavLink
-                  to={prop.layout + prop.path}
-                  className="nav-link"
-                  activeClassName="active"
-                  style={{ 'color': 'black'}}>
+          {props.routes.map((prop, key) => {
+            if (!prop.redirect) {
+              //https://material-ui.com/pt/components/lists/#simple-list
+              return (
+                <List dense={true} key={key} component="nav">
+                  <NavLink
+                    to={prop.layout + prop.path}
+                    className="nav-link"
+                    activeClassName="active"
+                    activeStyle={{ color: 'black' }}
+                    style={{color: 'black'}}>
 
+                    <ListItem button key={key} onClick={() => handleListItemClick(prop.layout + prop.path, prop.name)} selected={selectedIndex === prop.layout + prop.path}>
+                      <Badge anchorOrigin={{ vertical: 'top', horizontal: 'left' }} badgeContent={prop.name === 'Chat' ? perguntas.qtdePerguntas : 0} color="primary">
+                        <ListItemIcon style={{ 'marginLeft': '10px', color: 'black' }}><i className={prop.icon} style={{ 'fontSize': '15px' }} /></ListItemIcon>
+                      </Badge>
+                      <ListItemText style={{fontSize: '5px'}} primary={prop.name} />
+                    </ListItem>
 
-                  <ListItem button key={key} onClick={() => handleListItemClick(prop.layout + prop.path, prop.name)} selected={selectedIndex === prop.layout + prop.path}>
-                    <Badge anchorOrigin={{ vertical: 'top', horizontal: 'left' }} badgeContent={prop.name === 'Chat' ? perguntas.qtdePerguntas : 0} color="primary">
-                      <ListItemIcon style={{ 'marginLeft': '10px' }}><i className={prop.icon} style={{ 'fontSize': '15px' }} /></ListItemIcon>
-                    </Badge>
-                    <ListItemText primary={prop.name} />
-                    {open ? prop.name === 'Chat' ? <ExpandMore /> : <></> : prop.name === 'Chat' ? <ExpandLess /> : <></>}
-                  </ListItem>
+                  </NavLink>
+                </List>
+              );
+            }
+            return null;
+          })}
 
-                  {/*prop.name === 'Chat' ?
-                    <Collapse in={open} timeout="auto" unmountOnExit>
-                      <List component="div" disablePadding>
-
-                        <ListItem button className={classes.nested}>
-                          <ListItemIcon>
-                            <ChatIcon />
-                          </ListItemIcon>
-                          <ListItemText primary="Perguntas" />
-                        </ListItem>
-
-                        <ListItem button className={classes.nested}>
-                          <ListItemIcon>
-                            <ChatIcon />
-                          </ListItemIcon>
-                          <ListItemText primary="Mensagens Pós venda" />
-                        </ListItem>
-
-                      </List>
-                    </Collapse>
-            : <></>*/}
-
-                </NavLink>
-              </List>
-            );
-          }
-          return null;
-        })}
-
-      </Drawer>
-    </>
+        </Drawer>
   );
-
 }
 

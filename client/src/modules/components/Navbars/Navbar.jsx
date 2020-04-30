@@ -15,42 +15,14 @@ import Button from '@material-ui/core/Button';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Avatar from '@material-ui/core/Avatar';
-import { OPEN_DRAWER_MENU } from '../../constants/constants'
+import { OPEN_DRAWER_MENU, OPEN_DRAWER_MENU_RIGHT } from '../../constants/constants'
 import clsx from 'clsx';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import '../../../assets/css/Global/style.css'
-import { Popup } from 'semantic-ui-react'
-
-/**
- * <div>
-      <Nav>
-
-        <NavDropdown
-          eventKey={2}
-          title={notification}
-          noCaret
-          id="basic-nav-dropdown"
-        >
-          <MenuItem eventKey={2.1}><b>Nova mensagem</b>: Qual o preço do kit?</MenuItem>
-
-        </NavDropdown>
-
-      </Nav>
-
-      <Nav pullRight>
-        <NavItem eventKey={1} href="#">
-          Ola! {this.props.nomeUsuario}
-        </NavItem>
-
-
-        <NavItem eventKey={3} href="#">
-          Sair
-        </NavItem>
-      </Nav>
-    </div>
- */
+import SettingsIcon from '@material-ui/icons/Settings';
 
 const drawerWidth = 250
+const drawerWidthRight = 500
 
 const StyledMenu = withStyles({
   paper: {
@@ -106,6 +78,14 @@ const useStyles = makeStyles(theme => ({
       duration: theme.transitions.duration.enteringScreen,
     }),
   },
+  appBarShiftRight: {
+    width: `calc(100% - ${drawerWidthRight}px)`,
+    transition: theme.transitions.create(['margin', 'width'], {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    marginRight: drawerWidthRight,
+  },
   sectionDesktop: {
     display: 'none',
     [theme.breakpoints.up('md')]: {
@@ -148,6 +128,10 @@ export default function Navbar(props) {
     dispatch({ type: OPEN_DRAWER_MENU, isSidebar: true })
   }
 
+  const handleClickOpenRight = () => {
+    dispatch({type: OPEN_DRAWER_MENU_RIGHT, isSidebarRight: true})
+  }
+
   return (
     <>
       <CssBaseline />
@@ -156,9 +140,10 @@ export default function Navbar(props) {
         position="fixed"
         className={clsx(classes.appBar, {
           [classes.appBarShift]: sideBarState.isSidebar,
+          [classes.appBarShiftRight]: sideBarState.isSidebarRight
         })}
       >
-        <Toolbar variant="dense">
+        <Toolbar>
           <IconButton
             edge="start"
             className={clsx(classes.menuButton, {
@@ -176,12 +161,12 @@ export default function Navbar(props) {
             Licença {localStorage.getItem('@sigiml/plano').toLocaleUpperCase()} - {localStorage.getItem('@sigiml/expiration_day') == 0 ? <>Expira hoje</> : <>Expira daqui a {localStorage.getItem('@sigiml/expiration_day')}  dias</>}
           </Typography>
 
-          <Popup
+          {/**<Popup
             content={<div>Até hoje, sua cor como vendedor é verde escuro:</div>}
             header='Reputação'
             trigger={<img style={{height: '8px', marginLeft : '20px'}} 
             src='https://http2.mlstatic.com/resources/frontend/statics/reputation-dashboard-frontend/green@2x.png'></img> }
-          />
+          />*/}
 
          
 
@@ -237,6 +222,18 @@ export default function Navbar(props) {
           <NavLink to='/'>
             <Button style={{ color: 'white' }} color="inherit" onClick={() => setState({ open: true })}>Sair</Button>
           </NavLink>
+
+          <IconButton
+            color="inherit"
+            className={clsx(classes.menuButton, {
+              [classes.hide]: sideBarState.isSidebarRight,
+            })}
+            onClick={handleClickOpenRight}
+          >
+
+            <SettingsIcon />
+
+          </IconButton>
 
         </Toolbar>
       </AppBar>

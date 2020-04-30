@@ -1,14 +1,15 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import AnuncioView from './AnuncioView';
 import axios from 'axios'
 import { useSelector, useDispatch } from 'react-redux'
-import { DOMAIN, LISTAR_TODOS_ANUNCIOS } from '../../constants/constants'
+import { DOMAIN, LISTAR_TODOS_ANUNCIOS, OBTER_STATUS_ANUNCIOS } from '../../constants/constants'
 import sendNotification from '../../components/Notification/Notification'
 import swal from 'sweetalert'
 
 export default function AnuncioController() {
 
     const state = useSelector(store => store.anuncio)
+    const stateDashboard = useSelector(store => store.dashboard)
 
     const [isShowEditPrice, setIsShowEditPrice] = useState(false)
     const [loadingButton, setLoadingButton] = useState(false)
@@ -35,6 +36,10 @@ export default function AnuncioController() {
     
 
     const dispatch = useDispatch()
+
+    useEffect(() => {
+        obterTotalAnuncios()
+    }, [])
 
     let updateShipping = async (itemId, free_shipping, custoFrete) => {
         sendNotification('success', 'Processando sua solicitação, por favor aguarde...', 8999)
@@ -202,11 +207,26 @@ export default function AnuncioController() {
             setDisabledButton(false)
             setIsShowConfirmPauseProduct(false)
             setIsStatusUpdated(true)
+            setOpenBackdrop(true)
 
             dispatch({ type: LISTAR_TODOS_ANUNCIOS, data: updateStatusAnuncioInStore(itemId, status), isLoading: false })
 
-            //sendNotification('success', 'Status atualizado com sucesso!', 5000)
             swal("Atualizado!", "Status atualizado com sucesso", "success");
+            sendNotification('success', 'Carregando os anúncio...', 3000)
+
+            let offset = (state.page * 100) - 100
+
+            setTimeout(async ()=> {
+                if((stateDashboard.totalAtivos - offset) === 1){
+                    await getAnuncioByOffset(0, status === 'active' ? 'paused' : 'active')
+                }else{
+                    await getAnuncioByOffset(state.page === 1 ? 0 : offset, status === 'active' ? 'paused' : 'active')
+                }
+                await obterTotalAnuncios()
+                setOpenBackdrop(false)
+            }, 3000)
+
+            
 
         }).catch(error => {
             sendNotification('error', 'Ocorreu um erro ao atualizar o status do anúncio (AnuncioController:167)' + error, 5000)
@@ -375,7 +395,6 @@ export default function AnuncioController() {
                 })
             })
 
-            console.log(newArray)
             setAtributo(newArray)
         }).catch(error => {
             sendNotification('error', 'Ocorreu um erro ao obter os atributos do anuncio' + error, 5000)
@@ -446,19 +465,24 @@ export default function AnuncioController() {
         })
     }
 
-    let duplicarAnuncioPorID = async (itemId, qtdeX) =>{
+    let duplicarAnuncioPorID = async (itemId, qtdeX, status) =>{
         for (let index = 0; index < qtdeX; index++) {
-            await axios.get(`${DOMAIN}/anuncio/copiar_anuncio_por_id/${itemId}`).then(response => {
+            await axios.get(`${DOMAIN}/anuncio/copiar_anuncio_por_id/copy/anuncio/${itemId}`).then(response => {
                 sendNotification('success', (index+1)+' anúncio duplicado!', 5000)
             }).catch(error => {
-                sendNotification('error', 'Ocorreu um erro ao atualizar as imagens da variação do anuncio' + error, 5000)
+                sendNotification('error', 'Ocorreu um erro ao duplicar os anúncios! Por favor entre em contato com o suporte técnico!' + error, 5000)
             })
         }
         swal("Concluído!", `${qtdeX} anúncios duplicados com sucesso!`, "success");
+        sendNotification('success', 'Carregando os anúncio...', 3000)
+        setTimeout(async ()=> {
+            await getAnuncioByOffset(state.page === 1 ? 0 : (state.page * 100) - 100, status)
+            await obterTotalAnuncios()
+        }, 3000)
     }
 
-    let getAnuncioByOffset = async (offset) => {
-        await axios.get(`${DOMAIN}/anuncio/${offset}`).then(response => {
+    let getAnuncioByOffset = async (offset, status) => {
+        await axios.get(`${DOMAIN}/anuncio/${offset}/${status}`).then(response => {
             dispatch({ type: LISTAR_TODOS_ANUNCIOS, data: response.data })
             setOpenBackdrop(false)
         }).catch(error => {
@@ -466,12 +490,23 @@ export default function AnuncioController() {
         })
     }
 
-
+    let obterTotalAnuncios = async () => {
+        await axios.get(`${DOMAIN}/anuncio/total_status`).then(status => {
+            dispatch({
+                type: OBTER_STATUS_ANUNCIOS,
+                totalAtivos: status.data.total_ativos,
+                totalPausados: status.data.total_pausados
+            })
+        }).catch(error => {
+            sendNotification('error', 'Ocorreu um erro ao obter o total de anuncios' + error, 5000)
+        })
+    }
 
     return (
         <>
             <AnuncioView
                 state={state}
+                stateDashboard={stateDashboard}
                 {...state}
                 openBackdrop={openBackdrop}
                 setOpenBackdrop={setOpenBackdrop}

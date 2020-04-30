@@ -41,6 +41,7 @@ export const CARREGANDO_AGUARDE = 'Carregando, aguarde...'
 
 //OPEN_DRAWER_MENU
 export const OPEN_DRAWER_MENU = 'OPEN_DRAWER_MENU'
+export const OPEN_DRAWER_MENU_RIGHT = 'OPEN_DRAWER_MENU_RIGHT'
 
 //Domain production
 //export const DOMAIN = ''

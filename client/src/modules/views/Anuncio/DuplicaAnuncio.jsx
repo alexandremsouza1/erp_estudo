@@ -16,7 +16,7 @@ export default class DuplicaAnuncio extends React.Component {
         if(this.state.qtdeX <= 0){
             sendNotification('error', 'A quantidade de vezes precisa ser maior do que ZERO, tente novamente!', 5000)
         }else{
-            this.props.duplicarAnuncioPorID(this.props.id, this.state.qtdeX)
+            this.props.duplicarAnuncioPorID(this.props.id, this.state.qtdeX, this.props.status)
             this.props.setIsShowDuplicarAnuncio(false)
         }
     }
@@ -42,6 +42,9 @@ export default class DuplicaAnuncio extends React.Component {
                         #{this.props.id} - {this.props.titulo}
                         </p>
                         <TextField value={this.state.qtdeX} onChange={(event) => this.setState({qtdeX: event.target.value})} style={{width: '500px'}} label="Informe a quantidade de vezes que esse anúncio será duplicado." variant="filled" />
+                        <div style={{paddingTop: '10px'}}>
+                            Seu saldo para duplicar anúncios é de <b>148</b>, não deixa que seu saldo acabe, adquira hoje mesmo mais saldo e duplique mais anúncios!
+                        </div>
                     </Modal.Content>
 
                     <Modal.Actions>
@@ -58,3 +61,4 @@ export default class DuplicaAnuncio extends React.Component {
         )
     }
 }
+

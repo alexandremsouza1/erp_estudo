@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux'
 import { Route, Switch } from "react-router-dom";
 import NavbarController from "../modules/components/Navbars/NavbarController";
 import Sidebar from "../modules/components/Sidebar/Sidebar";
+import SidebarRight from "../modules/components/Sidebar/SidebarRight";
 import { makeStyles } from '@material-ui/core/styles';
 import routes from "routes.js";
 import { Widget, addResponseMessage, addUserMessage } from 'react-chat-widget';
@@ -120,7 +121,7 @@ export default function Admin(props) {
         />
 
         <Sidebar {...props} routes={routes} ref={React.createRef()} />
-
+      
         <main className={classes.content} >
 
           <div className={classes.toolbar} />
@@ -157,7 +158,10 @@ export default function Admin(props) {
 
         </main>
 
+        
+
       </div>
+      <SidebarRight/>
     </>
   );
 

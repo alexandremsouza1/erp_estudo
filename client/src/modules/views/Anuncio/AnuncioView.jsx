@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Grid, Row, Col, Navbar, Form} from "react-bootstrap";
+import { Row, Col, Navbar, Form} from "react-bootstrap";
 import {useDispatch, useSelector} from 'react-redux'
 import LoadingCarregandoSolicitacao from "modules/components/Loading/LoadingCarregandoSolicitacao"
 import '../../../assets/css/Global/style.css';
@@ -25,7 +25,7 @@ import DuplicaAnuncio from './DuplicaAnuncio'
 import Pagination from '@material-ui/lab/Pagination';
 import {Dimmer, Segment} from 'semantic-ui-react'
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { PAGE_OFFSET } from '../../constants/constants'
+import Grid from '@material-ui/core/Grid';
 
 
 export default function AnuncioView(props) {
@@ -55,7 +55,9 @@ export default function AnuncioView(props) {
   };
 
   const handleChangeIsActive = (e) => {
+    props.setOpenBackdrop(true)
     setIsActive(e.target.value)
+    props.getAnuncioByOffset(0, e.target.value)
   };
 
   const handleChangeIsSelectedEstadoProdutoNovo = () => {
@@ -85,60 +87,43 @@ export default function AnuncioView(props) {
                             </FormControl>
    */
 
-   const onChangeHandlePage = (event, page) => {
+   const onChangeHandlePage = (event, page, status) => {
         props.setOpenBackdrop(true)
         //setPage(page)
         dispatch({type: 'PAGE_OFFSET', data: page})
-        props.getAnuncioByOffset(page === 1 ? 0 : (page * 100) - 100)
+        props.getAnuncioByOffset(page === 1 ? 0 : (page * 100) - 100, isActive)
    }
 
   if (!props.isLoading) {
     return (
-      <div>
-        <Grid fluid>
-          <Row>
-            <Col md={12}>
-              
-               
+      <Grid container>
+         <Grid item xs={12}>
                   <>
                     <Navbar bg="light" expand="lg">
                       <Form inline>
-                        <div>
-                            <FormControlUI style={{marginRight: '15px', width: '100px'}}>
-                              <InputLabel>Status</InputLabel>
-                              <Select
-                                value={isActive}
-                                onChange={handleChangeIsActive}>
-                                <MenuItem value="active">Ativos</MenuItem>
-                                <MenuItem value="paused">Pausados</MenuItem>
-                              </Select>
-                            </FormControlUI>
-                          </div> 
                       
                       <br></br>
 
                       <div style={{display: 'flex', justifyContent: 'space-between'}}>
                           <div>
+
                             <span>
-                              <Badge badgeContent={4} 
-                                    color="primary" 
-                                    anchorOrigin={{
-                                      vertical: 'top',
-                                      horizontal: 'left',
-                                    }}>
-                                  <ButtonUI size="small" startIcon={<TuneIcon/>}>Filtrar e Ordenar</ButtonUI>
-                              </Badge>
+                              <FormControlUI style={{marginRight: '15px', width: '100px'}}>
+                                <Select
+                                  value={isActive}
+                                  onChange={handleChangeIsActive}>
+                                  <MenuItem value="active">Ativos</MenuItem>
+                                  <MenuItem value="paused">Pausados</MenuItem>
+                                </Select>
+                              </FormControlUI>
                             </span>
+
                             <span style={{padding: '0 15px 0'}}>
                               <TextField style={{width: '300px'}} placeholder="Buscar por título" />
                             </span>
-                            <span>
-                              <IconButton>
-                                  <SearchIcon/>
-                              </IconButton>
-                            </span>
+                            
                           </div>
-                          <div>
+                          <div style={{marginRight: '420px'}}>
                             <span style={{paddingLeft: '5px'}}>
                                 <ButtonUI color="primary" size="small" variant="contained" onClick={handleClickNovoAnuncio}>Novo anúncio</ButtonUI>
                                 <Menu
@@ -158,11 +143,14 @@ export default function AnuncioView(props) {
 
                     {/*PAGINAÇÃO*/}                
                     <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', paddingBottom: '10px'}}>
-                        <Pagination page={state.page} onChange={onChangeHandlePage} count={56} color="primary" showFirstButton showLastButton />
+                        {
+                          isActive === 'active' ? props.stateDashboard.totalAtivos   > 100 && <Pagination page={state.page} onChange={onChangeHandlePage} count={56} color="primary" showFirstButton showLastButton /> 
+                        : isActive === 'paused' ? props.stateDashboard.totalPausados > 100 && <Pagination page={state.page} onChange={onChangeHandlePage} count={56} color="primary" showFirstButton showLastButton /> : <></> 
+                        }
                     </div>
 
                     {props.result.map((prop, key) => {
-                      if (prop.status === isActive) {
+                      if (prop.status) {
                         return (
                           <div className="panel panel-primary" key={key}>
                             <Dimmer.Dimmable dimmed={props.openBackdrop}>
@@ -199,7 +187,7 @@ export default function AnuncioView(props) {
 
                               </div>
 
-                              <div className="col-md-3 col-xs-6 text-center-xs">
+                              <div className="col-md-3 col-xs-6 text-center-xs" style={{margin: '0 -70px 0'}}>
 
                                 <font size="3">
                                   <b>
@@ -219,8 +207,8 @@ export default function AnuncioView(props) {
                               </div>
 
                               {/*Botão de modificar anúncio*/}
-                              <div className="col-md-2 text-center-xs">
-                                <Button icon labelPosition='left' style={{ 'fontSize': '12px' }} 
+                              <div className="col-md-2 text-center-xs" style={{margin: '0 -6px 0'}}>
+                                <Button icon labelPosition='left' style={{ fontSize: '12px', margin: '0 0 2px' }} 
                                   onClick={() => {
                                   setShowModal(true)
                                   setAnuncio(prop)
@@ -315,10 +303,20 @@ export default function AnuncioView(props) {
 
                               </div>
                             </div>
-                            <Dimmer active={props.openBackdrop} onClickOutside={() => props.setOpenBackdrop(false)}>
-                                <CircularProgress color="inherit" />
+                              <Dimmer active={props.openBackdrop} onClickOutside={() => props.setOpenBackdrop(false)}>
+                                  <CircularProgress color="inherit" />
                               </Dimmer>
 
+                            </Dimmer.Dimmable>
+                          </div>
+                        )
+                      }else{
+                        return (
+                          <div>
+                            <Dimmer.Dimmable>
+                              <Dimmer active={props.openBackdrop} onClickOutside={() => props.setOpenBackdrop(false)}>
+                                  <CircularProgress color="inherit" />
+                              </Dimmer>
                             </Dimmer.Dimmable>
                           </div>
                         )
@@ -329,12 +327,13 @@ export default function AnuncioView(props) {
                   </>
                  {/*PAGINAÇÃO*/}                
                  <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', paddingBottom: '10px'}}>
-                        <Pagination page={state.page} onChange={onChangeHandlePage} count={56} color="primary" showFirstButton showLastButton />
+                    {
+                      isActive === 'active' ? props.stateDashboard.totalAtivos   > 100 && <Pagination page={state.page} onChange={onChangeHandlePage} count={56} color="primary" showFirstButton showLastButton /> 
+                    : isActive === 'paused' ? props.stateDashboard.totalPausados > 100 && <Pagination page={state.page} onChange={onChangeHandlePage} count={56} color="primary" showFirstButton showLastButton /> : <></> 
+                    }
                  </div>
-                  
-            </Col>
-          </Row>
-        </Grid>
+        
+          </Grid>
 
         { /*MODAL*/}
         {isShowVariationManager && 
@@ -442,7 +441,7 @@ export default function AnuncioView(props) {
             updateStatus={props.updateStatus}
           />}    
 
-      </div>
+      </Grid>
     );
   } else {
     return (
