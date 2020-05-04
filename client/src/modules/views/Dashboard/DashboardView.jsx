@@ -65,7 +65,7 @@ export default function DashboardView(props) {
                   </Message.Content>
                 </Message>
               }
-              {props.comunicado.label !== '' &&
+              {props.comunicado !== undefined &&
                 <Message negative style={{ width: '100%' }}>
                   <Message.Header>{props.comunicado.label}</Message.Header>
                   <Message.Content>

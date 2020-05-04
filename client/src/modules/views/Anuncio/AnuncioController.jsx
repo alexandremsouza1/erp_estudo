@@ -250,7 +250,7 @@ export default function AnuncioController() {
     }
 
     let obterValorDoCustoFreteGratisPorAnuncio = async (itemID) => {
-        await axios.get(`${DOMAIN}/anuncio/obterValorDoCustoFreteGratisPorAnuncio/${itemID}`).then(response => {
+        await axios.get(`${DOMAIN}/anuncio/obterValorDoCustoFreteGratisPorAnuncio/get/anuncio/custo/${itemID}`).then(response => {
             setCustoFrete(response.data.custo.toFixed(2))
         }).catch(error => {
             sendNotification('error', 'Ocorreu um erro ao obter o custo do frete (AnuncioController:189)' + error, 5000)
@@ -348,7 +348,7 @@ export default function AnuncioController() {
 
     let obterCategoria = async (itemId) => {
         setCategoria(categoria !== '' ? 'Carregando, aguarde...' : categoria)
-        await axios.get(`${DOMAIN}/anuncio/obter_categoria/${itemId}`).then(response => {
+        await axios.get(`${DOMAIN}/anuncio/obter_categoria/get/anuncio/${itemId}`).then(response => {
             let dados = []
             response.data.map(cat => {
                 dados.push(cat.name)
@@ -495,7 +495,8 @@ export default function AnuncioController() {
             dispatch({
                 type: OBTER_STATUS_ANUNCIOS,
                 totalAtivos: status.data.total_ativos,
-                totalPausados: status.data.total_pausados
+                totalPausados: status.data.total_pausados,
+                isLoading: false
             })
         }).catch(error => {
             sendNotification('error', 'Ocorreu um erro ao obter o total de anuncios' + error, 5000)

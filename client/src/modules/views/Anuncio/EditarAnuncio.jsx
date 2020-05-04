@@ -51,6 +51,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import AddPhotoAlternateIcon from '@material-ui/icons/AddPhotoAlternate';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+import NovaVariacao from './NovaVariacao'
 
 
 
@@ -119,6 +120,7 @@ export default function EditarAnuncio(props) {
     const [showInfoFormaDeEntrega, setShowInfoFormaDeEntrega] = React.useState(false)
     const [description, setDescription] = React.useState(props.description)
     const [condicao, setCondicao] = React.useState(props.json.condition)
+    const [openNovaVariacao, setOpenNovaVariacao] = React.useState(false)
 
     const onChangeSetAtributos = (event, id) => {
         props.atributo.map(dado => {
@@ -362,6 +364,7 @@ export default function EditarAnuncio(props) {
         props.setDisabledButton(true)
         sendNotification('success', 'Estamos ativando seu anúncio! Por favor aguarde...', 5000)
     }
+    
 
     return (
         <>
@@ -416,7 +419,7 @@ export default function EditarAnuncio(props) {
                                                     {props.json.variations.length === 0 && <> <Divider />
                                                         <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '15px' }}>
                                                             <div style={{ color: '#333333', fontSize: '16px' }}>Características</div>
-                                                            <ButtonUI color="primary" startIcon={<CloseIcon />}>Adicionar variações</ButtonUI>
+                                                            <ButtonUI onClick={() => setOpenNovaVariacao(true)} color="primary" startIcon={<CloseIcon />}>Adicionar variações</ButtonUI>
                                                         </div>
                                                         <div style={{ display: 'flex' }}>
                                                             <div style={{ color: '#999999', fontSize: '13px', paddingRight: '5px' }}>Fotos</div>
@@ -541,7 +544,7 @@ export default function EditarAnuncio(props) {
                                                 } else {
                                                     return (
                                                         <div key={att.id}>
-                                                            <FormControl variant="filled" style={{ width: '100%', padding: '5px 0 5px' }}>
+                                                            {att.id !== 'ITEM_CONDITION' && <FormControl variant="filled" style={{ width: '100%', padding: '5px 0 5px' }}>
                                                                 <InputLabel>{att.name}</InputLabel>
                                                                 <Select value={handleSetAtributo(att.id)} onChange={(event => onChangeSetAtributos(event, att.id))}>
                                                                     {att.values.map(value => {
@@ -550,7 +553,7 @@ export default function EditarAnuncio(props) {
                                                                         )
                                                                     })}
                                                                 </Select>
-                                                            </FormControl>
+                                                            </FormControl>}
                                                         </div>
                                                     )
                                                 }
@@ -1084,6 +1087,13 @@ export default function EditarAnuncio(props) {
                     </div>
                 </Paper>
             </Dialog>
+
+            {openNovaVariacao && 
+            <NovaVariacao
+                {...props}
+                openNovaVariacao={openNovaVariacao}
+                setOpenNovaVariacao={setOpenNovaVariacao}
+            />}
         </>
     )
 }

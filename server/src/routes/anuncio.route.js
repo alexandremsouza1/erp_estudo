@@ -8,8 +8,8 @@ router.get('/obter_atributos_por_categoria/:categoria', anuncioService.obterAtri
 router.get('/total_status', anuncioService.totalStatusAnuncios)
 router.get('/:offset/:status', anuncioService.listarTodosAnuncio);
 router.get('/:titulo', anuncioService.listarTodosAnuncio)
-router.get('/obterValorDoCustoFreteGratisPorAnuncio/:item_id', anuncioService.obterValorDoCustoFreteGratisPorAnuncio)
-router.get('/obter_categoria/:itemId', anuncioService.getCategoria)
+router.get('/obterValorDoCustoFreteGratisPorAnuncio/get/anuncio/custo/:item_id', anuncioService.obterValorDoCustoFreteGratisPorAnuncio)
+router.get('/obter_categoria/get/anuncio/:itemId', anuncioService.getCategoria)
 router.get('/copiar_anuncio_por_id/copy/anuncio/:itemId/', anuncioService.copiarAnuncioPorID)
 
 router.post('/obter_imagem_site', anuncioService.obterImagemSite)
