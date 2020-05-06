@@ -95,19 +95,21 @@ class GerenciarVariacoes extends React.Component {
       <div>
         <Modal open={this.props.isShowVariationManager} style={{
           position: 'relative',
-          width: '70%',
+          width: '65%',
           marginBottom: '5%',
           marginLeft: '50%',
           marginRight: '50%',
-          margin: '70px 0 0'
+          margin: '70px 0 0',
+          left: '13px'
         }}
           closeOnDimmerClick={false} >
 
           <Header icon='edit' content={
 
-            <div>Gerenciar Variações
-          <IconButton style={{ paddingLeft: '10px', marginLeft: '630px' }} onClick={() => this.props.setIsShowVariationManager(false)}>
-                <CancelIcon />
+            <div style={{display: 'flex', justifyContent: 'space-between'}}>
+              <div style={{paddingTop: '13px'}}>Gerenciar Variações</div>
+               <IconButton style={{left: '580px'}} onClick={() => this.props.setIsShowVariationManager(false)}>
+                  <CancelIcon />
               </IconButton>
             </div>}
 

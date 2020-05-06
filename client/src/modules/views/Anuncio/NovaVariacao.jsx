@@ -97,9 +97,9 @@ export default function NovaVariacao(props) {
             if(info.id === id){
                 info.quantidade = event.target.value
             }
+            return info
         })
         setInfoVariacoes(infoVariacoes)
-        console.log(infoVariacoes)
     }
 
     const adicionarInfoVariacoes = () => {
@@ -116,121 +116,121 @@ export default function NovaVariacao(props) {
         if (textFieldOpcoes02 != '') {
             infoVariacoes.push({
                 id: 2,
-                opcao: textFieldOpcoes02,
+                opcao: textFieldOpcoes02.text,
                 fotos: [],
-                quantidade: 0
+                quantidade: textFieldOpcoes02.quantidade
             })
         }
         if (textFieldOpcoes03 != '') {
             infoVariacoes.push({
                 id: 3,
-                opcao: textFieldOpcoes03,
+                opcao: textFieldOpcoes03.text,
                 fotos: [],
-                quantidade: 0
+                quantidade: textFieldOpcoes03.quantidade
             })
         }
         if (textFieldOpcoes04 != '') {
             infoVariacoes.push({
                 id: 4,
-                opcao: textFieldOpcoes04,
+                opcao: textFieldOpcoes04.text,
                 fotos: [],
-                quantidade: 0
+                quantidade: textFieldOpcoes04.quantidade
             })
         }
         if (textFieldOpcoes05 != '') {
             infoVariacoes.push({
                 id: 5,
-                opcao: textFieldOpcoes05,
+                opcao: textFieldOpcoes05.text,
                 fotos: [],
-                quantidade: 0
+                quantidade: textFieldOpcoes05.quantidade
             })
         }
         if (textFieldOpcoes06 != '') {
             infoVariacoes.push({
                 id: 6,
-                opcao: textFieldOpcoes06,
+                opcao: textFieldOpcoes06.text,
                 fotos: [],
-                quantidade: 0
+                quantidade: textFieldOpcoes06.quantidade
             })
         }
         if (textFieldOpcoes07 != '') {
             infoVariacoes.push({
                 id: 7,
-                opcao: textFieldOpcoes07,
+                opcao: textFieldOpcoes07.text,
                 fotos: [],
-                quantidade: 0
+                quantidade: textFieldOpcoes07.quantidade
             })
         }
         if (textFieldOpcoes08 != '') {
             infoVariacoes.push({
                 id: 8,
-                opcao: textFieldOpcoes08,
+                opcao: textFieldOpcoes08.text,
                 fotos: [],
-                quantidade: 0
+                quantidade: textFieldOpcoes08.quantidade
             })
         }
         if (textFieldOpcoes09 != '') {
             infoVariacoes.push({
                 id: 9,
-                opcao: textFieldOpcoes09,
+                opcao: textFieldOpcoes09.text,
                 fotos: [],
-                quantidade: 0
+                quantidade: textFieldOpcoes09.quantidade
             })
         }
         if (textFieldOpcoes10 != '') {
             infoVariacoes.push({
                 id: 10,
-                opcao: textFieldOpcoes10,
+                opcao: textFieldOpcoes10.text,
                 fotos: [],
-                quantidade: 0
+                quantidade: textFieldOpcoes10.quantidade
             })
         }
         if (textFieldOpcoes11 != '') {
             infoVariacoes.push({
                 id: 11,
-                opcao: textFieldOpcoes11,
+                opcao: textFieldOpcoes11.text,
                 fotos: [],
-                quantidade: 0
+                quantidade: textFieldOpcoes11.quantidade
             })
         }
         if (textFieldOpcoes12 != '') {
             infoVariacoes.push({
                 id: 12,
-                opcao: textFieldOpcoes12,
+                opcao: textFieldOpcoes12.text,
                 fotos: [],
-                quantidade: 0
+                quantidade: textFieldOpcoes12.quantidade
             })
         }
         if (textFieldOpcoes13 != '') {
             infoVariacoes.push({
                 id: 13,
-                opcao: textFieldOpcoes13,
+                opcao: textFieldOpcoes13.text,
                 fotos: [],
-                quantidade: 0
+                quantidade: textFieldOpcoes13.quantidade
             })
         }
         if (textFieldOpcoes14 != '') {
             infoVariacoes.push({
                 id: 14,
-                opcao: textFieldOpcoes14,
+                opcao: textFieldOpcoes14.text,
                 fotos: [],
-                quantidade: 0
+                quantidade: textFieldOpcoes14.quantidade
             })
         }
         if (textFieldOpcoes15 != '') {
             infoVariacoes.push({
                 id: 15,
-                opcao: textFieldOpcoes15,
+                opcao: textFieldOpcoes15.text,
                 fotos: [],
-                quantidade: 0
+                quantidade: textFieldOpcoes15.quantidade
             })
         }
         if (textFieldOpcoes16 != '') {
             infoVariacoes.push({
                 id: 16,
-                opcao: textFieldOpcoes16,
+                opcao: textFieldOpcoes16.text,
                 fotos: [],
-                quantidade: 0
+                quantidade: textFieldOpcoes16.quantidade
             })
         }
         setInfoVariacoes(infoVariacoes)
@@ -292,7 +292,7 @@ export default function NovaVariacao(props) {
 
                                 <Divider style={{ marginTop: '30px' }} />
 
-                                <div style={{ display: 'flex', justifyContent: 'end', height: '40px' }}>
+                                <div style={{ display: 'flex', justifyContent: 'flex-end', height: '59px', alignItems: 'center' }}>
                                     <Button disabled={isDisabledButtonCaracteristica} onClick={() => handlebuttonCaracteristica()} size="small" variant="contained" style={{ padding: '20px 20px 20px' }}>Confirmar</Button>
                                 </div>
                             </Paper>
@@ -307,33 +307,33 @@ export default function NovaVariacao(props) {
                                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                                     <div>
                                         <Chip style={{ marginLeft: '30px' }} label={<TextField value={textFieldOpcoes01.text} onChange={(event) => setTextFieldOpcoes01({text: event.target.value})} style={{ width: '135px' }} size="small" />} />
-                                        <Chip style={{ marginLeft: '30px' }} label={<TextField value={textFieldOpcoes02} onChange={(event) => setTextFieldOpcoes02(event.target.value)} style={{ width: '135px' }} size="small" />} />
-                                        <Chip style={{ marginLeft: '30px' }} label={<TextField value={textFieldOpcoes03} onChange={(event) => setTextFieldOpcoes03(event.target.value)} style={{ width: '135px' }} size="small" />} />
-                                        <Chip style={{ marginLeft: '30px' }} label={<TextField value={textFieldOpcoes04} onChange={(event) => setTextFieldOpcoes04(event.target.value)} style={{ width: '135px' }} size="small" />} />
+                                        <Chip style={{ marginLeft: '30px' }} label={<TextField value={textFieldOpcoes02.text} onChange={(event) => setTextFieldOpcoes02({text: event.target.value})} style={{ width: '135px' }} size="small" />} />
+                                        <Chip style={{ marginLeft: '30px' }} label={<TextField value={textFieldOpcoes03.text} onChange={(event) => setTextFieldOpcoes03({text: event.target.value})} style={{ width: '135px' }} size="small" />} />
+                                        <Chip style={{ marginLeft: '30px' }} label={<TextField value={textFieldOpcoes04.text} onChange={(event) => setTextFieldOpcoes04({text: event.target.value})} style={{ width: '135px' }} size="small" />} />
                                     </div>
                                     <div style={{ paddingTop: '5px' }}>
-                                        <Chip style={{ marginLeft: '30px' }} label={<TextField value={textFieldOpcoes05} onChange={(event) => setTextFieldOpcoes05(event.target.value)} style={{ width: '135px' }} size="small" />} />
-                                        <Chip style={{ marginLeft: '30px' }} label={<TextField value={textFieldOpcoes06} onChange={(event) => setTextFieldOpcoes06(event.target.value)} style={{ width: '135px' }} size="small" />} />
-                                        <Chip style={{ marginLeft: '30px' }} label={<TextField value={textFieldOpcoes07} onChange={(event) => setTextFieldOpcoes07(event.target.value)} style={{ width: '135px' }} size="small" />} />
-                                        <Chip style={{ marginLeft: '30px' }} label={<TextField value={textFieldOpcoes08} onChange={(event) => setTextFieldOpcoes08(event.target.value)} style={{ width: '135px' }} size="small" />} />
+                                        <Chip style={{ marginLeft: '30px' }} label={<TextField value={textFieldOpcoes05.text} onChange={(event) => setTextFieldOpcoes05({text: event.target.value})} style={{ width: '135px' }} size="small" />} />
+                                        <Chip style={{ marginLeft: '30px' }} label={<TextField value={textFieldOpcoes06.text} onChange={(event) => setTextFieldOpcoes06({text: event.target.value})} style={{ width: '135px' }} size="small" />} />
+                                        <Chip style={{ marginLeft: '30px' }} label={<TextField value={textFieldOpcoes07.text} onChange={(event) => setTextFieldOpcoes07({text: event.target.value})} style={{ width: '135px' }} size="small" />} />
+                                        <Chip style={{ marginLeft: '30px' }} label={<TextField value={textFieldOpcoes08.text} onChange={(event) => setTextFieldOpcoes08({text: event.target.value})} style={{ width: '135px' }} size="small" />} />
                                     </div>
                                     <div style={{ paddingTop: '5px' }}>
-                                        <Chip style={{ marginLeft: '30px' }} label={<TextField value={textFieldOpcoes09} onChange={(event) => setTextFieldOpcoes09(event.target.value)} style={{ width: '135px' }} size="small" />} />
-                                        <Chip style={{ marginLeft: '30px' }} label={<TextField value={textFieldOpcoes10} onChange={(event) => setTextFieldOpcoes10(event.target.value)} style={{ width: '135px' }} size="small" />} />
-                                        <Chip style={{ marginLeft: '30px' }} label={<TextField value={textFieldOpcoes11} onChange={(event) => setTextFieldOpcoes11(event.target.value)} style={{ width: '135px' }} size="small" />} />
-                                        <Chip style={{ marginLeft: '30px' }} label={<TextField value={textFieldOpcoes12} onChange={(event) => setTextFieldOpcoes12(event.target.value)} style={{ width: '135px' }} size="small" />} />
+                                        <Chip style={{ marginLeft: '30px' }} label={<TextField value={textFieldOpcoes09.text} onChange={(event) => setTextFieldOpcoes09({text: event.target.value})} style={{ width: '135px' }} size="small" />} />
+                                        <Chip style={{ marginLeft: '30px' }} label={<TextField value={textFieldOpcoes10.text} onChange={(event) => setTextFieldOpcoes10({text: event.target.value})} style={{ width: '135px' }} size="small" />} />
+                                        <Chip style={{ marginLeft: '30px' }} label={<TextField value={textFieldOpcoes11.text} onChange={(event) => setTextFieldOpcoes11({text: event.target.value})} style={{ width: '135px' }} size="small" />} />
+                                        <Chip style={{ marginLeft: '30px' }} label={<TextField value={textFieldOpcoes12.text} onChange={(event) => setTextFieldOpcoes12({text: event.target.value})} style={{ width: '135px' }} size="small" />} />
                                     </div>
                                     <div style={{ paddingTop: '5px' }}>
-                                        <Chip style={{ marginLeft: '30px' }} label={<TextField value={textFieldOpcoes13} onChange={(event) => setTextFieldOpcoes13(event.target.value)} style={{ width: '135px' }} size="small" />} />
-                                        <Chip style={{ marginLeft: '30px' }} label={<TextField value={textFieldOpcoes14} onChange={(event) => setTextFieldOpcoes14(event.target.value)} style={{ width: '135px' }} size="small" />} />
-                                        <Chip style={{ marginLeft: '30px' }} label={<TextField value={textFieldOpcoes15} onChange={(event) => setTextFieldOpcoes15(event.target.value)} style={{ width: '135px' }} size="small" />} />
-                                        <Chip style={{ marginLeft: '30px' }} label={<TextField value={textFieldOpcoes16} onChange={(event) => setTextFieldOpcoes16(event.target.value)} style={{ width: '135px' }} size="small" />} />
+                                        <Chip style={{ marginLeft: '30px' }} label={<TextField value={textFieldOpcoes13.text} onChange={(event) => setTextFieldOpcoes13({text: event.target.value})} style={{ width: '135px' }} size="small" />} />
+                                        <Chip style={{ marginLeft: '30px' }} label={<TextField value={textFieldOpcoes14.text} onChange={(event) => setTextFieldOpcoes14({text: event.target.value})} style={{ width: '135px' }} size="small" />} />
+                                        <Chip style={{ marginLeft: '30px' }} label={<TextField value={textFieldOpcoes15.text} onChange={(event) => setTextFieldOpcoes15({text: event.target.value})} style={{ width: '135px' }} size="small" />} />
+                                        <Chip style={{ marginLeft: '30px' }} label={<TextField value={textFieldOpcoes16.text} onChange={(event) => setTextFieldOpcoes16({text: event.target.value})} style={{ width: '135px' }} size="small" />} />
                                     </div>
                                 </div>
 
                                 <Divider style={{ marginTop: '30px' }} />
 
-                                <div style={{ display: 'flex', justifyContent: 'end', height: '40px' }}>
+                                <div style={{ display: 'flex', justifyContent: 'flex-end', height: '59px', alignItems: 'center' }}>
                                     <Button onClick={() => adicionarInfoVariacoes()} size="small" variant="contained" style={{ padding: '20px 20px 20px' }}>Confirmar</Button>
                                 </div>
                             </Paper>
@@ -350,7 +350,7 @@ export default function NovaVariacao(props) {
                                                 <div style={{ display: 'flex', paddingLeft: '25px', alignItems: 'center' }}>
                                                     <Button startIcon={index === indexVariacao ? <ArrowUpIcon/> : <ArrowDownIcon />} onClick={() => handleButtonAdicionarEstoque(index)} style={{ paddingLeft: '15px' }}>{info.opcao}</Button>
                                                 </div>
-                                                <div style={{ color: 'black', fontSize: '15px', paddingRight: '30px' }}>{info.quantidade === 0 ? <Button onClick={() => handleButtonAdicionarEstoque(index)} style={{ color: 'blue' }}>Adicionar estoque</Button> : <Button onClick={() => handleButtonAdicionarEstoque(index)}>Estoque: {info.quantidade}</Button>}</div>
+                                                <div style={{ color: 'black', fontSize: '15px', paddingRight: '30px' }}><Button onClick={() => handleButtonAdicionarEstoque(index)} style={{ color: 'blue' }}>Adicionar estoque</Button></div>
                                             </div>
                                             {(index === indexVariacao) && <div style={{ paddingLeft: '61px' }}>
 
