@@ -14,7 +14,8 @@ import {
   IDS_REMOVIDOS_IMAGENS_VARIACAO_ANUNCIO,
   SOURCES,
   LISTAR_TODOS_ANUNCIOS,
-  DOMAIN
+  DOMAIN,
+  IMAGENS_ANUNCIO
 } from '../../constants/constants'
 
 
@@ -27,7 +28,6 @@ class GerenciarVariacoes extends React.Component {
       isShowEditarAnuncio: false,
       attributeCombinations: {},
       imageVariation: [],
-      imagesAnuncio: [],
       vart: '',
       json: {}
     }
@@ -46,8 +46,27 @@ class GerenciarVariacoes extends React.Component {
     })
   }
 
-  getImageVariation = (json, variation) => {
+  getImageVariation = (variationId) => {
     let urls = []
+    this.props.result.map(anuncio => {
+      if (anuncio.id === this.props.id) {
+        anuncio.json.pictures.map(picture => {
+          anuncio.json.variations.map(variation => {
+            if (variationId === variation.id) {
+                variation.picture_ids.map(picture_ids => {
+                  if (picture_ids === picture.id) {
+                    urls.push({
+                      url: picture.url,
+                      id: picture.id
+                    })
+                  }
+                })
+              }
+          })
+        })
+      }
+    })
+    /*
     json.pictures.map(image => {
       variation.picture_ids.map(picture_ids => {
         if (picture_ids === image.id) {
@@ -57,19 +76,25 @@ class GerenciarVariacoes extends React.Component {
           })
         }
       })
-    })
+    })*/
+    console.log("this.props.result \n")
+    console.log(urls)
+    console.log('\n')
 
-    this.setState({
+    /*this.setState({
       imageVariation: urls,
-      imagesAnuncio: json.pictures
-    })
+    })*/
+
+    this.props.updateUrlImage(urls)
+
   }
 
-  setPropsEditAnuncio = (variation, attr, json) => {
+  setPropsEditAnuncio = (variationId, variation, attr, json) => {
+    this.getAnuncios()
     this.props.limparArrayIdsRemovidos([])
     this.props.limparArraySources([])
     this.setProps(attr)
-    this.getImageVariation(json, variation)
+    this.getImageVariation(variationId)
     this.setState({
       vart: variation,
       json: json
@@ -89,6 +114,12 @@ class GerenciarVariacoes extends React.Component {
     this.setState({ isShowEditarAnuncio: close })
   }
 
+  getAnuncios = async () => {
+    await axios.get(`${DOMAIN}/anuncio/0/active`).then(async resp => {
+      await this.props.listarTodosAnuncios(LISTAR_TODOS_ANUNCIOS, resp.data, false)
+    }).catch(err => { console.log(err) })
+  }
+
 
   render() {
     return (
@@ -106,17 +137,17 @@ class GerenciarVariacoes extends React.Component {
 
           <Header icon='edit' content={
 
-            <div style={{display: 'flex', justifyContent: 'space-between'}}>
-              <div style={{paddingTop: '13px'}}>Gerenciar Variações</div>
-               <IconButton style={{left: '580px'}} onClick={() => this.props.setIsShowVariationManager(false)}>
-                  <CancelIcon />
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <div style={{ paddingTop: '13px' }}>Gerenciar Variações</div>
+              <IconButton style={{ left: '580px' }} onClick={() => this.props.setIsShowVariationManager(false)}>
+                <CancelIcon />
               </IconButton>
             </div>}
 
             style={{ 'backgroundColor': '#467EED', 'color': 'white' }} />
 
           <Modal.Content>
-            <div style={{display: 'flex', justifyContent: 'space-between'}}>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
               <div>
                 <p>
                   {this.props.titulo}{' | '}
@@ -162,7 +193,7 @@ class GerenciarVariacoes extends React.Component {
                                 <Button icon color='red' style={{ 'fontSize': '12px' }}> <Icon name='remove' /> </Button>
                               </Tooltip>
                               <Tooltip title="Editar variação">
-                                <Button icon color='blue' style={{ 'fontSize': '12px' }} onClick={() => this.setPropsEditAnuncio(variation, attr, this.props.json)}> <Icon name='edit' /> </Button>
+                                <Button icon color='blue' style={{ 'fontSize': '12px' }} onClick={() => this.setPropsEditAnuncio(variation.id, variation, attr, this.props.json)}> <Icon name='edit' /> </Button>
                               </Tooltip>
                             </Table.Cell>
                             <EditarVariacao
@@ -170,10 +201,10 @@ class GerenciarVariacoes extends React.Component {
                               setImageVariation={this.setImageVariation}
                               updateImagemVariation={this.props.updateImagemVariation}
                               urlImage={this.state.imageVariation}
-                              imagesAnuncio={this.state.imagesAnuncio}
                               attributeCombinations={this.state.attributeCombinations}
                               isShowEditarAnuncio={this.state.isShowEditarAnuncio}
                               variation={variation}
+                              getAnuncios={this.getAnuncios}
                               vart={this.state.vart}
                               {...this.props}
                               {...this.state}
@@ -203,7 +234,8 @@ class GerenciarVariacoes extends React.Component {
 const mapStateToProps = (store) => {
   return {
     idRemovidos: store.anuncio.idRemovidos,
-    sources: store.anuncio.sources
+    sources: store.anuncio.sources,
+    result: store.anuncio.result
   }
 }
 
@@ -216,6 +248,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   listarTodosAnuncios: (type, data, isLoading) => {
     dispatch({ type, data, isLoading })
+  },
+  updateUrlImage: (urlImage) => {
+    dispatch({type: IMAGENS_ANUNCIO, data: urlImage})
   }
 })
 

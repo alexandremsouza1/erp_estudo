@@ -261,7 +261,7 @@ export default function AnuncioController() {
         await axios.put(`${DOMAIN}/anuncio/update_retirar_pessoalmente`, { itemId: itemId, local_pick_up: isRetirarPessoalmente }).then(response => {
             sendNotification('success', 'Pronto salvamos suas modificações', 5000)
             setLoadingButtonRetirarPessoalmente(false)
-            dispatch({ type: LISTAR_TODOS_ANUNCIOS, data: updateStateRetirarPessoalmente(itemId, isRetirarPessoalmente) })
+            dispatch({ type: LISTAR_TODOS_ANUNCIOS, data: updateStateRetirarPessoalmente(itemId, isRetirarPessoalmente), isLoading: false })
         }).catch(error => {
             sendNotification('error', 'Ocorreu um erro ao atualizar a retirar pessoalmente (AnuncioController:197)' + error, 5000)
         })
@@ -284,7 +284,7 @@ export default function AnuncioController() {
         await axios.put(`${DOMAIN}/anuncio/update_description`, { itemId: itemId, plain_text: plainText }).then(response => {
             sendNotification('success', 'Pronto salvamos suas modificações', 5000)
             setLoadingButtonDescription(false)
-            dispatch({ type: LISTAR_TODOS_ANUNCIOS, data: updateStateDescription(itemId, plainText) })
+            dispatch({ type: LISTAR_TODOS_ANUNCIOS, data: updateStateDescription(itemId, plainText), isLoading: false })
         }).catch(error => {
             sendNotification('error', 'Ocorreu um erro ao atualizar a descrição do anuncio (AnuncioController:216)' + error, 5000)
         })
@@ -307,7 +307,7 @@ export default function AnuncioController() {
         await axios.put(`${DOMAIN}/anuncio/update_garantia`, { itemId: itemId, tipo_garantia: tipoGarantia, value_name: valueName, tempo: tempo }).then(response => {
             sendNotification('success', 'Pronto salvamos suas modificações', 5000)
             setLoadingButtonGarantia(false)
-            dispatch({ type: LISTAR_TODOS_ANUNCIOS, data: updateStateGarantia(itemId, garantia, valueName, tempo) })
+            dispatch({ type: LISTAR_TODOS_ANUNCIOS, data: updateStateGarantia(itemId, garantia, valueName, tempo), isLoading: false })
         }).catch(error => {
             sendNotification('error', 'Ocorreu um erro ao atualizar a garantia do anuncio' + error, 5000)
         })
@@ -460,6 +460,7 @@ export default function AnuncioController() {
     let updateImagemVariation = async (itemId, variations, pictures) => {
         await axios.put(`${DOMAIN}/anuncio/update_imagem_variation`, { itemId, variations, pictures }).then(response => {
             sendNotification('success', 'Pronto salvamos suas modificações', 5000)
+            getAnuncioByOffset(0, 'active')
         }).catch(error => {
             sendNotification('error', 'Ocorreu um erro ao atualizar as imagens da variação do anuncio' + error, 5000)
         })
@@ -483,7 +484,7 @@ export default function AnuncioController() {
 
     let getAnuncioByOffset = async (offset, status) => {
         await axios.get(`${DOMAIN}/anuncio/${offset}/${status}`).then(response => {
-            dispatch({ type: LISTAR_TODOS_ANUNCIOS, data: response.data })
+            dispatch({ type: LISTAR_TODOS_ANUNCIOS, data: response.data, isLoading: false })
             setOpenBackdrop(false)
         }).catch(error => {
             sendNotification('error', 'Ocorreu um erro ao realizar a paginação do anuncio' + error, 5000)
