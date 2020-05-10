@@ -40,6 +40,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use('/products', productRoute);
+//app.use('/', index);
 
 //Anúncio
 app.use('/anuncio', anuncioRoute);
